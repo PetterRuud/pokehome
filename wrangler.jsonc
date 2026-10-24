@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pokehome",
+  "compatibility_date": "2026-10-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/server.ts",
+  "observability": {
+    "enabled": true,
+  },
+  "triggers": {
+    "crons": ["0 12 * * *"],
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pokehome",
+      "database_id": "50793b2b-09e0-43da-b2dd-cbc53fa2015a",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "POKE_CACHE",
+      "id": "ade47850c60f475094e239b56892ea47",
+      "preview_id": "afd51cc60b3040459b14cf87deb91d36",
+    },
+  ],
+}

@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-24T18:28:45.755Z",
+  "megaCount": 87,
+  "gmaxCount": 32,
+  "mega": {
+    "3": {
+      "formId": 10033,
+      "slug": "venusaur-mega",
+      "apiSlug": "venusaur-mega"
+    },
+    "6": {
+      "formId": 10034,
+      "slug": "charizard-megax",
+      "apiSlug": "charizard-mega-x",
+      "alts": [
+        {
+          "formId": 10035,
+          "slug": "charizard-megay",
+          "apiSlug": "charizard-mega-y"
+        }
+      ]
+    },
+    "9": {
+      "formId": 10036,
+      "slug": "blastoise-mega",
+      "apiSlug": "blastoise-mega"
+    },
+    "15": {
+      "formId": 10090,
+      "slug": "beedrill-mega",
+      "apiSlug": "beedrill-mega"
+    },
+    "18": {
+      "formId": 10073,
+      "slug": "pidgeot-mega",
+      "apiSlug": "pidgeot-mega"
+    },
+    "26": {
+      "formId": 10304,
+      "slug": "raichu-megax",
+      "apiSlug": "raichu-mega-x",
+      "alts": [
+        {
+          "formId": 10305,
+          "slug": "raichu-megay",
+          "apiSlug": "raichu-mega-y"
+        }
+      ]
+    },
+    "36": {
+      "formId": 10278,
+      "slug": "clefable-mega",
+      "apiSlug": "clefable-mega"
+    },
+    "65": {
+      "formId": 10037,
+      "slug": "alakazam-mega",
+      "apiSlug": "alakazam-mega"
+    },
+    "71": {
+      "formId": 10279,
+      "slug": "victreebel-mega",
+      "apiSlug": "victreebel-mega"
+    },
+    "80": {
+      "formId": 10071,
+      "slug": "slowbro-mega",
+      "apiSlug": "slowbro-mega"
+    },
+    "94": {
+      "formId": 10038,
+      "slug": "gengar-mega",
+      "apiSlug": "gengar-mega"
+    },
+    "115": {
+      "formId": 10039,
+      "slug": "kangaskhan-mega",
+      "apiSlug": "kangaskhan-mega"
+    },
+    "121": {
+      "formId": 10280,
+      "slug": "starmie-mega",
+      "apiSlug": "starmie-mega"
+    },
+    "127": {
+      "formId": 10040,
+      "slug": "pinsir-mega",
+      "apiSlug": "pinsir-mega"
+    },
+    "130": {
+      "formId": 10041,
+      "slug": "gyarados-mega",
+      "apiSlug": "gyarados-mega"
+    },
+    "142": {
+      "formId": 10042,
+      "slug": "aerodactyl-mega",
+      "apiSlug": "aerodactyl-mega"
+    },
+    "149": {
+      "formId": 10281,
+      "slug": "dragonite-mega",
+      "apiSlug": "dragonite-mega"
+    },
+    "150": {
+      "formId": 10043,
+      "slug": "mewtwo-megax",
+      "apiSlug": "mewtwo-mega-x",
+      "alts": [
+        {
+          "formId": 10044,
+          "slug": "mewtwo-megay",
+          "apiSlug": "mewtwo-mega-y"
+        }
+      ]
+    },
+    "154": {
+      "formId": 10282,
+      "slug": "meganium-mega",
+      "apiSlug": "meganium-mega"
+    },
+    "160": {
+      "formId": 10283,
+      "slug": "feraligatr-mega",
+      "apiSlug": "feraligatr-mega"
+    },
+    "181": {
+      "formId": 10045,
+      "slug": "ampharos-mega",
+      "apiSlug": "ampharos-mega"
+    },
+    "208": {
+      "formId": 10072,
+      "slug": "steelix-mega",
+      "apiSlug": "steelix-mega"
+    },
+    "212": {
+      "formId": 10046,
+      "slug": "scizor-mega",
+      "apiSlug": "scizor-mega"
+    },
+    "214": {
+      "formId": 10047,
+      "slug": "heracross-mega",
+      "apiSlug": "heracross-mega"
+    },
+    "227": {
+      "formId": 10284,
+      "slug": "skarmory-mega",
+      "apiSlug": "skarmory-mega"
+    },
+    "229": {
+      "formId": 10048,
+      "slug": "houndoom-mega",
+      "apiSlug": "houndoom-mega"
+    },
+    "248": {
+      "formId": 10049,
+      "slug": "tyranitar-mega",
+      "apiSlug": "tyranitar-mega"
+    },
+    "254": {
+      "formId": 10065,
+      "slug": "sceptile-mega",
+      "apiSlug": "sceptile-mega"
+    },
+    "257": {
+      "formId": 10050,
+      "slug": "blaziken-mega",
+      "apiSlug": "blaziken-mega"
+    },
+    "260": {
+      "formId": 10064,
+      "slug": "swampert-mega",
+      "apiSlug": "swampert-mega"
+    },
+    "282": {
+      "formId": 10051,
+      "slug": "gardevoir-mega",
+      "apiSlug": "gardevoir-mega"
+    },
+    "302": {
+      "formId": 10066,
+      "slug": "sableye-mega",
+      "apiSlug": "sableye-mega"
+    },
+    "303": {
+      "formId": 10052,
+      "slug": "mawile-mega",
+      "apiSlug": "mawile-mega"
+    },
+    "306": {
+      "formId": 10053,
+      "slug": "aggron-mega",
+      "apiSlug": "aggron-mega"
+    },
+    "308": {
+      "formId": 10054,
+      "slug": "medicham-mega",
+      "apiSlug": "medicham-mega"
+    },
+    "310": {
+      "formId": 10055,
+      "slug": "manectric-mega",
+      "apiSlug": "manectric-mega"
+    },
+    "319": {
+      "formId": 10070,
+      "slug": "sharpedo-mega",
+      "apiSlug": "sharpedo-mega"
+    },
+    "323": {
+      "formId": 10087,
+      "slug": "camerupt-mega",
+      "apiSlug": "camerupt-mega"
+    },
+    "334": {
+      "formId": 10067,
+      "slug": "altaria-mega",
+      "apiSlug": "altaria-mega"
+    },
+    "354": {
+      "formId": 10056,
+      "slug": "banette-mega",
+      "apiSlug": "banette-mega"
+    },
+    "358": {
+      "formId": 10306,
+      "slug": "chimecho-mega",
+      "apiSlug": "chimecho-mega"
+    },
+    "359": {
+      "formId": 10057,
+      "slug": "absol-mega",
+      "apiSlug": "absol-mega"
+    },
+    "362": {
+      "formId": 10074,
+      "slug": "glalie-mega",
+      "apiSlug": "glalie-mega"
+    },
+    "373": {
+      "formId": 10089,
+      "slug": "salamence-mega",
+      "apiSlug": "salamence-mega"
+    },
+    "376": {
+      "formId": 10076,
+      "slug": "metagross-mega",
+      "apiSlug": "metagross-mega"
+    },
+    "380": {
+      "formId": 10062,
+      "slug": "latias-mega",
+      "apiSlug": "latias-mega"
+    },
+    "381": {
+      "formId": 10063,
+      "slug": "latios-mega",
+      "apiSlug": "latios-mega"
+    },
+    "384": {
+      "formId": 10079,
+      "slug": "rayquaza-mega",
+      "apiSlug": "rayquaza-mega"
+    },
+    "398": {
+      "formId": 10308,
+      "slug": "staraptor-mega",
+      "apiSlug": "staraptor-mega"
+    },
+    "428": {
+      "formId": 10088,
+      "slug": "lopunny-mega",
+      "apiSlug": "lopunny-mega"
+    },
+    "445": {
+      "formId": 10058,
+      "slug": "garchomp-mega",
+      "apiSlug": "garchomp-mega"
+    },
+    "448": {
+      "formId": 10059,
+      "slug": "lucario-mega",
+      "apiSlug": "lucario-mega"
+    },
+    "460": {
+      "formId": 10060,
+      "slug": "abomasnow-mega",
+      "apiSlug": "abomasnow-mega"
+    },
+    "475": {
+      "formId": 10068,
+      "slug": "gallade-mega",
+      "apiSlug": "gallade-mega"
+    },
+    "478": {
+      "formId": 10285,
+      "slug": "froslass-mega",
+      "apiSlug": "froslass-mega"
+    },
+    "485": {
+      "formId": 10311,
+      "slug": "heatran-mega",
+      "apiSlug": "heatran-mega"
+    },
+    "491": {
+      "formId": 10312,
+      "slug": "darkrai-mega",
+      "apiSlug": "darkrai-mega"
+    },
+    "500": {
+      "formId": 10286,
+      "slug": "emboar-mega",
+      "apiSlug": "emboar-mega"
+    },
+    "530": {
+      "formId": 10287,
+      "slug": "excadrill-mega",
+      "apiSlug": "excadrill-mega"
+    },
+    "531": {
+      "formId": 10069,
+      "slug": "audino-mega",
+      "apiSlug": "audino-mega"
+    },
+    "545": {
+      "formId": 10288,
+      "slug": "scolipede-mega",
+      "apiSlug": "scolipede-mega"
+    },
+    "560": {
+      "formId": 10289,
+      "slug": "scrafty-mega",
+      "apiSlug": "scrafty-mega"
+    },
+    "604": {
+      "formId": 10290,
+      "slug": "eelektross-mega",
+      "apiSlug": "eelektross-mega"
+    },
+    "609": {
+      "formId": 10291,
+      "slug": "chandelure-mega",
+      "apiSlug": "chandelure-mega"
+    },
+    "623": {
+      "formId": 10313,
+      "slug": "golurk-mega",
+      "apiSlug": "golurk-mega"
+    },
+    "652": {
+      "formId": 10292,
+      "slug": "chesnaught-mega",
+      "apiSlug": "chesnaught-mega"
+    },
+    "655": {
+      "formId": 10293,
+      "slug": "delphox-mega",
+      "apiSlug": "delphox-mega"
+    },
+    "658": {
+      "formId": 10294,
+      "slug": "greninja-mega",
+      "apiSlug": "greninja-mega"
+    },
+    "668": {
+      "formId": 10295,
+      "slug": "pyroar-mega",
+      "apiSlug": "pyroar-mega"
+    },
+    "670": {
+      "formId": 10296,
+      "slug": "floette-mega",
+      "apiSlug": "floette-mega"
+    },
+    "678": {
+      "formId": 10314,
+      "slug": "meowstic-male-mega",
+      "apiSlug": "meowstic-male-mega",
+      "alts": [
+        {
+          "formId": 10326,
+          "slug": "meowstic-female-mega",
+          "apiSlug": "meowstic-female-mega"
+        }
+      ]
+    },
+    "687": {
+      "formId": 10297,
+      "slug": "malamar-mega",
+      "apiSlug": "malamar-mega"
+    },
+    "689": {
+      "formId": 10298,
+      "slug": "barbaracle-mega",
+      "apiSlug": "barbaracle-mega"
+    },
+    "691": {
+      "formId": 10299,
+      "slug": "dragalge-mega",
+      "apiSlug": "dragalge-mega"
+    },
+    "701": {
+      "formId": 10300,
+      "slug": "hawlucha-mega",
+      "apiSlug": "hawlucha-mega"
+    },
+    "718": {
+      "formId": 10301,
+      "slug": "zygarde-mega",
+      "apiSlug": "zygarde-mega"
+    },
+    "719": {
+      "formId": 10075,
+      "slug": "diancie-mega",
+      "apiSlug": "diancie-mega"
+    },
+    "740": {
+      "formId": 10315,
+      "slug": "crabominable-mega",
+      "apiSlug": "crabominable-mega"
+    },
+    "768": {
+      "formId": 10316,
+      "slug": "golisopod-mega",
+      "apiSlug": "golisopod-mega"
+    },
+    "780": {
+      "formId": 10302,
+      "slug": "drampa-mega",
+      "apiSlug": "drampa-mega"
+    },
+    "801": {
+      "formId": 10317,
+      "slug": "magearna-mega",
+      "apiSlug": "magearna-mega",
+      "alts": [
+        {
+          "formId": 10318,
+          "slug": "magearna-original-mega",
+          "apiSlug": "magearna-original-mega"
+        }
+      ]
+    },
+    "807": {
+      "formId": 10319,
+      "slug": "zeraora-mega",
+      "apiSlug": "zeraora-mega"
+    },
+    "870": {
+      "formId": 10303,
+      "slug": "falinks-mega",
+      "apiSlug": "falinks-mega"
+    },
+    "952": {
+      "formId": 10320,
+      "slug": "scovillain-mega",
+      "apiSlug": "scovillain-mega"
+    },
+    "970": {
+      "formId": 10321,
+      "slug": "glimmora-mega",
+      "apiSlug": "glimmora-mega"
+    },
+    "978": {
+      "formId": 10322,
+      "slug": "tatsugiri-curly-mega",
+      "apiSlug": "tatsugiri-curly-mega",
+      "alts": [
+        {
+          "formId": 10323,
+          "slug": "tatsugiri-droopy-mega",
+          "apiSlug": "tatsugiri-droopy-mega"
+        },
+        {
+          "formId": 10324,
+          "slug": "tatsugiri-stretchy-mega",
+          "apiSlug": "tatsugiri-stretchy-mega"
+        }
+      ]
+    },
+    "998": {
+      "formId": 10325,
+      "slug": "baxcalibur-mega",
+      "apiSlug": "baxcalibur-mega"
+    }
+  },
+  "gmax": {
+    "3": {
+      "formId": 10195,
+      "slug": "venusaur-gmax",
+      "apiSlug": "venusaur-gmax"
+    },
+    "6": {
+      "formId": 10196,
+      "slug": "charizard-gmax",
+      "apiSlug": "charizard-gmax"
+    },
+    "9": {
+      "formId": 10197,
+      "slug": "blastoise-gmax",
+      "apiSlug": "blastoise-gmax"
+    },
+    "12": {
+      "formId": 10198,
+      "slug": "butterfree-gmax",
+      "apiSlug": "butterfree-gmax"
+    },
+    "25": {
+      "formId": 10199,
+      "slug": "pikachu-gmax",
+      "apiSlug": "pikachu-gmax"
+    },
+    "52": {
+      "formId": 10200,
+      "slug": "meowth-gmax",
+      "apiSlug": "meowth-gmax"
+    },
+    "68": {
+      "formId": 10201,
+      "slug": "machamp-gmax",
+      "apiSlug": "machamp-gmax"
+    },
+    "94": {
+      "formId": 10202,
+      "slug": "gengar-gmax",
+      "apiSlug": "gengar-gmax"
+    },
+    "99": {
+      "formId": 10203,
+      "slug": "kingler-gmax",
+      "apiSlug": "kingler-gmax"
+    },
+    "131": {
+      "formId": 10204,
+      "slug": "lapras-gmax",
+      "apiSlug": "lapras-gmax"
+    },
+    "133": {
+      "formId": 10205,
+      "slug": "eevee-gmax",
+      "apiSlug": "eevee-gmax"
+    },
+    "143": {
+      "formId": 10206,
+      "slug": "snorlax-gmax",
+      "apiSlug": "snorlax-gmax"
+    },
+    "569": {
+      "formId": 10207,
+      "slug": "garbodor-gmax",
+      "apiSlug": "garbodor-gmax"
+    },
+    "809": {
+      "formId": 10208,
+      "slug": "melmetal-gmax",
+      "apiSlug": "melmetal-gmax"
+    },
+    "812": {
+      "formId": 10209,
+      "slug": "rillaboom-gmax",
+      "apiSlug": "rillaboom-gmax"
+    },
+    "815": {
+      "formId": 10210,
+      "slug": "cinderace-gmax",
+      "apiSlug": "cinderace-gmax"
+    },
+    "818": {
+      "formId": 10211,
+      "slug": "inteleon-gmax",
+      "apiSlug": "inteleon-gmax"
+    },
+    "823": {
+      "formId": 10212,
+      "slug": "corviknight-gmax",
+      "apiSlug": "corviknight-gmax"
+    },
+    "826": {
+      "formId": 10213,
+      "slug": "orbeetle-gmax",
+      "apiSlug": "orbeetle-gmax"
+    },
+    "834": {
+      "formId": 10214,
+      "slug": "drednaw-gmax",
+      "apiSlug": "drednaw-gmax"
+    },
+    "839": {
+      "formId": 10215,
+      "slug": "coalossal-gmax",
+      "apiSlug": "coalossal-gmax"
+    },
+    "841": {
+      "formId": 10216,
+      "slug": "flapple-gmax",
+      "apiSlug": "flapple-gmax"
+    },
+    "842": {
+      "formId": 10217,
+      "slug": "appletun-gmax",
+      "apiSlug": "appletun-gmax"
+    },
+    "844": {
+      "formId": 10218,
+      "slug": "sandaconda-gmax",
+      "apiSlug": "sandaconda-gmax"
+    },
+    "849": {
+      "formId": 10228,
+      "slug": "toxtricity-low-key-gmax",
+      "apiSlug": "toxtricity-low-key-gmax"
+    },
+    "851": {
+      "formId": 10220,
+      "slug": "centiskorch-gmax",
+      "apiSlug": "centiskorch-gmax"
+    },
+    "858": {
+      "formId": 10221,
+      "slug": "hatterene-gmax",
+      "apiSlug": "hatterene-gmax"
+    },
+    "861": {
+      "formId": 10222,
+      "slug": "grimmsnarl-gmax",
+      "apiSlug": "grimmsnarl-gmax"
+    },
+    "869": {
+      "formId": 10223,
+      "slug": "alcremie-gmax",
+      "apiSlug": "alcremie-gmax"
+    },
+    "879": {
+      "formId": 10224,
+      "slug": "copperajah-gmax",
+      "apiSlug": "copperajah-gmax"
+    },
+    "884": {
+      "formId": 10225,
+      "slug": "duraludon-gmax",
+      "apiSlug": "duraludon-gmax"
+    },
+    "892": {
+      "formId": 10227,
+      "slug": "urshifu-rapid-strike-gmax",
+      "apiSlug": "urshifu-rapid-strike-gmax"
+    }
+  }
+}

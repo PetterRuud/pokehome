@@ -1,0 +1,62 @@
+[
+  {
+    "id": "home-celebi-2026",
+    "name": "Celebi",
+    "pokemon": "Celebi",
+    "games": ["HOME"],
+    "region": "Global",
+    "start": "2026-10-01",
+    "end": null,
+    "method": "serial",
+    "notes": "Serial code via Pokémon HOME (example curated entry — update with real codes).",
+    "sourceUrl": "https://www.pokemon.com"
+  },
+  {
+    "id": "sv-fidough-2025",
+    "name": "Fidough",
+    "pokemon": "Fidough",
+    "games": ["Scarlet", "Violet"],
+    "region": "Global",
+    "start": "2025-11-01",
+    "end": "2026-10-31",
+    "method": "serial",
+    "notes": "Serial code distribution for Scarlet/Violet.",
+    "sourceUrl": "https://www.pokemon.com"
+  },
+  {
+    "id": "za-audino-2025",
+    "name": "Audino",
+    "pokemon": "Audino",
+    "games": ["Legends: Z-A"],
+    "region": "Global",
+    "start": "2025-11-01",
+    "end": "2026-10-31",
+    "method": "serial",
+    "notes": "Serial code for Legends: Z-A.",
+    "sourceUrl": "https://www.pokemon.com"
+  },
+  {
+    "id": "home-keldeo-shiny",
+    "name": "Keldeo★",
+    "pokemon": "Keldeo",
+    "games": ["HOME"],
+    "region": "Global",
+    "start": "2025-02-12",
+    "end": null,
+    "method": "serial",
+    "notes": "Shiny Keldeo via HOME serial (curated placeholder).",
+    "sourceUrl": "https://www.pokemon.com"
+  },
+  {
+    "id": "upcoming-demo-2027",
+    "name": "Demo Upcoming Gift",
+    "pokemon": "Mew",
+    "games": ["HOME"],
+    "region": "Global",
+    "start": "2027-01-01",
+    "end": "2027-01-31",
+    "method": "internet",
+    "notes": "Placeholder upcoming event so the Upcoming tab has content.",
+    "sourceUrl": "https://www.pokemon.com"
+  }
+]
