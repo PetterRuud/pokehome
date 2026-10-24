@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { canGmax, canMega } from "@/lib/form-variants";
 import type { DexSlot, FormView, SpriteStyle } from "@/lib/types";
 import { PokemonSprite } from "@/components/pokemon-sprite";
+import { Checkbox } from "@/components/ui/checkbox";
 import { InfoIcon } from "lucide-react";
 
 export function DexSlotButton({
@@ -11,7 +12,8 @@ export function DexSlotButton({
   formView,
   flagged,
   spriteStyle,
-  onToggle,
+  selected,
+  onSelectedChange,
 }: {
   slot: DexSlot;
   caught: boolean;
@@ -19,7 +21,8 @@ export function DexSlotButton({
   /** Whether this species has the currently selected form flag. */
   flagged: boolean;
   spriteStyle: SpriteStyle;
-  onToggle: () => void;
+  selected: boolean;
+  onSelectedChange: (selected: boolean) => void;
 }) {
   const trackingForm = formView !== "default";
   const showShiny = formView === "shiny";
@@ -37,20 +40,32 @@ export function DexSlotButton({
         : "default";
   const label =
     formView === "default"
-      ? `${slot.name}: ${caught ? "caught" : "missing"}. Tap to toggle.`
-      : `${slot.name}: ${flagged ? `has ${formView}` : `no ${formView}`}. Tap to toggle.`;
+      ? `${slot.name}: ${caught ? "caught" : "missing"}. Tap to select.`
+      : `${slot.name}: ${flagged ? `has ${formView}` : `no ${formView}`}. Tap to select.`;
 
   return (
-    <div className="relative">
+    <div
+      className={cn(
+        "relative rounded-md",
+        selected && "ring-2 ring-primary/50 ring-offset-1 ring-offset-background",
+      )}
+    >
+      <Checkbox
+        checked={selected}
+        onCheckedChange={(v) => onSelectedChange(v === true)}
+        aria-label={`Select ${slot.name}`}
+        className="absolute top-1.5 left-1.5 z-10"
+      />
       <button
         type="button"
-        onClick={onToggle}
+        onClick={() => onSelectedChange(!selected)}
         aria-label={label}
-        aria-pressed={active}
+        aria-pressed={selected}
         className={cn(
-          "flex min-h-20 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-md border-2 p-1.5 transition active:scale-[0.97] sm:min-h-24 sm:p-2",
+          "flex min-h-20 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-md border-2 p-1.5 pt-7 transition active:scale-[0.97] sm:min-h-24 sm:p-2 sm:pt-7",
           !active && "border-border/60 bg-muted/80 text-muted-foreground",
-          active && !showForm && "border-primary/50 bg-primary/10 text-foreground",
+          active && !showForm && !selected && "border-primary/50 bg-primary/10 text-foreground",
+          selected && "border-primary bg-primary/15 text-foreground",
           showShiny &&
             flagged &&
             "border-amber-400 bg-gradient-to-b from-amber-200/30 via-fuchsia-200/20 to-sky-200/30 text-foreground shadow-[0_0_0_1px_rgba(251,191,36,0.45),0_0_12px_rgba(232,121,249,0.35)] dark:border-amber-300 dark:from-amber-400/20 dark:via-fuchsia-400/15 dark:to-sky-400/20",

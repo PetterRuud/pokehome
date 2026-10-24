@@ -34,6 +34,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import {
+  AddToSplitButton,
+  applyAddToOptions,
+  summarizeAddOptions,
+  type AddToOptions,
+} from "@/components/add-to-split-button";
 import { DexSlotButton } from "@/components/dex-slot";
 import { GameLogo } from "@/components/game-logo";
 import { PokemonSprite } from "@/components/pokemon-sprite";
@@ -65,6 +71,10 @@ import {
   ZapIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+
+/** Sit under the app shell sticky header (h-14). */
+const DEX_STICKY_TOOLBAR =
+  "sticky top-14 z-30 -mx-4 flex flex-wrap items-center gap-2 border-b border-border bg-background/95 px-4 py-2 backdrop-blur md:-mx-6 md:px-6";
 
 const EMPTY_CAUGHT: Record<string, boolean> = {};
 const LIST_ROW_HEIGHT = 104;
@@ -179,7 +189,7 @@ function DexPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Living dex</h1>
           <p className="text-sm text-muted-foreground">
-            National + HOME game / DLC dexes · tap slots to track caught or forms
+            National + HOME game / DLC dexes · select slots, then Add or Clear
           </p>
         </div>
         <Field orientation="horizontal" className="w-auto items-center">
@@ -281,16 +291,12 @@ function NationalDexView() {
   const alphaByKey = useDexStore((s) => s.alphaByKey);
   const megaByKey = useDexStore((s) => s.megaByKey);
   const gmaxByKey = useDexStore((s) => s.gmaxByKey);
-  const toggleCaught = useDexStore((s) => s.toggleCaught);
-  const toggleShiny = useDexStore((s) => s.toggleShiny);
-  const toggleAlpha = useDexStore((s) => s.toggleAlpha);
-  const toggleMega = useDexStore((s) => s.toggleMega);
-  const toggleGmax = useDexStore((s) => s.toggleGmax);
   const setCaughtMany = useDexStore((s) => s.setCaughtMany);
   const setShinyMany = useDexStore((s) => s.setShinyMany);
   const setAlphaMany = useDexStore((s) => s.setAlphaMany);
   const setMegaMany = useDexStore((s) => s.setMegaMany);
   const setGmaxMany = useDexStore((s) => s.setGmaxMany);
+  const setGamesCaughtMany = useDexStore((s) => s.setGamesCaughtMany);
   const nationalBoxLayout = useDexStore((s) => s.nationalBoxLayout);
   const renameNationalBox = useDexStore((s) => s.renameNationalBox);
   const reorderNationalBoxes = useDexStore((s) => s.reorderNationalBoxes);
@@ -299,6 +305,7 @@ function NationalDexView() {
   const collapseCompleted = prefs.collapseCompleted;
   const formView = prefs.formView;
   const spriteStyle = prefs.spriteStyle;
+  const [selected, setSelected] = useState<Set<string>>(() => new Set());
 
   const boxes = useMemo(() => {
     const laidOut = applyBoxLayout(
@@ -307,6 +314,10 @@ function NationalDexView() {
     );
     return filterBoxesForFormView(laidOut, formView);
   }, [nationalBoxLayout, formView]);
+
+  useEffect(() => {
+    setSelected(new Set());
+  }, [formView]);
 
   const defaultTitles = useMemo(() => {
     const map: Record<string, string> = {};
@@ -348,21 +359,10 @@ function NationalDexView() {
     .slice(0, 3)
     .map((box) => box.id);
 
-  function toggleSlot(key: string) {
-    if (formView === "shiny") toggleShiny(key);
-    else if (formView === "alpha") toggleAlpha(key);
-    else if (formView === "mega") toggleMega(key);
-    else if (formView === "gmax") toggleGmax(key);
-    else toggleCaught(key);
-  }
-
-  function setMany(keys: string[], value: boolean) {
-    if (formView === "shiny") setShinyMany(keys, value);
-    else if (formView === "alpha") setAlphaMany(keys, value);
-    else if (formView === "mega") setMegaMany(keys, value);
-    else if (formView === "gmax") setGmaxMany(keys, value);
-    else setCaughtMany(keys, value);
-  }
+  const allKeys = useMemo(() => boxes.flatMap((box) => box.slots.map((s) => s.key)), [boxes]);
+  const selectedCount = selected.size;
+  const allSelected = allKeys.length > 0 && allKeys.every((k) => selected.has(k));
+  const someSelected = allKeys.some((k) => selected.has(k));
 
   const trackLabel =
     formView === "default"
@@ -375,21 +375,96 @@ function NationalDexView() {
             ? "mega"
             : "gmax";
 
+  function setMany(keys: string[], value: boolean) {
+    if (formView === "shiny") setShinyMany(keys, value);
+    else if (formView === "alpha") setAlphaMany(keys, value);
+    else if (formView === "mega") setMegaMany(keys, value);
+    else if (formView === "gmax") setGmaxMany(keys, value);
+    else setCaughtMany(keys, value);
+  }
+
+  function toggleSelected(key: string, next: boolean) {
+    setSelected((prev) => {
+      const out = new Set(prev);
+      if (next) out.add(key);
+      else out.delete(key);
+      return out;
+    });
+  }
+
+  function toggleSelectAll(next: boolean) {
+    setSelected((prev) => {
+      const out = new Set(prev);
+      for (const key of allKeys) {
+        if (next) out.add(key);
+        else out.delete(key);
+      }
+      return out;
+    });
+  }
+
+  function addSelected(options: AddToOptions) {
+    if (selectedCount === 0) return;
+    const keys = Array.from(selected);
+    applyAddToOptions(keys, options, {
+      setCaughtMany,
+      setShinyMany,
+      setAlphaMany,
+      setMegaMany,
+      setGmaxMany,
+      setGamesCaughtMany,
+    });
+    setSelected(new Set());
+    toast.success(
+      keys.length === 1
+        ? `Added 1 · ${summarizeAddOptions(options)}`
+        : `Added ${keys.length} · ${summarizeAddOptions(options)}`,
+    );
+  }
+
+  function clearSelected() {
+    if (selectedCount === 0) return;
+    const label =
+      selectedCount === 1
+        ? `Clear ${trackLabel} for this Pokémon?`
+        : `Clear ${trackLabel} for ${selectedCount} Pokémon?`;
+    if (!window.confirm(label)) return;
+    const keys = Array.from(selected);
+    setMany(keys, false);
+    setSelected(new Set());
+    toast.success(
+      keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`,
+    );
+  }
+
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <p className="text-sm text-muted-foreground">
-          {formView === 'mega'
-            ? `Mega · ${formProgress.caught} / ${megaSpeciesCount()}`
-            : formView === 'gmax'
-              ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
-              : formView === 'shiny' || formView === 'alpha'
-                ? `${trackLabel} · ${formProgress.caught} marked`
-                : `National · ${formProgress.caught} / ${formProgress.total}`}
-          {formView !== 'default'
-            ? ` · tap to mark ${trackLabel}`
-            : ' · tap to catch'}
-        </p>
+      <div className={DEX_STICKY_TOOLBAR}>
+        <label className="flex items-center gap-2 text-sm">
+          <Checkbox
+            checked={allSelected}
+            indeterminate={someSelected && !allSelected}
+            onCheckedChange={(v) => toggleSelectAll(v)}
+            aria-label="Select all"
+          />
+          <span className="text-muted-foreground">
+            Select all
+            {selectedCount > 0 ? ` · ${selectedCount}` : ""}
+          </span>
+        </label>
+        <AddToSplitButton
+          selectedCount={selectedCount}
+          disabled={selectedCount === 0}
+          onAdd={addSelected}
+        />
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={selectedCount === 0}
+          onClick={clearSelected}
+        >
+          Clear
+        </Button>
         <ToggleGroup
           variant="outline"
           size="sm"
@@ -398,7 +473,7 @@ function NationalDexView() {
             const value = next[0] as FormView | undefined;
             if (value) setPref("formView", value);
           }}
-          className="flex flex-wrap justify-start"
+          className="ml-auto flex flex-wrap justify-start"
           aria-label="Form view"
         >
           {FORM_VIEW_OPTIONS.map((opt) => {
@@ -412,12 +487,24 @@ function NationalDexView() {
                 className="gap-1.5 px-2.5"
               >
                 <Icon className={cn("size-3.5", opt.className)} />
-                <span className="text-xs">{opt.label}</span>
+                <span className="hidden text-xs sm:inline">{opt.label}</span>
               </ToggleGroupItem>
             );
           })}
         </ToggleGroup>
       </div>
+
+      <p className="text-sm text-muted-foreground">
+        {formView === "mega"
+          ? `Mega · ${formProgress.caught} / ${megaSpeciesCount()}`
+          : formView === "gmax"
+            ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
+            : formView === "shiny" || formView === "alpha"
+              ? `${trackLabel} · ${formProgress.caught} marked`
+              : `National · ${formProgress.caught} / ${formProgress.total}`}
+        {" · select, then Add"}
+      </p>
+
       <BoxAccordion
         boxes={boxes}
         caughtByKey={progressByKey}
@@ -460,7 +547,8 @@ function NationalDexView() {
             formView={formView}
             flagged={Boolean(flagByKey?.[slot.key])}
             spriteStyle={spriteStyle}
-            onToggle={() => toggleSlot(slot.key)}
+            selected={selected.has(slot.key)}
+            onSelectedChange={(next) => toggleSelected(slot.key, next)}
           />
         )}
       />
@@ -579,19 +667,40 @@ function GameDexView({ gameId }: { gameId: GameId }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="outline">
-          {caught}/{total} · {percent}%
-        </Badge>
-        {missingCount > 0 ? (
-          <Badge variant="secondary">{missingCount} missing</Badge>
-        ) : (
-          <Badge variant="secondary">Complete</Badge>
-        )}
-        {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
-      </div>
+      <div className={DEX_STICKY_TOOLBAR}>
+        {visible.length > 0 ? (
+          <>
+            <label className="flex items-center gap-2 text-sm">
+              <Checkbox
+                checked={allVisibleSelected}
+                indeterminate={someVisibleSelected && !allVisibleSelected}
+                onCheckedChange={(v) => toggleSelectAll(v)}
+                aria-label="Select all visible"
+              />
+              <span className="text-muted-foreground">
+                Select all
+                {selectedCount > 0 ? ` · ${selectedCount}` : ""}
+              </span>
+            </label>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={selectedCount === 0}
+              onClick={addSelected}
+            >
+              Add
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={selectedCount === 0}
+              onClick={removeSelected}
+            >
+              Clear
+            </Button>
+          </>
+        ) : null}
 
-      <div className="flex flex-wrap items-center gap-2">
         <ToggleGroup
           variant="outline"
           size="sm"
@@ -627,38 +736,17 @@ function GameDexView({ gameId }: { gameId: GameId }) {
         </ToggleGroup>
       </div>
 
-      {visible.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-2">
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox
-              checked={allVisibleSelected}
-              indeterminate={someVisibleSelected && !allVisibleSelected}
-              onCheckedChange={(v) => toggleSelectAll(v)}
-              aria-label="Select all visible"
-            />
-            <span className="text-muted-foreground">
-              Select all
-              {selectedCount > 0 ? ` · ${selectedCount}` : ""}
-            </span>
-          </label>
-          <Button
-            size="sm"
-            variant="secondary"
-            disabled={selectedCount === 0}
-            onClick={addSelected}
-          >
-            Add
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            disabled={selectedCount === 0}
-            onClick={removeSelected}
-          >
-            Remove
-          </Button>
-        </div>
-      ) : null}
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge variant="outline">
+          {caught}/{total} · {percent}%
+        </Badge>
+        {missingCount > 0 ? (
+          <Badge variant="secondary">{missingCount} missing</Badge>
+        ) : (
+          <Badge variant="secondary">Complete</Badge>
+        )}
+        {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
+      </div>
 
       {visible.length === 0 ? (
         <Empty className="border border-dashed">
