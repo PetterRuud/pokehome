@@ -58,10 +58,13 @@ pnpm exec wrangler d1 migrations apply pokehome --local
 pnpm exec wrangler d1 migrations apply pokehome --remote
 ```
 
-Set Clerk secrets on the Worker for production:
+Clerk on Cloudflare:
+
+- `VITE_CLERK_PUBLISHABLE_KEY` — plain `vars` in [`wrangler.jsonc`](wrangler.jsonc) (public; safe to commit)
+- `CLERK_SECRET_KEY` — Worker secret only (never in git):
 
 ```bash
 pnpm exec wrangler secret put CLERK_SECRET_KEY
 ```
 
-`VITE_CLERK_PUBLISHABLE_KEY` is inlined at build time from `.env.local` / CI env.
+For Cloudflare Builds, also set `VITE_CLERK_PUBLISHABLE_KEY` as a **build** variable so Vite can inline it.

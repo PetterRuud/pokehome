@@ -10,6 +10,10 @@
   "triggers": {
     "crons": ["0 12 * * *"],
   },
+  // Publishable key is public (client-safe). Keep CLERK_SECRET_KEY as a Worker secret only.
+  "vars": {
+    "VITE_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsucG9rZWhvbWUucnV1ZC5mYW1pbHkk",
+  },
   "d1_databases": [
     {
       "binding": "DB",
