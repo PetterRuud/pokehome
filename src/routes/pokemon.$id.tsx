@@ -19,9 +19,37 @@ import { PokemonSprite } from "@/components/pokemon-sprite";
 import { getEvolutionChain, getPokemonSummary } from "@/server/pokemon";
 import { useDexStore } from "@/lib/store";
 import { canGmax, canMega } from "@/lib/form-variants";
-import { ArrowLeftIcon, ExpandIcon, SparklesIcon, EyeIcon, ZapIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ExpandIcon,
+  SparklesIcon,
+  EyeIcon,
+  ZapIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getGameGroupsForSpecies } from "@/lib/games";
+import nationalDex from "@/data/national-dex.json";
+
+const nationalOrder = (() => {
+  const slots: { id: number; name: string }[] = [];
+  for (const box of nationalDex.boxes as Array<{ slots: Array<{ id: number; name: string }> }>) {
+    for (const slot of box.slots) slots.push({ id: slot.id, name: slot.name });
+  }
+  return slots;
+})();
+
+const nationalIndexById = new Map(nationalOrder.map((slot, index) => [slot.id, index]));
+
+function nationalNeighbors(id: number) {
+  const index = nationalIndexById.get(id);
+  if (index == null) return { prev: null, next: null };
+  return {
+    prev: index > 0 ? nationalOrder[index - 1]! : null,
+    next: index < nationalOrder.length - 1 ? nationalOrder[index + 1]! : null,
+  };
+}
 
 export const Route = createFileRoute("/pokemon/$id")({
   loader: async ({ params }) => {
@@ -77,19 +105,23 @@ function PokemonPage() {
   const gameGroups = getGameGroupsForSpecies(summary.id);
   const hasMega = canMega(summary.id);
   const hasGmax = canGmax(summary.id);
+  const { prev, next } = nationalNeighbors(summary.id);
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="w-fit"
-        render={<Link to="/dex" />}
-        nativeButton={false}
-      >
-        <ArrowLeftIcon data-icon="inline-start" />
-        Dex
-      </Button>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-fit"
+          render={<Link to="/dex" />}
+          nativeButton={false}
+        >
+          <ArrowLeftIcon data-icon="inline-start" />
+          Dex
+        </Button>
+        <PokemonAdjacentNav prev={prev} next={next} />
+      </div>
 
       <div className="flex flex-col gap-6 md:flex-row md:items-start">
         <Card
@@ -275,6 +307,68 @@ function PokemonPage() {
           <EvolutionChart chain={chain} spriteStyle={spriteStyle} />
         </div>
       </div>
+
+      <PokemonAdjacentNav
+        prev={prev}
+        next={next}
+        className="w-full justify-between border-t border-border pt-4"
+      />
     </div>
+  );
+}
+
+function PokemonAdjacentNav({
+  prev,
+  next,
+  className,
+}: {
+  prev: { id: number; name: string } | null;
+  next: { id: number; name: string } | null;
+  className?: string;
+}) {
+  return (
+    <nav
+      className={cn("flex min-w-0 items-center justify-end gap-2", className)}
+      aria-label="Adjacent Pokémon"
+    >
+      {prev ? (
+        <Button
+          variant="outline"
+          size="sm"
+          className="min-w-0 max-w-[48%] justify-start"
+          render={<Link to="/pokemon/$id" params={{ id: String(prev.id) }} />}
+          nativeButton={false}
+        >
+          <ChevronLeftIcon data-icon="inline-start" />
+          <span className="truncate">
+            <span className="text-muted-foreground tabular-nums">
+              #{String(prev.id).padStart(4, "0")}
+            </span>{" "}
+            {prev.name}
+          </span>
+        </Button>
+      ) : (
+        <span className="min-w-0 max-w-[48%]" aria-hidden />
+      )}
+      {next ? (
+        <Button
+          variant="outline"
+          size="sm"
+          className="min-w-0 max-w-[48%] justify-end"
+          render={<Link to="/pokemon/$id" params={{ id: String(next.id) }} />}
+          nativeButton={false}
+        >
+          <span className="truncate">
+            <span className="text-muted-foreground tabular-nums">
+              #{String(next.id).padStart(4, "0")}
+            </span>{" "}
+            {next.name}
+          </span>
+          <ChevronRightIcon data-icon="inline-end" />
+        </Button>
+      ) : (
+        <span className="min-w-0 max-w-[48%]" aria-hidden />
+      )}
+    </nav>
   );
 }
