@@ -356,7 +356,6 @@ function NationalDexView() {
 
   const defaultOpen = boxes
     .filter((box) => !(collapseCompleted && isBoxComplete(box, progressByKey)))
-    .slice(0, 3)
     .map((box) => box.id);
 
   const allKeys = useMemo(() => boxes.flatMap((box) => box.slots.map((s) => s.key)), [boxes]);
