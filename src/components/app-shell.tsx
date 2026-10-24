@@ -14,7 +14,6 @@ import { useActiveGiftStats } from "@/hooks/use-active-gift-count";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -45,35 +44,6 @@ const nav = [...mainNav, settingsNav] as const;
 
 function isActivePath(pathname: string, to: string) {
   return to === "/" ? pathname === "/" : pathname.startsWith(to);
-}
-
-/** Avoid Clerk `<Show>` returning null while auth loads — that mismatches SSR HTML. */
-function SidebarAuthItem() {
-  const { isLoaded, isSignedIn } = useAuth();
-
-  if (isLoaded && isSignedIn) {
-    return (
-      <div className="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-        <UserButton
-          appearance={{
-            elements: { avatarBox: "size-8" },
-          }}
-        />
-        <span className="truncate text-sm group-data-[collapsible=icon]:hidden">Account</span>
-      </div>
-    );
-  }
-
-  return (
-    <SignInButton mode="modal">
-      <SidebarMenuButton tooltip="Sign in">
-        <span className="flex size-4 items-center justify-center rounded-full border border-sidebar-border text-[10px] font-semibold">
-          ?
-        </span>
-        <span>Sign in</span>
-      </SidebarMenuButton>
-    </SignInButton>
-  );
 }
 
 function HeaderAuth() {
@@ -164,14 +134,6 @@ function AppSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarAuthItem />
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>
