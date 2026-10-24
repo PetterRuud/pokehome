@@ -5,7 +5,7 @@ import {
   UserButton,
   useAuth,
 } from "@clerk/tanstack-react-start";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -17,6 +17,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { FieldDescription, FieldTitle } from "@/components/ui/field";
+import {
+  ConfirmAlertDialog,
+  type ConfirmRequest,
+} from "@/components/confirm-alert-dialog";
 import { useCloudSyncContext } from "@/components/cloud-sync-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useDexStore } from "@/lib/store";
@@ -38,6 +42,7 @@ function SettingsPage() {
   const resetAll = useDexStore((s) => s.resetAll);
   const { status, lastSyncedAt, error, syncNow } = useCloudSyncContext();
   const signedIn = isLoaded && isSignedIn;
+  const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
 
   function downloadExport() {
     const payload = exportData();
@@ -231,18 +236,29 @@ function SettingsPage() {
           <Button
             variant="destructive"
             onClick={() => {
-              if (
-                window.confirm("Reset all local catch progress and gift claims on this device?")
-              ) {
-                resetAll();
-                toast.success("Local data cleared");
-              }
+              setConfirm({
+                title: "Reset local data?",
+                description:
+                  "This clears all catch progress and gift claims stored in this browser. Cloud backup is not deleted.",
+                confirmLabel: "Reset",
+                onConfirm: () => {
+                  resetAll();
+                  toast.success("Local data cleared");
+                },
+              });
             }}
           >
             Reset local data
           </Button>
         </CardFooter>
       </Card>
+
+      <ConfirmAlertDialog
+        request={confirm}
+        onOpenChange={(open) => {
+          if (!open) setConfirm(null);
+        }}
+      />
     </div>
   );
 }

@@ -26,11 +26,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import {
-  AddToSplitButton,
+  AddToDialogButton,
   applyAddToOptions,
   summarizeAddOptions,
   type AddToOptions,
-} from "@/components/add-to-split-button";
+} from "@/components/add-to-dialog";
+import {
+  ConfirmAlertDialog,
+  type ConfirmRequest,
+} from "@/components/confirm-alert-dialog";
 import { DexSlotButton } from "@/components/dex-slot";
 import { GameLogo } from "@/components/game-logo";
 import { PokemonSprite } from "@/components/pokemon-sprite";
@@ -296,6 +300,7 @@ function NationalDexView() {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [renameBox, setRenameBox] = useState<DexBox | null>(null);
   const [renameValue, setRenameValue] = useState("");
+  const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [scrollMargin, setScrollMargin] = useState(0);
@@ -468,17 +473,22 @@ function NationalDexView() {
 
   function clearSelected() {
     if (selectedCount === 0) return;
-    const label =
-      selectedCount === 1
-        ? `Clear ${trackLabel} for this Pokémon?`
-        : `Clear ${trackLabel} for ${selectedCount} Pokémon?`;
-    if (!window.confirm(label)) return;
     const keys = Array.from(selected);
-    setMany(keys, false);
-    setSelected(new Set());
-    toast.success(
-      keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`,
-    );
+    setConfirm({
+      title: selectedCount === 1 ? `Clear ${trackLabel}?` : `Clear ${selectedCount} ${trackLabel}?`,
+      description:
+        selectedCount === 1
+          ? `This removes the ${trackLabel} mark for the selected Pokémon.`
+          : `This removes the ${trackLabel} mark for ${selectedCount} selected Pokémon.`,
+      confirmLabel: "Clear",
+      onConfirm: () => {
+        setMany(keys, false);
+        setSelected(new Set());
+        toast.success(
+          keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`,
+        );
+      },
+    });
   }
 
   const virtualItems = virtualizer.getVirtualItems();
@@ -498,7 +508,7 @@ function NationalDexView() {
             {selectedCount > 0 ? ` · ${selectedCount}` : ""}
           </span>
         </label>
-        <AddToSplitButton
+        <AddToDialogButton
           selectedCount={selectedCount}
           disabled={selectedCount === 0}
           onAdd={addSelected}
@@ -592,17 +602,26 @@ function NationalDexView() {
                       );
                     }}
                     onClearAll={() => {
-                      const label =
-                        row.keys.length === 1
-                          ? `Clear ${trackLabel} for this Pokémon?`
-                          : `Clear ${trackLabel} for all ${row.keys.length} in this box?`;
-                      if (!window.confirm(label)) return;
-                      setMany(row.keys, false);
-                      toast.success(
-                        row.keys.length === 1
-                          ? `Cleared 1 ${trackLabel}`
-                          : `Cleared ${row.keys.length} ${trackLabel}`,
-                      );
+                      const keys = row.keys;
+                      setConfirm({
+                        title:
+                          keys.length === 1
+                            ? `Clear ${trackLabel}?`
+                            : `Clear box ${trackLabel}?`,
+                        description:
+                          keys.length === 1
+                            ? `This removes the ${trackLabel} mark for this Pokémon.`
+                            : `This removes the ${trackLabel} mark for all ${keys.length} Pokémon in this box.`,
+                        confirmLabel: "Clear",
+                        onConfirm: () => {
+                          setMany(keys, false);
+                          toast.success(
+                            keys.length === 1
+                              ? `Cleared 1 ${trackLabel}`
+                              : `Cleared ${keys.length} ${trackLabel}`,
+                          );
+                        },
+                      });
                     }}
                   />
                 </div>
@@ -694,6 +713,13 @@ function NationalDexView() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmAlertDialog
+        request={confirm}
+        onOpenChange={(open) => {
+          if (!open) setConfirm(null);
+        }}
+      />
     </div>
   );
 }
@@ -776,6 +802,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const [filter, setFilter] = useState<"missing" | "caught" | "all">("all");
   const [layout, setLayout] = useState<"list" | "grid">("grid");
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [scrollMargin, setScrollMargin] = useState(0);
@@ -858,15 +885,23 @@ function GameDexView({ gameId }: { gameId: GameId }) {
 
   function removeSelected() {
     if (selectedCount === 0) return;
-    const label =
-      selectedCount === 1
-        ? "Remove this Pokémon from the dex?"
-        : `Remove ${selectedCount} Pokémon from the dex?`;
-    if (!window.confirm(label)) return;
     const keys = Array.from(selected);
-    setGameCaughtMany(gameId, keys, false);
-    setSelected(new Set());
-    toast.success(keys.length === 1 ? "Removed 1" : `Removed ${keys.length}`);
+    setConfirm({
+      title:
+        selectedCount === 1
+          ? "Clear from this dex?"
+          : `Clear ${selectedCount} from this dex?`,
+      description:
+        selectedCount === 1
+          ? "This unmarks the selected Pokémon in this game dex only."
+          : `This unmarks ${selectedCount} Pokémon in this game dex only.`,
+      confirmLabel: "Clear",
+      onConfirm: () => {
+        setGameCaughtMany(gameId, keys, false);
+        setSelected(new Set());
+        toast.success(keys.length === 1 ? "Removed 1" : `Removed ${keys.length}`);
+      },
+    });
   }
 
   if (!game) {
@@ -1027,6 +1062,13 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           })}
         </div>
       )}
+
+      <ConfirmAlertDialog
+        request={confirm}
+        onOpenChange={(open) => {
+          if (!open) setConfirm(null);
+        }}
+      />
     </div>
   );
 }
