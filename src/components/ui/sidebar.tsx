@@ -180,7 +180,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="w-(--sidebar-width) gap-0 overflow-hidden bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -192,7 +192,8 @@ function Sidebar({
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          {/* flex-1 + min-h-0 (not h-full): h-full + sr-only header overflowed the sheet and clipped the footer */}
+          <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">{children}</div>
         </SheetContent>
       </Sheet>
     );
@@ -331,7 +332,7 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("mt-auto flex shrink-0 flex-col gap-2 border-t border-sidebar-border p-2", className)}
       {...props}
     />
   );

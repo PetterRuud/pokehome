@@ -1,8 +1,17 @@
 import nationalDex from "@/data/national-dex.json";
 import type { DexSlot, MysteryGift } from "@/lib/types";
 
-function startOfDay(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+/** UTC day boundary so SSR (Worker) and the browser agree on gift windows. */
+function startOfDayUtc(d: Date) {
+  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+}
+
+function parseGiftDay(isoDate: string) {
+  // Date-only strings are UTC midnight; full ISO keeps its instant then floors to UTC day.
+  if (/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
+    return startOfDayUtc(new Date(`${isoDate}T00:00:00.000Z`));
+  }
+  return startOfDayUtc(new Date(isoDate));
 }
 
 const speciesByName = (() => {
@@ -62,9 +71,9 @@ export function giftDisplayNotes(gift: MysteryGift): string | null {
 }
 
 export function giftWindow(gift: MysteryGift, now = new Date()) {
-  const start = startOfDay(new Date(gift.start));
-  const end = gift.end ? startOfDay(new Date(gift.end)) : null;
-  const today = startOfDay(now);
+  const start = parseGiftDay(gift.start);
+  const end = gift.end ? parseGiftDay(gift.end) : null;
+  const today = startOfDayUtc(now);
 
   const isUpcoming = today < start;
   const isExpired = end != null && today > end;

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Show,
   SignInButton,
   SignUpButton,
   UserButton,
+  useAuth,
 } from "@clerk/tanstack-react-start";
 import { useRef } from "react";
 import {
@@ -37,12 +37,14 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const fileRef = useRef<HTMLInputElement>(null);
+  const { isLoaded, isSignedIn } = useAuth();
   const prefs = useDexStore((s) => s.prefs);
   const setPref = useDexStore((s) => s.setPref);
   const exportData = useDexStore((s) => s.exportData);
   const importData = useDexStore((s) => s.importData);
   const resetAll = useDexStore((s) => s.resetAll);
   const { status, lastSyncedAt, error, syncNow } = useCloudSyncContext();
+  const signedIn = isLoaded && isSignedIn;
 
   function downloadExport() {
     const payload = exportData();
@@ -100,7 +102,7 @@ function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <Show when="signed-out">
+          {!signedIn ? (
             <div className="flex flex-wrap gap-2">
               <SignInButton mode="modal">
                 <Button>Sign in</Button>
@@ -116,30 +118,31 @@ function SettingsPage() {
                 Full page sign-in
               </Button>
             </div>
-          </Show>
-          <Show when="signed-in">
-            <div className="flex flex-wrap items-center gap-3">
-              <UserButton />
-              <Button
-                variant="outline"
-                disabled={status === "syncing"}
-                onClick={() => {
-                  void syncNow().then(() => toast.success("Sync finished"));
-                }}
-              >
-                {status === "syncing" ? "Syncing…" : "Sync now"}
-              </Button>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {lastSyncedAt
-                ? `Last synced ${new Date(lastSyncedAt).toLocaleString()}`
-                : status === "syncing"
-                  ? "Syncing with cloud…"
-                  : "Not synced yet"}
-              {status === "ok" ? " · up to date" : null}
-              {error ? ` · ${error}` : null}
-            </p>
-          </Show>
+          ) : (
+            <>
+              <div className="flex flex-wrap items-center gap-3">
+                <UserButton />
+                <Button
+                  variant="outline"
+                  disabled={status === "syncing"}
+                  onClick={() => {
+                    void syncNow().then(() => toast.success("Sync finished"));
+                  }}
+                >
+                  {status === "syncing" ? "Syncing…" : "Sync now"}
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {lastSyncedAt
+                  ? `Last synced ${new Date(lastSyncedAt).toLocaleString()}`
+                  : status === "syncing"
+                    ? "Syncing with cloud…"
+                    : "Not synced yet"}
+                {status === "ok" ? " · up to date" : null}
+                {error ? ` · ${error}` : null}
+              </p>
+            </>
+          )}
         </CardContent>
       </Card>
 

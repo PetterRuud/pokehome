@@ -1,8 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Show,
   SignInButton,
   UserButton,
+  useAuth,
 } from "@clerk/tanstack-react-start";
 import { GiftIcon, HomeIcon, SettingsIcon, Grid2x2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -47,6 +47,51 @@ function isActivePath(pathname: string, to: string) {
   return to === "/" ? pathname === "/" : pathname.startsWith(to);
 }
 
+/** Avoid Clerk `<Show>` returning null while auth loads — that mismatches SSR HTML. */
+function SidebarAuthItem() {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (isLoaded && isSignedIn) {
+    return (
+      <div className="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+        <UserButton
+          appearance={{
+            elements: { avatarBox: "size-8" },
+          }}
+        />
+        <span className="truncate text-sm group-data-[collapsible=icon]:hidden">Account</span>
+      </div>
+    );
+  }
+
+  return (
+    <SignInButton mode="modal">
+      <SidebarMenuButton tooltip="Sign in">
+        <span className="flex size-4 items-center justify-center rounded-full border border-sidebar-border text-[10px] font-semibold">
+          ?
+        </span>
+        <span>Sign in</span>
+      </SidebarMenuButton>
+    </SignInButton>
+  );
+}
+
+function HeaderAuth() {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (isLoaded && isSignedIn) {
+    return <UserButton />;
+  }
+
+  return (
+    <SignInButton mode="modal">
+      <Button variant="outline" size="sm">
+        Sign in
+      </Button>
+    </SignInButton>
+  );
+}
+
 function AppSidebar({
   activeGiftCount,
   unclaimedGiftCount,
@@ -87,7 +132,7 @@ function AppSidebar({
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainNav.map((item) => {
+              {nav.map((item) => {
                 const Icon = item.icon;
                 const isGifts = item.to === "/gifts";
                 return (
@@ -123,41 +168,7 @@ function AppSidebar({
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              isActive={isActivePath(pathname, settingsNav.to)}
-              tooltip={settingsNav.label}
-              render={<Link to={settingsNav.to} />}
-              onClick={() => {
-                if (isMobile) setOpenMobile(false);
-              }}
-            >
-              <SettingsIcon />
-              <span>{settingsNav.label}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <Show when="signed-in">
-              <div className="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-                <UserButton
-                  appearance={{
-                    elements: { avatarBox: "size-8" },
-                  }}
-                />
-                <span className="truncate text-sm group-data-[collapsible=icon]:hidden">
-                  Account
-                </span>
-              </div>
-            </Show>
-            <Show when="signed-out">
-              <SignInButton mode="modal">
-                <SidebarMenuButton tooltip="Sign in">
-                  <span className="flex size-4 items-center justify-center rounded-full border border-sidebar-border text-[10px] font-semibold">
-                    ?
-                  </span>
-                  <span>Sign in</span>
-                </SidebarMenuButton>
-              </SignInButton>
-            </Show>
+            <SidebarAuthItem />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
@@ -238,21 +249,14 @@ export function AppShell({
           ) : (
             <div className="flex-1" />
           )}
-          <div className="hidden shrink-0 md:block">
-            <Show when="signed-in">
-              <UserButton />
-            </Show>
-            <Show when="signed-out">
-              <SignInButton mode="modal">
-                <Button variant="outline" size="sm">
-                  Sign in
-                </Button>
-              </SignInButton>
-            </Show>
+          <div className="shrink-0">
+            <HeaderAuth />
           </div>
         </header>
 
-        <main className="mb-nav flex-1 px-4 py-4 md:mb-0 md:px-6 md:py-6">{children}</main>
+
+        {/* SidebarInset is already a <main> — nesting another breaks HTML hydration */}
+        <div className="mb-nav flex-1 px-4 py-4 md:mb-0 md:px-6 md:py-6">{children}</div>
 
         <MobileBottomNav giftBadge={giftBadge} />
       </SidebarInset>
