@@ -1,13 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionHeader,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,10 +22,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import {
   AddToSplitButton,
@@ -45,7 +36,7 @@ import { GameLogo } from "@/components/game-logo";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { applyBoxLayout } from "@/lib/box-layout";
 import { useDexStore } from "@/lib/store";
-import { countGameProgress, countProgress, isBoxComplete } from "@/lib/dex-stats";
+import { countGameProgress, countProgress } from "@/lib/dex-stats";
 import {
   filterBoxesForFormView,
   gmaxSpeciesCount,
@@ -61,7 +52,6 @@ import {
   EyeIcon,
   CheckCheckIcon,
   EraserIcon,
-  GripVerticalIcon,
   InfoIcon,
   LayoutGridIcon,
   ListIcon,
@@ -79,6 +69,19 @@ const DEX_STICKY_TOOLBAR =
 const EMPTY_CAUGHT: Record<string, boolean> = {};
 const LIST_ROW_HEIGHT = 104;
 const GRID_ROW_HEIGHT = 148;
+const NAT_HEADER_HEIGHT = 44;
+const NAT_GRID_ROW_HEIGHT = 136;
+
+type NationalVirtualRow =
+  | {
+      type: "header";
+      box: DexBox;
+      caughtCount: number;
+      complete: boolean;
+      keys: string[];
+      missing: string[];
+    }
+  | { type: "grid"; boxId: string; slots: DexSlot[] };
 
 function useGridColumnCount(width: number) {
   if (width >= 1024) return 6;
@@ -140,8 +143,6 @@ export const Route = createFileRoute("/dex")({
 });
 
 function DexPage() {
-  const collapseCompleted = useDexStore((s) => s.prefs.collapseCompleted);
-  const setPref = useDexStore((s) => s.setPref);
   const caughtByGame = useDexStore((s) => s.caughtByGame);
   const games = getGames();
   const search = Route.useSearch();
@@ -185,22 +186,11 @@ function DexPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Living dex</h1>
-          <p className="text-sm text-muted-foreground">
-            National + HOME game / DLC dexes · select slots, then Add or Clear
-          </p>
-        </div>
-        <Field orientation="horizontal" className="w-auto items-center">
-          <FieldContent>
-            <FieldTitle>Collapse completed</FieldTitle>
-          </FieldContent>
-          <Switch
-            checked={collapseCompleted}
-            onCheckedChange={(v) => setPref("collapseCompleted", v)}
-          />
-        </Field>
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Living dex</h1>
+        <p className="text-sm text-muted-foreground">
+          National + HOME game / DLC dexes · select slots, then Add or Clear
+        </p>
       </div>
 
       <Tabs
@@ -299,19 +289,19 @@ function NationalDexView() {
   const setGamesCaughtMany = useDexStore((s) => s.setGamesCaughtMany);
   const nationalBoxLayout = useDexStore((s) => s.nationalBoxLayout);
   const renameNationalBox = useDexStore((s) => s.renameNationalBox);
-  const reorderNationalBoxes = useDexStore((s) => s.reorderNationalBoxes);
   const prefs = useDexStore((s) => s.prefs);
   const setPref = useDexStore((s) => s.setPref);
-  const collapseCompleted = prefs.collapseCompleted;
   const formView = prefs.formView;
   const spriteStyle = prefs.spriteStyle;
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  const [renameBox, setRenameBox] = useState<DexBox | null>(null);
+  const [renameValue, setRenameValue] = useState("");
+  const listRef = useRef<HTMLDivElement>(null);
+  const [scrollWidth, setScrollWidth] = useState(0);
+  const [scrollMargin, setScrollMargin] = useState(0);
 
   const boxes = useMemo(() => {
-    const laidOut = applyBoxLayout(
-      nationalDex.boxes as DexBox[],
-      nationalBoxLayout,
-    );
+    const laidOut = applyBoxLayout(nationalDex.boxes as DexBox[], nationalBoxLayout);
     return filterBoxesForFormView(laidOut, formView);
   }, [nationalBoxLayout, formView]);
 
@@ -354,15 +344,6 @@ function NationalDexView() {
     };
   }, [formView, boxes, caughtByKey, flagByKey]);
 
-  const defaultOpen = boxes
-    .filter((box) => !(collapseCompleted && isBoxComplete(box, progressByKey)))
-    .map((box) => box.id);
-
-  const allKeys = useMemo(() => boxes.flatMap((box) => box.slots.map((s) => s.key)), [boxes]);
-  const selectedCount = selected.size;
-  const allSelected = allKeys.length > 0 && allKeys.every((k) => selected.has(k));
-  const someSelected = allKeys.some((k) => selected.has(k));
-
   const trackLabel =
     formView === "default"
       ? "caught"
@@ -373,6 +354,70 @@ function NationalDexView() {
           : formView === "mega"
             ? "mega"
             : "gmax";
+
+  const allKeys = useMemo(
+    () => boxes.flatMap((box) => box.slots.map((s) => s.key)),
+    [boxes],
+  );
+  const selectedCount = selected.size;
+  const allSelected = allKeys.length > 0 && allKeys.every((k) => selected.has(k));
+  const someSelected = allKeys.some((k) => selected.has(k));
+
+  useLayoutEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    const update = () => {
+      setScrollWidth(el.clientWidth);
+      setScrollMargin(el.offsetTop);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener("resize", update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [boxes.length, formView]);
+
+  const colCount = useGridColumnCount(scrollWidth);
+
+  const virtualRows = useMemo(() => {
+    const rows: NationalVirtualRow[] = [];
+    for (const box of boxes) {
+      const keys = box.slots.map((s) => s.key);
+      const caughtCount = keys.filter((k) => Boolean(progressByKey[k])).length;
+      const complete = caughtCount === keys.length && keys.length > 0;
+      rows.push({
+        type: "header",
+        box,
+        caughtCount,
+        complete,
+        keys,
+        missing: keys.filter((k) => !progressByKey[k]),
+      });
+      for (let i = 0; i < box.slots.length; i += colCount) {
+        rows.push({
+          type: "grid",
+          boxId: box.id,
+          slots: box.slots.slice(i, i + colCount),
+        });
+      }
+    }
+    return rows;
+  }, [boxes, progressByKey, colCount]);
+
+  const virtualizer = useWindowVirtualizer({
+    count: virtualRows.length,
+    estimateSize: (index) =>
+      virtualRows[index]?.type === "header" ? NAT_HEADER_HEIGHT : NAT_GRID_ROW_HEIGHT,
+    overscan: 6,
+    scrollMargin,
+  });
+
+  useEffect(() => {
+    virtualizer.measure();
+  }, [colCount, scrollMargin, virtualRows.length, virtualizer]);
 
   function setMany(keys: string[], value: boolean) {
     if (formView === "shiny") setShinyMany(keys, value);
@@ -436,6 +481,8 @@ function NationalDexView() {
     );
   }
 
+  const virtualItems = virtualizer.getVirtualItems();
+
   return (
     <div className="flex flex-col gap-3">
       <div className={DEX_STICKY_TOOLBAR}>
@@ -456,12 +503,7 @@ function NationalDexView() {
           disabled={selectedCount === 0}
           onAdd={addSelected}
         />
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={selectedCount === 0}
-          onClick={clearSelected}
-        >
+        <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
         <ToggleGroup
@@ -504,53 +546,224 @@ function NationalDexView() {
         {" · select, then Add"}
       </p>
 
-      <BoxAccordion
-        boxes={boxes}
-        caughtByKey={progressByKey}
-        collapseCompleted={collapseCompleted}
-        defaultOpen={defaultOpen}
-        editable
-        defaultTitles={defaultTitles}
-        addAllLabel={formView === "default" ? "Add all" : `Mark all ${trackLabel}`}
-        clearAllLabel={formView === "default" ? "Clear box" : `Clear ${trackLabel}`}
-        onRename={(boxId, title) => renameNationalBox(boxId, title, defaultTitles[boxId] ?? title)}
-        onReorder={(fromId, toId) =>
-          reorderNationalBoxes(
-            fromId,
-            toId,
-            boxes.map((b) => b.id),
-          )
-        }
-        onAddAll={(keys) => {
-          setMany(keys, true);
-          toast.success(
-            keys.length === 1 ? `Marked 1 ${trackLabel}` : `Marked ${keys.length} ${trackLabel}`,
-          );
+      {boxes.length === 0 ? (
+        <Empty className="border border-dashed">
+          <EmptyHeader>
+            <EmptyTitle>No Pokémon here</EmptyTitle>
+            <EmptyDescription>Try another form view.</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <div
+          ref={listRef}
+          className="relative w-full"
+          style={{ height: virtualizer.getTotalSize() }}
+        >
+          {virtualItems.map((item) => {
+            const row = virtualRows[item.index];
+            if (!row) return null;
+
+            if (row.type === "header") {
+              return (
+                <div
+                  key={`h-${row.box.id}`}
+                  data-index={item.index}
+                  ref={virtualizer.measureElement}
+                  className="absolute top-0 left-0 w-full"
+                  style={{ transform: `translateY(${item.start - scrollMargin}px)` }}
+                >
+                  <NationalBoxHeader
+                    box={row.box}
+                    caughtCount={row.caughtCount}
+                    complete={row.complete}
+                    addAllLabel={formView === "default" ? "Add all" : `Mark all ${trackLabel}`}
+                    clearAllLabel={formView === "default" ? "Clear box" : `Clear ${trackLabel}`}
+                    onRename={() => {
+                      setRenameBox(row.box);
+                      setRenameValue(row.box.title);
+                    }}
+                    onAddAll={() => {
+                      const keys = row.missing.length > 0 ? row.missing : row.keys;
+                      setMany(keys, true);
+                      toast.success(
+                        keys.length === 1
+                          ? `Marked 1 ${trackLabel}`
+                          : `Marked ${keys.length} ${trackLabel}`,
+                      );
+                    }}
+                    onClearAll={() => {
+                      const label =
+                        row.keys.length === 1
+                          ? `Clear ${trackLabel} for this Pokémon?`
+                          : `Clear ${trackLabel} for all ${row.keys.length} in this box?`;
+                      if (!window.confirm(label)) return;
+                      setMany(row.keys, false);
+                      toast.success(
+                        row.keys.length === 1
+                          ? `Cleared 1 ${trackLabel}`
+                          : `Cleared ${row.keys.length} ${trackLabel}`,
+                      );
+                    }}
+                  />
+                </div>
+              );
+            }
+
+            return (
+              <div
+                key={`g-${row.boxId}-${row.slots[0]?.key ?? item.index}`}
+                data-index={item.index}
+                ref={virtualizer.measureElement}
+                className="absolute top-0 left-0 grid w-full gap-1.5 px-0.5 py-1 sm:gap-2"
+                style={{
+                  transform: `translateY(${item.start - scrollMargin}px)`,
+                  gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`,
+                }}
+              >
+                {row.slots.map((slot) => (
+                  <DexSlotButton
+                    key={slot.key}
+                    slot={slot}
+                    caught={Boolean(caughtByKey[slot.key])}
+                    formView={formView}
+                    flagged={Boolean(flagByKey?.[slot.key])}
+                    spriteStyle={spriteStyle}
+                    selected={selected.has(slot.key)}
+                    onSelectedChange={(next) => toggleSelected(slot.key, next)}
+                  />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <Dialog
+        open={renameBox != null}
+        onOpenChange={(open) => {
+          if (!open) setRenameBox(null);
         }}
-        onClearAll={(keys) => {
-          const label =
-            keys.length === 1
-              ? `Clear ${trackLabel} for this Pokémon?`
-              : `Clear ${trackLabel} for all ${keys.length} in this box?`;
-          if (!window.confirm(label)) return;
-          setMany(keys, false);
-          toast.success(
-            keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`,
-          );
-        }}
-        renderSlot={(slot) => (
-          <DexSlotButton
-            key={slot.key}
-            slot={slot}
-            caught={Boolean(caughtByKey[slot.key])}
-            formView={formView}
-            flagged={Boolean(flagByKey?.[slot.key])}
-            spriteStyle={spriteStyle}
-            selected={selected.has(slot.key)}
-            onSelectedChange={(next) => toggleSelected(slot.key, next)}
-          />
-        )}
-      />
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename box</DialogTitle>
+            <DialogDescription>
+              Custom name for this living-dex box. Leave blank to restore the default
+              {renameBox ? ` (“${defaultTitles[renameBox.id] ?? renameBox.title}”).` : "."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="box-rename">Name</Label>
+            <Input
+              id="box-rename"
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && renameBox) {
+                  renameNationalBox(
+                    renameBox.id,
+                    renameValue,
+                    defaultTitles[renameBox.id] ?? renameBox.title,
+                  );
+                  setRenameBox(null);
+                  toast.success("Box renamed");
+                }
+              }}
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setRenameBox(null)}>
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                if (!renameBox) return;
+                renameNationalBox(
+                  renameBox.id,
+                  renameValue,
+                  defaultTitles[renameBox.id] ?? renameBox.title,
+                );
+                setRenameBox(null);
+                toast.success("Box renamed");
+              }}
+            >
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function NationalBoxHeader({
+  box,
+  caughtCount,
+  complete,
+  addAllLabel,
+  clearAllLabel,
+  onRename,
+  onAddAll,
+  onClearAll,
+}: {
+  box: DexBox;
+  caughtCount: number;
+  complete: boolean;
+  addAllLabel: string;
+  clearAllLabel: string;
+  onRename: () => void;
+  onAddAll: () => void;
+  onClearAll: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-1 border-b border-border bg-background/80 px-1 py-1.5 backdrop-blur">
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 pl-1">
+        <span className="truncate font-semibold">{box.title}</span>
+        <span className="text-xs text-muted-foreground">{box.rangeLabel}</span>
+        <Badge variant="outline">
+          {caughtCount}/{box.slots.length}
+        </Badge>
+        {complete ? <Badge variant="secondary">Done</Badge> : null}
+      </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="shrink-0"
+              aria-label={`${box.title} actions`}
+            />
+          }
+        >
+          <MoreHorizontalIcon />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-40">
+          <DropdownMenuGroup>
+            {!complete ? (
+              <DropdownMenuItem onClick={onAddAll}>
+                <CheckCheckIcon />
+                {addAllLabel}
+              </DropdownMenuItem>
+            ) : null}
+            {caughtCount > 0 ? (
+              <DropdownMenuItem variant="destructive" onClick={onClearAll}>
+                <EraserIcon />
+                {clearAllLabel}
+              </DropdownMenuItem>
+            ) : null}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onRename}>
+              <PencilIcon />
+              Rename
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
@@ -934,231 +1147,5 @@ function GameDexGridCard({
         </span>
       </button>
     </div>
-  );
-}
-
-function BoxAccordion({
-  boxes,
-  caughtByKey,
-  collapseCompleted,
-  defaultOpen,
-  renderSlot,
-  editable = false,
-  defaultTitles,
-  addAllLabel = "Add all",
-  clearAllLabel = "Clear box",
-  onRename,
-  onReorder,
-  onAddAll,
-  onClearAll,
-}: {
-  boxes: DexBox[];
-  caughtByKey: Record<string, boolean>;
-  collapseCompleted: boolean;
-  defaultOpen: string[];
-  renderSlot: (slot: DexBox["slots"][number]) => React.ReactNode;
-  editable?: boolean;
-  defaultTitles?: Record<string, string>;
-  addAllLabel?: string;
-  clearAllLabel?: string;
-  onRename?: (boxId: string, title: string) => void;
-  onReorder?: (fromId: string, toId: string) => void;
-  onAddAll?: (keys: string[]) => void;
-  onClearAll?: (keys: string[]) => void;
-}) {
-  const [dragOverId, setDragOverId] = useState<string | null>(null);
-  const [renameBox, setRenameBox] = useState<DexBox | null>(null);
-  const [renameValue, setRenameValue] = useState("");
-
-  return (
-    <>
-      <Accordion multiple defaultValue={defaultOpen}>
-        {boxes.map((box) => {
-          const complete = isBoxComplete(box, caughtByKey);
-          const caughtCount = box.slots.filter((s) => Boolean(caughtByKey[s.key])).length;
-          const keys = box.slots.map((s) => s.key);
-          const missing = keys.filter((k) => !caughtByKey[k]);
-
-          return (
-            <AccordionItem
-              key={box.id}
-              value={box.id}
-              className={cn(dragOverId === box.id && "rounded-lg ring-2 ring-ring/60")}
-              onDragOver={
-                editable && onReorder
-                  ? (e) => {
-                      e.preventDefault();
-                      e.dataTransfer.dropEffect = "move";
-                      setDragOverId(box.id);
-                    }
-                  : undefined
-              }
-              onDragLeave={
-                editable
-                  ? () => {
-                      setDragOverId((id) => (id === box.id ? null : id));
-                    }
-                  : undefined
-              }
-              onDrop={
-                editable && onReorder
-                  ? (e) => {
-                      e.preventDefault();
-                      const fromId = e.dataTransfer.getData("text/box-id");
-                      setDragOverId(null);
-                      if (fromId) onReorder(fromId, box.id);
-                    }
-                  : undefined
-              }
-            >
-              <AccordionHeader className="px-1">
-                {editable && onReorder ? (
-                  <button
-                    type="button"
-                    draggable
-                    aria-label={`Reorder ${box.title}`}
-                    title="Drag to reorder"
-                    className="flex size-8 shrink-0 cursor-grab items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground active:cursor-grabbing"
-                    onClick={(e) => e.preventDefault()}
-                    onDragStart={(e) => {
-                      e.dataTransfer.setData("text/box-id", box.id);
-                      e.dataTransfer.effectAllowed = "move";
-                    }}
-                    onDragEnd={() => setDragOverId(null)}
-                  >
-                    <GripVerticalIcon className="size-4" />
-                  </button>
-                ) : null}
-
-                <AccordionTrigger className="min-w-0 hover:no-underline">
-                  <span className="flex min-w-0 flex-wrap items-center gap-2 text-left">
-                    <span className="font-semibold">{box.title}</span>
-                    <span className="text-xs text-muted-foreground">{box.rangeLabel}</span>
-                    {collapseCompleted && complete ? (
-                      <Badge variant="secondary">Complete</Badge>
-                    ) : (
-                      <>
-                        <Badge variant="outline">
-                          {caughtCount}/{box.slots.length}
-                        </Badge>
-                        {complete ? <Badge variant="secondary">Done</Badge> : null}
-                      </>
-                    )}
-                  </span>
-                </AccordionTrigger>
-
-                {onAddAll || onClearAll || (editable && onRename) ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon-sm"
-                          className="shrink-0"
-                          aria-label={`${box.title} actions`}
-                        />
-                      }
-                    >
-                      <MoreHorizontalIcon />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="min-w-40">
-                      <DropdownMenuGroup>
-                        {onAddAll && !complete ? (
-                          <DropdownMenuItem
-                            disabled={missing.length === 0}
-                            onClick={() => onAddAll(missing.length > 0 ? missing : keys)}
-                          >
-                            <CheckCheckIcon />
-                            {addAllLabel}
-                          </DropdownMenuItem>
-                        ) : null}
-                        {onClearAll && caughtCount > 0 ? (
-                          <DropdownMenuItem variant="destructive" onClick={() => onClearAll(keys)}>
-                            <EraserIcon />
-                            {clearAllLabel}
-                          </DropdownMenuItem>
-                        ) : null}
-                        {editable && onRename ? (
-                          <>
-                            {(onAddAll && !complete) || (onClearAll && caughtCount > 0) ? (
-                              <DropdownMenuSeparator />
-                            ) : null}
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setRenameBox(box);
-                                setRenameValue(box.title);
-                              }}
-                            >
-                              <PencilIcon />
-                              Rename
-                            </DropdownMenuItem>
-                          </>
-                        ) : null}
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : null}
-              </AccordionHeader>
-
-              <AccordionContent>
-                <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 md:grid-cols-6 md:gap-2.5">
-                  {box.slots.map((slot) => renderSlot(slot))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
-
-      <Dialog
-        open={renameBox != null}
-        onOpenChange={(open) => {
-          if (!open) setRenameBox(null);
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Rename box</DialogTitle>
-            <DialogDescription>
-              Custom name for this living-dex box. Leave blank to restore the default
-              {renameBox ? ` (“${defaultTitles?.[renameBox.id] ?? renameBox.title}”).` : "."}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="box-rename">Name</Label>
-            <Input
-              id="box-rename"
-              value={renameValue}
-              onChange={(e) => setRenameValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && renameBox && onRename) {
-                  onRename(renameBox.id, renameValue);
-                  setRenameBox(null);
-                  toast.success("Box renamed");
-                }
-              }}
-              autoFocus
-            />
-          </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setRenameBox(null)}>
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              onClick={() => {
-                if (!renameBox || !onRename) return;
-                onRename(renameBox.id, renameValue);
-                setRenameBox(null);
-                toast.success("Box renamed");
-              }}
-            >
-              Save
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
   );
 }

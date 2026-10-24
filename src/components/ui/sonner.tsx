@@ -1,4 +1,4 @@
-import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 import {
   CircleCheckIcon,
@@ -8,12 +8,31 @@ import {
   Loader2Icon,
 } from "lucide-react";
 
+function useDocumentTheme(): NonNullable<ToasterProps["theme"]> {
+  const [theme, setTheme] = useState<NonNullable<ToasterProps["theme"]>>("system");
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const read = () => {
+      if (root.classList.contains("dark")) setTheme("dark");
+      else if (root.classList.contains("light")) setTheme("light");
+      else setTheme("system");
+    };
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return theme;
+}
+
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+  const theme = useDocumentTheme();
 
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
+      theme={theme}
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,

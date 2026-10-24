@@ -52,7 +52,6 @@ type DexState = {
   setPref: <K extends keyof DexPrefs>(key: K, value: DexPrefs[K]) => void;
   setNationalBoxLayout: (layout: BoxLayout) => void;
   renameNationalBox: (boxId: string, title: string, defaultTitle: string) => void;
-  reorderNationalBoxes: (fromId: string, toId: string, boxIds: string[]) => void;
   exportData: () => ExportPayload;
   importData: (payload: AnyExportPayload, mode: "merge" | "replace") => void;
   resetAll: () => void;
@@ -60,7 +59,8 @@ type DexState = {
 
 function normalizeBoxLayout(layout?: Partial<BoxLayout> | null): BoxLayout {
   return {
-    order: Array.isArray(layout?.order) ? layout.order.filter(Boolean) : [],
+    // Custom box order removed — keep empty for backup compatibility.
+    order: [],
     titles: layout?.titles && typeof layout.titles === "object" ? { ...layout.titles } : {},
   };
 }
@@ -69,7 +69,6 @@ const FORM_VIEWS: FormView[] = ["default", "shiny", "alpha", "mega", "gmax"];
 const SPRITE_STYLES: SpriteStyle[] = ["pixel", "home"];
 
 const defaultPrefs: DexPrefs = {
-  collapseCompleted: false,
   notificationsEnabled: false,
   formView: "default",
   spriteStyle: "pixel",
@@ -101,7 +100,6 @@ function migrateFormView(prefs?: LegacyPrefs | null): FormView {
 
 function normalizePrefs(prefs?: LegacyPrefs | null): DexPrefs {
   return {
-    collapseCompleted: prefs?.collapseCompleted ?? false,
     notificationsEnabled: prefs?.notificationsEnabled ?? false,
     formView: migrateFormView(prefs),
     spriteStyle:
@@ -375,20 +373,7 @@ export const useDexStore = create<DexState>()(
           if (!trimmed || trimmed === defaultTitle) delete titles[boxId];
           else titles[boxId] = trimmed;
           return {
-            nationalBoxLayout: { ...s.nationalBoxLayout, titles },
-          };
-        }),
-      reorderNationalBoxes: (fromId, toId, boxIds) =>
-        set((s) => {
-          if (fromId === toId) return s;
-          const fromIndex = boxIds.indexOf(fromId);
-          const toIndex = boxIds.indexOf(toId);
-          if (fromIndex < 0 || toIndex < 0) return s;
-          const order = [...boxIds];
-          order.splice(fromIndex, 1);
-          order.splice(toIndex, 0, fromId);
-          return {
-            nationalBoxLayout: { ...s.nationalBoxLayout, order },
+            nationalBoxLayout: { ...s.nationalBoxLayout, titles, order: [] },
           };
         }),
       exportData: () => {
@@ -439,7 +424,6 @@ export const useDexStore = create<DexState>()(
             lastSeenGiftIds: Array.from(new Set([...s.lastSeenGiftIds, ...next.lastSeenGiftIds])),
             prefs: normalizePrefs({ ...s.prefs, ...next.prefs }),
             nationalBoxLayout:
-              next.nationalBoxLayout.order.length > 0 ||
               Object.keys(next.nationalBoxLayout.titles).length > 0
                 ? next.nationalBoxLayout
                 : s.nationalBoxLayout,

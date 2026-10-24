@@ -17,10 +17,6 @@ export function countGameProgress(boxes: DexBox[], caughtMap: Record<string, boo
   return countProgress(boxes, caughtMap ?? {});
 }
 
-export function isBoxComplete(box: DexBox, caughtByKey: Record<string, boolean>) {
-  return box.slots.every((s) => Boolean(caughtByKey[s.key]));
-}
-
 export function countFlag(flagByKey: Record<string, boolean> | undefined): number {
   if (!flagByKey) return 0;
   return Object.values(flagByKey).filter(Boolean).length;

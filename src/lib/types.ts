@@ -57,13 +57,12 @@ export type FormView = "default" | "shiny" | "alpha" | "mega" | "gmax";
 export type SpriteStyle = "pixel" | "home";
 
 export type DexPrefs = {
-  collapseCompleted: boolean;
   notificationsEnabled: boolean;
   formView: FormView;
   spriteStyle: SpriteStyle;
 };
 
-/** Custom national-dex box titles and display order. */
+/** Custom national-dex box titles. `order` is legacy and ignored. */
 export type BoxLayout = {
   order: string[];
   titles: Record<string, string>;

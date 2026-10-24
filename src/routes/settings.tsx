@@ -15,15 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldTitle,
-} from "@/components/ui/field";
+import { FieldDescription, FieldTitle } from "@/components/ui/field";
 import { useCloudSyncContext } from "@/components/cloud-sync-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useDexStore } from "@/lib/store";
@@ -193,28 +186,6 @@ function SettingsPage() {
               sprites.
             </FieldDescription>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Dex preferences</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup>
-            <Field orientation="horizontal">
-              <FieldContent>
-                <FieldTitle>Collapse completed boxes</FieldTitle>
-                <FieldDescription>
-                  Hide finished boxes behind the accordion header.
-                </FieldDescription>
-              </FieldContent>
-              <Switch
-                checked={prefs.collapseCompleted}
-                onCheckedChange={(v) => setPref("collapseCompleted", v)}
-              />
-            </Field>
-          </FieldGroup>
         </CardContent>
       </Card>
 
