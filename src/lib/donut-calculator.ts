@@ -103,3 +103,8 @@ export function donutShortLabel(recipe: TipRecipe): string {
   const cut = label.indexOf(" · ");
   return cut >= 0 ? label.slice(0, cut) : label;
 }
+
+/** Special portal donut bag art (vendored into `public/donuts`). */
+export function donutSpriteUrl(donutId: string): string {
+  return `/donuts/${donutId}.webp`;
+}

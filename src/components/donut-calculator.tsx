@@ -16,6 +16,7 @@ import {
   availableIncludingSubstitutes,
   checkDonutRecipe,
   donutShortLabel,
+  donutSpriteUrl,
   getAllHyperBerryIds,
   getSpecialDonutRecipes,
 } from "@/lib/donut-calculator";
@@ -31,7 +32,7 @@ function BerryCountStepper({
   value: number;
   onChange: (next: number) => void;
 }) {
-  const label = `Hyper ${capitalizeBerryId(id)}`;
+  const label = capitalizeBerryId(id);
   return (
     <div className="flex shrink-0 items-center gap-1">
       <Button
@@ -116,7 +117,7 @@ export function DonutCalculator() {
                   htmlFor={`hyper-${id}`}
                   className="min-w-0 flex-1 text-sm font-normal normal-case tracking-normal"
                 >
-                  Hyper {capitalizeBerryId(id)}
+                  {capitalizeBerryId(id)}
                 </Label>
                 <BerryCountStepper
                   id={id}
@@ -136,7 +137,18 @@ export function DonutCalculator() {
                 <Button type="button" variant="outline" className="w-full justify-between" />
               }
             >
-              <span className="truncate">{donutShortLabel(recipe)}</span>
+              <span className="flex min-w-0 items-center gap-2">
+                {recipe.donut ? (
+                  <img
+                    src={donutSpriteUrl(recipe.donut)}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="size-7 shrink-0"
+                  />
+                ) : null}
+                <span className="truncate">{donutShortLabel(recipe)}</span>
+              </span>
               <ChevronDownIcon data-icon="inline-end" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="max-h-72 w-(--anchor-width)">
@@ -146,7 +158,18 @@ export function DonutCalculator() {
               >
                 {recipes.map((r, i) => (
                   <DropdownMenuRadioItem key={r.label ?? i} value={String(i)}>
-                    {donutShortLabel(r)}
+                    <span className="flex min-w-0 items-center gap-2">
+                      {r.donut ? (
+                        <img
+                          src={donutSpriteUrl(r.donut)}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="size-6 shrink-0"
+                        />
+                      ) : null}
+                      <span className="truncate">{donutShortLabel(r)}</span>
+                    </span>
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
@@ -189,7 +212,7 @@ export function DonutCalculator() {
                     loading="lazy"
                   />
                   <span className="min-w-0 flex-1 truncate">
-                    Hyper {capitalizeBerryId(berry.id)}
+                    {capitalizeBerryId(berry.id)}
                   </span>
                   <span className="tabular-nums text-muted-foreground">
                     {have}/{berry.count}

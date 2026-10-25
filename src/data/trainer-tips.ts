@@ -2,7 +2,7 @@
 export type TipBerry = {
   id: string;
   count: number;
-  /** Prefix label with Hyper (ZA Mega Dimension). */
+  /** ZA Mega Dimension Hyper Berry (uses Hyper bag art). */
   hyper?: boolean;
   optional?: boolean;
 };
@@ -10,6 +10,8 @@ export type TipBerry = {
 export type TipRecipe = {
   /** Donut / mission name when relevant. */
   label?: string;
+  /** Local special-donut art slug under `/donuts/{id}.webp`. */
+  donut?: string;
   ingredients: TipBerry[];
   note?: string;
 };
@@ -93,6 +95,7 @@ export const trainerTipsById: Record<string, GameTips> = {
             recipes: [
               {
                 label: "Bad Dreams Cruller · Mission 11 · Mega Darkrai",
+                donut: "bad-dreams-cruller",
                 ingredients: [
                   b("tanga", 3, { hyper: H }),
                   b("kasib", 3, { hyper: H }),
@@ -103,6 +106,7 @@ export const trainerTipsById: Record<string, GameTips> = {
               },
               {
                 label: "Omega Old Fashioned · Mission 13 · Primal Groudon",
+                donut: "omega-old-fashioned",
                 ingredients: [
                   b("haban", 2, { hyper: H }),
                   b("tamato", 1, { hyper: H }),
@@ -116,6 +120,7 @@ export const trainerTipsById: Record<string, GameTips> = {
               },
               {
                 label: "Alpha Old Fashioned · Mission 14 · Primal Kyogre",
+                donut: "alpha-old-fashioned",
                 ingredients: [
                   b("payapa", 2, { hyper: H }),
                   b("kelpsy", 1, { hyper: H }),
@@ -129,6 +134,7 @@ export const trainerTipsById: Record<string, GameTips> = {
               },
               {
                 label: "Delta Old Fashioned · Mission 12 · Mega Rayquaza",
+                donut: "delta-old-fashioned",
                 ingredients: [
                   b("oran", 1, { hyper: H }),
                   b("yache", 1, { hyper: H }),
@@ -142,6 +148,7 @@ export const trainerTipsById: Record<string, GameTips> = {
               },
               {
                 label: "Plasma-Glazed · Side EX3 · Mega Zeraora",
+                donut: "plasma-glazed",
                 ingredients: [
                   b("kebia", 1, { hyper: H }),
                   b("charti", 1, { hyper: H }),

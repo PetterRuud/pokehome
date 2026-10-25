@@ -57,8 +57,7 @@ export function berrySpriteUrl(id: string, opts?: { hyper?: boolean }): string {
 }
 
 export function berryDisplayName(berry: TipBerry): string {
-  const base = berry.id.charAt(0).toUpperCase() + berry.id.slice(1);
-  const name = berry.hyper ? `Hyper ${base}` : base;
+  const name = capitalizeBerryId(berry.id);
   return berry.optional ? `${name} (optional)` : name;
 }
 

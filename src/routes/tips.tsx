@@ -224,8 +224,7 @@ function BerryChip({ berry }: { berry: TipBerry }) {
         style={berry.hyper ? undefined : { imageRendering: "pixelated" }}
         loading="lazy"
       />
-      ×{berry.count}{" "}
-      {berry.hyper ? `Hyper ${capitalize(berry.id)}` : capitalize(berry.id)}
+      ×{berry.count} {capitalize(berry.id)}
       {berry.optional ? " ?" : ""}
     </Badge>
   );
