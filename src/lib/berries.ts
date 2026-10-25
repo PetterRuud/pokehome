@@ -2,7 +2,7 @@ import type { TipBerry } from "@/data/trainer-tips";
 
 /**
  * Official Mega Dimension Hyper Berry set (Game8 / in-game order).
- * Slugs match local Hyper sprites under `/berries/hyper/{id}.png`.
+ * Slugs match local Hyper sprites under `/berries/hyper/{id}.webp`.
  */
 export const HYPER_BERRY_IDS = [
   "cheri",
@@ -47,7 +47,7 @@ const REGULAR_BERRY_SPRITE =
 
 /** ZA Hyper Berry bag art (vendored from Serebii itemdex into `public/berries/hyper`). */
 export function hyperBerrySpriteUrl(id: string): string {
-  return `/berries/hyper/${id}.png`;
+  return `/berries/hyper/${id}.webp`;
 }
 
 /** Regular berry item art (PokeAPI). Pass `hyper: true` for local Hyper bag sprites. */

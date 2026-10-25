@@ -1,4 +1,4 @@
-/** Berry slug: regular PokeAPI art, or `/berries/hyper/{id}.png` when `hyper`. */
+/** Berry slug: regular PokeAPI art, or `/berries/hyper/{id}.webp` when `hyper`. */
 export type TipBerry = {
   id: string;
   count: number;
