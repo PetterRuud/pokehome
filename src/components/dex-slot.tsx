@@ -59,13 +59,7 @@ export function DexSlotButton({
       ? `${slot.name}: ${caught ? "caught" : "missing"}. Tap to select.`
       : `${slot.name}: ${flagged ? `has ${formView}` : `no ${formView}`}. Tap to select.`;
 
-  const variant = selected
-    ? "secondary"
-    : active
-      ? "primary"
-      : searchActive || searchHit
-        ? "outline"
-        : "muted";
+  const variant = selected ? "secondary" : active ? "primary" : "muted";
 
   return (
     <div className="relative">
@@ -86,7 +80,14 @@ export function DexSlotButton({
             aria-pressed={selected}
           />
         }
-        className="flex-col items-center pt-8"
+        className={cn(
+          "flex-col items-center pt-8",
+          searchActive && "ring-2 ring-ring ring-offset-2 ring-offset-background",
+          searchHit &&
+            !searchActive &&
+            !selected &&
+            "ring-2 ring-ring/50 ring-offset-1 ring-offset-background",
+        )}
       >
         <PokemonSprite
           id={slot.id}

@@ -1252,16 +1252,21 @@ function GameDexRow({
 }) {
   const unavailable = slot.available === false;
   const pokemonSearch = { from: "games" as const, game: gameId };
-  const variant = selected
-    ? "secondary"
-    : caught
-      ? "primary"
-      : searchActive || searchHit
-        ? "outline"
-        : "muted";
+  const variant = selected ? "secondary" : caught ? "primary" : "muted";
 
   return (
-    <Item variant={variant} size="sm" className={cn(unavailable && "opacity-70")}>
+    <Item
+      variant={variant}
+      size="sm"
+      className={cn(
+        unavailable && "opacity-70",
+        searchActive && "ring-2 ring-ring ring-offset-2 ring-offset-background",
+        searchHit &&
+          !searchActive &&
+          !selected &&
+          "ring-2 ring-ring/50 ring-offset-1 ring-offset-background",
+      )}
+    >
       <Checkbox
         checked={selected}
         disabled={unavailable}
@@ -1334,13 +1339,7 @@ function GameDexGridCard({
   const unavailable = slot.available === false;
   const active = caught && !unavailable;
   const pokemonSearch = { from: "games" as const, game: gameId };
-  const variant = selected
-    ? "secondary"
-    : active
-      ? "primary"
-      : searchActive || searchHit
-        ? "outline"
-        : "muted";
+  const variant = selected ? "secondary" : active ? "primary" : "muted";
 
   return (
     <div className="relative">
@@ -1363,7 +1362,14 @@ function GameDexGridCard({
             aria-pressed={selected}
           />
         }
-        className="flex-col items-center pt-8"
+        className={cn(
+          "flex-col items-center pt-8",
+          searchActive && "ring-2 ring-ring ring-offset-2 ring-offset-background",
+          searchHit &&
+            !searchActive &&
+            !selected &&
+            "ring-2 ring-ring/50 ring-offset-1 ring-offset-background",
+        )}
       >
         <PokemonSprite
           id={slot.id}
