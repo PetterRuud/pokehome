@@ -1,8 +1,10 @@
 import { ClerkProvider } from "@clerk/tanstack-react-start";
-import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
+import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppShell } from "@/components/app-shell";
@@ -40,8 +42,32 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  notFoundComponent: NotFoundPage,
   shellComponent: RootDocument,
 });
+
+function NotFoundPage() {
+  return (
+    <div className="mx-auto flex w-full max-w-md flex-col gap-4 py-12">
+      <Empty className="border border-dashed">
+        <EmptyHeader>
+          <EmptyTitle>Page not found</EmptyTitle>
+          <EmptyDescription>
+            That route doesn’t exist. Head back home or open the living dex.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+      <div className="flex flex-wrap justify-center gap-2">
+        <Button render={<Link to="/" />} nativeButton={false}>
+          Home
+        </Button>
+        <Button variant="outline" render={<Link to="/dex" />} nativeButton={false}>
+          Open dex
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
