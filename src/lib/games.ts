@@ -27,6 +27,43 @@ export function gameHasSpecies(game: GameDex, nationalId: number): boolean {
   );
 }
 
+export type GameSpeciesNav = {
+  id: number;
+  name: string;
+  entryNumber?: number;
+};
+
+/** Unique species in game dex order (first slot wins for dual mega entries). */
+export function getGameSpeciesOrder(game: GameDex): GameSpeciesNav[] {
+  const seen = new Set<number>();
+  const out: GameSpeciesNav[] = [];
+  for (const box of game.boxes) {
+    for (const slot of box.slots) {
+      if (seen.has(slot.id)) continue;
+      seen.add(slot.id);
+      out.push({
+        id: slot.id,
+        name: slot.name,
+        entryNumber: slot.entryNumber,
+      });
+    }
+  }
+  return out;
+}
+
+export function gameNeighbors(
+  game: GameDex,
+  nationalId: number,
+): { prev: GameSpeciesNav | null; next: GameSpeciesNav | null } {
+  const order = getGameSpeciesOrder(game);
+  const index = order.findIndex((s) => s.id === nationalId);
+  if (index < 0) return { prev: null, next: null };
+  return {
+    prev: index > 0 ? order[index - 1]! : null,
+    next: index < order.length - 1 ? order[index + 1]! : null,
+  };
+}
+
 /** Group HOME-style dexes by family (main + DLC together). */
 export function getGameGroups(): GameGroup[] {
   const order: string[] = [];

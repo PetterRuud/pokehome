@@ -1050,6 +1050,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                 >
                   <GameDexRow
                     slot={slot}
+                    gameId={gameId}
                     caught={Boolean(caughtMap[slot.key])}
                     selected={selected.has(slot.key)}
                     spriteStyle={spriteStyle}
@@ -1076,6 +1077,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                   <GameDexGridCard
                     key={slot.key}
                     slot={slot}
+                    gameId={gameId}
                     caught={Boolean(caughtMap[slot.key])}
                     selected={selected.has(slot.key)}
                     spriteStyle={spriteStyle}
@@ -1118,18 +1120,21 @@ function GameDexNumbers({ slot }: { slot: DexSlot }) {
 
 function GameDexRow({
   slot,
+  gameId,
   caught,
   selected,
   spriteStyle,
   onSelectedChange,
 }: {
   slot: DexSlot;
+  gameId: GameId;
   caught: boolean;
   selected: boolean;
   spriteStyle: SpriteStyle;
   onSelectedChange: (selected: boolean) => void;
 }) {
   const unavailable = slot.available === false;
+  const pokemonSearch = { from: "games" as const, game: gameId };
 
   return (
     <div
@@ -1174,7 +1179,13 @@ function GameDexRow({
       <Button
         variant="ghost"
         size="icon-xs"
-        render={<Link to="/pokemon/$id" params={{ id: String(slot.id) }} />}
+        render={
+          <Link
+            to="/pokemon/$id"
+            params={{ id: String(slot.id) }}
+            search={pokemonSearch}
+          />
+        }
         nativeButton={false}
         aria-label={`${slot.name} details`}
       >
@@ -1186,18 +1197,21 @@ function GameDexRow({
 
 function GameDexGridCard({
   slot,
+  gameId,
   caught,
   selected,
   spriteStyle,
   onSelectedChange,
 }: {
   slot: DexSlot;
+  gameId: GameId;
   caught: boolean;
   selected: boolean;
   spriteStyle: SpriteStyle;
   onSelectedChange: (selected: boolean) => void;
 }) {
   const unavailable = slot.available === false;
+  const pokemonSearch = { from: "games" as const, game: gameId };
 
   return (
     <div
@@ -1223,6 +1237,7 @@ function GameDexGridCard({
       <Link
         to="/pokemon/$id"
         params={{ id: String(slot.id) }}
+        search={pokemonSearch}
         aria-label={`${slot.name} details`}
         className="absolute top-1 right-1 flex size-6 items-center justify-center rounded-full border border-border bg-background/90 text-muted-foreground shadow-sm transition hover:text-foreground"
       >
