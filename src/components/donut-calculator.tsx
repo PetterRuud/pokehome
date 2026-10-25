@@ -19,14 +19,20 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { berrySpriteUrl, capitalizeBerryId, hyperBerryHowto } from "@/lib/berries";
 import {
   availableIncludingSubstitutes,
   checkDonutRecipe,
+  DONUT_STAR_FLAVOR,
   donutShortLabel,
   donutSpriteUrl,
   getAllHyperBerryIds,
   getSpecialDonutRecipes,
+  suggestDonutForStars,
+  suggestTipMix,
+  type DonutStar,
+  type MixGoal,
 } from "@/lib/donut-calculator";
 import { useHyperBerryStore } from "@/lib/hyper-berry-store";
 import {
@@ -37,6 +43,18 @@ import {
   PlusIcon,
   XIcon,
 } from "lucide-react";
+
+const STAR_OPTIONS: DonutStar[] = [1, 2, 3, 4, 5];
+
+const MIX_GOALS: { id: MixGoal; label: string }[] = [
+  { id: "stars", label: "★ Rank" },
+  { id: "shiny", label: "Shiny" },
+  { id: "farm", label: "Farm" },
+  { id: "cheap", label: "Cheap farm" },
+  { id: "early", label: "Early" },
+  { id: "mid", label: "Mid" },
+  { id: "late", label: "Late" },
+];
 
 function BerryCountStepper({
   id,
@@ -90,11 +108,21 @@ export function DonutCalculator() {
   const setCount = useHyperBerryStore((s) => s.setCount);
   const clearAll = useHyperBerryStore((s) => s.clearAll);
   const [recipeIndex, setRecipeIndex] = useState(0);
+  const [mixGoal, setMixGoal] = useState<MixGoal>("stars");
+  const [targetStars, setTargetStars] = useState<DonutStar>(3);
 
   const recipe = recipes[recipeIndex] ?? recipes[0];
   const result = useMemo(
     () => (recipe ? checkDonutRecipe(counts, recipe) : null),
     [counts, recipe],
+  );
+  const starSuggestion = useMemo(
+    () => suggestDonutForStars(counts, targetStars),
+    [counts, targetStars],
+  );
+  const tipSuggestion = useMemo(
+    () => (mixGoal === "stars" ? null : suggestTipMix(counts, mixGoal)),
+    [counts, mixGoal],
   );
 
   if (recipes.length === 0 || !recipe || !result) return null;
@@ -171,6 +199,123 @@ export function DonutCalculator() {
               );
             })}
           </ul>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label>Suggest mix</Label>
+          <ToggleGroup
+            variant="outline"
+            size="sm"
+            value={[mixGoal]}
+            onValueChange={(next) => {
+              const id = next[0] as MixGoal | undefined;
+              if (id) setMixGoal(id);
+            }}
+            className="flex w-full flex-wrap"
+          >
+            {MIX_GOALS.map((goal) => (
+              <ToggleGroupItem key={goal.id} value={goal.id} aria-label={goal.label}>
+                {goal.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+
+          {mixGoal === "stars" ? (
+            <>
+              <ToggleGroup
+                variant="outline"
+                size="sm"
+                value={[String(targetStars)]}
+                onValueChange={(next) => {
+                  const v = Number(next[0]);
+                  if (v >= 1 && v <= 5) setTargetStars(v as DonutStar);
+                }}
+                className="grid w-full grid-cols-5"
+              >
+                {STAR_OPTIONS.map((star) => (
+                  <ToggleGroupItem key={star} value={String(star)} aria-label={`${star} star`}>
+                    {star}★
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+              <p className="text-xs text-muted-foreground">
+                Needs ≥{DONUT_STAR_FLAVOR[targetStars]} flavor · prefers berries you have most of
+                (max 8 slots)
+              </p>
+              {starSuggestion.ingredients.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Add berries to your stash first.</p>
+              ) : (
+                <>
+                  <Badge
+                    variant={starSuggestion.canMake ? "default" : "destructive"}
+                    className="w-fit"
+                  >
+                    {starSuggestion.canMake ? (
+                      <CheckIcon data-icon="inline-start" />
+                    ) : (
+                      <XIcon data-icon="inline-start" />
+                    )}
+                    {starSuggestion.flavor}/{starSuggestion.targetFlavor} flavor
+                    {starSuggestion.canMake ? "" : " — short"}
+                  </Badge>
+                  <ul className="flex flex-wrap items-center gap-2">
+                    {starSuggestion.ingredients.map((berry) => (
+                      <Badge key={berry.id} variant="outline">
+                        <img
+                          src={berrySpriteUrl(berry.id, { hyper: true })}
+                          alt=""
+                          loading="lazy"
+                        />
+                        ×{berry.count} {capitalizeBerryId(berry.id)}
+                      </Badge>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </>
+          ) : tipSuggestion ? (
+            <>
+              <p className="text-xs text-muted-foreground">
+                Best tip recipe for your stash
+                {tipSuggestion.note ? ` · ${tipSuggestion.note}` : ""}
+              </p>
+              <Badge
+                variant={tipSuggestion.canMake ? "default" : "destructive"}
+                className="w-fit"
+              >
+                {tipSuggestion.canMake ? (
+                  <CheckIcon data-icon="inline-start" />
+                ) : (
+                  <XIcon data-icon="inline-start" />
+                )}
+                {tipSuggestion.canMake ? "Can make" : "Missing berries"}
+              </Badge>
+              <ul className="flex flex-wrap items-center gap-2">
+                {tipSuggestion.ingredients.map((berry) => (
+                  <Badge key={berry.id} variant="outline">
+                    <img
+                      src={berrySpriteUrl(berry.id, { hyper: berry.hyper !== false })}
+                      alt=""
+                      loading="lazy"
+                      style={berry.hyper === false ? { imageRendering: "pixelated" } : undefined}
+                    />
+                    ×{berry.count} {capitalizeBerryId(berry.id)}
+                  </Badge>
+                ))}
+              </ul>
+              {!tipSuggestion.canMake && tipSuggestion.missing.length > 0 ? (
+                <ul className="flex flex-col gap-1.5">
+                  {tipSuggestion.missing.map((berry) => (
+                    <li key={berry.id} className="text-xs text-muted-foreground">
+                      Need {berry.count} more {capitalizeBerryId(berry.id)}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">No tip recipes for this goal.</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
