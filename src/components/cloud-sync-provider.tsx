@@ -1,5 +1,5 @@
-import { useCloudSync, type CloudSyncState } from "@/hooks/use-cloud-sync";
-import { createContext, useContext } from "react";
+import { useCloudSync, type CloudSyncState } from '@/hooks/use-cloud-sync';
+import { createContext, useContext } from 'react';
 
 const CloudSyncContext = createContext<CloudSyncState | null>(null);
 
@@ -12,7 +12,7 @@ export function useCloudSyncContext(): CloudSyncState {
   const ctx = useContext(CloudSyncContext);
   if (!ctx) {
     return {
-      status: "idle",
+      status: 'idle',
       lastSyncedAt: null,
       error: null,
       syncNow: async () => {},

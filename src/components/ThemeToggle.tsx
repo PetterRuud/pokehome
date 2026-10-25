@@ -1,63 +1,61 @@
-import { useEffect, useState } from "react";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { MoonIcon, SunIcon, MonitorIcon } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { MoonIcon, SunIcon, MonitorIcon } from 'lucide-react';
 
-type ThemeMode = "light" | "dark" | "auto";
+type ThemeMode = 'light' | 'dark' | 'auto';
 
 const OPTIONS: {
   value: ThemeMode;
   label: string;
   icon: typeof SunIcon;
 }[] = [
-  { value: "light", label: "Light", icon: SunIcon },
-  { value: "dark", label: "Dark", icon: MoonIcon },
-  { value: "auto", label: "System", icon: MonitorIcon },
+  { value: 'light', label: 'Light', icon: SunIcon },
+  { value: 'dark', label: 'Dark', icon: MoonIcon },
+  { value: 'auto', label: 'System', icon: MonitorIcon },
 ];
 
 function getInitialMode(): ThemeMode {
-  if (typeof window === "undefined") return "auto";
-  const stored = window.localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark" || stored === "auto") return stored;
-  return "auto";
+  if (typeof window === 'undefined') return 'auto';
+  const stored = window.localStorage.getItem('theme');
+  if (stored === 'light' || stored === 'dark' || stored === 'auto') return stored;
+  return 'auto';
 }
 
 function applyThemeMode(mode: ThemeMode) {
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const resolved = mode === "auto" ? (prefersDark ? "dark" : "light") : mode;
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const resolved = mode === 'auto' ? (prefersDark ? 'dark' : 'light') : mode;
 
-  document.documentElement.classList.remove("light", "dark");
+  document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(resolved);
 
-  if (mode === "auto") {
-    document.documentElement.removeAttribute("data-theme");
+  if (mode === 'auto') {
+    document.documentElement.removeAttribute('data-theme');
   } else {
-    document.documentElement.setAttribute("data-theme", mode);
+    document.documentElement.setAttribute('data-theme', mode);
   }
 
   document.documentElement.style.colorScheme = resolved;
 }
 
 export function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>("auto");
+  const [mode, setMode] = useState<ThemeMode>(getInitialMode);
 
   useEffect(() => {
-    const initialMode = getInitialMode();
-    setMode(initialMode);
-    applyThemeMode(initialMode);
-  }, []);
+    applyThemeMode(mode);
+  }, [mode]);
 
   useEffect(() => {
-    if (mode !== "auto") return;
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => applyThemeMode("auto");
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
+    if (mode !== 'auto') return undefined;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = () => applyThemeMode('auto');
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
   }, [mode]);
 
   function selectMode(nextMode: ThemeMode) {
     setMode(nextMode);
     applyThemeMode(nextMode);
-    window.localStorage.setItem("theme", nextMode);
+    window.localStorage.setItem('theme', nextMode);
   }
 
   return (

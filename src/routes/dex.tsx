@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,38 +21,33 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item';
 import {
   AddToDialogButton,
   applyAddToOptions,
   summarizeAddOptions,
   type AddToOptions,
-} from "@/components/add-to-dialog";
-import { ConfirmAlertDialog, type ConfirmRequest } from "@/components/confirm-alert-dialog";
-import { DexSearchBar } from "@/components/dex-search";
-import { DexSlotButton } from "@/components/dex-slot";
-import { GameLogo } from "@/components/game-logo";
-import { PokemonSprite } from "@/components/pokemon-sprite";
-import { applyBoxLayout } from "@/lib/box-layout";
-import { filterSlotsByQuery } from "@/lib/dex-search";
-import { useDexStore } from "@/lib/store";
-import { countGameProgress, countProgress, toPercent } from "@/lib/dex-stats";
-import {
-  filterBoxesForFormView,
-  gmaxSpeciesCount,
-  megaSpeciesCount,
-  regionalSpeciesCount,
-} from "@/lib/form-variants";
-import { getGame, getGames } from "@/lib/games";
-import nationalDex from "@/data/national-dex.json";
-import type { DexBox, DexSlot, FormView, GameId, SpriteStyle } from "@/lib/types";
-import { cn } from "@/lib/utils";
+} from '@/components/add-to-dialog';
+import { ConfirmAlertDialog, type ConfirmRequest } from '@/components/confirm-alert-dialog';
+import { DexSearchBar } from '@/components/dex-search';
+import { DexSlotButton } from '@/components/dex-slot';
+import { GameLogo } from '@/components/game-logo';
+import { PokemonSprite } from '@/components/pokemon-sprite';
+import { applyBoxLayout } from '@/lib/box-layout';
+import { filterSlotsByQuery } from '@/lib/dex-search';
+import { useDexStore } from '@/lib/store';
+import { countGameProgress, countProgress, toPercent } from '@/lib/dex-stats';
+import { filterBoxesForFormView, gmaxSpeciesCount, megaSpeciesCount, regionalSpeciesCount } from '@/lib/form-variants';
+import { getGame, getGames } from '@/lib/games';
+import nationalDex from '@/data/national-dex.json';
+import type { DexBox, DexSlot, FormView, GameId, SpriteStyle } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -68,21 +63,22 @@ import {
   PencilIcon,
   SparklesIcon,
   ZapIcon,
-} from "lucide-react";
+} from 'lucide-react';
 
 function useDexSearchState(slots: DexSlot[]) {
-  const [query, setQuery] = useState("");
+  const [query, setQueryState] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
 
   const matches = useMemo(() => filterSlotsByQuery(slots, query), [slots, query]);
 
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [query]);
-
   const safeIndex = matches.length === 0 ? -1 : Math.min(activeIndex, matches.length - 1);
   const activeKey = safeIndex >= 0 ? (matches[safeIndex]?.key ?? null) : null;
   const hitKeys = useMemo(() => new Set(matches.map((s) => s.key)), [matches]);
+
+  function setQuery(next: string) {
+    setQueryState(next);
+    setActiveIndex(0);
+  }
 
   function goNext() {
     if (matches.length === 0) return;
@@ -105,11 +101,11 @@ function useDexSearchState(slots: DexSlot[]) {
     goPrev,
   };
 }
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
 /** Sit under the app shell sticky header (h-14). */
 const DEX_STICKY_TOOLBAR =
-  "sticky top-14 z-30 -mx-4 flex flex-wrap items-center gap-2 border-b border-border bg-background/95 px-4 py-2 backdrop-blur md:-mx-6 md:px-6";
+  'sticky top-14 z-30 -mx-4 flex flex-wrap items-center gap-2 border-b border-border bg-background/95 px-4 py-2 backdrop-blur md:-mx-6 md:px-6';
 
 const EMPTY_CAUGHT: Record<string, boolean> = {};
 const LIST_ROW_HEIGHT = 104;
@@ -120,14 +116,14 @@ const NAT_GRID_ROW_HEIGHT = GRID_ROW_HEIGHT;
 
 type NationalVirtualRow =
   | {
-      type: "header";
+      type: 'header';
       box: DexBox;
       caughtCount: number;
       complete: boolean;
       keys: string[];
       missing: string[];
     }
-  | { type: "grid"; boxId: string; slots: DexSlot[] };
+  | { type: 'grid'; boxId: string; slots: DexSlot[] };
 
 function useGridColumnCount(width: number) {
   if (width >= 1024) return 6;
@@ -142,12 +138,12 @@ const FORM_VIEW_OPTIONS: {
   icon: typeof SparklesIcon;
   iconClassName?: string;
 }[] = [
-  { value: "default", label: "All", icon: LayoutGridIcon },
-  { value: "shiny", label: "Shiny", icon: SparklesIcon, iconClassName: "text-amber-500" },
-  { value: "alpha", label: "Alpha", icon: EyeIcon, iconClassName: "text-red-500" },
-  { value: "mega", label: "Mega", icon: ZapIcon, iconClassName: "text-violet-500" },
-  { value: "gmax", label: "Gmax", icon: ExpandIcon, iconClassName: "text-rose-500" },
-  { value: "regional", label: "Regional", icon: GlobeIcon, iconClassName: "text-sky-500" },
+  { value: 'default', label: 'All', icon: LayoutGridIcon },
+  { value: 'shiny', label: 'Shiny', icon: SparklesIcon, iconClassName: 'text-amber-500' },
+  { value: 'alpha', label: 'Alpha', icon: EyeIcon, iconClassName: 'text-red-500' },
+  { value: 'mega', label: 'Mega', icon: ZapIcon, iconClassName: 'text-violet-500' },
+  { value: 'gmax', label: 'Gmax', icon: ExpandIcon, iconClassName: 'text-rose-500' },
+  { value: 'regional', label: 'Regional', icon: GlobeIcon, iconClassName: 'text-sky-500' },
 ];
 
 function FormViewMenu({
@@ -197,12 +193,12 @@ function FormViewMenu({
 }
 
 const GAME_FILTER_OPTIONS = [
-  { value: "all", label: "All" },
-  { value: "missing", label: "Missing" },
-  { value: "caught", label: "Caught" },
+  { value: 'all', label: 'All' },
+  { value: 'missing', label: 'Missing' },
+  { value: 'caught', label: 'Caught' },
 ] as const;
 
-type GameFilter = (typeof GAME_FILTER_OPTIONS)[number]["value"];
+type GameFilter = (typeof GAME_FILTER_OPTIONS)[number]['value'];
 
 function GameFilterMenu({
   value,
@@ -232,10 +228,7 @@ function GameFilterMenu({
         <ChevronDownIcon data-icon="inline-end" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuRadioGroup
-          value={value}
-          onValueChange={(next) => onChange(next as GameFilter)}
-        >
+        <DropdownMenuRadioGroup value={value} onValueChange={(next) => onChange(next as GameFilter)}>
           {GAME_FILTER_OPTIONS.map((opt) => (
             <DropdownMenuRadioItem key={opt.value} value={opt.value}>
               {opt.label}
@@ -248,15 +241,14 @@ function GameFilterMenu({
 }
 
 type DexSearch = {
-  tab?: "national" | "games";
+  tab?: 'national' | 'games';
   game?: GameId;
 };
 
-export const Route = createFileRoute("/dex")({
+export const Route = createFileRoute('/dex')({
   validateSearch: (search: Record<string, unknown>): DexSearch => {
-    const tab = search.tab === "games" ? "games" : "national";
-    const rawGame =
-      typeof search.game === "string" && search.game.length > 0 ? search.game : undefined;
+    const tab = search.tab === 'games' ? 'games' : 'national';
+    const rawGame = typeof search.game === 'string' && search.game.length > 0 ? search.game : undefined;
     const game = rawGame && getGame(rawGame) ? rawGame : undefined;
     return {
       tab,
@@ -271,40 +263,31 @@ function DexPage() {
   const games = getGames();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
-  const tab = search.tab === "games" ? "games" : "national";
-  const [gameId, setGameId] = useState<GameId>(
-    () => (search.game && getGame(search.game)?.id) || games[0]?.id || "sv-paldea",
-  );
-
-  useEffect(() => {
-    if (search.game && getGame(search.game)) {
-      setGameId(search.game);
-    }
-  }, [search.game]);
+  const tab = search.tab === 'games' ? 'games' : 'national';
+  const gameId: GameId = (search.game && getGame(search.game)?.id) || games[0]?.id || 'sv-paldea';
 
   // Keep ?game= in sync when browsing the Games tab
   useEffect(() => {
-    if (tab !== "games") return;
+    if (tab !== 'games') return;
     if (search.game === gameId) return;
     void navigate({
-      to: "/dex",
-      search: { tab: "games", game: gameId },
+      to: '/dex',
+      search: { tab: 'games', game: gameId },
       replace: true,
     });
   }, [tab, gameId, search.game, navigate]);
 
-  function setTab(next: "national" | "games") {
+  function setTab(next: 'national' | 'games') {
     void navigate({
-      to: "/dex",
-      search: next === "games" ? { tab: "games", game: gameId } : { tab: "national" },
+      to: '/dex',
+      search: next === 'games' ? { tab: 'games', game: gameId } : { tab: 'national' },
     });
   }
 
   function selectGame(id: GameId) {
-    setGameId(id);
     void navigate({
-      to: "/dex",
-      search: { tab: "games", game: id },
+      to: '/dex',
+      search: { tab: 'games', game: id },
     });
   }
 
@@ -315,7 +298,7 @@ function DexPage() {
       <Tabs
         value={tab}
         onValueChange={(v) => {
-          if (v === "national" || v === "games") setTab(v);
+          if (v === 'national' || v === 'games') setTab(v);
         }}
       >
         <TabsList className="w-full justify-start overflow-x-auto">
@@ -345,25 +328,14 @@ function DexPage() {
                 <ToggleGroupItem
                   key={game.id}
                   value={game.id}
-                  aria-label={
-                    complete
-                      ? `${game.name}, complete`
-                      : `${game.name}, ${caught} of ${total} caught`
-                  }
+                  aria-label={complete ? `${game.name}, complete` : `${game.name}, ${caught} of ${total} caught`}
                   title={game.name}
                   className="h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5"
                 >
-                  <GameLogo
-                    logo={game.logo}
-                    title={game.name}
-                    variant="wordmark"
-                    className="h-7 max-w-full"
-                  />
+                  <GameLogo logo={game.logo} title={game.name} variant="wordmark" className="h-7 max-w-full" />
                   <span className="flex max-w-full flex-wrap items-center justify-center gap-1">
-                    <span className="text-center text-xs leading-tight font-medium">
-                      {game.name}
-                    </span>
-                    {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
+                    <span className="text-center text-xs leading-tight font-medium">{game.name}</span>
+                    {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
                   </span>
                   {complete ? (
                     <Badge variant="secondary">
@@ -408,7 +380,7 @@ function NationalDexView() {
   const spriteStyle = prefs.spriteStyle;
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [renameBox, setRenameBox] = useState<DexBox | null>(null);
-  const [renameValue, setRenameValue] = useState("");
+  const [renameValue, setRenameValue] = useState('');
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const [scrollWidth, setScrollWidth] = useState(0);
@@ -430,25 +402,25 @@ function NationalDexView() {
   }, []);
 
   const flagByKey =
-    formView === "shiny"
+    formView === 'shiny'
       ? shinyByKey
-      : formView === "alpha"
+      : formView === 'alpha'
         ? alphaByKey
-        : formView === "mega"
+        : formView === 'mega'
           ? megaByKey
-          : formView === "gmax"
+          : formView === 'gmax'
             ? gmaxByKey
-            : formView === "regional"
+            : formView === 'regional'
               ? regionalByKey
               : null;
 
   const progressByKey = flagByKey ?? caughtByKey;
 
   const formProgress = useMemo(() => {
-    if (formView === "default") {
+    if (formView === 'default') {
       return countProgress(boxes, caughtByKey);
     }
-    if (formView === "mega" || formView === "gmax" || formView === "regional") {
+    if (formView === 'mega' || formView === 'gmax' || formView === 'regional') {
       return countProgress(boxes, flagByKey ?? {});
     }
     const flagged = Object.values(flagByKey ?? {}).filter(Boolean).length;
@@ -461,17 +433,17 @@ function NationalDexView() {
   }, [formView, boxes, caughtByKey, flagByKey]);
 
   const trackLabel =
-    formView === "default"
-      ? "caught"
-      : formView === "shiny"
-        ? "shiny"
-        : formView === "alpha"
-          ? "alpha"
-          : formView === "mega"
-            ? "mega"
-            : formView === "gmax"
-              ? "gmax"
-              : "regional";
+    formView === 'default'
+      ? 'caught'
+      : formView === 'shiny'
+        ? 'shiny'
+        : formView === 'alpha'
+          ? 'alpha'
+          : formView === 'mega'
+            ? 'mega'
+            : formView === 'gmax'
+              ? 'gmax'
+              : 'regional';
 
   const allSlots = useMemo(() => boxes.flatMap((box) => box.slots), [boxes]);
   const allKeys = useMemo(() => allSlots.map((s) => s.key), [allSlots]);
@@ -490,10 +462,10 @@ function NationalDexView() {
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
-    window.addEventListener("resize", update);
+    window.addEventListener('resize', update);
     return () => {
       ro.disconnect();
-      window.removeEventListener("resize", update);
+      window.removeEventListener('resize', update);
     };
   }, [boxes.length, formView]);
 
@@ -506,7 +478,7 @@ function NationalDexView() {
       const caughtCount = keys.filter((k) => Boolean(progressByKey[k])).length;
       const complete = caughtCount === keys.length && keys.length > 0;
       rows.push({
-        type: "header",
+        type: 'header',
         box,
         caughtCount,
         complete,
@@ -515,7 +487,7 @@ function NationalDexView() {
       });
       for (let i = 0; i < box.slots.length; i += colCount) {
         rows.push({
-          type: "grid",
+          type: 'grid',
           boxId: box.id,
           slots: box.slots.slice(i, i + colCount),
         });
@@ -524,10 +496,10 @@ function NationalDexView() {
     return rows;
   }, [boxes, progressByKey, colCount]);
 
+  // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual intentionally skips compiler memoization
   const virtualizer = useWindowVirtualizer({
     count: virtualRows.length,
-    estimateSize: (index) =>
-      virtualRows[index]?.type === "header" ? NAT_HEADER_HEIGHT : NAT_GRID_ROW_HEIGHT,
+    estimateSize: (index) => (virtualRows[index]?.type === 'header' ? NAT_HEADER_HEIGHT : NAT_GRID_ROW_HEIGHT),
     overscan: 6,
     scrollMargin,
   });
@@ -539,19 +511,19 @@ function NationalDexView() {
   useEffect(() => {
     if (!search.activeKey) return;
     const rowIndex = virtualRows.findIndex(
-      (row) => row.type === "grid" && row.slots.some((slot) => slot.key === search.activeKey),
+      (row) => row.type === 'grid' && row.slots.some((slot) => slot.key === search.activeKey),
     );
     if (rowIndex >= 0) {
-      virtualizer.scrollToIndex(rowIndex, { align: "center" });
+      virtualizer.scrollToIndex(rowIndex, { align: 'center' });
     }
   }, [search.activeKey, virtualRows, virtualizer]);
 
   function setMany(keys: string[], value: boolean) {
-    if (formView === "shiny") setShinyMany(keys, value);
-    else if (formView === "alpha") setAlphaMany(keys, value);
-    else if (formView === "mega") setMegaMany(keys, value);
-    else if (formView === "gmax") setGmaxMany(keys, value);
-    else if (formView === "regional") setRegionalMany(keys, value);
+    if (formView === 'shiny') setShinyMany(keys, value);
+    else if (formView === 'alpha') setAlphaMany(keys, value);
+    else if (formView === 'mega') setMegaMany(keys, value);
+    else if (formView === 'gmax') setGmaxMany(keys, value);
+    else if (formView === 'regional') setRegionalMany(keys, value);
     else setCaughtMany(keys, value);
   }
 
@@ -604,13 +576,11 @@ function NationalDexView() {
         selectedCount === 1
           ? `This removes the ${trackLabel} mark for the selected Pokémon.`
           : `This removes the ${trackLabel} mark for ${selectedCount} selected Pokémon.`,
-      confirmLabel: "Clear",
+      confirmLabel: 'Clear',
       onConfirm: () => {
         setMany(keys, false);
         setSelected(new Set());
-        toast.success(
-          keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`,
-        );
+        toast.success(keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`);
       },
     });
   }
@@ -624,13 +594,9 @@ function NationalDexView() {
           checked={allSelected}
           indeterminate={someSelected && !allSelected}
           onCheckedChange={(v) => toggleSelectAll(v)}
-          aria-label={selectedCount > 0 ? `Select all · ${selectedCount} selected` : "Select all"}
+          aria-label={selectedCount > 0 ? `Select all · ${selectedCount} selected` : 'Select all'}
         />
-        <AddToDialogButton
-          selectedCount={selectedCount}
-          disabled={selectedCount === 0}
-          onAdd={addSelected}
-        />
+        <AddToDialogButton selectedCount={selectedCount} disabled={selectedCount === 0} onAdd={addSelected} />
         <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
@@ -642,21 +608,17 @@ function NationalDexView() {
           onPrev={search.goPrev}
           onNext={search.goNext}
         />
-        <FormViewMenu
-          value={formView}
-          onChange={(value) => setPref("formView", value)}
-          className="ml-auto"
-        />
+        <FormViewMenu value={formView} onChange={(value) => setPref('formView', value)} className="ml-auto" />
       </div>
 
       <p className="text-sm text-muted-foreground">
-        {formView === "mega"
+        {formView === 'mega'
           ? `Mega · ${formProgress.caught} / ${megaSpeciesCount()}`
-          : formView === "gmax"
+          : formView === 'gmax'
             ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
-            : formView === "regional"
+            : formView === 'regional'
               ? `Regional · ${formProgress.caught} / ${regionalSpeciesCount()}`
-              : formView === "shiny" || formView === "alpha"
+              : formView === 'shiny' || formView === 'alpha'
                 ? `${trackLabel} · ${formProgress.caught} marked`
                 : `National · ${formProgress.caught} / ${formProgress.total}`}
       </p>
@@ -669,16 +631,12 @@ function NationalDexView() {
           </EmptyHeader>
         </Empty>
       ) : (
-        <div
-          ref={listRef}
-          className="relative w-full"
-          style={{ height: virtualizer.getTotalSize() }}
-        >
+        <div ref={listRef} className="relative w-full" style={{ height: virtualizer.getTotalSize() }}>
           {virtualItems.map((item) => {
             const row = virtualRows[item.index];
             if (!row) return null;
 
-            if (row.type === "header") {
+            if (row.type === 'header') {
               return (
                 <div
                   key={`h-${row.box.id}`}
@@ -691,8 +649,8 @@ function NationalDexView() {
                     box={row.box}
                     caughtCount={row.caughtCount}
                     complete={row.complete}
-                    addAllLabel={formView === "default" ? "Add all" : `Mark all ${trackLabel}`}
-                    clearAllLabel={formView === "default" ? "Clear box" : `Clear ${trackLabel}`}
+                    addAllLabel={formView === 'default' ? 'Add all' : `Mark all ${trackLabel}`}
+                    clearAllLabel={formView === 'default' ? 'Clear box' : `Clear ${trackLabel}`}
                     onRename={() => {
                       setRenameBox(row.box);
                       setRenameValue(row.box.title);
@@ -701,27 +659,22 @@ function NationalDexView() {
                       const keys = row.missing.length > 0 ? row.missing : row.keys;
                       setMany(keys, true);
                       toast.success(
-                        keys.length === 1
-                          ? `Marked 1 ${trackLabel}`
-                          : `Marked ${keys.length} ${trackLabel}`,
+                        keys.length === 1 ? `Marked 1 ${trackLabel}` : `Marked ${keys.length} ${trackLabel}`,
                       );
                     }}
                     onClearAll={() => {
                       const keys = row.keys;
                       setConfirm({
-                        title:
-                          keys.length === 1 ? `Clear ${trackLabel}?` : `Clear box ${trackLabel}?`,
+                        title: keys.length === 1 ? `Clear ${trackLabel}?` : `Clear box ${trackLabel}?`,
                         description:
                           keys.length === 1
                             ? `This removes the ${trackLabel} mark for this Pokémon.`
                             : `This removes the ${trackLabel} mark for all ${keys.length} Pokémon in this box.`,
-                        confirmLabel: "Clear",
+                        confirmLabel: 'Clear',
                         onConfirm: () => {
                           setMany(keys, false);
                           toast.success(
-                            keys.length === 1
-                              ? `Cleared 1 ${trackLabel}`
-                              : `Cleared ${keys.length} ${trackLabel}`,
+                            keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`,
                           );
                         },
                       });
@@ -773,7 +726,7 @@ function NationalDexView() {
             <DialogTitle>Rename box</DialogTitle>
             <DialogDescription>
               Custom name for this living-dex box. Leave blank to restore the default
-              {renameBox ? ` (“${defaultTitles[renameBox.id] ?? renameBox.title}”).` : "."}
+              {renameBox ? ` (“${defaultTitles[renameBox.id] ?? renameBox.title}”).` : '.'}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-2">
@@ -783,14 +736,10 @@ function NationalDexView() {
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && renameBox) {
-                  renameNationalBox(
-                    renameBox.id,
-                    renameValue,
-                    defaultTitles[renameBox.id] ?? renameBox.title,
-                  );
+                if (e.key === 'Enter' && renameBox) {
+                  renameNationalBox(renameBox.id, renameValue, defaultTitles[renameBox.id] ?? renameBox.title);
                   setRenameBox(null);
-                  toast.success("Box renamed");
+                  toast.success('Box renamed');
                 }
               }}
               autoFocus
@@ -804,13 +753,9 @@ function NationalDexView() {
               type="button"
               onClick={() => {
                 if (!renameBox) return;
-                renameNationalBox(
-                  renameBox.id,
-                  renameValue,
-                  defaultTitles[renameBox.id] ?? renameBox.title,
-                );
+                renameNationalBox(renameBox.id, renameValue, defaultTitles[renameBox.id] ?? renameBox.title);
                 setRenameBox(null);
-                toast.success("Box renamed");
+                toast.success('Box renamed');
               }}
             >
               Save
@@ -904,8 +849,8 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? EMPTY_CAUGHT);
   const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
   const setGameCaughtMany = useDexStore((s) => s.setGameCaughtMany);
-  const [filter, setFilter] = useState<GameFilter>("all");
-  const [layout, setLayout] = useState<"list" | "grid">("grid");
+  const [filter, setFilter] = useState<GameFilter>('all');
+  const [layout, setLayout] = useState<'list' | 'grid'>('grid');
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -920,8 +865,8 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const search = useDexSearchState(slots);
 
   const visible = useMemo(() => {
-    if (filter === "all") return slots;
-    if (filter === "caught") {
+    if (filter === 'all') return slots;
+    if (filter === 'caught') {
       return slots.filter((s) => s.available !== false && caughtMap[s.key]);
     }
     // Missing: obtainable but not caught (skip unreleased)
@@ -938,19 +883,20 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
-    window.addEventListener("resize", update);
+    window.addEventListener('resize', update);
     return () => {
       ro.disconnect();
-      window.removeEventListener("resize", update);
+      window.removeEventListener('resize', update);
     };
   }, [layout, gameId, visible.length]);
 
   const colCount = useGridColumnCount(scrollWidth);
-  const rowCount = layout === "grid" ? Math.ceil(visible.length / colCount) : visible.length;
+  const rowCount = layout === 'grid' ? Math.ceil(visible.length / colCount) : visible.length;
 
+  // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual intentionally skips compiler memoization
   const virtualizer = useWindowVirtualizer({
     count: rowCount,
-    estimateSize: () => (layout === "list" ? LIST_ROW_HEIGHT : GRID_ROW_HEIGHT),
+    estimateSize: () => (layout === 'list' ? LIST_ROW_HEIGHT : GRID_ROW_HEIGHT),
     overscan: 8,
     scrollMargin,
   });
@@ -963,14 +909,14 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   useEffect(() => {
     if (!search.activeKey) return;
     const inVisible = visible.some((s) => s.key === search.activeKey);
-    if (!inVisible && filter !== "all") {
-      setFilter("all");
+    if (!inVisible && filter !== 'all') {
+      setFilter('all');
       return;
     }
     const slotIndex = visible.findIndex((s) => s.key === search.activeKey);
     if (slotIndex < 0) return;
-    const rowIndex = layout === "grid" ? Math.floor(slotIndex / colCount) : slotIndex;
-    virtualizer.scrollToIndex(rowIndex, { align: "center" });
+    const rowIndex = layout === 'grid' ? Math.floor(slotIndex / colCount) : slotIndex;
+    virtualizer.scrollToIndex(rowIndex, { align: 'center' });
   }, [search.activeKey, visible, filter, layout, colCount, virtualizer]);
 
   const selectableVisible = useMemo(() => visible.filter((s) => s.available !== false), [visible]);
@@ -1011,23 +957,23 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     if (keys.length === 0) return;
     setGameCaughtMany(gameId, keys, true);
     setSelected(new Set());
-    toast.success(keys.length === 1 ? "Marked 1 as caught" : `Marked ${keys.length} as caught`);
+    toast.success(keys.length === 1 ? 'Marked 1 as caught' : `Marked ${keys.length} as caught`);
   }
 
   function removeSelected() {
     if (selectedCount === 0) return;
     const keys = Array.from(selected);
     setConfirm({
-      title: selectedCount === 1 ? "Clear from this dex?" : `Clear ${selectedCount} from this dex?`,
+      title: selectedCount === 1 ? 'Clear from this dex?' : `Clear ${selectedCount} from this dex?`,
       description:
         selectedCount === 1
-          ? "This unmarks the selected Pokémon in this game dex only."
+          ? 'This unmarks the selected Pokémon in this game dex only.'
           : `This unmarks ${selectedCount} Pokémon in this game dex only.`,
-      confirmLabel: "Clear",
+      confirmLabel: 'Clear',
       onConfirm: () => {
         setGameCaughtMany(gameId, keys, false);
         setSelected(new Set());
-        toast.success(keys.length === 1 ? "Removed 1" : `Removed ${keys.length}`);
+        toast.success(keys.length === 1 ? 'Removed 1' : `Removed ${keys.length}`);
       },
     });
   }
@@ -1047,21 +993,12 @@ function GameDexView({ gameId }: { gameId: GameId }) {
               checked={allVisibleSelected}
               indeterminate={someVisibleSelected && !allVisibleSelected}
               onCheckedChange={(v) => toggleSelectAll(v)}
-              aria-label={
-                selectedCount > 0
-                  ? `Select all visible · ${selectedCount} selected`
-                  : "Select all visible"
-              }
+              aria-label={selectedCount > 0 ? `Select all visible · ${selectedCount} selected` : 'Select all visible'}
             />
             <Button size="sm" disabled={selectedCount === 0} onClick={addSelected}>
               Add
             </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={selectedCount === 0}
-              onClick={removeSelected}
-            >
+            <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={removeSelected}>
               Clear
             </Button>
           </>
@@ -1102,20 +1039,16 @@ function GameDexView({ gameId }: { gameId: GameId }) {
       {visible.length === 0 ? (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>{filter === "missing" ? "Nothing missing" : "No Pokémon here"}</EmptyTitle>
+            <EmptyTitle>{filter === 'missing' ? 'Nothing missing' : 'No Pokémon here'}</EmptyTitle>
             <EmptyDescription>
-              {filter === "missing" ? "This dex is complete." : "Try another filter."}
+              {filter === 'missing' ? 'This dex is complete.' : 'Try another filter.'}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
-        <div
-          ref={listRef}
-          className="relative w-full"
-          style={{ height: virtualizer.getTotalSize() }}
-        >
+        <div ref={listRef} className="relative w-full" style={{ height: virtualizer.getTotalSize() }}>
           {virtualItems.map((item) => {
-            if (layout === "list") {
+            if (layout === 'list') {
               const slot = visible[item.index];
               return (
                 <div
@@ -1184,7 +1117,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
 }
 
 function formatDexEntry(n: number) {
-  return `#${String(n).padStart(3, "0")}`;
+  return `#${String(n).padStart(3, '0')}`;
 }
 
 /** Game dex # plus national # when they differ (easier cross-checking). */
@@ -1194,9 +1127,7 @@ function GameDexNumbers({ slot }: { slot: DexSlot }) {
   return (
     <>
       <span className="font-semibold">{formatDexEntry(entry)}</span>
-      {showNational ? (
-        <span className="font-normal text-muted-foreground"> · N{slot.id}</span>
-      ) : null}
+      {showNational ? <span className="font-normal text-muted-foreground"> · N{slot.id}</span> : null}
     </>
   );
 }
@@ -1221,20 +1152,17 @@ function GameDexRow({
   onSelectedChange: (selected: boolean) => void;
 }) {
   const unavailable = slot.available === false;
-  const pokemonSearch = { from: "games" as const, game: gameId };
-  const variant = selected ? "secondary" : caught ? "primary" : "muted";
+  const pokemonSearch = { from: 'games' as const, game: gameId };
+  const variant = selected ? 'secondary' : caught ? 'primary' : 'muted';
 
   return (
     <Item
       variant={variant}
       size="sm"
       className={cn(
-        unavailable && "opacity-70",
-        searchActive && "ring-2 ring-ring ring-offset-2 ring-offset-background",
-        searchHit &&
-          !searchActive &&
-          !selected &&
-          "ring-2 ring-ring/50 ring-offset-1 ring-offset-background",
+        unavailable && 'opacity-70',
+        searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
+        searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
       )}
     >
       <Checkbox
@@ -1251,7 +1179,7 @@ function GameDexRow({
           slug={slot.slug}
           width={72}
           height={72}
-          className={cn("size-18 sm:size-20", (!caught || unavailable) && "opacity-40 grayscale")}
+          className={cn('size-18 sm:size-20', (!caught || unavailable) && 'opacity-40 grayscale')}
         />
       </ItemMedia>
       <ItemContent>
@@ -1299,8 +1227,8 @@ function GameDexGridCard({
 }) {
   const unavailable = slot.available === false;
   const active = caught && !unavailable;
-  const pokemonSearch = { from: "games" as const, game: gameId };
-  const variant = selected ? "secondary" : active ? "primary" : "muted";
+  const pokemonSearch = { from: 'games' as const, game: gameId };
+  const variant = selected ? 'secondary' : active ? 'primary' : 'muted';
 
   return (
     <div className="relative">
@@ -1319,17 +1247,14 @@ function GameDexGridCard({
             type="button"
             disabled={unavailable}
             onClick={() => onSelectedChange(!selected)}
-            aria-label={`${slot.name}: ${unavailable ? "unavailable" : caught ? "caught" : "missing"}. Tap to select.`}
+            aria-label={`${slot.name}: ${unavailable ? 'unavailable' : caught ? 'caught' : 'missing'}. Tap to select.`}
             aria-pressed={selected}
           />
         }
         className={cn(
-          "flex-col items-center pt-8",
-          searchActive && "ring-2 ring-ring ring-offset-2 ring-offset-background",
-          searchHit &&
-            !searchActive &&
-            !selected &&
-            "ring-2 ring-ring/50 ring-offset-1 ring-offset-background",
+          'flex-col items-center pt-8',
+          searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
+          searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
         )}
       >
         <PokemonSprite
@@ -1339,7 +1264,7 @@ function GameDexGridCard({
           slug={slot.slug}
           width={80}
           height={80}
-          className={cn("size-16 sm:size-20", !active && "opacity-35 grayscale")}
+          className={cn('size-16 sm:size-20', !active && 'opacity-35 grayscale')}
         />
         <ItemContent className="w-full items-center text-center">
           <ItemTitle className="w-full justify-center tabular-nums">

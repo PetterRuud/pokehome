@@ -1,11 +1,6 @@
-import { cn } from "@/lib/utils";
-import type { SpriteStyle } from "@/lib/types";
-import {
-  spriteFallbackChain,
-  spriteImageRendering,
-  spriteUrl,
-  type SpriteVariant,
-} from "@/lib/sprites";
+import { cn } from '@/lib/utils';
+import type { SpriteStyle } from '@/lib/types';
+import { spriteFallbackChain, spriteImageRendering, spriteUrl, type SpriteVariant } from '@/lib/sprites';
 
 type PokemonSpriteProps = {
   id: number;
@@ -19,7 +14,7 @@ type PokemonSpriteProps = {
   width?: number;
   height?: number;
   className?: string;
-  loading?: "lazy" | "eager";
+  loading?: 'lazy' | 'eager';
 };
 
 /**
@@ -29,14 +24,14 @@ export function PokemonSprite({
   id,
   style,
   shiny = false,
-  variant = "default",
+  variant = 'default',
   slug,
   formId,
-  alt = "",
+  alt = '',
   width = 80,
   height = 80,
   className,
-  loading = "lazy",
+  loading = 'lazy',
 }: PokemonSpriteProps) {
   const opts = { shiny, variant, slug, formId };
   const primary = spriteUrl(id, style, opts);
@@ -44,14 +39,14 @@ export function PokemonSprite({
 
   return (
     <img
-      key={`${id}-${style}-${variant}-${shiny ? "s" : "n"}-${slug ?? ""}-${formId ?? ""}`}
+      key={`${id}-${style}-${variant}-${shiny ? 's' : 'n'}-${slug ?? ''}-${formId ?? ''}`}
       src={primary}
       alt={alt}
       width={width}
       height={height}
       loading={loading}
       data-fallback-index={0}
-      className={cn("object-contain", className)}
+      className={cn('object-contain', className)}
       style={{ imageRendering: spriteImageRendering(style, variant) }}
       onError={(e) => {
         const img = e.currentTarget;
@@ -61,12 +56,12 @@ export function PokemonSprite({
         img.dataset.fallbackIndex = String(idx + 1);
         img.src = next;
         img.style.imageRendering =
-          next.includes("/sprites/pokemon/") &&
-          !next.includes("/other/") &&
-          !next.includes("showdown") &&
-          !next.includes("play.pokemonshowdown")
-            ? "pixelated"
-            : "auto";
+          next.includes('/sprites/pokemon/') &&
+          !next.includes('/other/') &&
+          !next.includes('showdown') &&
+          !next.includes('play.pokemonshowdown')
+            ? 'pixelated'
+            : 'auto';
       }}
     />
   );

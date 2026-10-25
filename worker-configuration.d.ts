@@ -7,32 +7,32 @@ interface __BaseEnv_Env {
 }
 declare namespace Cloudflare {
   interface GlobalProps {
-    mainModule: typeof import("./src/server");
+    mainModule: typeof import('./src/server');
   }
   interface Env extends __BaseEnv_Env {}
 }
 interface Env extends __BaseEnv_Env {}
-declare module "*.txt" {
+declare module '*.txt' {
   const value: string;
   export default value;
 }
-declare module "*.html" {
+declare module '*.html' {
   const value: string;
   export default value;
 }
-declare module "*.sql" {
+declare module '*.sql' {
   const value: string;
   export default value;
 }
-declare module "*.bin" {
+declare module '*.bin' {
   const value: ArrayBuffer;
   export default value;
 }
-declare module "*.wasm" {
+declare module '*.wasm' {
   const value: WebAssembly.Module;
   export default value;
 }
-declare module "*.wasm?module" {
+declare module '*.wasm?module' {
   const value: WebAssembly.Module;
   export default value;
 }
@@ -257,7 +257,7 @@ declare namespace WebAssembly {
   class RuntimeError extends Error {
     constructor(message?: string);
   }
-  type ValueType = "anyfunc" | "externref" | "f32" | "f64" | "i32" | "i64" | "v128";
+  type ValueType = 'anyfunc' | 'externref' | 'f32' | 'f64' | 'i32' | 'i64' | 'v128';
   interface GlobalDescriptor {
     value: ValueType;
     mutable?: boolean;
@@ -286,7 +286,7 @@ declare namespace WebAssembly {
     readonly buffer: ArrayBuffer;
     grow(delta: number): number;
   }
-  type ImportExportKind = "function" | "global" | "memory" | "table";
+  type ImportExportKind = 'function' | 'global' | 'memory' | 'table';
   interface ModuleExportDescriptor {
     kind: ImportExportKind;
     name: string;
@@ -301,7 +301,7 @@ declare namespace WebAssembly {
     static exports(module: Module): ModuleExportDescriptor[];
     static imports(module: Module): ModuleImportDescriptor[];
   }
-  type TableKind = "anyfunc" | "externref";
+  type TableKind = 'anyfunc' | 'externref';
   interface TableDescriptor {
     element: TableKind;
     initial: number;
@@ -329,18 +329,10 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
   btoa(data: string): string;
   atob(data: string): string;
   setTimeout(callback: (...args: any[]) => void, msDelay?: number): number;
-  setTimeout<Args extends any[]>(
-    callback: (...args: Args) => void,
-    msDelay?: number,
-    ...args: Args
-  ): number;
+  setTimeout<Args extends any[]>(callback: (...args: Args) => void, msDelay?: number, ...args: Args): number;
   clearTimeout(timeoutId: number | null): void;
   setInterval(callback: (...args: any[]) => void, msDelay?: number): number;
-  setInterval<Args extends any[]>(
-    callback: (...args: Args) => void,
-    msDelay?: number,
-    ...args: Args
-  ): number;
+  setInterval<Args extends any[]>(callback: (...args: Args) => void, msDelay?: number, ...args: Args): number;
   clearInterval(timeoutId: number | null): void;
   queueMicrotask(task: Function): void;
   structuredClone<T>(value: T, options?: StructuredSerializeOptions): T;
@@ -427,9 +419,7 @@ declare function removeEventListener<Type extends keyof WorkerGlobalScopeEventMa
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/dispatchEvent)
  */
-declare function dispatchEvent(
-  event: WorkerGlobalScopeEventMap[keyof WorkerGlobalScopeEventMap],
-): boolean;
+declare function dispatchEvent(event: WorkerGlobalScopeEventMap[keyof WorkerGlobalScopeEventMap]): boolean;
 /* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/btoa) */
 declare function btoa(data: string): string;
 /* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/atob) */
@@ -461,10 +451,7 @@ declare function structuredClone<T>(value: T, options?: StructuredSerializeOptio
 /* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
 declare function reportError(error: any): void;
 /* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-declare function fetch(
-  input: RequestInfo | URL,
-  init?: RequestInit<RequestInitCfProperties>,
-): Promise<Response>;
+declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
 declare const self: ServiceWorkerGlobalScope;
 /**
  * The Web Crypto API provides a set of low-level functions for common cryptographic tasks.
@@ -528,10 +515,7 @@ type ExportedHandlerTailStreamHandler<Env = unknown, Props = unknown> = (
   event: TailStream.TailEvent<TailStream.Onset>,
   env: Env,
   ctx: ExecutionContext<Props>,
-) =>
-  | TailStream.TailEventHandlerType
-  | undefined
-  | Promise<TailStream.TailEventHandlerType | undefined>;
+) => TailStream.TailEventHandlerType | undefined | Promise<TailStream.TailEventHandlerType | undefined>;
 type ExportedHandlerScheduledHandler<Env = unknown, Props = unknown> = (
   controller: ScheduledController,
   env: Env,
@@ -547,12 +531,7 @@ type ExportedHandlerTestHandler<Env = unknown, Props = unknown> = (
   env: Env,
   ctx: ExecutionContext<Props>,
 ) => void | Promise<void>;
-interface ExportedHandler<
-  Env = unknown,
-  QueueHandlerMessage = unknown,
-  CfHostMetadata = unknown,
-  Props = unknown,
-> {
+interface ExportedHandler<Env = unknown, QueueHandlerMessage = unknown, CfHostMetadata = unknown, Props = unknown> {
   fetch?: ExportedHandlerFetchHandler<Env, CfHostMetadata, Props>;
   connect?: ExportedHandlerConnectHandler<Env, Props>;
   tail?: ExportedHandlerTailHandler<Env, Props>;
@@ -611,17 +590,12 @@ interface DurableObject {
   connect?(socket: Socket): void | Promise<void>;
   alarm?(alarmInfo?: AlarmInvocationInfo): void | Promise<void>;
   webSocketMessage?(ws: WebSocket, message: string | ArrayBuffer): void | Promise<void>;
-  webSocketClose?(
-    ws: WebSocket,
-    code: number,
-    reason: string,
-    wasClean: boolean,
-  ): void | Promise<void>;
+  webSocketClose?(ws: WebSocket, code: number, reason: string, wasClean: boolean): void | Promise<void>;
   webSocketError?(ws: WebSocket, error: unknown): void | Promise<void>;
 }
 type DurableObjectStub<T extends Rpc.DurableObjectBranded | undefined = undefined> = Fetcher<
   T,
-  "alarm" | "connect" | "webSocketMessage" | "webSocketClose" | "webSocketError"
+  'alarm' | 'connect' | 'webSocketMessage' | 'webSocketClose' | 'webSocketError'
 > & {
   readonly id: DurableObjectId;
   readonly name?: string;
@@ -632,39 +606,31 @@ interface DurableObjectId {
   readonly name?: string;
   readonly jurisdiction?: string;
 }
-declare abstract class DurableObjectNamespace<
-  T extends Rpc.DurableObjectBranded | undefined = undefined,
-> {
+declare abstract class DurableObjectNamespace<T extends Rpc.DurableObjectBranded | undefined = undefined> {
   newUniqueId(options?: DurableObjectNamespaceNewUniqueIdOptions): DurableObjectId;
   idFromName(name: string): DurableObjectId;
   idFromString(id: string): DurableObjectId;
-  get(
-    id: DurableObjectId,
-    options?: DurableObjectNamespaceGetDurableObjectOptions,
-  ): DurableObjectStub<T>;
-  getByName(
-    name: string,
-    options?: DurableObjectNamespaceGetDurableObjectOptions,
-  ): DurableObjectStub<T>;
+  get(id: DurableObjectId, options?: DurableObjectNamespaceGetDurableObjectOptions): DurableObjectStub<T>;
+  getByName(name: string, options?: DurableObjectNamespaceGetDurableObjectOptions): DurableObjectStub<T>;
   jurisdiction(jurisdiction: DurableObjectJurisdiction): DurableObjectNamespace<T>;
 }
-type DurableObjectJurisdiction = "eu" | "fedramp" | "fedramp-high" | "us";
+type DurableObjectJurisdiction = 'eu' | 'fedramp' | 'fedramp-high' | 'us';
 interface DurableObjectNamespaceNewUniqueIdOptions {
   jurisdiction?: DurableObjectJurisdiction;
 }
 type DurableObjectLocationHint =
-  | "wnam"
-  | "enam"
-  | "sam"
-  | "weur"
-  | "eeur"
-  | "apac"
-  | "apac-ne"
-  | "apac-se"
-  | "oc"
-  | "afr"
-  | "me";
-type DurableObjectRoutingMode = "primary-only";
+  | 'wnam'
+  | 'enam'
+  | 'sam'
+  | 'weur'
+  | 'eeur'
+  | 'apac'
+  | 'apac-ne'
+  | 'apac-se'
+  | 'oc'
+  | 'afr'
+  | 'me';
+type DurableObjectRoutingMode = 'primary-only';
 interface DurableObjectNamespaceGetDurableObjectOptions {
   locationHint?: DurableObjectLocationHint;
   routingMode?: DurableObjectRoutingMode;
@@ -1276,10 +1242,7 @@ declare abstract class SubtleCrypto {
    *
    * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest)
    */
-  digest(
-    algorithm: string | SubtleCryptoHashAlgorithm,
-    data: ArrayBuffer | ArrayBufferView,
-  ): Promise<ArrayBuffer>;
+  digest(algorithm: string | SubtleCryptoHashAlgorithm, data: ArrayBuffer | ArrayBufferView): Promise<ArrayBuffer>;
   /**
    * The **`generateKey()`** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
    *
@@ -1983,7 +1946,7 @@ interface Response extends Body {
    *
    * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Response/type)
    */
-  type: "default" | "error";
+  type: 'default' | 'error';
 }
 interface ResponseInit {
   status?: number;
@@ -1991,11 +1954,9 @@ interface ResponseInit {
   headers?: HeadersInit;
   cf?: any;
   webSocket?: WebSocket | null;
-  encodeBody?: "automatic" | "manual";
+  encodeBody?: 'automatic' | 'manual';
 }
-type RequestInfo<CfHostMetadata = unknown, Cf = CfProperties<CfHostMetadata>> =
-  | Request<CfHostMetadata, Cf>
-  | string;
+type RequestInfo<CfHostMetadata = unknown, Cf = CfProperties<CfHostMetadata>> = Request<CfHostMetadata, Cf> | string;
 /**
  * The **`Request`** interface of the Fetch API represents a resource request.
  *
@@ -2069,7 +2030,7 @@ interface Request<CfHostMetadata = unknown, Cf = CfProperties<CfHostMetadata>> e
    *
    * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/cache)
    */
-  cache?: "no-store" | "no-cache";
+  cache?: 'no-store' | 'no-cache';
 }
 interface RequestInit<Cf = CfProperties> {
   /* A string to set request's method. */
@@ -2083,12 +2044,12 @@ interface RequestInit<Cf = CfProperties> {
   fetcher?: Fetcher | null;
   cf?: Cf;
   /* A string indicating how the request will interact with the browser's cache to set request's cache. */
-  cache?: "no-store" | "no-cache";
+  cache?: 'no-store' | 'no-cache';
   /* A cryptographic hash of the resource to be fetched by request. Sets request's integrity. */
   integrity?: string;
   /* An AbortSignal to set request's signal. */
   signal?: AbortSignal | null;
-  encodeResponseBody?: "automatic" | "manual";
+  encodeResponseBody?: 'automatic' | 'manual';
 }
 type Service<
   T extends
@@ -2106,9 +2067,7 @@ type Service<
 type Fetcher<
   T extends Rpc.EntrypointBranded | undefined = undefined,
   Reserved extends string = never,
-> = (T extends Rpc.EntrypointBranded
-  ? Rpc.Provider<T, Reserved | "fetch" | "connect">
-  : unknown) & {
+> = (T extends Rpc.EntrypointBranded ? Rpc.Provider<T, Reserved | 'fetch' | 'connect'> : unknown) & {
   fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
   connect(address: SocketAddress | string, options?: SocketOptions): Socket;
 };
@@ -2131,37 +2090,23 @@ type KVNamespaceListResult<Metadata, Key extends string = string> =
     };
 interface KVNamespace<Key extends string = string> {
   get(key: Key, options?: Partial<KVNamespaceGetOptions<undefined>>): Promise<string | null>;
-  get(key: Key, type: "text"): Promise<string | null>;
-  get<ExpectedValue = unknown>(key: Key, type: "json"): Promise<ExpectedValue | null>;
-  get(key: Key, type: "arrayBuffer"): Promise<ArrayBuffer | null>;
-  get(key: Key, type: "stream"): Promise<ReadableStream | null>;
-  get(key: Key, options?: KVNamespaceGetOptions<"text">): Promise<string | null>;
-  get<ExpectedValue = unknown>(
-    key: Key,
-    options?: KVNamespaceGetOptions<"json">,
-  ): Promise<ExpectedValue | null>;
-  get(key: Key, options?: KVNamespaceGetOptions<"arrayBuffer">): Promise<ArrayBuffer | null>;
-  get(key: Key, options?: KVNamespaceGetOptions<"stream">): Promise<ReadableStream | null>;
-  get(key: Array<Key>, type: "text"): Promise<Map<string, string | null>>;
+  get(key: Key, type: 'text'): Promise<string | null>;
+  get<ExpectedValue = unknown>(key: Key, type: 'json'): Promise<ExpectedValue | null>;
+  get(key: Key, type: 'arrayBuffer'): Promise<ArrayBuffer | null>;
+  get(key: Key, type: 'stream'): Promise<ReadableStream | null>;
+  get(key: Key, options?: KVNamespaceGetOptions<'text'>): Promise<string | null>;
+  get<ExpectedValue = unknown>(key: Key, options?: KVNamespaceGetOptions<'json'>): Promise<ExpectedValue | null>;
+  get(key: Key, options?: KVNamespaceGetOptions<'arrayBuffer'>): Promise<ArrayBuffer | null>;
+  get(key: Key, options?: KVNamespaceGetOptions<'stream'>): Promise<ReadableStream | null>;
+  get(key: Array<Key>, type: 'text'): Promise<Map<string, string | null>>;
+  get<ExpectedValue = unknown>(key: Array<Key>, type: 'json'): Promise<Map<string, ExpectedValue | null>>;
+  get(key: Array<Key>, options?: Partial<KVNamespaceGetOptions<undefined>>): Promise<Map<string, string | null>>;
+  get(key: Array<Key>, options?: KVNamespaceGetOptions<'text'>): Promise<Map<string, string | null>>;
   get<ExpectedValue = unknown>(
     key: Array<Key>,
-    type: "json",
+    options?: KVNamespaceGetOptions<'json'>,
   ): Promise<Map<string, ExpectedValue | null>>;
-  get(
-    key: Array<Key>,
-    options?: Partial<KVNamespaceGetOptions<undefined>>,
-  ): Promise<Map<string, string | null>>;
-  get(
-    key: Array<Key>,
-    options?: KVNamespaceGetOptions<"text">,
-  ): Promise<Map<string, string | null>>;
-  get<ExpectedValue = unknown>(
-    key: Array<Key>,
-    options?: KVNamespaceGetOptions<"json">,
-  ): Promise<Map<string, ExpectedValue | null>>;
-  list<Metadata = unknown>(
-    options?: KVNamespaceListOptions,
-  ): Promise<KVNamespaceListResult<Metadata, Key>>;
+  list<Metadata = unknown>(options?: KVNamespaceListOptions): Promise<KVNamespaceListResult<Metadata, Key>>;
   put(
     key: Key,
     value: string | ArrayBuffer | ArrayBufferView | ReadableStream,
@@ -2173,43 +2118,43 @@ interface KVNamespace<Key extends string = string> {
   ): Promise<KVNamespaceGetWithMetadataResult<string, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Key,
-    type: "text",
+    type: 'text',
   ): Promise<KVNamespaceGetWithMetadataResult<string, Metadata>>;
   getWithMetadata<ExpectedValue = unknown, Metadata = unknown>(
     key: Key,
-    type: "json",
+    type: 'json',
   ): Promise<KVNamespaceGetWithMetadataResult<ExpectedValue, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Key,
-    type: "arrayBuffer",
+    type: 'arrayBuffer',
   ): Promise<KVNamespaceGetWithMetadataResult<ArrayBuffer, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Key,
-    type: "stream",
+    type: 'stream',
   ): Promise<KVNamespaceGetWithMetadataResult<ReadableStream, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Key,
-    options: KVNamespaceGetOptions<"text">,
+    options: KVNamespaceGetOptions<'text'>,
   ): Promise<KVNamespaceGetWithMetadataResult<string, Metadata>>;
   getWithMetadata<ExpectedValue = unknown, Metadata = unknown>(
     key: Key,
-    options: KVNamespaceGetOptions<"json">,
+    options: KVNamespaceGetOptions<'json'>,
   ): Promise<KVNamespaceGetWithMetadataResult<ExpectedValue, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Key,
-    options: KVNamespaceGetOptions<"arrayBuffer">,
+    options: KVNamespaceGetOptions<'arrayBuffer'>,
   ): Promise<KVNamespaceGetWithMetadataResult<ArrayBuffer, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Key,
-    options: KVNamespaceGetOptions<"stream">,
+    options: KVNamespaceGetOptions<'stream'>,
   ): Promise<KVNamespaceGetWithMetadataResult<ReadableStream, Metadata>>;
   getWithMetadata<Metadata = unknown>(
     key: Array<Key>,
-    type: "text",
+    type: 'text',
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<string, Metadata>>>;
   getWithMetadata<ExpectedValue = unknown, Metadata = unknown>(
     key: Array<Key>,
-    type: "json",
+    type: 'json',
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<ExpectedValue, Metadata>>>;
   getWithMetadata<Metadata = unknown>(
     key: Array<Key>,
@@ -2217,11 +2162,11 @@ interface KVNamespace<Key extends string = string> {
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<string, Metadata>>>;
   getWithMetadata<Metadata = unknown>(
     key: Array<Key>,
-    options?: KVNamespaceGetOptions<"text">,
+    options?: KVNamespaceGetOptions<'text'>,
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<string, Metadata>>>;
   getWithMetadata<ExpectedValue = unknown, Metadata = unknown>(
     key: Array<Key>,
-    options?: KVNamespaceGetOptions<"json">,
+    options?: KVNamespaceGetOptions<'json'>,
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<ExpectedValue, Metadata>>>;
   delete(key: Key): Promise<void>;
 }
@@ -2244,7 +2189,7 @@ interface KVNamespaceGetWithMetadataResult<Value, Metadata> {
   metadata: Metadata | null;
   cacheStatus: string | null;
 }
-type QueueContentType = "text" | "bytes" | "json" | "v8";
+type QueueContentType = 'text' | 'bytes' | 'json' | 'v8';
 interface Queue<Body = unknown> {
   metrics(): Promise<QueueMetrics>;
   send(message: Body, options?: QueueSendOptions): Promise<QueueSendResponse>;
@@ -2338,7 +2283,7 @@ interface R2ListOptions {
   cursor?: string;
   delimiter?: string;
   startAfter?: string;
-  include?: ("httpMetadata" | "customMetadata")[];
+  include?: ('httpMetadata' | 'customMetadata')[];
 }
 interface R2Bucket {
   head(key: string): Promise<R2Object | null>;
@@ -2507,14 +2452,14 @@ interface UnderlyingSink<W = any> {
   close?: () => void | Promise<void>;
 }
 interface UnderlyingByteSource {
-  type: "bytes";
+  type: 'bytes';
   autoAllocateChunkSize?: number;
   start?: (controller: ReadableByteStreamController) => void | Promise<void>;
   pull?: (controller: ReadableByteStreamController) => void | Promise<void>;
   cancel?: (reason: any) => void | Promise<void>;
 }
 interface UnderlyingSource<R = any> {
-  type?: "" | undefined;
+  type?: '' | undefined;
   start?: (controller: ReadableStreamDefaultController<R>) => void | Promise<void>;
   pull?: (controller: ReadableStreamDefaultController<R>) => void | Promise<void>;
   cancel?: (reason: any) => void | Promise<void>;
@@ -2596,10 +2541,7 @@ interface ReadableStream<R = any> {
    *
    * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeThrough)
    */
-  pipeThrough<T>(
-    transform: ReadableWritablePair<T, R>,
-    options?: StreamPipeOptions,
-  ): ReadableStream<T>;
+  pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
   /**
    * The **`pipeTo()`** method of the ReadableStream interface pipes the current ReadableStream to a given WritableStream and returns a Promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
    *
@@ -2622,14 +2564,8 @@ interface ReadableStream<R = any> {
  */
 declare const ReadableStream: {
   prototype: ReadableStream;
-  new (
-    underlyingSource: UnderlyingByteSource,
-    strategy?: QueuingStrategy<Uint8Array>,
-  ): ReadableStream<Uint8Array>;
-  new <R = any>(
-    underlyingSource?: UnderlyingSource<R>,
-    strategy?: QueuingStrategy<R>,
-  ): ReadableStream<R>;
+  new (underlyingSource: UnderlyingByteSource, strategy?: QueuingStrategy<Uint8Array>): ReadableStream<Uint8Array>;
+  new <R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
 };
 /**
  * The **`ReadableStreamDefaultReader`** interface of the Streams API represents a default reader that can be used to read stream data supplied from a network (such as a fetch request).
@@ -2674,10 +2610,7 @@ declare class ReadableStreamBYOBReader {
    * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/releaseLock)
    */
   releaseLock(): void;
-  readAtLeast<T extends ArrayBufferView>(
-    minElements: number,
-    view: T,
-  ): Promise<ReadableStreamReadResult<T>>;
+  readAtLeast<T extends ArrayBufferView>(minElements: number, view: T): Promise<ReadableStreamReadResult<T>>;
 }
 interface ReadableStreamBYOBReaderReadableStreamBYOBReaderReadOptions {
   min?: number;
@@ -2688,7 +2621,7 @@ interface ReadableStreamGetReaderOptions {
    *
    * This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
    */
-  mode: "byob";
+  mode: 'byob';
 }
 /**
  * The **`ReadableStreamBYOBRequest`** interface of the Streams API represents a "pull request" for data from an underlying source that will made as a zero-copy transfer to a consumer (bypassing the stream's internal queues).
@@ -2950,15 +2883,9 @@ declare class TransformStream<I = any, O = any> {
   get writable(): WritableStream<I>;
 }
 declare class FixedLengthStream extends IdentityTransformStream {
-  constructor(
-    expectedLength: number | bigint,
-    queuingStrategy?: IdentityTransformStreamQueuingStrategy,
-  );
+  constructor(expectedLength: number | bigint, queuingStrategy?: IdentityTransformStreamQueuingStrategy);
 }
-declare class IdentityTransformStream extends TransformStream<
-  ArrayBuffer | ArrayBufferView,
-  Uint8Array
-> {
+declare class IdentityTransformStream extends TransformStream<ArrayBuffer | ArrayBufferView, Uint8Array> {
   constructor(queuingStrategy?: IdentityTransformStreamQueuingStrategy);
 }
 interface IdentityTransformStreamQueuingStrategy {
@@ -2973,18 +2900,15 @@ interface ReadableStreamValuesOptions {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CompressionStream)
  */
 declare class CompressionStream extends TransformStream<ArrayBuffer | ArrayBufferView, Uint8Array> {
-  constructor(format: "gzip" | "deflate" | "deflate-raw");
+  constructor(format: 'gzip' | 'deflate' | 'deflate-raw');
 }
 /**
  * The **`DecompressionStream`** interface of the Compression Streams API decompresses a stream of data. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/DecompressionStream)
  */
-declare class DecompressionStream extends TransformStream<
-  ArrayBuffer | ArrayBufferView,
-  Uint8Array
-> {
-  constructor(format: "gzip" | "deflate" | "deflate-raw");
+declare class DecompressionStream extends TransformStream<ArrayBuffer | ArrayBufferView, Uint8Array> {
+  constructor(format: 'gzip' | 'deflate' | 'deflate-raw');
 }
 /**
  * The **`TextEncoderStream`** interface of the Encoding API converts a stream of strings into bytes in the UTF-8 encoding. It is the streaming equivalent of TextEncoder. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
@@ -3636,7 +3560,7 @@ interface WebSocket extends EventTarget<WebSocketEventMap> {
    *
    * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/binaryType)
    */
-  binaryType: "blob" | "arraybuffer";
+  binaryType: 'blob' | 'arraybuffer';
 }
 interface WebSocketAcceptOptions {
   /**
@@ -3655,10 +3579,7 @@ declare const WebSocketPair: {
   };
 };
 interface SqlStorage {
-  exec<T extends Record<string, SqlStorageValue>>(
-    query: string,
-    ...bindings: any[]
-  ): SqlStorageCursor<T>;
+  exec<T extends Record<string, SqlStorageValue>>(query: string, ...bindings: any[]): SqlStorageCursor<T>;
   get databaseSize(): number;
   Cursor: typeof SqlStorageCursor;
   Statement: typeof SqlStorageStatement;
@@ -3681,7 +3602,7 @@ interface Socket {
   get closed(): Promise<void>;
   get opened(): Promise<SocketInfo>;
   get upgraded(): boolean;
-  get secureTransport(): "on" | "off" | "starttls";
+  get secureTransport(): 'on' | 'off' | 'starttls';
   close(): Promise<void>;
   startTls(options?: TlsOptions): Socket;
 }
@@ -3764,9 +3685,9 @@ interface ContainerExecOptions {
   user?: string;
   signal?: AbortSignal;
   pty?: boolean | ContainerExecPtyOptions;
-  stdin?: ReadableStream | "pipe";
-  stdout?: "pipe" | "ignore";
-  stderr?: "pipe" | "ignore" | "combined";
+  stdin?: ReadableStream | 'pipe';
+  stdout?: 'pipe' | 'ignore';
+  stderr?: 'pipe' | 'ignore' | 'combined';
 }
 interface ContainerExecPtyOptions {
   cols?: number;
@@ -3829,14 +3750,7 @@ type ContainerStartupOptions = {
   entrypoint?: string[];
   enableInternet: boolean;
   env?: Record<string, string>;
-  instance?:
-    | "lite"
-    | "basic"
-    | "standard-1"
-    | "standard-2"
-    | "standard-3"
-    | "standard-4"
-    | ContainerStartResources;
+  instance?: 'lite' | 'basic' | 'standard-1' | 'standard-2' | 'standard-3' | 'standard-4' | ContainerStartResources;
   labels?: Record<string, string>;
   directorySnapshots?: ContainerDirectorySnapshotRestoreParams[];
 } & (
@@ -3909,31 +3823,24 @@ interface MessagePortPostMessageOptions {
   transfer?: any[];
 }
 type LoopbackForExport<
-  T extends
-    | (new (...args: any[]) => Rpc.EntrypointBranded)
-    | ExportedHandler<any, any, any>
-    | undefined = undefined,
+  T extends (new (...args: any[]) => Rpc.EntrypointBranded) | ExportedHandler<any, any, any> | undefined = undefined,
 > = T extends new (...args: any[]) => Rpc.WorkerEntrypointBranded
   ? LoopbackServiceStub<InstanceType<T>>
   : T extends new (...args: any[]) => Rpc.DurableObjectBranded
     ? LoopbackDurableObjectClass<InstanceType<T>>
-    : T extends new (
-          ...args: any[]
-        ) => CloudflareWorkersModule.WorkflowEntrypoint<any, infer Params>
+    : T extends new (...args: any[]) => CloudflareWorkersModule.WorkflowEntrypoint<any, infer Params>
       ? Workflow<Params>
       : T extends ExportedHandler<any, any, any>
         ? LoopbackServiceStub<undefined>
         : undefined;
-type LoopbackServiceStub<T extends Rpc.WorkerEntrypointBranded | undefined = undefined> =
-  Fetcher<T> &
-    (T extends CloudflareWorkersModule.WorkerEntrypoint<any, infer Props>
-      ? (opts: { props?: Props }) => Fetcher<T>
-      : (opts: { props?: any }) => Fetcher<T>);
-type LoopbackDurableObjectClass<T extends Rpc.DurableObjectBranded | undefined = undefined> =
-  DurableObjectClass<T> &
-    (T extends CloudflareWorkersModule.DurableObject<any, infer Props>
-      ? (opts: { props?: Props }) => DurableObjectClass<T>
-      : (opts: { props?: any }) => DurableObjectClass<T>);
+type LoopbackServiceStub<T extends Rpc.WorkerEntrypointBranded | undefined = undefined> = Fetcher<T> &
+  (T extends CloudflareWorkersModule.WorkerEntrypoint<any, infer Props>
+    ? (opts: { props?: Props }) => Fetcher<T>
+    : (opts: { props?: any }) => Fetcher<T>);
+type LoopbackDurableObjectClass<T extends Rpc.DurableObjectBranded | undefined = undefined> = DurableObjectClass<T> &
+  (T extends CloudflareWorkersModule.DurableObject<any, infer Props>
+    ? (opts: { props?: Props }) => DurableObjectClass<T>
+    : (opts: { props?: any }) => DurableObjectClass<T>);
 interface LoopbackDurableObjectNamespace extends DurableObjectNamespace {}
 interface LoopbackColoLocalActorNamespace extends ColoLocalActorNamespace {}
 interface SyncKvStorage {
@@ -3965,10 +3872,7 @@ interface WorkerStubEntrypointOptions {
   limits?: workerdResourceLimits;
 }
 interface WorkerLoader {
-  get(
-    name: string | null,
-    getCode: () => WorkerLoaderWorkerCode | Promise<WorkerLoaderWorkerCode>,
-  ): WorkerStub;
+  get(name: string | null, getCode: () => WorkerLoaderWorkerCode | Promise<WorkerLoaderWorkerCode>): WorkerStub;
   load(code: WorkerLoaderWorkerCode): WorkerStub;
 }
 interface WorkerLoaderModule {
@@ -4015,16 +3919,8 @@ declare abstract class Performance {
   toJSON(): object;
 }
 interface Tracing {
-  enterSpan<T, A extends unknown[]>(
-    name: string,
-    callback: (span: Span, ...args: A) => T,
-    ...args: A
-  ): T;
-  startActiveSpan<T, A extends unknown[]>(
-    name: string,
-    callback: (span: Span, ...args: A) => T,
-    ...args: A
-  ): T;
+  enterSpan<T, A extends unknown[]>(name: string, callback: (span: Span, ...args: A) => T, ...args: A): T;
+  startActiveSpan<T, A extends unknown[]>(name: string, callback: (span: Span, ...args: A) => T, ...args: A): T;
   startSpan(name: string): Span;
   getActiveSpan(): Span | undefined;
   Span: typeof Span;
@@ -4060,7 +3956,7 @@ declare abstract class Span {
   setStatus(status: TracingSpanStatus): this;
   end(): void;
 }
-type TracingSpanStatusCode = "unset" | "ok" | "error";
+type TracingSpanStatusCode = 'unset' | 'ok' | 'error';
 interface TracingSpanStatus {
   code: TracingSpanStatusCode;
   message?: string;
@@ -4121,14 +4017,14 @@ interface CloudflareAccessIdentity extends Record<string, unknown> {
 // Public type surface for user Workers binding to an Agent Memory namespace.
 // ============================================================================
 /** Memory type — every memory is classified into exactly one. */
-type AgentMemoryMemoryType = "fact" | "event" | "instruction" | "task";
+type AgentMemoryMemoryType = 'fact' | 'event' | 'instruction' | 'task';
 /** Search intensity for recall. */
-type AgentMemoryThinkingLevel = "low" | "medium" | "high";
+type AgentMemoryThinkingLevel = 'low' | 'medium' | 'high';
 /** Response verbosity for recall. */
-type AgentMemoryResponseLength = "short" | "medium" | "long";
+type AgentMemoryResponseLength = 'short' | 'medium' | 'long';
 /** A conversation message passed to ingest(). */
 interface AgentMemoryMessage {
-  role: "system" | "user" | "assistant";
+  role: 'system' | 'user' | 'assistant';
   content: string;
   /** Optional message timestamp. */
   timestamp?: Date;
@@ -4158,7 +4054,7 @@ interface AgentMemoryMemory {
   updatedAt: Date;
 }
 /** Single entry in a list() response. Same shape as Memory minus full content. */
-type AgentMemoryMemoryListEntry = Omit<AgentMemoryMemory, "content">;
+type AgentMemoryMemoryListEntry = Omit<AgentMemoryMemory, 'content'>;
 /** A scored memory candidate in a recall result. */
 interface AgentMemoryScoredCandidate {
   /** Candidate ID. */
@@ -4344,7 +4240,7 @@ interface AiSearchNotFoundError extends Error {}
 // ============ AI Search Common Types ============
 /** A single message in a conversation-style search or chat request. */
 type AiSearchMessage = {
-  role: "system" | "developer" | "user" | "assistant" | "tool";
+  role: 'system' | 'developer' | 'user' | 'assistant' | 'tool';
   content: string | null;
 };
 /**
@@ -4354,11 +4250,11 @@ type AiSearchMessage = {
 type AiSearchOptions = {
   retrieval?: {
     /** Which retrieval backend to use. Defaults to the instance's configured index_method. */
-    retrieval_type?: "vector" | "keyword" | "hybrid";
+    retrieval_type?: 'vector' | 'keyword' | 'hybrid';
     /** Fusion method for combining vector + keyword results. */
-    fusion_method?: "max" | "rrf";
+    fusion_method?: 'max' | 'rrf';
     /** How keyword terms are combined: "and" = all terms must match, "or" = any term matches. */
-    keyword_match_mode?: "and" | "or";
+    keyword_match_mode?: 'and' | 'or';
     /** Minimum similarity score (0-1) for a result to be included. Default 0.4. */
     match_threshold?: number;
     /** Maximum number of results to return (1-50). Default 10. */
@@ -4374,7 +4270,7 @@ type AiSearchOptions = {
     /** Boost results by metadata field values. Max 3 entries. */
     boost_by?: Array<{
       field: string;
-      direction?: "asc" | "desc" | "exists" | "not_exists";
+      direction?: 'asc' | 'desc' | 'exists' | 'not_exists';
     }>;
     [key: string]: unknown;
   };
@@ -4393,7 +4289,7 @@ type AiSearchOptions = {
   };
   cache?: {
     enabled?: boolean;
-    cache_threshold?: "super_strict_match" | "close_enough" | "flexible_friend" | "anything_goes";
+    cache_threshold?: 'super_strict_match' | 'close_enough' | 'flexible_friend' | 'anything_goes';
   };
   [key: string]: unknown;
 };
@@ -4447,7 +4343,7 @@ type AiSearchMultiSearchRequest =
       ai_search_options: AiSearchMultiSearchOptions;
     };
 /** A search result chunk tagged with the instance it originated from. */
-type AiSearchMultiSearchChunk = AiSearchSearchResponse["chunks"][number] & {
+type AiSearchMultiSearchChunk = AiSearchSearchResponse['chunks'][number] & {
   instance_id: string;
 };
 /** Describes a per-instance error during a multi-instance operation. */
@@ -4462,14 +4358,11 @@ type AiSearchMultiSearchResponse = {
   errors?: AiSearchMultiSearchError[];
 };
 /** Request for chat completions across multiple instances within a namespace. `ai_search_options` is required and must include `instance_ids`. */
-type AiSearchMultiChatCompletionsRequest = Omit<
-  AiSearchChatCompletionsRequest,
-  "ai_search_options"
-> & {
+type AiSearchMultiChatCompletionsRequest = Omit<AiSearchChatCompletionsRequest, 'ai_search_options'> & {
   ai_search_options: AiSearchMultiSearchOptions;
 };
 /** Response from multi-instance chat completions, with chunks tagged by instance and optional partial-failure errors. */
-type AiSearchMultiChatCompletionsResponse = Omit<AiSearchChatCompletionsResponse, "chunks"> & {
+type AiSearchMultiChatCompletionsResponse = Omit<AiSearchChatCompletionsResponse, 'chunks'> & {
   chunks: AiSearchMultiSearchChunk[];
   errors?: AiSearchMultiSearchError[];
 };
@@ -4499,7 +4392,7 @@ type AiSearchSearchResponse = {
       /** Reranking model score */
       reranking_score?: number;
       /** Fusion method used to combine results */
-      fusion_method?: "rrf" | "max";
+      fusion_method?: 'rrf' | 'max';
       [key: string]: unknown;
     };
   }>;
@@ -4511,13 +4404,13 @@ type AiSearchChatCompletionsResponse = {
   choices: Array<{
     index?: number;
     message: {
-      role: "system" | "developer" | "user" | "assistant" | "tool";
+      role: 'system' | 'developer' | 'user' | 'assistant' | 'tool';
       content: string | null;
       [key: string]: unknown;
     };
     [key: string]: unknown;
   }>;
-  chunks: AiSearchSearchResponse["chunks"];
+  chunks: AiSearchSearchResponse['chunks'];
   [key: string]: unknown;
 };
 type AiSearchStatsResponse = {
@@ -4544,7 +4437,7 @@ type AiSearchStatsResponse = {
 // ============ AI Search Instance Info Types ============
 type AiSearchInstanceInfo = {
   id: string;
-  type?: "r2" | "web-crawler" | string;
+  type?: 'r2' | 'web-crawler' | string;
   source?: string;
   source_params?: unknown;
   paused?: boolean;
@@ -4568,15 +4461,15 @@ type AiSearchInstanceInfo = {
     keyword?: boolean;
   };
   /** Fusion method for combining vector and keyword results. */
-  fusion_method?: "max" | "rrf";
+  fusion_method?: 'max' | 'rrf';
   indexing_options?: {
-    keyword_tokenizer?: "porter" | "trigram";
+    keyword_tokenizer?: 'porter' | 'trigram';
   } | null;
   retrieval_options?: {
-    keyword_match_mode?: "and" | "or";
+    keyword_match_mode?: 'and' | 'or';
     boost_by?: Array<{
       field: string;
-      direction?: "asc" | "desc" | "exists" | "not_exists";
+      direction?: 'asc' | 'desc' | 'exists' | 'not_exists';
     }>;
   } | null;
   chunk?: boolean;
@@ -4585,10 +4478,10 @@ type AiSearchInstanceInfo = {
   score_threshold?: number;
   max_num_results?: number;
   cache?: boolean;
-  cache_threshold?: "super_strict_match" | "close_enough" | "flexible_friend" | "anything_goes";
+  cache_threshold?: 'super_strict_match' | 'close_enough' | 'flexible_friend' | 'anything_goes';
   custom_metadata?: Array<{
     field_name: string;
-    data_type: "text" | "number" | "boolean" | "datetime";
+    data_type: 'text' | 'number' | 'boolean' | 'datetime';
   }>;
   /** Sync interval in seconds. */
   sync_interval?: 3600 | 7200 | 14400 | 21600 | 43200 | 86400;
@@ -4602,9 +4495,9 @@ type AiSearchListInstancesParams = {
   /** Search instances by ID. */
   search?: string;
   /** Field to sort by. */
-  order_by?: "created_at";
+  order_by?: 'created_at';
   /** Sort direction. */
-  order_by_direction?: "asc" | "desc";
+  order_by_direction?: 'asc' | 'desc';
 };
 type AiSearchListResponse = {
   result: AiSearchInstanceInfo[];
@@ -4620,7 +4513,7 @@ type AiSearchConfig = {
   /** Instance ID (1-32 chars, pattern: ^[a-z0-9_]+(?:-[a-z0-9_]+)*$) */
   id: string;
   /** Instance type. Omit to create with built-in storage. */
-  type?: "r2" | "web-crawler" | string;
+  type?: 'r2' | 'web-crawler' | string;
   /** Source URL (required for web-crawler type). */
   source?: string;
   source_params?: unknown;
@@ -4643,15 +4536,15 @@ type AiSearchConfig = {
     keyword?: boolean;
   };
   /** Fusion method for combining vector and keyword results. "rrf" = reciprocal rank fusion (default), "max" = maximum score. */
-  fusion_method?: "max" | "rrf";
+  fusion_method?: 'max' | 'rrf';
   indexing_options?: {
-    keyword_tokenizer?: "porter" | "trigram";
+    keyword_tokenizer?: 'porter' | 'trigram';
   } | null;
   retrieval_options?: {
-    keyword_match_mode?: "and" | "or";
+    keyword_match_mode?: 'and' | 'or';
     boost_by?: Array<{
       field: string;
-      direction?: "asc" | "desc" | "exists" | "not_exists";
+      direction?: 'asc' | 'desc' | 'exists' | 'not_exists';
     }>;
   } | null;
   chunk?: boolean;
@@ -4662,10 +4555,10 @@ type AiSearchConfig = {
   max_num_results?: number;
   cache?: boolean;
   /** Similarity threshold for cache hits. Stricter = fewer cache hits but higher relevance. */
-  cache_threshold?: "super_strict_match" | "close_enough" | "flexible_friend" | "anything_goes";
+  cache_threshold?: 'super_strict_match' | 'close_enough' | 'flexible_friend' | 'anything_goes';
   custom_metadata?: Array<{
     field_name: string;
-    data_type: "text" | "number" | "boolean" | "datetime";
+    data_type: 'text' | 'number' | 'boolean' | 'datetime';
   }>;
   namespace?: string;
   /** Sync interval in seconds. 3600=1h, 7200=2h, 14400=4h, 21600=6h, 43200=12h, 86400=24h. */
@@ -4677,8 +4570,8 @@ type AiSearchConfig = {
 type AiSearchItemInfo = {
   id: string;
   key: string;
-  status: "completed" | "error" | "skipped" | "queued" | "running" | "outdated";
-  next_action?: "INDEX" | "DELETE" | null;
+  status: 'completed' | 'error' | 'skipped' | 'queued' | 'running' | 'outdated';
+  next_action?: 'INDEX' | 'DELETE' | null;
   error?: string;
   checksum?: string;
   namespace?: string;
@@ -4705,9 +4598,9 @@ type AiSearchListItemsParams = {
   /** Search items by key name. */
   search?: string;
   /** Sort order for results. */
-  sort_by?: "status" | "modified_at";
+  sort_by?: 'status' | 'modified_at';
   /** Filter items by processing status. */
-  status?: "queued" | "running" | "completed" | "error" | "skipped" | "outdated";
+  status?: 'queued' | 'running' | 'completed' | 'error' | 'skipped' | 'outdated';
   /** Filter items by source (e.g. "builtin" or "web-crawler:https://example.com"). */
   source?: string;
   /** JSON-encoded Vectorize filter for metadata filtering. */
@@ -4787,7 +4680,7 @@ type AiSearchItemChunksResponse = {
 // ============ AI Search Job Types ============
 type AiSearchJobInfo = {
   id: string;
-  source: "user" | "schedule";
+  source: 'user' | 'schedule';
   description?: string;
   last_seen_at?: string;
   started_at?: string;
@@ -5105,9 +4998,7 @@ declare abstract class AiSearchNamespace {
    * @param params Chat completions request with required `ai_search_options.instance_ids`.
    * @returns Chat completion response with choices, chunks tagged by instance_id, and optional partial-failure errors.
    */
-  chatCompletions(
-    params: AiSearchMultiChatCompletionsRequest,
-  ): Promise<AiSearchMultiChatCompletionsResponse>;
+  chatCompletions(params: AiSearchMultiChatCompletionsRequest): Promise<AiSearchMultiChatCompletionsResponse>;
 }
 type AiImageClassificationInput = {
   image: number[];
@@ -5245,7 +5136,7 @@ declare abstract class BaseAiTextEmbeddings {
   postProcessedOutputs: AiTextEmbeddingsOutput;
 }
 type RoleScopedChatInput = {
-  role: "user" | "assistant" | "system" | "tool" | (string & NonNullable<unknown>);
+  role: 'user' | 'assistant' | 'system' | 'tool' | (string & NonNullable<unknown>);
   content: string;
   name?: string;
 };
@@ -5253,7 +5144,7 @@ type AiTextGenerationToolLegacyInput = {
   name: string;
   description: string;
   parameters?: {
-    type: "object" | (string & NonNullable<unknown>);
+    type: 'object' | (string & NonNullable<unknown>);
     properties: {
       [key: string]: {
         type: string;
@@ -5264,12 +5155,12 @@ type AiTextGenerationToolLegacyInput = {
   };
 };
 type AiTextGenerationToolInput = {
-  type: "function" | (string & NonNullable<unknown>);
+  type: 'function' | (string & NonNullable<unknown>);
   function: {
     name: string;
     description: string;
     parameters?: {
-      type: "object" | (string & NonNullable<unknown>);
+      type: 'object' | (string & NonNullable<unknown>);
       properties: {
         [key: string]: {
           type: string;
@@ -5302,10 +5193,7 @@ type AiTextGenerationInput = {
   presence_penalty?: number;
   messages?: RoleScopedChatInput[];
   response_format?: AiTextGenerationResponseFormat;
-  tools?:
-    | AiTextGenerationToolInput[]
-    | AiTextGenerationToolLegacyInput[]
-    | (object & NonNullable<unknown>);
+  tools?: AiTextGenerationToolInput[] | AiTextGenerationToolLegacyInput[] | (object & NonNullable<unknown>);
   functions?: AiTextGenerationFunctionsInput[];
 };
 type AiTextGenerationToolLegacyOutput = {
@@ -5314,7 +5202,7 @@ type AiTextGenerationToolLegacyOutput = {
 };
 type AiTextGenerationToolOutput = {
   id: string;
-  type: "function";
+  type: 'function';
   function: {
     name: string;
     arguments: string;
@@ -5381,26 +5269,26 @@ declare abstract class BaseAiTranslation {
  * Workers AI support for OpenAI's Chat Completions API
  */
 type ChatCompletionContentPartText = {
-  type: "text";
+  type: 'text';
   text: string;
 };
 type ChatCompletionContentPartImage = {
-  type: "image_url";
+  type: 'image_url';
   image_url: {
     url: string;
-    detail?: "auto" | "low" | "high";
+    detail?: 'auto' | 'low' | 'high';
   };
 };
 type ChatCompletionContentPartInputAudio = {
-  type: "input_audio";
+  type: 'input_audio';
   input_audio: {
     /** Base64 encoded audio data. */
     data: string;
-    format: "wav" | "mp3";
+    format: 'wav' | 'mp3';
   };
 };
 type ChatCompletionContentPartFile = {
-  type: "file";
+  type: 'file';
   file: {
     /** Base64 encoded file data. */
     file_data?: string;
@@ -5410,7 +5298,7 @@ type ChatCompletionContentPartFile = {
   };
 };
 type ChatCompletionContentPartRefusal = {
-  type: "refusal";
+  type: 'refusal';
   refusal: string;
 };
 type ChatCompletionContentPart =
@@ -5425,24 +5313,22 @@ type FunctionDefinition = {
   strict?: boolean | null;
 };
 type ChatCompletionFunctionTool = {
-  type: "function";
+  type: 'function';
   function: FunctionDefinition;
 };
 type ChatCompletionCustomToolGrammarFormat = {
-  type: "grammar";
+  type: 'grammar';
   grammar: {
     definition: string;
-    syntax: "lark" | "regex";
+    syntax: 'lark' | 'regex';
   };
 };
 type ChatCompletionCustomToolTextFormat = {
-  type: "text";
+  type: 'text';
 };
-type ChatCompletionCustomToolFormat =
-  | ChatCompletionCustomToolTextFormat
-  | ChatCompletionCustomToolGrammarFormat;
+type ChatCompletionCustomToolFormat = ChatCompletionCustomToolTextFormat | ChatCompletionCustomToolGrammarFormat;
 type ChatCompletionCustomTool = {
-  type: "custom";
+  type: 'custom';
   custom: {
     name: string;
     description?: string;
@@ -5452,7 +5338,7 @@ type ChatCompletionCustomTool = {
 type ChatCompletionTool = ChatCompletionFunctionTool | ChatCompletionCustomTool;
 type ChatCompletionMessageFunctionToolCall = {
   id: string;
-  type: "function";
+  type: 'function';
   function: {
     name: string;
     /** JSON-encoded arguments string. */
@@ -5461,57 +5347,55 @@ type ChatCompletionMessageFunctionToolCall = {
 };
 type ChatCompletionMessageCustomToolCall = {
   id: string;
-  type: "custom";
+  type: 'custom';
   custom: {
     name: string;
     input: string;
   };
 };
-type ChatCompletionMessageToolCall =
-  | ChatCompletionMessageFunctionToolCall
-  | ChatCompletionMessageCustomToolCall;
+type ChatCompletionMessageToolCall = ChatCompletionMessageFunctionToolCall | ChatCompletionMessageCustomToolCall;
 type ChatCompletionToolChoiceFunction = {
-  type: "function";
+  type: 'function';
   function: {
     name: string;
   };
 };
 type ChatCompletionToolChoiceCustom = {
-  type: "custom";
+  type: 'custom';
   custom: {
     name: string;
   };
 };
 type ChatCompletionToolChoiceAllowedTools = {
-  type: "allowed_tools";
+  type: 'allowed_tools';
   allowed_tools: {
-    mode: "auto" | "required";
+    mode: 'auto' | 'required';
     tools: Array<Record<string, unknown>>;
   };
 };
 type ChatCompletionToolChoiceOption =
-  | "none"
-  | "auto"
-  | "required"
+  | 'none'
+  | 'auto'
+  | 'required'
   | ChatCompletionToolChoiceFunction
   | ChatCompletionToolChoiceCustom
   | ChatCompletionToolChoiceAllowedTools;
 type DeveloperMessage = {
-  role: "developer";
+  role: 'developer';
   content:
     | string
     | Array<{
-        type: "text";
+        type: 'text';
         text: string;
       }>;
   name?: string;
 };
 type SystemMessage = {
-  role: "system";
+  role: 'system';
   content:
     | string
     | Array<{
-        type: "text";
+        type: 'text';
         text: string;
       }>;
   name?: string;
@@ -5524,15 +5408,15 @@ type SystemMessage = {
  * different array elements, so the schema uses a single merged object.
  */
 type UserMessageContentPart = {
-  type: "text" | "image_url" | "input_audio" | "file";
+  type: 'text' | 'image_url' | 'input_audio' | 'file';
   text?: string;
   image_url?: {
     url?: string;
-    detail?: "auto" | "low" | "high";
+    detail?: 'auto' | 'low' | 'high';
   };
   input_audio?: {
     data?: string;
-    format?: "wav" | "mp3";
+    format?: 'wav' | 'mp3';
   };
   file?: {
     file_data?: string;
@@ -5541,17 +5425,17 @@ type UserMessageContentPart = {
   };
 };
 type UserMessage = {
-  role: "user";
+  role: 'user';
   content: string | Array<UserMessageContentPart>;
   name?: string;
 };
 type AssistantMessageContentPart = {
-  type: "text" | "refusal";
+  type: 'text' | 'refusal';
   text?: string;
   refusal?: string;
 };
 type AssistantMessage = {
-  role: "assistant";
+  role: 'assistant';
   content?: string | null | Array<AssistantMessageContentPart>;
   refusal?: string | null;
   name?: string;
@@ -5565,17 +5449,17 @@ type AssistantMessage = {
   };
 };
 type ToolMessage = {
-  role: "tool";
+  role: 'tool';
   content:
     | string
     | Array<{
-        type: "text";
+        type: 'text';
         text: string;
       }>;
   tool_call_id: string;
 };
 type FunctionMessage = {
-  role: "function";
+  role: 'function';
   content: string;
   name: string;
 };
@@ -5587,13 +5471,13 @@ type ChatCompletionMessageParam =
   | ToolMessage
   | FunctionMessage;
 type ChatCompletionsResponseFormatText = {
-  type: "text";
+  type: 'text';
 };
 type ChatCompletionsResponseFormatJSONObject = {
-  type: "json_object";
+  type: 'json_object';
 };
 type ResponseFormatJSONSchema = {
-  type: "json_schema";
+  type: 'json_schema';
   json_schema: {
     name: string;
     description?: string;
@@ -5610,11 +5494,11 @@ type ChatCompletionsStreamOptions = {
   include_obfuscation?: boolean;
 };
 type PredictionContent = {
-  type: "content";
+  type: 'content';
   content:
     | string
     | Array<{
-        type: "text";
+        type: 'text';
         text: string;
       }>;
 };
@@ -5624,10 +5508,10 @@ type AudioParams = {
     | {
         id: string;
       };
-  format: "wav" | "aac" | "mp3" | "flac" | "opus" | "pcm16";
+  format: 'wav' | 'aac' | 'mp3' | 'flac' | 'opus' | 'pcm16';
 };
 type WebSearchUserLocation = {
-  type: "approximate";
+  type: 'approximate';
   approximate: {
     city?: string;
     country?: string;
@@ -5636,7 +5520,7 @@ type WebSearchUserLocation = {
   };
 };
 type WebSearchOptions = {
-  search_context_size?: "low" | "medium" | "high";
+  search_context_size?: 'low' | 'medium' | 'high';
   user_location?: WebSearchUserLocation;
 };
 // Source of truth for per-model reasoning types: each model's `reasoning_effort` metadata
@@ -5661,17 +5545,17 @@ type ChatCompletionsCommonOptions = {
   max_tokens?: number | null;
   max_completion_tokens?: number | null;
   metadata?: Record<string, unknown> | null;
-  modalities?: Array<"text" | "audio"> | null;
+  modalities?: Array<'text' | 'audio'> | null;
   n?: number | null;
   parallel_tool_calls?: boolean;
   prediction?: PredictionContent;
   presence_penalty?: number | null;
   /** Reasoning effort. Supported levels depend on the model. */
-  reasoning_effort?: "low" | "medium" | "high" | null;
+  reasoning_effort?: 'low' | 'medium' | 'high' | null;
   chat_template_kwargs?: ChatTemplateKwargs;
   response_format?: ResponseFormat;
   seed?: number | null;
-  service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+  service_tier?: 'auto' | 'default' | 'flex' | 'scale' | 'priority' | null;
   stop?: string | Array<string> | null;
   store?: boolean | null;
   stream?: boolean | null;
@@ -5683,8 +5567,8 @@ type ChatCompletionsCommonOptions = {
   user?: string;
   web_search_options?: WebSearchOptions;
   function_call?:
-    | "none"
-    | "auto"
+    | 'none'
+    | 'auto'
     | {
         name: string;
       };
@@ -5726,7 +5610,7 @@ type ChatCompletionAudio = {
   transcript: string;
 };
 type ChatCompletionUrlCitation = {
-  type: "url_citation";
+  type: 'url_citation';
   url_citation: {
     url: string;
     title: string;
@@ -5735,7 +5619,7 @@ type ChatCompletionUrlCitation = {
   };
 };
 type ChatCompletionResponseMessage = {
-  role: "assistant";
+  role: 'assistant';
   content: string | null;
   refusal: string | null;
   annotations?: Array<ChatCompletionUrlCitation>;
@@ -5753,7 +5637,7 @@ type ChatCompletionLogprobs = {
 type ChatCompletionChoice = {
   index: number;
   message: ChatCompletionResponseMessage;
-  finish_reason: "stop" | "length" | "tool_calls" | "content_filter" | "function_call";
+  finish_reason: 'stop' | 'length' | 'tool_calls' | 'content_filter' | 'function_call';
   logprobs: ChatCompletionLogprobs | null;
 };
 type ChatCompletionsMessagesInput = {
@@ -5767,7 +5651,7 @@ type ChatCompletionsOutput = {
   choices: Array<ChatCompletionChoice>;
   usage?: CompletionUsage;
   system_fingerprint?: string | null;
-  service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+  service_tier?: 'auto' | 'default' | 'flex' | 'scale' | 'priority' | null;
 };
 /**
  * Workers AI support for OpenAI's Responses API
@@ -5791,7 +5675,7 @@ type ResponsesInput = {
   prompt_cache_key?: string;
   reasoning?: Reasoning | null;
   safety_identifier?: string;
-  service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+  service_tier?: 'auto' | 'default' | 'flex' | 'scale' | 'priority' | null;
   stream?: boolean | null;
   stream_options?: StreamOptions | null;
   temperature?: number | null;
@@ -5799,7 +5683,7 @@ type ResponsesInput = {
   tool_choice?: ToolChoiceOptions | ToolChoiceFunction;
   tools?: Array<Tool>;
   top_p?: number | null;
-  truncation?: "auto" | "disabled" | null;
+  truncation?: 'auto' | 'disabled' | null;
 };
 type ResponsesOutput = {
   id?: string;
@@ -5808,7 +5692,7 @@ type ResponsesOutput = {
   error?: ResponseError | null;
   incomplete_details?: ResponseIncompleteDetails | null;
   instructions?: string | Array<ResponseInputItem> | null;
-  object?: "response";
+  object?: 'response';
   output?: Array<ResponseOutputItem>;
   parallel_tool_calls?: boolean;
   temperature?: number | null;
@@ -5820,16 +5704,16 @@ type ResponsesOutput = {
   prompt?: ResponsePrompt | null;
   reasoning?: Reasoning | null;
   safety_identifier?: string;
-  service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+  service_tier?: 'auto' | 'default' | 'flex' | 'scale' | 'priority' | null;
   status?: ResponseStatus;
   text?: ResponseTextConfig;
-  truncation?: "auto" | "disabled" | null;
+  truncation?: 'auto' | 'disabled' | null;
   usage?: ResponseUsage;
 };
 type EasyInputMessage = {
   content: string | ResponseInputMessageContentList;
-  role: "user" | "assistant" | "system" | "developer";
-  type?: "message";
+  role: 'user' | 'assistant' | 'system' | 'developer';
+  type?: 'message';
 };
 type ResponsesFunctionTool = {
   name: string;
@@ -5837,11 +5721,11 @@ type ResponsesFunctionTool = {
     [key: string]: unknown;
   } | null;
   strict: boolean | null;
-  type: "function";
+  type: 'function';
   description?: string | null;
 };
 type ResponseIncompleteDetails = {
-  reason?: "max_output_tokens" | "content_filter";
+  reason?: 'max_output_tokens' | 'content_filter';
 };
 type ResponsePrompt = {
   id: string;
@@ -5852,8 +5736,8 @@ type ResponsePrompt = {
 };
 type Reasoning = {
   effort?: ReasoningEffort | null;
-  generate_summary?: "auto" | "concise" | "detailed" | null;
-  summary?: "auto" | "concise" | "detailed" | null;
+  generate_summary?: 'auto' | 'concise' | 'detailed' | null;
+  summary?: 'auto' | 'concise' | 'detailed' | null;
 };
 type ResponseContent =
   | ResponseInputText
@@ -5863,7 +5747,7 @@ type ResponseContent =
   | ResponseContentReasoningText;
 type ResponseContentReasoningText = {
   text: string;
-  type: "reasoning_text";
+  type: 'reasoning_text';
 };
 type ResponseConversationParam = {
   id: string;
@@ -5871,34 +5755,34 @@ type ResponseConversationParam = {
 type ResponseCreatedEvent = {
   response: Response;
   sequence_number: number;
-  type: "response.created";
+  type: 'response.created';
 };
 type ResponseCustomToolCallOutput = {
   call_id: string;
   output: string | Array<ResponseInputText | ResponseInputImage>;
-  type: "custom_tool_call_output";
+  type: 'custom_tool_call_output';
   id?: string;
 };
 type ResponseError = {
   code:
-    | "server_error"
-    | "rate_limit_exceeded"
-    | "invalid_prompt"
-    | "vector_store_timeout"
-    | "invalid_image"
-    | "invalid_image_format"
-    | "invalid_base64_image"
-    | "invalid_image_url"
-    | "image_too_large"
-    | "image_too_small"
-    | "image_parse_error"
-    | "image_content_policy_violation"
-    | "invalid_image_mode"
-    | "image_file_too_large"
-    | "unsupported_image_media_type"
-    | "empty_image_file"
-    | "failed_to_download_image"
-    | "image_file_not_found";
+    | 'server_error'
+    | 'rate_limit_exceeded'
+    | 'invalid_prompt'
+    | 'vector_store_timeout'
+    | 'invalid_image'
+    | 'invalid_image_format'
+    | 'invalid_base64_image'
+    | 'invalid_image_url'
+    | 'image_too_large'
+    | 'image_too_small'
+    | 'image_parse_error'
+    | 'image_content_policy_violation'
+    | 'invalid_image_mode'
+    | 'image_file_too_large'
+    | 'unsupported_image_media_type'
+    | 'empty_image_file'
+    | 'failed_to_download_image'
+    | 'image_file_not_found';
   message: string;
 };
 type ResponseErrorEvent = {
@@ -5906,29 +5790,26 @@ type ResponseErrorEvent = {
   message: string;
   param: string | null;
   sequence_number: number;
-  type: "error";
+  type: 'error';
 };
 type ResponseFailedEvent = {
   response: Response;
   sequence_number: number;
-  type: "response.failed";
+  type: 'response.failed';
 };
 type ResponseFormatText = {
-  type: "text";
+  type: 'text';
 };
 type ResponseFormatJSONObject = {
-  type: "json_object";
+  type: 'json_object';
 };
-type ResponseFormatTextConfig =
-  | ResponseFormatText
-  | ResponseFormatTextJSONSchemaConfig
-  | ResponseFormatJSONObject;
+type ResponseFormatTextConfig = ResponseFormatText | ResponseFormatTextJSONSchemaConfig | ResponseFormatJSONObject;
 type ResponseFormatTextJSONSchemaConfig = {
   name: string;
   schema: {
     [key: string]: unknown;
   };
-  type: "json_schema";
+  type: 'json_schema';
   description?: string;
   strict?: boolean | null;
 };
@@ -5937,7 +5818,7 @@ type ResponseFunctionCallArgumentsDeltaEvent = {
   item_id: string;
   output_index: number;
   sequence_number: number;
-  type: "response.function_call_arguments.delta";
+  type: 'response.function_call_arguments.delta';
 };
 type ResponseFunctionCallArgumentsDoneEvent = {
   arguments: string;
@@ -5945,7 +5826,7 @@ type ResponseFunctionCallArgumentsDoneEvent = {
   name: string;
   output_index: number;
   sequence_number: number;
-  type: "response.function_call_arguments.done";
+  type: 'response.function_call_arguments.done';
 };
 type ResponseFunctionCallOutputItem = ResponseInputTextContent | ResponseInputImageContent;
 type ResponseFunctionCallOutputItemList = Array<ResponseFunctionCallOutputItem>;
@@ -5953,9 +5834,9 @@ type ResponseFunctionToolCall = {
   arguments: string;
   call_id: string;
   name: string;
-  type: "function_call";
+  type: 'function_call';
   id?: string;
-  status?: "in_progress" | "completed" | "incomplete";
+  status?: 'in_progress' | 'completed' | 'incomplete';
 };
 interface ResponseFunctionToolCallItem extends ResponseFunctionToolCall {
   id: string;
@@ -5964,28 +5845,28 @@ type ResponseFunctionToolCallOutputItem = {
   id: string;
   call_id: string;
   output: string | Array<ResponseInputText | ResponseInputImage>;
-  type: "function_call_output";
-  status?: "in_progress" | "completed" | "incomplete";
+  type: 'function_call_output';
+  status?: 'in_progress' | 'completed' | 'incomplete';
 };
-type ResponseIncludable = "message.input_image.image_url" | "message.output_text.logprobs";
+type ResponseIncludable = 'message.input_image.image_url' | 'message.output_text.logprobs';
 type ResponseIncompleteEvent = {
   response: Response;
   sequence_number: number;
-  type: "response.incomplete";
+  type: 'response.incomplete';
 };
 type ResponseInput = Array<ResponseInputItem>;
 type ResponseInputContent = ResponseInputText | ResponseInputImage;
 type ResponseInputImage = {
-  detail: "low" | "high" | "auto";
-  type: "input_image";
+  detail: 'low' | 'high' | 'auto';
+  type: 'input_image';
   /**
    * Base64 encoded image
    */
   image_url?: string | null;
 };
 type ResponseInputImageContent = {
-  type: "input_image";
-  detail?: "low" | "high" | "auto" | null;
+  type: 'input_image';
+  detail?: 'low' | 'high' | 'auto' | null;
   /**
    * Base64 encoded image
    */
@@ -6001,31 +5882,31 @@ type ResponseInputItem =
 type ResponseInputItemFunctionCallOutput = {
   call_id: string;
   output: string | ResponseFunctionCallOutputItemList;
-  type: "function_call_output";
+  type: 'function_call_output';
   id?: string | null;
-  status?: "in_progress" | "completed" | "incomplete" | null;
+  status?: 'in_progress' | 'completed' | 'incomplete' | null;
 };
 type ResponseInputItemMessage = {
   content: ResponseInputMessageContentList;
-  role: "user" | "system" | "developer";
-  status?: "in_progress" | "completed" | "incomplete";
-  type?: "message";
+  role: 'user' | 'system' | 'developer';
+  status?: 'in_progress' | 'completed' | 'incomplete';
+  type?: 'message';
 };
 type ResponseInputMessageContentList = Array<ResponseInputContent>;
 type ResponseInputMessageItem = {
   id: string;
   content: ResponseInputMessageContentList;
-  role: "user" | "system" | "developer";
-  status?: "in_progress" | "completed" | "incomplete";
-  type?: "message";
+  role: 'user' | 'system' | 'developer';
+  status?: 'in_progress' | 'completed' | 'incomplete';
+  type?: 'message';
 };
 type ResponseInputText = {
   text: string;
-  type: "input_text";
+  type: 'input_text';
 };
 type ResponseInputTextContent = {
   text: string;
-  type: "input_text";
+  type: 'input_text';
 };
 type ResponseItem =
   | ResponseInputMessageItem
@@ -6037,45 +5918,45 @@ type ResponseOutputItemAddedEvent = {
   item: ResponseOutputItem;
   output_index: number;
   sequence_number: number;
-  type: "response.output_item.added";
+  type: 'response.output_item.added';
 };
 type ResponseOutputItemDoneEvent = {
   item: ResponseOutputItem;
   output_index: number;
   sequence_number: number;
-  type: "response.output_item.done";
+  type: 'response.output_item.done';
 };
 type ResponseOutputMessage = {
   id: string;
   content: Array<ResponseOutputText | ResponseOutputRefusal>;
-  role: "assistant";
-  status: "in_progress" | "completed" | "incomplete";
-  type: "message";
+  role: 'assistant';
+  status: 'in_progress' | 'completed' | 'incomplete';
+  type: 'message';
 };
 type ResponseOutputRefusal = {
   refusal: string;
-  type: "refusal";
+  type: 'refusal';
 };
 type ResponseOutputText = {
   text: string;
-  type: "output_text";
+  type: 'output_text';
   logprobs?: Array<Logprob>;
 };
 type ResponseReasoningItem = {
   id: string;
   summary: Array<ResponseReasoningSummaryItem>;
-  type: "reasoning";
+  type: 'reasoning';
   content?: Array<ResponseReasoningContentItem>;
   encrypted_content?: string | null;
-  status?: "in_progress" | "completed" | "incomplete";
+  status?: 'in_progress' | 'completed' | 'incomplete';
 };
 type ResponseReasoningSummaryItem = {
   text: string;
-  type: "summary_text";
+  type: 'summary_text';
 };
 type ResponseReasoningContentItem = {
   text: string;
-  type: "reasoning_text";
+  type: 'reasoning_text';
 };
 type ResponseReasoningTextDeltaEvent = {
   content_index: number;
@@ -6083,7 +5964,7 @@ type ResponseReasoningTextDeltaEvent = {
   item_id: string;
   output_index: number;
   sequence_number: number;
-  type: "response.reasoning_text.delta";
+  type: 'response.reasoning_text.delta';
 };
 type ResponseReasoningTextDoneEvent = {
   content_index: number;
@@ -6091,7 +5972,7 @@ type ResponseReasoningTextDoneEvent = {
   output_index: number;
   sequence_number: number;
   text: string;
-  type: "response.reasoning_text.done";
+  type: 'response.reasoning_text.done';
 };
 type ResponseRefusalDeltaEvent = {
   content_index: number;
@@ -6099,7 +5980,7 @@ type ResponseRefusalDeltaEvent = {
   item_id: string;
   output_index: number;
   sequence_number: number;
-  type: "response.refusal.delta";
+  type: 'response.refusal.delta';
 };
 type ResponseRefusalDoneEvent = {
   content_index: number;
@@ -6107,15 +5988,9 @@ type ResponseRefusalDoneEvent = {
   output_index: number;
   refusal: string;
   sequence_number: number;
-  type: "response.refusal.done";
+  type: 'response.refusal.done';
 };
-type ResponseStatus =
-  | "completed"
-  | "failed"
-  | "in_progress"
-  | "cancelled"
-  | "queued"
-  | "incomplete";
+type ResponseStatus = 'completed' | 'failed' | 'in_progress' | 'cancelled' | 'queued' | 'incomplete';
 type ResponseStreamEvent =
   | ResponseCompletedEvent
   | ResponseCreatedEvent
@@ -6135,11 +6010,11 @@ type ResponseStreamEvent =
 type ResponseCompletedEvent = {
   response: Response;
   sequence_number: number;
-  type: "response.completed";
+  type: 'response.completed';
 };
 type ResponseTextConfig = {
   format?: ResponseFormatTextConfig;
-  verbosity?: "low" | "medium" | "high" | null;
+  verbosity?: 'low' | 'medium' | 'high' | null;
 };
 type ResponseTextDeltaEvent = {
   content_index: number;
@@ -6148,7 +6023,7 @@ type ResponseTextDeltaEvent = {
   logprobs: Array<Logprob>;
   output_index: number;
   sequence_number: number;
-  type: "response.output_text.delta";
+  type: 'response.output_text.delta';
 };
 type ResponseTextDoneEvent = {
   content_index: number;
@@ -6157,7 +6032,7 @@ type ResponseTextDoneEvent = {
   output_index: number;
   sequence_number: number;
   text: string;
-  type: "response.output_text.done";
+  type: 'response.output_text.done';
 };
 type Logprob = {
   token: string;
@@ -6176,10 +6051,10 @@ type ResponseUsage = {
 type Tool = ResponsesFunctionTool;
 type ToolChoiceFunction = {
   name: string;
-  type: "function";
+  type: 'function';
 };
-type ToolChoiceOptions = "none";
-type ReasoningEffort = "minimal" | "low" | "medium" | "high" | null;
+type ToolChoiceOptions = 'none';
+type ReasoningEffort = 'minimal' | 'low' | 'medium' | 'high' | null;
 type StreamOptions = {
   include_obfuscation?: boolean;
 };
@@ -6195,7 +6070,7 @@ type Ai_Cf_Baai_Bge_Base_En_V1_5_Input =
       /**
        * The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.
        */
-      pooling?: "mean" | "cls";
+      pooling?: 'mean' | 'cls';
     }
   | {
       /**
@@ -6206,7 +6081,7 @@ type Ai_Cf_Baai_Bge_Base_En_V1_5_Input =
         /**
          * The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.
          */
-        pooling?: "mean" | "cls";
+        pooling?: 'mean' | 'cls';
       }[];
     };
 type Ai_Cf_Baai_Bge_Base_En_V1_5_Output =
@@ -6219,7 +6094,7 @@ type Ai_Cf_Baai_Bge_Base_En_V1_5_Output =
       /**
        * The pooling method used in the embedding process.
        */
-      pooling?: "mean" | "cls";
+      pooling?: 'mean' | 'cls';
     }
   | Ai_Cf_Baai_Bge_Base_En_V1_5_AsyncResponse;
 interface Ai_Cf_Baai_Bge_Base_En_V1_5_AsyncResponse {
@@ -6321,7 +6196,7 @@ type Ai_Cf_Baai_Bge_Small_En_V1_5_Input =
       /**
        * The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.
        */
-      pooling?: "mean" | "cls";
+      pooling?: 'mean' | 'cls';
     }
   | {
       /**
@@ -6332,7 +6207,7 @@ type Ai_Cf_Baai_Bge_Small_En_V1_5_Input =
         /**
          * The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.
          */
-        pooling?: "mean" | "cls";
+        pooling?: 'mean' | 'cls';
       }[];
     };
 type Ai_Cf_Baai_Bge_Small_En_V1_5_Output =
@@ -6345,7 +6220,7 @@ type Ai_Cf_Baai_Bge_Small_En_V1_5_Output =
       /**
        * The pooling method used in the embedding process.
        */
-      pooling?: "mean" | "cls";
+      pooling?: 'mean' | 'cls';
     }
   | Ai_Cf_Baai_Bge_Small_En_V1_5_AsyncResponse;
 interface Ai_Cf_Baai_Bge_Small_En_V1_5_AsyncResponse {
@@ -6364,7 +6239,7 @@ type Ai_Cf_Baai_Bge_Large_En_V1_5_Input =
       /**
        * The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.
        */
-      pooling?: "mean" | "cls";
+      pooling?: 'mean' | 'cls';
     }
   | {
       /**
@@ -6375,7 +6250,7 @@ type Ai_Cf_Baai_Bge_Large_En_V1_5_Input =
         /**
          * The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.
          */
-        pooling?: "mean" | "cls";
+        pooling?: 'mean' | 'cls';
       }[];
     };
 type Ai_Cf_Baai_Bge_Large_En_V1_5_Output =
@@ -6388,7 +6263,7 @@ type Ai_Cf_Baai_Bge_Large_En_V1_5_Output =
       /**
        * The pooling method used in the embedding process.
        */
-      pooling?: "mean" | "cls";
+      pooling?: 'mean' | 'cls';
     }
   | Ai_Cf_Baai_Bge_Large_En_V1_5_AsyncResponse;
 interface Ai_Cf_Baai_Bge_Large_En_V1_5_AsyncResponse {
@@ -6619,10 +6494,7 @@ type Ai_Cf_Baai_Bge_M3_Input =
       /**
        * Batch of the embeddings requests to run using async-queue
        */
-      requests: (
-        | Ai_Cf_Baai_Bge_M3_Input_QueryAnd_Contexts_1
-        | Ai_Cf_Baai_Bge_M3_Input_Embedding_1
-      )[];
+      requests: (Ai_Cf_Baai_Bge_M3_Input_QueryAnd_Contexts_1 | Ai_Cf_Baai_Bge_M3_Input_Embedding_1)[];
     };
 interface Ai_Cf_Baai_Bge_M3_Input_QueryAnd_Contexts {
   /**
@@ -6699,7 +6571,7 @@ interface Ai_Cf_Baai_Bge_M3_Output_EmbeddingFor_Contexts {
   /**
    * The pooling method used in the embedding process.
    */
-  pooling?: "mean" | "cls";
+  pooling?: 'mean' | 'cls';
 }
 interface Ai_Cf_Baai_Bge_M3_Output_Embedding {
   shape?: number[];
@@ -6710,7 +6582,7 @@ interface Ai_Cf_Baai_Bge_M3_Output_Embedding {
   /**
    * The pooling method used in the embedding process.
    */
-  pooling?: "mean" | "cls";
+  pooling?: 'mean' | 'cls';
 }
 interface Ai_Cf_Baai_Bge_M3_AsyncResponse {
   /**
@@ -7049,7 +6921,7 @@ interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_Prompt {
   presence_penalty?: number;
 }
 interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_JSON_Mode {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_Messages {
@@ -7211,7 +7083,7 @@ interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_Messages {
   presence_penalty?: number;
 }
 interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_JSON_Mode_1 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_Async_Batch {
@@ -7260,7 +7132,7 @@ interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_Async_Batch {
   }[];
 }
 interface Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_JSON_Mode_2 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 type Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast_Output =
@@ -7320,7 +7192,7 @@ interface Ai_Cf_Meta_Llama_Guard_3_8B_Input {
     /**
      * The role of the message sender must alternate between 'user' and 'assistant'.
      */
-    role: "user" | "assistant";
+    role: 'user' | 'assistant';
     /**
      * The content of the message as a string.
      */
@@ -7468,7 +7340,7 @@ interface Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct_Prompt {
   presence_penalty?: number;
 }
 interface Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct_JSON_Mode {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct_Messages {
@@ -7622,7 +7494,7 @@ interface Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct_Messages {
   presence_penalty?: number;
 }
 interface Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct_JSON_Mode_1 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 type Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct_Output = {
@@ -8211,9 +8083,7 @@ declare abstract class Base_Ai_Cf_Mistralai_Mistral_Small_3_1_24B_Instruct {
   inputs: Ai_Cf_Mistralai_Mistral_Small_3_1_24B_Instruct_Input;
   postProcessedOutputs: Ai_Cf_Mistralai_Mistral_Small_3_1_24B_Instruct_Output;
 }
-type Ai_Cf_Google_Gemma_3_12B_It_Input =
-  | Ai_Cf_Google_Gemma_3_12B_It_Prompt
-  | Ai_Cf_Google_Gemma_3_12B_It_Messages;
+type Ai_Cf_Google_Gemma_3_12B_It_Input = Ai_Cf_Google_Gemma_3_12B_It_Prompt | Ai_Cf_Google_Gemma_3_12B_It_Messages;
 interface Ai_Cf_Google_Gemma_3_12B_It_Prompt {
   /**
    * The input text prompt for the model to generate a response.
@@ -8524,7 +8394,7 @@ interface Ai_Cf_Meta_Llama_4_Scout_17B_16E_Instruct_Prompt {
   presence_penalty?: number;
 }
 interface Ai_Cf_Meta_Llama_4_Scout_17B_16E_Instruct_JSON_Mode {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Meta_Llama_4_Scout_17B_16E_Instruct_Messages {
@@ -9057,7 +8927,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Prompt {
   presence_penalty?: number;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_JSON_Mode {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Messages {
@@ -9219,7 +9089,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Messages {
   presence_penalty?: number;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_JSON_Mode_1 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Async_Batch {
@@ -9277,7 +9147,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Prompt_1 {
   presence_penalty?: number;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_JSON_Mode_2 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Messages_1 {
@@ -9439,7 +9309,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Messages_1 {
   presence_penalty?: number;
 }
 interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_JSON_Mode_3 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 type Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Output =
@@ -9455,7 +9325,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Chat_Completion_Response {
   /**
    * Object type identifier
    */
-  object?: "chat.completion";
+  object?: 'chat.completion';
   /**
    * Unix timestamp of when the completion was created
    */
@@ -9499,7 +9369,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Chat_Completion_Response {
         /**
          * Type of tool call
          */
-        type: "function";
+        type: 'function';
         function: {
           /**
            * Name of the function to call
@@ -9555,7 +9425,7 @@ interface Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8_Text_Completion_Response {
   /**
    * Object type identifier
    */
-  object?: "text_completion";
+  object?: 'text_completion';
   /**
    * Unix timestamp of when the completion was created
    */
@@ -9629,7 +9499,7 @@ interface Ai_Cf_Deepgram_Nova_3_Input {
   /**
    * Sets how the model will interpret strings submitted to the custom_topic param. When strict, the model will only return topics submitted using the custom_topic param. When extended, the model will return its own detected topics in addition to those submitted using the custom_topic param.
    */
-  custom_topic_mode?: "extended" | "strict";
+  custom_topic_mode?: 'extended' | 'strict';
   /**
    * Custom topics you want the model to detect within your input audio or text if present Submit up to 100
    */
@@ -9637,7 +9507,7 @@ interface Ai_Cf_Deepgram_Nova_3_Input {
   /**
    * Sets how the model will interpret intents submitted to the custom_intent param. When strict, the model will only return intents submitted using the custom_intent param. When extended, the model will return its own detected intents in addition those submitted using the custom_intents param
    */
-  custom_intent_mode?: "extended" | "strict";
+  custom_intent_mode?: 'extended' | 'strict';
   /**
    * Custom intents you want the model to detect within your input audio if present
    */
@@ -9661,7 +9531,7 @@ interface Ai_Cf_Deepgram_Nova_3_Input {
   /**
    * Specify the expected encoding of your submitted audio
    */
-  encoding?: "linear16" | "flac" | "mulaw" | "amr-nb" | "amr-wb" | "opus" | "speex" | "g729";
+  encoding?: 'linear16' | 'flac' | 'mulaw' | 'amr-nb' | 'amr-wb' | 'opus' | 'speex' | 'g729';
   /**
    * Arbitrary key-value pairs that are attached to the API response for usage in downstream processing
    */
@@ -9693,7 +9563,7 @@ interface Ai_Cf_Deepgram_Nova_3_Input {
   /**
    * Mode of operation for the model representing broad area of topic that will be talked about in the supplied audio
    */
-  mode?: "general" | "medical" | "finance";
+  mode?: 'general' | 'medical' | 'finance';
   /**
    * Transcribe each audio channel independently.
    */
@@ -9833,7 +9703,7 @@ type Ai_Cf_Pipecat_Ai_Smart_Turn_V2_Input =
       /**
        * type of data PCM data that's sent to the inference server as raw array
        */
-      dtype?: "uint8" | "float32" | "float64";
+      dtype?: 'uint8' | 'float32' | 'float64';
     }
   | {
       /**
@@ -9843,7 +9713,7 @@ type Ai_Cf_Pipecat_Ai_Smart_Turn_V2_Input =
       /**
        * type of data PCM data that's sent to the inference server as raw array
        */
-      dtype?: "uint8" | "float32" | "float64";
+      dtype?: 'uint8' | 'float32' | 'float64';
     };
 interface Ai_Cf_Pipecat_Ai_Smart_Turn_V2_Output {
   /**
@@ -9861,26 +9731,26 @@ declare abstract class Base_Ai_Cf_Pipecat_Ai_Smart_Turn_V2 {
 }
 declare abstract class Base_Ai_Cf_Openai_Gpt_Oss_120B {
   inputs: XOR<
-    Omit<ResponsesInput, "reasoning"> & {
+    Omit<ResponsesInput, 'reasoning'> & {
       reasoning?:
-        | (Omit<Reasoning, "effort"> & {
+        | (Omit<Reasoning, 'effort'> & {
             /**
              * Reasoning effort. Supported levels: low, medium, high. Reasoning cannot be disabled.
              *
              * @default "medium"
              */
-            effort?: "low" | "medium" | "high" | null;
+            effort?: 'low' | 'medium' | 'high' | null;
           })
         | null;
     },
-    Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+    Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
       /**
        * Reasoning effort. Supported levels: low, medium, high. Reasoning cannot be disabled.
        *
        * @default "medium"
        */
-      reasoning_effort?: "low" | "medium" | "high" | null;
-      chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+      reasoning_effort?: 'low' | 'medium' | 'high' | null;
+      chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
         /**
          * Reasoning is always enabled for this model and cannot be disabled.
          *
@@ -9894,26 +9764,26 @@ declare abstract class Base_Ai_Cf_Openai_Gpt_Oss_120B {
 }
 declare abstract class Base_Ai_Cf_Openai_Gpt_Oss_20B {
   inputs: XOR<
-    Omit<ResponsesInput, "reasoning"> & {
+    Omit<ResponsesInput, 'reasoning'> & {
       reasoning?:
-        | (Omit<Reasoning, "effort"> & {
+        | (Omit<Reasoning, 'effort'> & {
             /**
              * Reasoning effort. Supported levels: low, medium, high. Reasoning cannot be disabled.
              *
              * @default "medium"
              */
-            effort?: "low" | "medium" | "high" | null;
+            effort?: 'low' | 'medium' | 'high' | null;
           })
         | null;
     },
-    Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+    Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
       /**
        * Reasoning effort. Supported levels: low, medium, high. Reasoning cannot be disabled.
        *
        * @default "medium"
        */
-      reasoning_effort?: "low" | "medium" | "high" | null;
-      chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+      reasoning_effort?: 'low' | 'medium' | 'high' | null;
+      chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
         /**
          * Reasoning is always enabled for this model and cannot be disabled.
          *
@@ -10008,26 +9878,26 @@ interface Ai_Cf_Deepgram_Aura_1_Input {
    * Speaker used to produce the audio.
    */
   speaker?:
-    | "angus"
-    | "asteria"
-    | "arcas"
-    | "orion"
-    | "orpheus"
-    | "athena"
-    | "luna"
-    | "zeus"
-    | "perseus"
-    | "helios"
-    | "hera"
-    | "stella";
+    | 'angus'
+    | 'asteria'
+    | 'arcas'
+    | 'orion'
+    | 'orpheus'
+    | 'athena'
+    | 'luna'
+    | 'zeus'
+    | 'perseus'
+    | 'helios'
+    | 'hera'
+    | 'stella';
   /**
    * Encoding of the output audio.
    */
-  encoding?: "linear16" | "flac" | "mulaw" | "alaw" | "mp3" | "opus" | "aac";
+  encoding?: 'linear16' | 'flac' | 'mulaw' | 'alaw' | 'mp3' | 'opus' | 'aac';
   /**
    * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..
    */
-  container?: "none" | "wav" | "ogg";
+  container?: 'none' | 'wav' | 'ogg';
   /**
    * The text content to be converted to speech
    */
@@ -10058,40 +9928,40 @@ interface Ai_Cf_Ai4Bharat_Indictrans2_En_Indic_1B_Input {
    * Target langauge to translate to
    */
   target_language:
-    | "asm_Beng"
-    | "awa_Deva"
-    | "ben_Beng"
-    | "bho_Deva"
-    | "brx_Deva"
-    | "doi_Deva"
-    | "eng_Latn"
-    | "gom_Deva"
-    | "gon_Deva"
-    | "guj_Gujr"
-    | "hin_Deva"
-    | "hne_Deva"
-    | "kan_Knda"
-    | "kas_Arab"
-    | "kas_Deva"
-    | "kha_Latn"
-    | "lus_Latn"
-    | "mag_Deva"
-    | "mai_Deva"
-    | "mal_Mlym"
-    | "mar_Deva"
-    | "mni_Beng"
-    | "mni_Mtei"
-    | "npi_Deva"
-    | "ory_Orya"
-    | "pan_Guru"
-    | "san_Deva"
-    | "sat_Olck"
-    | "snd_Arab"
-    | "snd_Deva"
-    | "tam_Taml"
-    | "tel_Telu"
-    | "urd_Arab"
-    | "unr_Deva";
+    | 'asm_Beng'
+    | 'awa_Deva'
+    | 'ben_Beng'
+    | 'bho_Deva'
+    | 'brx_Deva'
+    | 'doi_Deva'
+    | 'eng_Latn'
+    | 'gom_Deva'
+    | 'gon_Deva'
+    | 'guj_Gujr'
+    | 'hin_Deva'
+    | 'hne_Deva'
+    | 'kan_Knda'
+    | 'kas_Arab'
+    | 'kas_Deva'
+    | 'kha_Latn'
+    | 'lus_Latn'
+    | 'mag_Deva'
+    | 'mai_Deva'
+    | 'mal_Mlym'
+    | 'mar_Deva'
+    | 'mni_Beng'
+    | 'mni_Mtei'
+    | 'npi_Deva'
+    | 'ory_Orya'
+    | 'pan_Guru'
+    | 'san_Deva'
+    | 'sat_Olck'
+    | 'snd_Arab'
+    | 'snd_Deva'
+    | 'tam_Taml'
+    | 'tel_Telu'
+    | 'urd_Arab'
+    | 'unr_Deva';
 }
 interface Ai_Cf_Ai4Bharat_Indictrans2_En_Indic_1B_Output {
   /**
@@ -10159,7 +10029,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Prompt {
   presence_penalty?: number;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_JSON_Mode {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Messages {
@@ -10321,7 +10191,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Messages {
   presence_penalty?: number;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_JSON_Mode_1 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Async_Batch {
@@ -10382,7 +10252,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Prompt_1 {
   presence_penalty?: number;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_JSON_Mode_2 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Messages_1 {
@@ -10544,7 +10414,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Messages_1 {
   presence_penalty?: number;
 }
 interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_JSON_Mode_3 {
-  type?: "json_object" | "json_schema";
+  type?: 'json_object' | 'json_schema';
   json_schema?: unknown;
 }
 type Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Output =
@@ -10560,7 +10430,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Chat_Completion_Response {
   /**
    * Object type identifier
    */
-  object?: "chat.completion";
+  object?: 'chat.completion';
   /**
    * Unix timestamp of when the completion was created
    */
@@ -10604,7 +10474,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Chat_Completion_Response {
         /**
          * Type of tool call
          */
-        type: "function";
+        type: 'function';
         function: {
           /**
            * Name of the function to call
@@ -10660,7 +10530,7 @@ interface Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It_Text_Completion_Response {
   /**
    * Object type identifier
    */
-  object?: "text_completion";
+  object?: 'text_completion';
   /**
    * Unix timestamp of when the completion was created
    */
@@ -10753,7 +10623,7 @@ interface Ai_Cf_Deepgram_Flux_Input {
   /**
    * Encoding of the audio stream. Currently only supports raw signed little-endian 16-bit PCM.
    */
-  encoding: "linear16";
+  encoding: 'linear16';
   /**
    * Sample rate of the audio stream in Hz.
    */
@@ -10777,7 +10647,7 @@ interface Ai_Cf_Deepgram_Flux_Input {
   /**
    * Opts out requests from the Deepgram Model Improvement Program. Refer to Deepgram Docs for pricing impacts before setting this to true. https://dpgr.am/deepgram-mip
    */
-  mip_opt_out?: "true" | "false";
+  mip_opt_out?: 'true' | 'false';
   /**
    * Label your requests for the purpose of identification during usage reporting
    */
@@ -10798,7 +10668,7 @@ interface Ai_Cf_Deepgram_Flux_Output {
   /**
    * The type of event being reported.
    */
-  event?: "Update" | "StartOfTurn" | "EagerEndOfTurn" | "TurnResumed" | "EndOfTurn";
+  event?: 'Update' | 'StartOfTurn' | 'EagerEndOfTurn' | 'TurnResumed' | 'EndOfTurn';
   /**
    * The index of the current turn
    */
@@ -10842,54 +10712,54 @@ interface Ai_Cf_Deepgram_Aura_2_En_Input {
    * Speaker used to produce the audio.
    */
   speaker?:
-    | "amalthea"
-    | "andromeda"
-    | "apollo"
-    | "arcas"
-    | "aries"
-    | "asteria"
-    | "athena"
-    | "atlas"
-    | "aurora"
-    | "callista"
-    | "cora"
-    | "cordelia"
-    | "delia"
-    | "draco"
-    | "electra"
-    | "harmonia"
-    | "helena"
-    | "hera"
-    | "hermes"
-    | "hyperion"
-    | "iris"
-    | "janus"
-    | "juno"
-    | "jupiter"
-    | "luna"
-    | "mars"
-    | "minerva"
-    | "neptune"
-    | "odysseus"
-    | "ophelia"
-    | "orion"
-    | "orpheus"
-    | "pandora"
-    | "phoebe"
-    | "pluto"
-    | "saturn"
-    | "thalia"
-    | "theia"
-    | "vesta"
-    | "zeus";
+    | 'amalthea'
+    | 'andromeda'
+    | 'apollo'
+    | 'arcas'
+    | 'aries'
+    | 'asteria'
+    | 'athena'
+    | 'atlas'
+    | 'aurora'
+    | 'callista'
+    | 'cora'
+    | 'cordelia'
+    | 'delia'
+    | 'draco'
+    | 'electra'
+    | 'harmonia'
+    | 'helena'
+    | 'hera'
+    | 'hermes'
+    | 'hyperion'
+    | 'iris'
+    | 'janus'
+    | 'juno'
+    | 'jupiter'
+    | 'luna'
+    | 'mars'
+    | 'minerva'
+    | 'neptune'
+    | 'odysseus'
+    | 'ophelia'
+    | 'orion'
+    | 'orpheus'
+    | 'pandora'
+    | 'phoebe'
+    | 'pluto'
+    | 'saturn'
+    | 'thalia'
+    | 'theia'
+    | 'vesta'
+    | 'zeus';
   /**
    * Encoding of the output audio.
    */
-  encoding?: "linear16" | "flac" | "mulaw" | "alaw" | "mp3" | "opus" | "aac";
+  encoding?: 'linear16' | 'flac' | 'mulaw' | 'alaw' | 'mp3' | 'opus' | 'aac';
   /**
    * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..
    */
-  container?: "none" | "wav" | "ogg";
+  container?: 'none' | 'wav' | 'ogg';
   /**
    * The text content to be converted to speech
    */
@@ -10916,24 +10786,24 @@ interface Ai_Cf_Deepgram_Aura_2_Es_Input {
    * Speaker used to produce the audio.
    */
   speaker?:
-    | "sirio"
-    | "nestor"
-    | "carina"
-    | "celeste"
-    | "alvaro"
-    | "diana"
-    | "aquila"
-    | "selena"
-    | "estrella"
-    | "javier";
+    | 'sirio'
+    | 'nestor'
+    | 'carina'
+    | 'celeste'
+    | 'alvaro'
+    | 'diana'
+    | 'aquila'
+    | 'selena'
+    | 'estrella'
+    | 'javier';
   /**
    * Encoding of the output audio.
    */
-  encoding?: "linear16" | "flac" | "mulaw" | "alaw" | "mp3" | "opus" | "aac";
+  encoding?: 'linear16' | 'flac' | 'mulaw' | 'alaw' | 'mp3' | 'opus' | 'aac';
   /**
    * Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..
    */
-  container?: "none" | "wav" | "ogg";
+  container?: 'none' | 'wav' | 'ogg';
   /**
    * The text content to be converted to speech
    */
@@ -11004,8 +10874,8 @@ declare abstract class Base_Ai_Cf_Black_Forest_Labs_Flux_2_Klein_9B {
   postProcessedOutputs: Ai_Cf_Black_Forest_Labs_Flux_2_Klein_9B_Output;
 }
 declare abstract class Base_Ai_Cf_Zai_Org_Glm_4_7_Flash {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Whether to enable reasoning for this model. This model has no reasoning effort levels.
        *
@@ -11021,14 +10891,14 @@ declare abstract class Base_Ai_Cf_Moonshotai_Kimi_K2_5 {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 declare abstract class Base_Ai_Cf_Moonshotai_Kimi_K2_6 {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: high, none. Compatibility aliases (accepted by the API, not by these types): low maps to high; medium maps to high; max maps to high.
      *
      * @default "high"
      */
-    reasoning_effort?: "high" | "none" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'high' | 'none' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Whether to enable reasoning for this model.
        *
@@ -11041,30 +10911,24 @@ declare abstract class Base_Ai_Cf_Moonshotai_Kimi_K2_6 {
 }
 type Ai_Cf_Nvidia_Nemotron_3_120B_A12B_Input = Omit<
   ChatCompletionsInput,
-  | "model"
-  | "max_tokens"
-  | "metadata"
-  | "modalities"
-  | "chat_template_kwargs"
-  | "store"
-  | "reasoning_effort"
+  'model' | 'max_tokens' | 'metadata' | 'modalities' | 'chat_template_kwargs' | 'store' | 'reasoning_effort'
 > & {
   /**
    * ID of the model to use (for example, '@cf/nvidia/nemotron-3-120b-a12b').
    */
-  model?: ChatCompletionsInput["model"];
+  model?: ChatCompletionsInput['model'];
   /**
    * The maximum number of tokens to generate.
    */
-  max_tokens?: ChatCompletionsInput["max_tokens"];
+  max_tokens?: ChatCompletionsInput['max_tokens'];
   /**
    * Set of key-value pairs that can be attached to the object.
    */
-  metadata?: ChatCompletionsInput["metadata"];
+  metadata?: ChatCompletionsInput['metadata'];
   /**
    * Output types requested from the model.
    */
-  modalities?: ChatCompletionsInput["modalities"];
+  modalities?: ChatCompletionsInput['modalities'];
   /**
    * Nemotron chat-template controls for normal reasoning, low-effort reasoning, and non-reasoning responses.
    */
@@ -11087,17 +10951,14 @@ type Ai_Cf_Nvidia_Nemotron_3_120B_A12B_Input = Omit<
    *
    * @default false
    */
-  store?: ChatCompletionsInput["store"];
+  store?: ChatCompletionsInput['store'];
 };
 declare abstract class Base_Ai_Cf_Nvidia_Nemotron_3_120B_A12B {
   inputs: Ai_Cf_Nvidia_Nemotron_3_120B_A12B_Input;
   postProcessedOutputs: ChatCompletionsOutput;
 }
-type Ai_Cf_Google_Gemma_4_26B_A4B_It_Input = Omit<
-  ChatCompletionsInput,
-  "reasoning_effort" | "chat_template_kwargs"
-> & {
-  chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+type Ai_Cf_Google_Gemma_4_26B_A4B_It_Input = Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
+  chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
     /**
      * Whether to enable reasoning for this model. This model has no reasoning effort levels.
      *
@@ -11132,7 +10993,7 @@ type Ai_Cf_Nvidia_Nemotron_Speech_Streaming_En_0_6B_Input =
        * base64 encoded audio data
        */
       audio: string;
-      encoding?: "wav" | "flac" | "ogg" | "linear16";
+      encoding?: 'wav' | 'flac' | 'ogg' | 'linear16';
       sample_rate?: number;
       channels?: number;
     };
@@ -11145,8 +11006,8 @@ declare abstract class Base_Ai_Cf_Nvidia_Nemotron_Speech_Streaming_En_0_6B {
   postProcessedOutputs: Ai_Cf_Nvidia_Nemotron_Speech_Streaming_En_0_6B_Output;
 }
 declare abstract class Base_Ai_Cf_Moonshotai_Kimi_K2_7_Code {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Reasoning is always enabled for this model and cannot be disabled. This model has no reasoning effort levels.
        *
@@ -11158,14 +11019,14 @@ declare abstract class Base_Ai_Cf_Moonshotai_Kimi_K2_7_Code {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 declare abstract class Base_Ai_Cf_Zai_Org_Glm_5_2 {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: max, high, none. Compatibility aliases (accepted by the API, not by these types): low maps to high; medium maps to high; xhigh maps to max; minimal maps to none.
      *
      * @default "max"
      */
-    reasoning_effort?: "max" | "high" | "none" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'max' | 'high' | 'none' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Whether to enable reasoning for this model.
        *
@@ -11180,7 +11041,7 @@ interface Ai_Cf_Moondream_Moondream3_1_9B_A2B_Input {
   /**
    * Which Moondream skill to run.
    */
-  task?: "query" | "caption" | "point" | "detect";
+  task?: 'query' | 'caption' | 'point' | 'detect';
   /**
    * Input image as a public HTTPS URL or base64 data URI. Optional for `query`; required for `caption`, `point`, and `detect`.
    */
@@ -11192,7 +11053,7 @@ interface Ai_Cf_Moondream_Moondream3_1_9B_A2B_Input {
   /**
    * Caption length for the `caption` task.
    */
-  caption_length?: "short" | "normal" | "long";
+  caption_length?: 'short' | 'normal' | 'long';
   /**
    * Object phrase to locate for `point` and `detect` tasks (e.g. 'person wearing a red shirt').
    */
@@ -11310,14 +11171,14 @@ declare abstract class Base_Ai_Cf_Moondream_Moondream3_1_9B_A2B {
   postProcessedOutputs: Ai_Cf_Moondream_Moondream3_1_9B_A2B_Output;
 }
 declare abstract class Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Flash_0731 {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: max, high, low, none. Compatibility aliases (accepted by the API, not by these types): minimal maps to low; medium maps to high; xhigh maps to high.
      *
      * @default "high"
      */
-    reasoning_effort?: "max" | "high" | "low" | "none" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'max' | 'high' | 'low' | 'none' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Whether to enable reasoning for this model.
        *
@@ -11329,14 +11190,14 @@ declare abstract class Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Flash_0731 {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 declare abstract class Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Pro_0813 {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: max, high, low, none. Compatibility aliases (accepted by the API, not by these types): minimal maps to low; medium maps to high; xhigh maps to high.
      *
      * @default "high"
      */
-    reasoning_effort?: "max" | "high" | "low" | "none" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'max' | 'high' | 'low' | 'none' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Whether to enable reasoning for this model.
        *
@@ -11348,14 +11209,14 @@ declare abstract class Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Pro_0813 {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 declare abstract class Base_Ai_Cf_Qwen_Qwen3_8_27B {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: low, medium, xhigh.
      *
      * @default "xhigh"
      */
-    reasoning_effort?: "low" | "medium" | "xhigh" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'low' | 'medium' | 'xhigh' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Whether to enable reasoning for this model.
        *
@@ -11367,14 +11228,14 @@ declare abstract class Base_Ai_Cf_Qwen_Qwen3_8_27B {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 declare abstract class Base_Ai_Cf_Zai_Org_Glm_5_3 {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: max, high, low. Reasoning cannot be disabled. Compatibility aliases (accepted by the API, not by these types): none maps to max; minimal maps to max; medium maps to max; xhigh maps to max.
      *
      * @default "max"
      */
-    reasoning_effort?: "max" | "high" | "low" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'max' | 'high' | 'low' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Reasoning is always enabled for this model and cannot be disabled.
        *
@@ -11386,14 +11247,14 @@ declare abstract class Base_Ai_Cf_Zai_Org_Glm_5_3 {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 declare abstract class Base_Ai_Cf_Zai_Org_Glm_5_3_Flash {
-  inputs: Omit<ChatCompletionsInput, "reasoning_effort" | "chat_template_kwargs"> & {
+  inputs: Omit<ChatCompletionsInput, 'reasoning_effort' | 'chat_template_kwargs'> & {
     /**
      * Reasoning effort. Supported levels: max, high, low. Reasoning cannot be disabled. Compatibility aliases (accepted by the API, not by these types): none maps to max; minimal maps to max; medium maps to max; xhigh maps to max.
      *
      * @default "max"
      */
-    reasoning_effort?: "max" | "high" | "low" | null;
-    chat_template_kwargs?: Omit<ChatTemplateKwargs, "enable_thinking"> & {
+    reasoning_effort?: 'max' | 'high' | 'low' | null;
+    chat_template_kwargs?: Omit<ChatTemplateKwargs, 'enable_thinking'> & {
       /**
        * Reasoning is always enabled for this model and cannot be disabled.
        *
@@ -11405,105 +11266,105 @@ declare abstract class Base_Ai_Cf_Zai_Org_Glm_5_3_Flash {
   postProcessedOutputs: ChatCompletionsOutput;
 }
 interface AiModels {
-  "@cf/huggingface/distilbert-sst-2-int8": BaseAiTextClassification;
-  "@cf/stabilityai/stable-diffusion-xl-base-1.0": BaseAiTextToImage;
-  "@cf/runwayml/stable-diffusion-v1-5-inpainting": BaseAiTextToImage;
-  "@cf/lykon/dreamshaper-8-lcm": BaseAiTextToImage;
-  "@cf/bytedance/stable-diffusion-xl-lightning": BaseAiTextToImage;
-  "@cf/myshell-ai/melotts": BaseAiTextToSpeech;
-  "@cf/google/embeddinggemma-300m": BaseAiTextEmbeddings;
-  "@cf/microsoft/resnet-50": BaseAiImageClassification;
-  "@cf/meta/llama-2-7b-chat-int8": BaseAiTextGeneration;
-  "@cf/mistral/mistral-7b-instruct-v0.1": BaseAiTextGeneration;
-  "@cf/meta/llama-2-7b-chat-fp16": BaseAiTextGeneration;
-  "@hf/thebloke/llama-2-13b-chat-awq": BaseAiTextGeneration;
-  "@hf/thebloke/mistral-7b-instruct-v0.1-awq": BaseAiTextGeneration;
-  "@hf/thebloke/zephyr-7b-beta-awq": BaseAiTextGeneration;
-  "@hf/thebloke/openhermes-2.5-mistral-7b-awq": BaseAiTextGeneration;
-  "@hf/thebloke/neural-chat-7b-v3-1-awq": BaseAiTextGeneration;
-  "@hf/thebloke/deepseek-coder-6.7b-base-awq": BaseAiTextGeneration;
-  "@hf/thebloke/deepseek-coder-6.7b-instruct-awq": BaseAiTextGeneration;
-  "@cf/deepseek-ai/deepseek-math-7b-instruct": BaseAiTextGeneration;
-  "@cf/defog/sqlcoder-7b-2": BaseAiTextGeneration;
-  "@cf/openchat/openchat-3.5-0106": BaseAiTextGeneration;
-  "@cf/tiiuae/falcon-7b-instruct": BaseAiTextGeneration;
-  "@cf/thebloke/discolm-german-7b-v1-awq": BaseAiTextGeneration;
-  "@cf/qwen/qwen1.5-0.5b-chat": BaseAiTextGeneration;
-  "@cf/qwen/qwen1.5-7b-chat-awq": BaseAiTextGeneration;
-  "@cf/qwen/qwen1.5-14b-chat-awq": BaseAiTextGeneration;
-  "@cf/tinyllama/tinyllama-1.1b-chat-v1.0": BaseAiTextGeneration;
-  "@cf/microsoft/phi-2": BaseAiTextGeneration;
-  "@cf/qwen/qwen1.5-1.8b-chat": BaseAiTextGeneration;
-  "@cf/mistral/mistral-7b-instruct-v0.2-lora": BaseAiTextGeneration;
-  "@hf/nousresearch/hermes-2-pro-mistral-7b": BaseAiTextGeneration;
-  "@hf/nexusflow/starling-lm-7b-beta": BaseAiTextGeneration;
-  "@hf/google/gemma-7b-it": BaseAiTextGeneration;
-  "@cf/meta-llama/llama-2-7b-chat-hf-lora": BaseAiTextGeneration;
-  "@cf/google/gemma-2b-it-lora": BaseAiTextGeneration;
-  "@cf/google/gemma-7b-it-lora": BaseAiTextGeneration;
-  "@hf/mistral/mistral-7b-instruct-v0.2": BaseAiTextGeneration;
-  "@cf/meta/llama-3-8b-instruct": BaseAiTextGeneration;
-  "@cf/fblgit/una-cybertron-7b-v2-bf16": BaseAiTextGeneration;
-  "@cf/meta/llama-3-8b-instruct-awq": BaseAiTextGeneration;
-  "@cf/meta/llama-3.1-8b-instruct-fp8": BaseAiTextGeneration;
-  "@cf/meta/llama-3.1-8b-instruct-awq": BaseAiTextGeneration;
-  "@cf/meta/llama-3.2-3b-instruct": BaseAiTextGeneration;
-  "@cf/meta/llama-3.2-1b-instruct": BaseAiTextGeneration;
-  "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b": BaseAiTextGeneration;
-  "@cf/ibm-granite/granite-4.0-h-micro": BaseAiTextGeneration;
-  "@cf/facebook/bart-large-cnn": BaseAiSummarization;
-  "@cf/llava-hf/llava-1.5-7b-hf": BaseAiImageToText;
-  "@cf/baai/bge-base-en-v1.5": Base_Ai_Cf_Baai_Bge_Base_En_V1_5;
-  "@cf/openai/whisper": Base_Ai_Cf_Openai_Whisper;
-  "@cf/meta/m2m100-1.2b": Base_Ai_Cf_Meta_M2M100_1_2B;
-  "@cf/baai/bge-small-en-v1.5": Base_Ai_Cf_Baai_Bge_Small_En_V1_5;
-  "@cf/baai/bge-large-en-v1.5": Base_Ai_Cf_Baai_Bge_Large_En_V1_5;
-  "@cf/unum/uform-gen2-qwen-500m": Base_Ai_Cf_Unum_Uform_Gen2_Qwen_500M;
-  "@cf/openai/whisper-tiny-en": Base_Ai_Cf_Openai_Whisper_Tiny_En;
-  "@cf/openai/whisper-large-v3-turbo": Base_Ai_Cf_Openai_Whisper_Large_V3_Turbo;
-  "@cf/baai/bge-m3": Base_Ai_Cf_Baai_Bge_M3;
-  "@cf/black-forest-labs/flux-1-schnell": Base_Ai_Cf_Black_Forest_Labs_Flux_1_Schnell;
-  "@cf/meta/llama-3.2-11b-vision-instruct": Base_Ai_Cf_Meta_Llama_3_2_11B_Vision_Instruct;
-  "@cf/meta/llama-3.3-70b-instruct-fp8-fast": Base_Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast;
-  "@cf/meta/llama-guard-3-8b": Base_Ai_Cf_Meta_Llama_Guard_3_8B;
-  "@cf/baai/bge-reranker-base": Base_Ai_Cf_Baai_Bge_Reranker_Base;
-  "@cf/qwen/qwen2.5-coder-32b-instruct": Base_Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct;
-  "@cf/qwen/qwq-32b": Base_Ai_Cf_Qwen_Qwq_32B;
-  "@cf/mistralai/mistral-small-3.1-24b-instruct": Base_Ai_Cf_Mistralai_Mistral_Small_3_1_24B_Instruct;
-  "@cf/google/gemma-3-12b-it": Base_Ai_Cf_Google_Gemma_3_12B_It;
-  "@cf/meta/llama-4-scout-17b-16e-instruct": Base_Ai_Cf_Meta_Llama_4_Scout_17B_16E_Instruct;
-  "@cf/qwen/qwen3-30b-a3b-fp8": Base_Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8;
-  "@cf/deepgram/nova-3": Base_Ai_Cf_Deepgram_Nova_3;
-  "@cf/qwen/qwen3-embedding-0.6b": Base_Ai_Cf_Qwen_Qwen3_Embedding_0_6B;
-  "@cf/pipecat-ai/smart-turn-v2": Base_Ai_Cf_Pipecat_Ai_Smart_Turn_V2;
-  "@cf/openai/gpt-oss-120b": Base_Ai_Cf_Openai_Gpt_Oss_120B;
-  "@cf/openai/gpt-oss-20b": Base_Ai_Cf_Openai_Gpt_Oss_20B;
-  "@cf/leonardo/phoenix-1.0": Base_Ai_Cf_Leonardo_Phoenix_1_0;
-  "@cf/leonardo/lucid-origin": Base_Ai_Cf_Leonardo_Lucid_Origin;
-  "@cf/deepgram/aura-1": Base_Ai_Cf_Deepgram_Aura_1;
-  "@cf/ai4bharat/indictrans2-en-indic-1B": Base_Ai_Cf_Ai4Bharat_Indictrans2_En_Indic_1B;
-  "@cf/aisingapore/gemma-sea-lion-v4-27b-it": Base_Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It;
-  "@cf/pfnet/plamo-embedding-1b": Base_Ai_Cf_Pfnet_Plamo_Embedding_1B;
-  "@cf/deepgram/flux": Base_Ai_Cf_Deepgram_Flux;
-  "@cf/deepgram/aura-2-en": Base_Ai_Cf_Deepgram_Aura_2_En;
-  "@cf/deepgram/aura-2-es": Base_Ai_Cf_Deepgram_Aura_2_Es;
-  "@cf/black-forest-labs/flux-2-dev": Base_Ai_Cf_Black_Forest_Labs_Flux_2_Dev;
-  "@cf/black-forest-labs/flux-2-klein-4b": Base_Ai_Cf_Black_Forest_Labs_Flux_2_Klein_4B;
-  "@cf/black-forest-labs/flux-2-klein-9b": Base_Ai_Cf_Black_Forest_Labs_Flux_2_Klein_9B;
-  "@cf/zai-org/glm-4.7-flash": Base_Ai_Cf_Zai_Org_Glm_4_7_Flash;
-  "@cf/moonshotai/kimi-k2.5": Base_Ai_Cf_Moonshotai_Kimi_K2_5;
-  "@cf/moonshotai/kimi-k2.6": Base_Ai_Cf_Moonshotai_Kimi_K2_6;
-  "@cf/nvidia/nemotron-3-120b-a12b": Base_Ai_Cf_Nvidia_Nemotron_3_120B_A12B;
-  "@cf/google/gemma-4-26b-a4b-it": Base_Ai_Cf_Google_Gemma_4_26B_A4B_It;
-  "@cf/nvidia/nemotron-speech-streaming-en-0.6b": Base_Ai_Cf_Nvidia_Nemotron_Speech_Streaming_En_0_6B;
-  "@cf/moonshotai/kimi-k2.7-code": Base_Ai_Cf_Moonshotai_Kimi_K2_7_Code;
-  "@cf/zai-org/glm-5.2": Base_Ai_Cf_Zai_Org_Glm_5_2;
-  "@cf/moondream/moondream3.1-9B-A2B": Base_Ai_Cf_Moondream_Moondream3_1_9B_A2B;
-  "@cf/deepseek-ai/deepseek-v4-flash-0731": Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Flash_0731;
-  "@cf/deepseek-ai/deepseek-v4-pro-0813": Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Pro_0813;
-  "@cf/qwen/qwen3.8-27b": Base_Ai_Cf_Qwen_Qwen3_8_27B;
-  "@cf/zai-org/glm-5.3": Base_Ai_Cf_Zai_Org_Glm_5_3;
-  "@cf/zai-org/glm-5.3-flash": Base_Ai_Cf_Zai_Org_Glm_5_3_Flash;
+  '@cf/huggingface/distilbert-sst-2-int8': BaseAiTextClassification;
+  '@cf/stabilityai/stable-diffusion-xl-base-1.0': BaseAiTextToImage;
+  '@cf/runwayml/stable-diffusion-v1-5-inpainting': BaseAiTextToImage;
+  '@cf/lykon/dreamshaper-8-lcm': BaseAiTextToImage;
+  '@cf/bytedance/stable-diffusion-xl-lightning': BaseAiTextToImage;
+  '@cf/myshell-ai/melotts': BaseAiTextToSpeech;
+  '@cf/google/embeddinggemma-300m': BaseAiTextEmbeddings;
+  '@cf/microsoft/resnet-50': BaseAiImageClassification;
+  '@cf/meta/llama-2-7b-chat-int8': BaseAiTextGeneration;
+  '@cf/mistral/mistral-7b-instruct-v0.1': BaseAiTextGeneration;
+  '@cf/meta/llama-2-7b-chat-fp16': BaseAiTextGeneration;
+  '@hf/thebloke/llama-2-13b-chat-awq': BaseAiTextGeneration;
+  '@hf/thebloke/mistral-7b-instruct-v0.1-awq': BaseAiTextGeneration;
+  '@hf/thebloke/zephyr-7b-beta-awq': BaseAiTextGeneration;
+  '@hf/thebloke/openhermes-2.5-mistral-7b-awq': BaseAiTextGeneration;
+  '@hf/thebloke/neural-chat-7b-v3-1-awq': BaseAiTextGeneration;
+  '@hf/thebloke/deepseek-coder-6.7b-base-awq': BaseAiTextGeneration;
+  '@hf/thebloke/deepseek-coder-6.7b-instruct-awq': BaseAiTextGeneration;
+  '@cf/deepseek-ai/deepseek-math-7b-instruct': BaseAiTextGeneration;
+  '@cf/defog/sqlcoder-7b-2': BaseAiTextGeneration;
+  '@cf/openchat/openchat-3.5-0106': BaseAiTextGeneration;
+  '@cf/tiiuae/falcon-7b-instruct': BaseAiTextGeneration;
+  '@cf/thebloke/discolm-german-7b-v1-awq': BaseAiTextGeneration;
+  '@cf/qwen/qwen1.5-0.5b-chat': BaseAiTextGeneration;
+  '@cf/qwen/qwen1.5-7b-chat-awq': BaseAiTextGeneration;
+  '@cf/qwen/qwen1.5-14b-chat-awq': BaseAiTextGeneration;
+  '@cf/tinyllama/tinyllama-1.1b-chat-v1.0': BaseAiTextGeneration;
+  '@cf/microsoft/phi-2': BaseAiTextGeneration;
+  '@cf/qwen/qwen1.5-1.8b-chat': BaseAiTextGeneration;
+  '@cf/mistral/mistral-7b-instruct-v0.2-lora': BaseAiTextGeneration;
+  '@hf/nousresearch/hermes-2-pro-mistral-7b': BaseAiTextGeneration;
+  '@hf/nexusflow/starling-lm-7b-beta': BaseAiTextGeneration;
+  '@hf/google/gemma-7b-it': BaseAiTextGeneration;
+  '@cf/meta-llama/llama-2-7b-chat-hf-lora': BaseAiTextGeneration;
+  '@cf/google/gemma-2b-it-lora': BaseAiTextGeneration;
+  '@cf/google/gemma-7b-it-lora': BaseAiTextGeneration;
+  '@hf/mistral/mistral-7b-instruct-v0.2': BaseAiTextGeneration;
+  '@cf/meta/llama-3-8b-instruct': BaseAiTextGeneration;
+  '@cf/fblgit/una-cybertron-7b-v2-bf16': BaseAiTextGeneration;
+  '@cf/meta/llama-3-8b-instruct-awq': BaseAiTextGeneration;
+  '@cf/meta/llama-3.1-8b-instruct-fp8': BaseAiTextGeneration;
+  '@cf/meta/llama-3.1-8b-instruct-awq': BaseAiTextGeneration;
+  '@cf/meta/llama-3.2-3b-instruct': BaseAiTextGeneration;
+  '@cf/meta/llama-3.2-1b-instruct': BaseAiTextGeneration;
+  '@cf/deepseek-ai/deepseek-r1-distill-qwen-32b': BaseAiTextGeneration;
+  '@cf/ibm-granite/granite-4.0-h-micro': BaseAiTextGeneration;
+  '@cf/facebook/bart-large-cnn': BaseAiSummarization;
+  '@cf/llava-hf/llava-1.5-7b-hf': BaseAiImageToText;
+  '@cf/baai/bge-base-en-v1.5': Base_Ai_Cf_Baai_Bge_Base_En_V1_5;
+  '@cf/openai/whisper': Base_Ai_Cf_Openai_Whisper;
+  '@cf/meta/m2m100-1.2b': Base_Ai_Cf_Meta_M2M100_1_2B;
+  '@cf/baai/bge-small-en-v1.5': Base_Ai_Cf_Baai_Bge_Small_En_V1_5;
+  '@cf/baai/bge-large-en-v1.5': Base_Ai_Cf_Baai_Bge_Large_En_V1_5;
+  '@cf/unum/uform-gen2-qwen-500m': Base_Ai_Cf_Unum_Uform_Gen2_Qwen_500M;
+  '@cf/openai/whisper-tiny-en': Base_Ai_Cf_Openai_Whisper_Tiny_En;
+  '@cf/openai/whisper-large-v3-turbo': Base_Ai_Cf_Openai_Whisper_Large_V3_Turbo;
+  '@cf/baai/bge-m3': Base_Ai_Cf_Baai_Bge_M3;
+  '@cf/black-forest-labs/flux-1-schnell': Base_Ai_Cf_Black_Forest_Labs_Flux_1_Schnell;
+  '@cf/meta/llama-3.2-11b-vision-instruct': Base_Ai_Cf_Meta_Llama_3_2_11B_Vision_Instruct;
+  '@cf/meta/llama-3.3-70b-instruct-fp8-fast': Base_Ai_Cf_Meta_Llama_3_3_70B_Instruct_Fp8_Fast;
+  '@cf/meta/llama-guard-3-8b': Base_Ai_Cf_Meta_Llama_Guard_3_8B;
+  '@cf/baai/bge-reranker-base': Base_Ai_Cf_Baai_Bge_Reranker_Base;
+  '@cf/qwen/qwen2.5-coder-32b-instruct': Base_Ai_Cf_Qwen_Qwen2_5_Coder_32B_Instruct;
+  '@cf/qwen/qwq-32b': Base_Ai_Cf_Qwen_Qwq_32B;
+  '@cf/mistralai/mistral-small-3.1-24b-instruct': Base_Ai_Cf_Mistralai_Mistral_Small_3_1_24B_Instruct;
+  '@cf/google/gemma-3-12b-it': Base_Ai_Cf_Google_Gemma_3_12B_It;
+  '@cf/meta/llama-4-scout-17b-16e-instruct': Base_Ai_Cf_Meta_Llama_4_Scout_17B_16E_Instruct;
+  '@cf/qwen/qwen3-30b-a3b-fp8': Base_Ai_Cf_Qwen_Qwen3_30B_A3B_Fp8;
+  '@cf/deepgram/nova-3': Base_Ai_Cf_Deepgram_Nova_3;
+  '@cf/qwen/qwen3-embedding-0.6b': Base_Ai_Cf_Qwen_Qwen3_Embedding_0_6B;
+  '@cf/pipecat-ai/smart-turn-v2': Base_Ai_Cf_Pipecat_Ai_Smart_Turn_V2;
+  '@cf/openai/gpt-oss-120b': Base_Ai_Cf_Openai_Gpt_Oss_120B;
+  '@cf/openai/gpt-oss-20b': Base_Ai_Cf_Openai_Gpt_Oss_20B;
+  '@cf/leonardo/phoenix-1.0': Base_Ai_Cf_Leonardo_Phoenix_1_0;
+  '@cf/leonardo/lucid-origin': Base_Ai_Cf_Leonardo_Lucid_Origin;
+  '@cf/deepgram/aura-1': Base_Ai_Cf_Deepgram_Aura_1;
+  '@cf/ai4bharat/indictrans2-en-indic-1B': Base_Ai_Cf_Ai4Bharat_Indictrans2_En_Indic_1B;
+  '@cf/aisingapore/gemma-sea-lion-v4-27b-it': Base_Ai_Cf_Aisingapore_Gemma_Sea_Lion_V4_27B_It;
+  '@cf/pfnet/plamo-embedding-1b': Base_Ai_Cf_Pfnet_Plamo_Embedding_1B;
+  '@cf/deepgram/flux': Base_Ai_Cf_Deepgram_Flux;
+  '@cf/deepgram/aura-2-en': Base_Ai_Cf_Deepgram_Aura_2_En;
+  '@cf/deepgram/aura-2-es': Base_Ai_Cf_Deepgram_Aura_2_Es;
+  '@cf/black-forest-labs/flux-2-dev': Base_Ai_Cf_Black_Forest_Labs_Flux_2_Dev;
+  '@cf/black-forest-labs/flux-2-klein-4b': Base_Ai_Cf_Black_Forest_Labs_Flux_2_Klein_4B;
+  '@cf/black-forest-labs/flux-2-klein-9b': Base_Ai_Cf_Black_Forest_Labs_Flux_2_Klein_9B;
+  '@cf/zai-org/glm-4.7-flash': Base_Ai_Cf_Zai_Org_Glm_4_7_Flash;
+  '@cf/moonshotai/kimi-k2.5': Base_Ai_Cf_Moonshotai_Kimi_K2_5;
+  '@cf/moonshotai/kimi-k2.6': Base_Ai_Cf_Moonshotai_Kimi_K2_6;
+  '@cf/nvidia/nemotron-3-120b-a12b': Base_Ai_Cf_Nvidia_Nemotron_3_120B_A12B;
+  '@cf/google/gemma-4-26b-a4b-it': Base_Ai_Cf_Google_Gemma_4_26B_A4B_It;
+  '@cf/nvidia/nemotron-speech-streaming-en-0.6b': Base_Ai_Cf_Nvidia_Nemotron_Speech_Streaming_En_0_6B;
+  '@cf/moonshotai/kimi-k2.7-code': Base_Ai_Cf_Moonshotai_Kimi_K2_7_Code;
+  '@cf/zai-org/glm-5.2': Base_Ai_Cf_Zai_Org_Glm_5_2;
+  '@cf/moondream/moondream3.1-9B-A2B': Base_Ai_Cf_Moondream_Moondream3_1_9B_A2B;
+  '@cf/deepseek-ai/deepseek-v4-flash-0731': Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Flash_0731;
+  '@cf/deepseek-ai/deepseek-v4-pro-0813': Base_Ai_Cf_Deepseek_Ai_Deepseek_V4_Pro_0813;
+  '@cf/qwen/qwen3.8-27b': Base_Ai_Cf_Qwen_Qwen3_8_27B;
+  '@cf/zai-org/glm-5.3': Base_Ai_Cf_Zai_Org_Glm_5_3;
+  '@cf/zai-org/glm-5.3-flash': Base_Ai_Cf_Zai_Org_Glm_5_3_Flash;
 }
 type AiOptions = {
   /**
@@ -11597,7 +11458,7 @@ declare abstract class Ai<AiModelList extends AiModelListType = AiModels> {
   run<Name extends keyof AiModelList>(
     model: Name,
     inputs: {
-      requests: AiModelList[Name]["inputs"][];
+      requests: AiModelList[Name]['inputs'][];
     },
     options: AiOptions & {
       queueRequest: true;
@@ -11606,7 +11467,7 @@ declare abstract class Ai<AiModelList extends AiModelListType = AiModels> {
   // Raw response
   run<Name extends keyof AiModelList>(
     model: Name,
-    inputs: AiModelList[Name]["inputs"],
+    inputs: AiModelList[Name]['inputs'],
     options: AiOptions & {
       returnRawResponse: true;
     },
@@ -11614,7 +11475,7 @@ declare abstract class Ai<AiModelList extends AiModelListType = AiModels> {
   // WebSocket
   run<Name extends keyof AiModelList>(
     model: Name,
-    inputs: AiModelList[Name]["inputs"],
+    inputs: AiModelList[Name]['inputs'],
     options: AiOptions & {
       websocket: true;
     },
@@ -11622,7 +11483,7 @@ declare abstract class Ai<AiModelList extends AiModelListType = AiModels> {
   // Streaming
   run<Name extends keyof AiModelList>(
     model: Name,
-    inputs: AiModelList[Name]["inputs"] & {
+    inputs: AiModelList[Name]['inputs'] & {
       stream: true;
     },
     options?: AiOptions,
@@ -11630,9 +11491,9 @@ declare abstract class Ai<AiModelList extends AiModelListType = AiModels> {
   // Normal (default) - known model
   run<Name extends keyof AiModelList>(
     model: Name,
-    inputs: AiModelList[Name]["inputs"],
+    inputs: AiModelList[Name]['inputs'],
     options?: AiOptions,
-  ): Promise<AiModelList[Name]["postProcessedOutputs"]>;
+  ): Promise<AiModelList[Name]['postProcessedOutputs']>;
   // Unknown model (fallback).
   //
   // The `Exclude<..., keyof AiModelList>` constraint forces TypeScript to
@@ -11648,19 +11509,13 @@ declare abstract class Ai<AiModelList extends AiModelListType = AiModels> {
   ): Promise<Record<string, unknown>>;
   models(params?: AiModelsSearchParams): Promise<AiModelsSearchObject[]>;
   toMarkdown(): ToMarkdownService;
-  toMarkdown(
-    files: MarkdownDocument[],
-    options?: ConversionRequestOptions,
-  ): Promise<ConversionResponse[]>;
-  toMarkdown(
-    files: MarkdownDocument,
-    options?: ConversionRequestOptions,
-  ): Promise<ConversionResponse>;
+  toMarkdown(files: MarkdownDocument[], options?: ConversionRequestOptions): Promise<ConversionResponse[]>;
+  toMarkdown(files: MarkdownDocument, options?: ConversionRequestOptions): Promise<ConversionResponse>;
 }
 type GatewayRetries = {
   maxAttempts?: 1 | 2 | 3 | 4 | 5;
   retryDelayMs?: number;
-  backoff?: "constant" | "linear" | "exponential";
+  backoff?: 'constant' | 'linear' | 'exponential';
 };
 type GatewayOptions = {
   id: string;
@@ -11673,7 +11528,7 @@ type GatewayOptions = {
   requestTimeoutMs?: number;
   retries?: GatewayRetries;
 };
-type UniversalGatewayOptions = Exclude<GatewayOptions, "id"> & {
+type UniversalGatewayOptions = Exclude<GatewayOptions, 'id'> & {
   /**
    ** @deprecated
    */
@@ -11712,29 +11567,29 @@ type AiGatewayLog = {
   created_at: Date;
 };
 type AIGatewayProviders =
-  | "workers-ai"
-  | "anthropic"
-  | "aws-bedrock"
-  | "azure-openai"
-  | "google-vertex-ai"
-  | "huggingface"
-  | "openai"
-  | "perplexity-ai"
-  | "replicate"
-  | "groq"
-  | "cohere"
-  | "google-ai-studio"
-  | "mistral"
-  | "grok"
-  | "openrouter"
-  | "deepseek"
-  | "cerebras"
-  | "cartesia"
-  | "elevenlabs"
-  | "adobe-firefly";
+  | 'workers-ai'
+  | 'anthropic'
+  | 'aws-bedrock'
+  | 'azure-openai'
+  | 'google-vertex-ai'
+  | 'huggingface'
+  | 'openai'
+  | 'perplexity-ai'
+  | 'replicate'
+  | 'groq'
+  | 'cohere'
+  | 'google-ai-studio'
+  | 'mistral'
+  | 'grok'
+  | 'openrouter'
+  | 'deepseek'
+  | 'cerebras'
+  | 'cartesia'
+  | 'elevenlabs'
+  | 'adobe-firefly';
 type AIGatewayHeaders = {
-  "cf-aig-metadata": Record<string, number | string | boolean | null | bigint> | string;
-  "cf-aig-custom-cost":
+  'cf-aig-metadata': Record<string, number | string | boolean | null | bigint> | string;
+  'cf-aig-custom-cost':
     | {
         per_token_in?: number;
         per_token_out?: number;
@@ -11743,17 +11598,17 @@ type AIGatewayHeaders = {
         total_cost?: number;
       }
     | string;
-  "cf-aig-cache-ttl": number | string;
-  "cf-aig-skip-cache": boolean | string;
-  "cf-aig-cache-key": string;
-  "cf-aig-event-id": string;
-  "cf-aig-request-timeout": number | string;
-  "cf-aig-max-attempts": number | string;
-  "cf-aig-retry-delay": number | string;
-  "cf-aig-backoff": string;
-  "cf-aig-collect-log": boolean | string;
+  'cf-aig-cache-ttl': number | string;
+  'cf-aig-skip-cache': boolean | string;
+  'cf-aig-cache-key': string;
+  'cf-aig-event-id': string;
+  'cf-aig-request-timeout': number | string;
+  'cf-aig-max-attempts': number | string;
+  'cf-aig-retry-delay': number | string;
+  'cf-aig-backoff': string;
+  'cf-aig-collect-log': boolean | string;
   Authorization: string;
-  "Content-Type": string;
+  'Content-Type': string;
   [key: string]: string | number | boolean | object;
 };
 type AIGatewayUniversalRequest = {
@@ -11852,7 +11707,7 @@ interface ArtifactsCreateRepoResult {
 /** Paginated list of repositories. */
 interface ArtifactsRepoListResult {
   /** Repositories in this page (without the `remote` field). */
-  repos: Omit<ArtifactsRepoInfo, "remote">[];
+  repos: Omit<ArtifactsRepoInfo, 'remote'>[];
   /** Total number of repositories in the namespace. */
   total: number;
   /** Cursor for the next page, if there are more results. */
@@ -11865,7 +11720,7 @@ interface ArtifactsCreateTokenResult {
   /** Plaintext token (only returned at creation time). */
   plaintext: string;
   /** Token scope: "read" or "write". */
-  scope: "read" | "write";
+  scope: 'read' | 'write';
   /** ISO 8601 token expiry timestamp. */
   expiresAt: string;
 }
@@ -11874,9 +11729,9 @@ interface ArtifactsTokenInfo {
   /** Unique token ID. */
   id: string;
   /** Token scope: "read" or "write". */
-  scope: "read" | "write";
+  scope: 'read' | 'write';
   /** Token state: "active", "expired", or "revoked". */
-  state: "active" | "expired" | "revoked";
+  state: 'active' | 'expired' | 'revoked';
   /** ISO 8601 creation timestamp. */
   createdAt: string;
   /** ISO 8601 expiry timestamp. */
@@ -11895,7 +11750,7 @@ interface ArtifactsTokenListResult {
  * `tree` is a directory, `blob` is a regular file, `symlink` is a symbolic link,
  * `gitlink` is a submodule reference, and `exec` is an executable file.
  */
-type ArtifactsTreeEntryType = "tree" | "blob" | "symlink" | "gitlink" | "exec";
+type ArtifactsTreeEntryType = 'tree' | 'blob' | 'symlink' | 'gitlink' | 'exec';
 /** An immediate child of a Git tree returned by {@link ArtifactsRepo.readTree}. */
 interface ArtifactsTreeEntry {
   /** Name relative to the tree being read. */
@@ -11952,7 +11807,7 @@ interface ArtifactsRepo extends Disposable {
    * @param ttl Time-to-live in seconds (default 86400, min 60, max 31536000).
    * @throws {ArtifactsError} with code `INVALID_TTL` if ttl is out of range.
    */
-  createToken(scope?: "write" | "read", ttl?: number): Promise<ArtifactsCreateTokenResult>;
+  createToken(scope?: 'write' | 'read', ttl?: number): Promise<ArtifactsCreateTokenResult>;
   /** List tokens for this repo (metadata only, no plaintext). */
   listTokens(): Promise<ArtifactsTokenListResult>;
   /**
@@ -12043,19 +11898,19 @@ interface ArtifactsRepo extends Disposable {
  * Each code maps to a numeric code available on `ArtifactsError.numericCode`.
  */
 type ArtifactsErrorCode =
-  | "ALREADY_EXISTS"
-  | "NOT_FOUND"
-  | "CREATE_IN_PROGRESS"
-  | "IMPORT_IN_PROGRESS"
-  | "FORK_IN_PROGRESS"
-  | "INVALID_INPUT"
-  | "INVALID_REPO_NAME"
-  | "INVALID_TTL"
-  | "INVALID_URL"
-  | "REMOTE_AUTH_REQUIRED"
-  | "UPSTREAM_UNAVAILABLE"
-  | "MEMORY_LIMIT"
-  | "INTERNAL_ERROR";
+  | 'ALREADY_EXISTS'
+  | 'NOT_FOUND'
+  | 'CREATE_IN_PROGRESS'
+  | 'IMPORT_IN_PROGRESS'
+  | 'FORK_IN_PROGRESS'
+  | 'INVALID_INPUT'
+  | 'INVALID_REPO_NAME'
+  | 'INVALID_TTL'
+  | 'INVALID_URL'
+  | 'REMOTE_AUTH_REQUIRED'
+  | 'UPSTREAM_UNAVAILABLE'
+  | 'MEMORY_LIMIT'
+  | 'INTERNAL_ERROR';
 /**
  * Error thrown by Artifacts binding operations.
  *
@@ -12064,7 +11919,7 @@ type ArtifactsErrorCode =
  * the REST API `errors[].code` values.
  */
 interface ArtifactsError extends Error {
-  readonly name: "ArtifactsError";
+  readonly name: 'ArtifactsError';
   /** String error code for programmatic matching. */
   readonly code: ArtifactsErrorCode;
   /** Numeric error code matching the REST API. */
@@ -12165,11 +12020,11 @@ interface AutoRAGUnauthorizedError extends Error {}
 interface AutoRAGNameNotSetError extends Error {}
 type ComparisonFilter = {
   key: string;
-  type: "eq" | "ne" | "gt" | "gte" | "lt" | "lte";
+  type: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte';
   value: string | number | boolean;
 };
 type CompoundFilter = {
-  type: "and" | "or";
+  type: 'and' | 'or';
   filters: ComparisonFilter[];
 };
 /**
@@ -12202,7 +12057,7 @@ type AutoRagAiSearchRequest = AutoRagSearchRequest & {
  * @deprecated Use the standalone AI Search Workers binding instead.
  * See https://developers.cloudflare.com/ai-search/usage/workers-binding/
  */
-type AutoRagAiSearchRequestStreaming = Omit<AutoRagAiSearchRequest, "stream"> & {
+type AutoRagAiSearchRequestStreaming = Omit<AutoRagAiSearchRequest, 'stream'> & {
   stream: true;
 };
 /**
@@ -12210,7 +12065,7 @@ type AutoRagAiSearchRequestStreaming = Omit<AutoRagAiSearchRequest, "stream"> & 
  * See https://developers.cloudflare.com/ai-search/usage/workers-binding/
  */
 type AutoRagSearchResponse = {
-  object: "vector_store.search_results.page";
+  object: 'vector_store.search_results.page';
   search_query: string;
   data: {
     file_id: string;
@@ -12218,7 +12073,7 @@ type AutoRagSearchResponse = {
     score: number;
     attributes: Record<string, string | number | boolean | null>;
     content: {
-      type: "text";
+      type: 'text';
       text: string;
     }[];
   }[];
@@ -12276,26 +12131,26 @@ declare abstract class AutoRAG {
    */
   aiSearch(params: AutoRagAiSearchRequest): Promise<AutoRagAiSearchResponse | Response>;
 }
-type BrowserRunLifecycleEvent = "load" | "domcontentloaded" | "networkidle0" | "networkidle2";
+type BrowserRunLifecycleEvent = 'load' | 'domcontentloaded' | 'networkidle0' | 'networkidle2';
 type BrowserRunResourceType =
-  | "document"
-  | "stylesheet"
-  | "image"
-  | "media"
-  | "font"
-  | "script"
-  | "texttrack"
-  | "xhr"
-  | "fetch"
-  | "prefetch"
-  | "eventsource"
-  | "websocket"
-  | "manifest"
-  | "signedexchange"
-  | "ping"
-  | "cspviolationreport"
-  | "preflight"
-  | "other";
+  | 'document'
+  | 'stylesheet'
+  | 'image'
+  | 'media'
+  | 'font'
+  | 'script'
+  | 'texttrack'
+  | 'xhr'
+  | 'fetch'
+  | 'prefetch'
+  | 'eventsource'
+  | 'websocket'
+  | 'manifest'
+  | 'signedexchange'
+  | 'ping'
+  | 'cspviolationreport'
+  | 'preflight'
+  | 'other';
 /** Options fields shared by all quick actions. */
 interface BrowserRunBaseOptions {
   /** Adds `<script>` tags into the page with the desired URL or content.
@@ -12328,11 +12183,11 @@ interface BrowserRunBaseOptions {
     path?: string;
     secure?: boolean;
     httpOnly?: boolean;
-    sameSite?: "Strict" | "Lax" | "None";
+    sameSite?: 'Strict' | 'Lax' | 'None';
     expires?: number;
-    priority?: "Low" | "Medium" | "High";
+    priority?: 'Low' | 'Medium' | 'High';
     sameParty?: boolean;
-    sourceScheme?: "Unset" | "NonSecure" | "Secure";
+    sourceScheme?: 'Unset' | 'NonSecure' | 'Secure';
     sourcePort?: number;
     partitionKey?: string;
   }>;
@@ -12399,7 +12254,7 @@ interface BrowserRunBaseOptions {
 /** Backend selection for quick actions. */
 interface BrowserRunAlternateBackendOptions {
   /** Render with an alternate browser backend instead of the default one. */
-  browser?: "kitesurf";
+  browser?: 'kitesurf';
 }
 /** Common options shared by all quick actions. Exactly one of `url` or `html` must be provided.*/
 type BrowserRunCommonOptions = BrowserRunBaseOptions &
@@ -12416,9 +12271,9 @@ type BrowserRunCommonOptions = BrowserRunBaseOptions &
   );
 type BrowserRunPuppeteerScreenshotOptions = {
   /** @default "png" */
-  type?: "png" | "jpeg" | "webp";
+  type?: 'png' | 'jpeg' | 'webp';
   /** @default "binary" */
-  encoding?: "binary" | "base64";
+  encoding?: 'binary' | 'base64';
   quality?: number;
   fullPage?: boolean;
   clip?: {
@@ -12456,18 +12311,7 @@ type BrowserRunPDFOptions = BrowserRunCommonOptions & {
     landscape?: boolean;
     pageRanges?: string;
     /** @default "letter" */
-    format?:
-      | "letter"
-      | "legal"
-      | "tabloid"
-      | "ledger"
-      | "a0"
-      | "a1"
-      | "a2"
-      | "a3"
-      | "a4"
-      | "a5"
-      | "a6";
+    format?: 'letter' | 'legal' | 'tabloid' | 'ledger' | 'a0' | 'a1' | 'a2' | 'a3' | 'a4' | 'a5' | 'a6';
     width?: string | number;
     height?: string | number;
     /** @default false */
@@ -12500,7 +12344,7 @@ type BrowserRunLinksOptions = BrowserRunCommonOptions & {
   /** When true, exclude links pointing to external domains. @default false */
   excludeExternalLinks?: boolean;
 };
-type BrowserRunSnapshotFormat = "content" | "screenshot" | "markdown" | "accessibilityTree";
+type BrowserRunSnapshotFormat = 'content' | 'screenshot' | 'markdown' | 'accessibilityTree';
 type BrowserRunSnapshotOptions = BrowserRunCommonOptions & {
   /** Which representations of the page to return. At least two distinct formats
    * are required; request a single format from its dedicated action instead.
@@ -12508,7 +12352,7 @@ type BrowserRunSnapshotOptions = BrowserRunCommonOptions & {
    */
   formats?: BrowserRunSnapshotFormat[];
   /** @see https://pptr.dev/api/puppeteer.screenshotoptions */
-  screenshotOptions?: Omit<BrowserRunPuppeteerScreenshotOptions, "encoding">;
+  screenshotOptions?: Omit<BrowserRunPuppeteerScreenshotOptions, 'encoding'>;
 };
 /** Options for the `accessibilityTree` quick action. */
 type BrowserRunAccessibilityTreeOptions = BrowserRunCommonOptions & {
@@ -12586,7 +12430,7 @@ interface BrowserRunSerializedAXNode {
   /** The `aria-autocomplete` value. */
   autocomplete?: string;
   /** Checked state of a checkbox, radio, or menu item. */
-  checked?: boolean | "mixed";
+  checked?: boolean | 'mixed';
   /** Accessible description, typically from `aria-describedby` or `title`. */
   description?: string;
   disabled?: boolean;
@@ -12611,7 +12455,7 @@ interface BrowserRunSerializedAXNode {
   name?: string;
   orientation?: string;
   /** Pressed state of a toggle button. */
-  pressed?: boolean | "mixed";
+  pressed?: boolean | 'mixed';
   readonly?: boolean;
   required?: boolean;
   /** Author-supplied role description, from `aria-roledescription`. */
@@ -12770,10 +12614,10 @@ type BrowserRunConnection = {
   targets?: BrowserRunDevToolsTarget[];
 };
 /** The UI mode for a live-view link. */
-type BrowserRunLiveViewMode = "devtools" | "tab" | "full";
+type BrowserRunLiveViewMode = 'devtools' | 'tab' | 'full';
 /** Connection-scoped guardrails applied to a live-view link. */
 type BrowserRunConnectionGuardrails = {
-  mode: "readonly";
+  mode: 'readonly';
 };
 /** Options for minting a live-view link. */
 type BrowserRunLiveViewOptions = {
@@ -12839,10 +12683,10 @@ type BrowserRunDevToolsTarget = {
 /** Browser and protocol version metadata. */
 type BrowserRunDevToolsVersion = {
   Browser: string;
-  "Protocol-Version": string;
-  "User-Agent": string;
-  "V8-Version": string;
-  "WebKit-Version": string;
+  'Protocol-Version': string;
+  'User-Agent': string;
+  'V8-Version': string;
+  'WebKit-Version': string;
   webSocketDebuggerUrl: string;
 };
 /** A DevTools protocol domain. Protocol definitions may gain additional fields over time. */
@@ -12874,22 +12718,15 @@ type BrowserRunTargetActionResult = {
 type BrowserRunDevtools = {
   getVersion(sessionId: string): Promise<BrowserRunDevToolsVersion>;
   getProtocol(sessionId: string): Promise<BrowserRunDevToolsProtocol>;
-  listTargets(
-    sessionId: string,
-    options?: BrowserRunTargetOptions,
-  ): Promise<BrowserRunDevToolsTarget[]>;
+  listTargets(sessionId: string, options?: BrowserRunTargetOptions): Promise<BrowserRunDevToolsTarget[]>;
   getTarget(sessionId: string, targetId: string): Promise<BrowserRunDevToolsTarget>;
-  newTarget(
-    sessionId: string,
-    url?: string,
-    options?: BrowserRunTargetOptions,
-  ): Promise<BrowserRunDevToolsTarget>;
+  newTarget(sessionId: string, url?: string, options?: BrowserRunTargetOptions): Promise<BrowserRunDevToolsTarget>;
   activateTarget(sessionId: string, targetId: string): Promise<BrowserRunTargetActionResult>;
   closeTarget(sessionId: string, targetId: string): Promise<BrowserRunTargetActionResult>;
 };
 /** Result returned when closing a browser session. */
 type BrowserRunCloseSessionResult = {
-  status: "closing" | "closed";
+  status: 'closing' | 'closed';
 };
 /**
  * Browser Run API binding for automating headless browsers.
@@ -12918,7 +12755,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "screenshot", options: BrowserRunScreenshotOptions): Promise<Response>;
+  quickAction(action: 'screenshot', options: BrowserRunScreenshotOptions): Promise<Response>;
   /**
    * Generate a PDF of a web page.
    * @param action - Must be `'pdf'`.
@@ -12934,7 +12771,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "pdf", options: BrowserRunPDFOptions): Promise<Response>;
+  quickAction(action: 'pdf', options: BrowserRunPDFOptions): Promise<Response>;
   /**
    * Get the HTML content of a web page.
    * @param action - Must be `'content'`.
@@ -12950,7 +12787,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "content", options: BrowserRunContentOptions): Promise<Response>;
+  quickAction(action: 'content', options: BrowserRunContentOptions): Promise<Response>;
   /**
    * Scrape elements from a web page by CSS selector.
    * @param action - Must be `'scrape'`.
@@ -12966,7 +12803,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "scrape", options: BrowserRunScrapeOptions): Promise<Response>;
+  quickAction(action: 'scrape', options: BrowserRunScrapeOptions): Promise<Response>;
   /**
    * Extract all links from a web page.
    * @param action - Must be `'links'`.
@@ -12982,7 +12819,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "links", options: BrowserRunLinksOptions): Promise<Response>;
+  quickAction(action: 'links', options: BrowserRunLinksOptions): Promise<Response>;
   /**
    * Get several representations of a web page in one request.
    * @param action - Must be `'snapshot'`.
@@ -12999,7 +12836,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "snapshot", options: BrowserRunSnapshotOptions): Promise<Response>;
+  quickAction(action: 'snapshot', options: BrowserRunSnapshotOptions): Promise<Response>;
   /**
    * Extract structured JSON data from a web page using AI.
    * @param action - Must be `'json'`.
@@ -13017,7 +12854,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "json", options: BrowserRunJsonOptions): Promise<Response>;
+  quickAction(action: 'json', options: BrowserRunJsonOptions): Promise<Response>;
   /**
    * Convert a web page to Markdown.
    * @param action - Must be `'markdown'`.
@@ -13034,7 +12871,7 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(action: "markdown", options: BrowserRunMarkdownOptions): Promise<Response>;
+  quickAction(action: 'markdown', options: BrowserRunMarkdownOptions): Promise<Response>;
   /**
    * Get the accessibility tree of a web page.
    * @param action - Must be `'accessibilityTree'`.
@@ -13054,19 +12891,13 @@ declare abstract class BrowserRun {
    * **Headers:**
    * - `X-Browser-Ms-Used`: Browser time consumed in milliseconds (set when status < 500)
    */
-  quickAction(
-    action: "accessibilityTree",
-    options: BrowserRunAccessibilityTreeOptions,
-  ): Promise<Response>;
+  quickAction(action: 'accessibilityTree', options: BrowserRunAccessibilityTreeOptions): Promise<Response>;
   /** Acquire a new browser session and return its metadata. */
   acquire(options?: BrowserRunAcquireOptions): Promise<BrowserRunAcquireResult>;
   /** Acquire a browser session and return a session-pinned WebSocket capability. */
   launch(options?: BrowserRunAcquireOptions): Promise<BrowserRunConnection>;
   /** Return a session-pinned WebSocket capability for an existing session. */
-  connectSession(
-    sessionId: string,
-    options?: BrowserRunConnectOptions,
-  ): Promise<BrowserRunConnection>;
+  connectSession(sessionId: string, options?: BrowserRunConnectOptions): Promise<BrowserRunConnection>;
   /** Mint an authenticated live-view link for a browser session. */
   getLiveView(sessionId: string, options?: BrowserRunLiveViewOptions): Promise<BrowserRunLiveView>;
   /** List the caller's active browser sessions. */
@@ -13127,7 +12958,7 @@ interface RequestInitCfProperties extends Record<string, unknown> {
    * - `"on"`: enable origin range requests for this request.
    * - `"off"`: disable origin range requests for this request.
    */
-  originRangeRequests?: "on" | "off";
+  originRangeRequests?: 'on' | 'off';
   /** Controls how responses with a `Vary` header are cached for this request. */
   vary?: RequestInitCfPropertiesVary;
   /**
@@ -13177,11 +13008,11 @@ interface RequestInitCfProperties extends Record<string, unknown> {
    * Provides per-request control over the same edge conversion behavior
    * gated by the `auto_grpc_convert` compatibility flag.
    */
-  grpcWeb?: "passthrough" | "convert";
+  grpcWeb?: 'passthrough' | 'convert';
   image?: RequestInitCfPropertiesImage;
   minify?: RequestInitCfPropertiesImageMinify;
   mirage?: boolean;
-  polish?: "lossy" | "lossless" | "off";
+  polish?: 'lossy' | 'lossless' | 'off';
   r2?: RequestInitCfPropertiesR2;
   /**
    * Redirects the request to an alternate origin server. You can use this,
@@ -13209,7 +13040,7 @@ interface RequestInitCfProperties extends Record<string, unknown> {
  * - `"bypass"`: bypass cache when the header appears in the origin `Vary`
  *   response header.
  */
-type RequestInitCfPropertiesVaryAction = "normalize" | "passthrough" | "bypass";
+type RequestInitCfPropertiesVaryAction = 'normalize' | 'passthrough' | 'bypass';
 /** Configuration for Workers Standard Vary support. */
 interface RequestInitCfPropertiesVary {
   /** The fallback action for varied request headers not listed in `headers`. */
@@ -13252,7 +13083,7 @@ interface RequestInitCfPropertiesVaryAcceptLanguageHeader extends RequestInitCfP
  */
 interface RequestInitCfPropertiesVaryHeaders {
   accept?: RequestInitCfPropertiesVaryAcceptHeader;
-  "accept-language"?: RequestInitCfPropertiesVaryAcceptLanguageHeader;
+  'accept-language'?: RequestInitCfPropertiesVaryAcceptLanguageHeader;
   [header: string]:
     | RequestInitCfPropertiesVaryHeader
     | RequestInitCfPropertiesVaryAcceptHeader
@@ -13281,14 +13112,14 @@ interface BasicImageTransformations {
    * source image.
    */
   gravity?:
-    | "face"
-    | "left"
-    | "right"
-    | "top"
-    | "bottom"
-    | "center"
-    | "auto"
-    | "entropy"
+    | 'face'
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'bottom'
+    | 'center'
+    | 'auto'
+    | 'entropy'
     | BasicImageTransformationsGravityCoordinates;
   /**
    * Specifies how closely the image is cropped toward detected faces when combined
@@ -13326,7 +13157,7 @@ interface BasicImageTransformations {
    *  - squeeze: Stretches and deforms to the width and height given, even if it
    *    breaks aspect ratio
    */
-  fit?: "scale-down" | "scale-up" | "contain" | "cover" | "crop" | "pad" | "squeeze";
+  fit?: 'scale-down' | 'scale-up' | 'contain' | 'cover' | 'crop' | 'pad' | 'squeeze';
   /**
    * Allows you to trim your image. Takes dpr into account and is performed before
    * resizing or rotation.
@@ -13343,7 +13174,7 @@ interface BasicImageTransformations {
    *    - keep: the number of pixels of border to keep
    */
   trim?:
-    | "border"
+    | 'border'
     | {
         top?: number;
         bottom?: number;
@@ -13370,7 +13201,7 @@ interface BasicImageTransformations {
    * rotation, so if you apply flip=h,rotate=90 then the image will be flipped
    * horizontally, then rotated by 90 degrees.
    */
-  flip?: "h" | "v" | "hv";
+  flip?: 'h' | 'v' | 'hv';
   /**
    * Number of degrees (90, 180, 270) to rotate the image by. width and height
    * options refer to axes after rotation.
@@ -13437,7 +13268,7 @@ interface BasicImageTransformations {
    * within selected segment area to transparent e.g "foreground" sets every
    * background pixel as transparent.
    */
-  segment?: "foreground";
+  segment?: 'foreground';
   /**
    * Controls the algorithm used when an image needs to be enlarged. This
    * parameter works with any fit mode that upscales, such as `contain`,
@@ -13448,12 +13279,12 @@ interface BasicImageTransformations {
    * - generate: Uses AI upscaling to produce sharper, more detailed results
    *   when enlarging images.
    */
-  upscale?: "interpolate" | "generate";
+  upscale?: 'interpolate' | 'generate';
 }
 interface BasicImageTransformationsGravityCoordinates {
   x?: number;
   y?: number;
-  mode?: "remainder" | "box-center";
+  mode?: 'remainder' | 'box-center';
 }
 interface RequestInitCfPropertiesImageDraw extends BasicImageTransformations {
   /**
@@ -13475,23 +13306,23 @@ interface RequestInitCfPropertiesImageDraw extends BasicImageTransformations {
    * - If set to "y", the overlay image will be tiled vertically only
    *   (form a line).
    */
-  repeat?: true | "x" | "y";
+  repeat?: true | 'x' | 'y';
   /**
    * How to combine the foreground and backdrop pixels to create the result
    */
   composite?:
     /** Foreground drawn on top of backdrop (default) */
-    | "over"
+    | 'over'
     /** Foreground shown only where backdrop is opaque */
-    | "in"
+    | 'in'
     /** Foreground drawn on top, but clipped to the backdrop's shape */
-    | "atop"
+    | 'atop'
     /** Foreground shown only where backdrop is transparent */
-    | "out"
+    | 'out'
     /** Foreground and backdrop visible only where the other is not */
-    | "xor"
+    | 'xor'
     /** Foreground and backdrop channels added (brightening) */
-    | "lighter";
+    | 'lighter';
   /**
    * Position of the overlay image relative to a given edge. Each property is
    * an offset in pixels. 0 aligns exactly to the edge. For example, left: 10
@@ -13514,7 +13345,7 @@ interface RequestInitCfPropertiesImage extends BasicImageTransformations {
    * make images look worse, but load faster. The default is 85. It applies only
    * to JPEG and WebP images. It doesn’t have any effect on PNG.
    */
-  quality?: number | "low" | "medium-low" | "medium-high" | "high";
+  quality?: number | 'low' | 'medium-low' | 'medium-high' | 'high';
   /**
    * Output format to generate. It can be:
    *  - avif: generate images in AVIF format.
@@ -13526,7 +13357,7 @@ interface RequestInitCfPropertiesImage extends BasicImageTransformations {
    * - jpeg: generate images in JPEG format.
    * - png: generate images in PNG format.
    */
-  format?: "avif" | "webp" | "json" | "jpeg" | "png" | "baseline-jpeg" | "png-force" | "svg";
+  format?: 'avif' | 'webp' | 'json' | 'jpeg' | 'png' | 'baseline-jpeg' | 'png-force' | 'svg';
   /**
    * Whether to preserve animation frames from input files. Default is true.
    * Setting it to false reduces animations to still images. This setting is
@@ -13549,7 +13380,7 @@ interface RequestInitCfPropertiesImage extends BasicImageTransformations {
    *  - none: Discard all invisible EXIF metadata. Currently WebP and PNG
    *    output formats always discard metadata.
    */
-  metadata?: "keep" | "copyright" | "none";
+  metadata?: 'keep' | 'copyright' | 'none';
   /**
    * Overlays are drawn in the order they appear in the array (last array
    * entry is the topmost layer).
@@ -13560,7 +13391,7 @@ interface RequestInitCfPropertiesImage extends BasicImageTransformations {
    * pass authentication headers (Authorization, Cookie, etc.) through to
    * the origin.
    */
-  "origin-auth"?: "share-publicly";
+  'origin-auth'?: 'share-publicly';
   /**
    * Slightly reduces latency on a cache miss by selecting a
    * quickest-to-compress file format, at a cost of increased file size and
@@ -13569,7 +13400,7 @@ interface RequestInitCfPropertiesImage extends BasicImageTransformations {
    * unusual circumstances like resizing uncacheable dynamically-generated
    * images.
    */
-  compression?: "fast";
+  compression?: 'fast';
 }
 interface RequestInitCfPropertiesImageMinify {
   javascript?: boolean;
@@ -13743,9 +13574,7 @@ interface IncomingRequestCfPropertiesCloudflareAccessOrApiShield {
    * The property `certPresented` will be set to `"1"` when
    * the object is populated (i.e. the above conditions were met).
    */
-  tlsClientAuth:
-    | IncomingRequestCfPropertiesTLSClientAuth
-    | IncomingRequestCfPropertiesTLSClientAuthPlaceholder;
+  tlsClientAuth: IncomingRequestCfPropertiesTLSClientAuth | IncomingRequestCfPropertiesTLSClientAuthPlaceholder;
 }
 /**
  * Metadata about the request's TLS handshake
@@ -13791,13 +13620,13 @@ interface IncomingRequestCfPropertiesGeographicInformation {
    *
    * @example "GB"
    */
-  country?: Iso3166Alpha2Code | "T1";
+  country?: Iso3166Alpha2Code | 'T1';
   /**
    * If present, this property indicates that the request originated in the EU
    *
    * @example "1"
    */
-  isEUCountry?: "1";
+  isEUCountry?: '1';
   /**
    * A two-letter code indicating the continent the request originated from.
    *
@@ -13858,19 +13687,19 @@ interface IncomingRequestCfPropertiesGeographicInformation {
 /** Data about the incoming request's TLS certificate */
 interface IncomingRequestCfPropertiesTLSClientAuth {
   /** Always `"1"`, indicating that the certificate was presented */
-  certPresented: "1";
+  certPresented: '1';
   /**
    * Result of certificate verification.
    *
    * @example "FAILED:self signed certificate"
    */
-  certVerified: Exclude<CertVerificationStatus, "NONE">;
+  certVerified: Exclude<CertVerificationStatus, 'NONE'>;
   /** The presented certificate's revokation status.
    *
    * - A value of `"1"` indicates the certificate has been revoked
    * - A value of `"0"` indicates the certificate has not been revoked
    */
-  certRevoked: "1" | "0";
+  certRevoked: '1' | '0';
   /**
    * The certificate issuer's [distinguished name](https://knowledge.digicert.com/generalinformation/INFO1745.html)
    *
@@ -13976,44 +13805,44 @@ interface IncomingRequestCfPropertiesTLSClientAuth {
 }
 /** Placeholder values for TLS Client Authorization */
 interface IncomingRequestCfPropertiesTLSClientAuthPlaceholder {
-  certPresented: "0";
-  certVerified: "NONE";
-  certRevoked: "0";
-  certIssuerDN: "";
-  certSubjectDN: "";
-  certIssuerDNRFC2253: "";
-  certSubjectDNRFC2253: "";
-  certIssuerDNLegacy: "";
-  certSubjectDNLegacy: "";
-  certSerial: "";
-  certIssuerSerial: "";
-  certSKI: "";
-  certIssuerSKI: "";
-  certFingerprintSHA1: "";
-  certFingerprintSHA256: "";
-  certNotBefore: "";
-  certNotAfter: "";
-  certRFC9440: "";
+  certPresented: '0';
+  certVerified: 'NONE';
+  certRevoked: '0';
+  certIssuerDN: '';
+  certSubjectDN: '';
+  certIssuerDNRFC2253: '';
+  certSubjectDNRFC2253: '';
+  certIssuerDNLegacy: '';
+  certSubjectDNLegacy: '';
+  certSerial: '';
+  certIssuerSerial: '';
+  certSKI: '';
+  certIssuerSKI: '';
+  certFingerprintSHA1: '';
+  certFingerprintSHA256: '';
+  certNotBefore: '';
+  certNotAfter: '';
+  certRFC9440: '';
   certRFC9440TooLarge: false;
-  certChainRFC9440: "";
+  certChainRFC9440: '';
   certChainRFC9440TooLarge: false;
 }
 /** Possible outcomes of TLS verification */
 declare type CertVerificationStatus =
   /** Authentication succeeded */
-  | "SUCCESS"
+  | 'SUCCESS'
   /** No certificate was presented */
-  | "NONE"
+  | 'NONE'
   /** Failed because the certificate was self-signed */
-  | "FAILED:self signed certificate"
+  | 'FAILED:self signed certificate'
   /** Failed because the certificate failed a trust chain check */
-  | "FAILED:unable to verify the first certificate"
+  | 'FAILED:unable to verify the first certificate'
   /** Failed because the certificate not yet valid */
-  | "FAILED:certificate is not yet valid"
+  | 'FAILED:certificate is not yet valid'
   /** Failed because the certificate is expired */
-  | "FAILED:certificate has expired"
+  | 'FAILED:certificate has expired'
   /** Failed for another unspecified reason */
-  | "FAILED";
+  | 'FAILED';
 /**
  * An upstream endpoint's response to a TCP `keepalive` message from Cloudflare.
  */
@@ -14026,260 +13855,258 @@ declare type IncomingRequestCfPropertiesEdgeRequestKeepAliveStatus =
   | 5; /** connection re-use, accepted by the origin server */
 /** ISO 3166-1 Alpha-2 codes */
 declare type Iso3166Alpha2Code =
-  | "AD"
-  | "AE"
-  | "AF"
-  | "AG"
-  | "AI"
-  | "AL"
-  | "AM"
-  | "AO"
-  | "AQ"
-  | "AR"
-  | "AS"
-  | "AT"
-  | "AU"
-  | "AW"
-  | "AX"
-  | "AZ"
-  | "BA"
-  | "BB"
-  | "BD"
-  | "BE"
-  | "BF"
-  | "BG"
-  | "BH"
-  | "BI"
-  | "BJ"
-  | "BL"
-  | "BM"
-  | "BN"
-  | "BO"
-  | "BQ"
-  | "BR"
-  | "BS"
-  | "BT"
-  | "BV"
-  | "BW"
-  | "BY"
-  | "BZ"
-  | "CA"
-  | "CC"
-  | "CD"
-  | "CF"
-  | "CG"
-  | "CH"
-  | "CI"
-  | "CK"
-  | "CL"
-  | "CM"
-  | "CN"
-  | "CO"
-  | "CR"
-  | "CU"
-  | "CV"
-  | "CW"
-  | "CX"
-  | "CY"
-  | "CZ"
-  | "DE"
-  | "DJ"
-  | "DK"
-  | "DM"
-  | "DO"
-  | "DZ"
-  | "EC"
-  | "EE"
-  | "EG"
-  | "EH"
-  | "ER"
-  | "ES"
-  | "ET"
-  | "FI"
-  | "FJ"
-  | "FK"
-  | "FM"
-  | "FO"
-  | "FR"
-  | "GA"
-  | "GB"
-  | "GD"
-  | "GE"
-  | "GF"
-  | "GG"
-  | "GH"
-  | "GI"
-  | "GL"
-  | "GM"
-  | "GN"
-  | "GP"
-  | "GQ"
-  | "GR"
-  | "GS"
-  | "GT"
-  | "GU"
-  | "GW"
-  | "GY"
-  | "HK"
-  | "HM"
-  | "HN"
-  | "HR"
-  | "HT"
-  | "HU"
-  | "ID"
-  | "IE"
-  | "IL"
-  | "IM"
-  | "IN"
-  | "IO"
-  | "IQ"
-  | "IR"
-  | "IS"
-  | "IT"
-  | "JE"
-  | "JM"
-  | "JO"
-  | "JP"
-  | "KE"
-  | "KG"
-  | "KH"
-  | "KI"
-  | "KM"
-  | "KN"
-  | "KP"
-  | "KR"
-  | "KW"
-  | "KY"
-  | "KZ"
-  | "LA"
-  | "LB"
-  | "LC"
-  | "LI"
-  | "LK"
-  | "LR"
-  | "LS"
-  | "LT"
-  | "LU"
-  | "LV"
-  | "LY"
-  | "MA"
-  | "MC"
-  | "MD"
-  | "ME"
-  | "MF"
-  | "MG"
-  | "MH"
-  | "MK"
-  | "ML"
-  | "MM"
-  | "MN"
-  | "MO"
-  | "MP"
-  | "MQ"
-  | "MR"
-  | "MS"
-  | "MT"
-  | "MU"
-  | "MV"
-  | "MW"
-  | "MX"
-  | "MY"
-  | "MZ"
-  | "NA"
-  | "NC"
-  | "NE"
-  | "NF"
-  | "NG"
-  | "NI"
-  | "NL"
-  | "NO"
-  | "NP"
-  | "NR"
-  | "NU"
-  | "NZ"
-  | "OM"
-  | "PA"
-  | "PE"
-  | "PF"
-  | "PG"
-  | "PH"
-  | "PK"
-  | "PL"
-  | "PM"
-  | "PN"
-  | "PR"
-  | "PS"
-  | "PT"
-  | "PW"
-  | "PY"
-  | "QA"
-  | "RE"
-  | "RO"
-  | "RS"
-  | "RU"
-  | "RW"
-  | "SA"
-  | "SB"
-  | "SC"
-  | "SD"
-  | "SE"
-  | "SG"
-  | "SH"
-  | "SI"
-  | "SJ"
-  | "SK"
-  | "SL"
-  | "SM"
-  | "SN"
-  | "SO"
-  | "SR"
-  | "SS"
-  | "ST"
-  | "SV"
-  | "SX"
-  | "SY"
-  | "SZ"
-  | "TC"
-  | "TD"
-  | "TF"
-  | "TG"
-  | "TH"
-  | "TJ"
-  | "TK"
-  | "TL"
-  | "TM"
-  | "TN"
-  | "TO"
-  | "TR"
-  | "TT"
-  | "TV"
-  | "TW"
-  | "TZ"
-  | "UA"
-  | "UG"
-  | "UM"
-  | "US"
-  | "UY"
-  | "UZ"
-  | "VA"
-  | "VC"
-  | "VE"
-  | "VG"
-  | "VI"
-  | "VN"
-  | "VU"
-  | "WF"
-  | "WS"
-  | "YE"
-  | "YT"
-  | "ZA"
-  | "ZM"
-  | "ZW";
+  | 'AD'
+  | 'AE'
+  | 'AF'
+  | 'AG'
+  | 'AI'
+  | 'AL'
+  | 'AM'
+  | 'AO'
+  | 'AQ'
+  | 'AR'
+  | 'AS'
+  | 'AT'
+  | 'AU'
+  | 'AW'
+  | 'AX'
+  | 'AZ'
+  | 'BA'
+  | 'BB'
+  | 'BD'
+  | 'BE'
+  | 'BF'
+  | 'BG'
+  | 'BH'
+  | 'BI'
+  | 'BJ'
+  | 'BL'
+  | 'BM'
+  | 'BN'
+  | 'BO'
+  | 'BQ'
+  | 'BR'
+  | 'BS'
+  | 'BT'
+  | 'BV'
+  | 'BW'
+  | 'BY'
+  | 'BZ'
+  | 'CA'
+  | 'CC'
+  | 'CD'
+  | 'CF'
+  | 'CG'
+  | 'CH'
+  | 'CI'
+  | 'CK'
+  | 'CL'
+  | 'CM'
+  | 'CN'
+  | 'CO'
+  | 'CR'
+  | 'CU'
+  | 'CV'
+  | 'CW'
+  | 'CX'
+  | 'CY'
+  | 'CZ'
+  | 'DE'
+  | 'DJ'
+  | 'DK'
+  | 'DM'
+  | 'DO'
+  | 'DZ'
+  | 'EC'
+  | 'EE'
+  | 'EG'
+  | 'EH'
+  | 'ER'
+  | 'ES'
+  | 'ET'
+  | 'FI'
+  | 'FJ'
+  | 'FK'
+  | 'FM'
+  | 'FO'
+  | 'FR'
+  | 'GA'
+  | 'GB'
+  | 'GD'
+  | 'GE'
+  | 'GF'
+  | 'GG'
+  | 'GH'
+  | 'GI'
+  | 'GL'
+  | 'GM'
+  | 'GN'
+  | 'GP'
+  | 'GQ'
+  | 'GR'
+  | 'GS'
+  | 'GT'
+  | 'GU'
+  | 'GW'
+  | 'GY'
+  | 'HK'
+  | 'HM'
+  | 'HN'
+  | 'HR'
+  | 'HT'
+  | 'HU'
+  | 'ID'
+  | 'IE'
+  | 'IL'
+  | 'IM'
+  | 'IN'
+  | 'IO'
+  | 'IQ'
+  | 'IR'
+  | 'IS'
+  | 'IT'
+  | 'JE'
+  | 'JM'
+  | 'JO'
+  | 'JP'
+  | 'KE'
+  | 'KG'
+  | 'KH'
+  | 'KI'
+  | 'KM'
+  | 'KN'
+  | 'KP'
+  | 'KR'
+  | 'KW'
+  | 'KY'
+  | 'KZ'
+  | 'LA'
+  | 'LB'
+  | 'LC'
+  | 'LI'
+  | 'LK'
+  | 'LR'
+  | 'LS'
+  | 'LT'
+  | 'LU'
+  | 'LV'
+  | 'LY'
+  | 'MA'
+  | 'MC'
+  | 'MD'
+  | 'ME'
+  | 'MF'
+  | 'MG'
+  | 'MH'
+  | 'MK'
+  | 'ML'
+  | 'MM'
+  | 'MN'
+  | 'MO'
+  | 'MP'
+  | 'MQ'
+  | 'MR'
+  | 'MS'
+  | 'MT'
+  | 'MU'
+  | 'MV'
+  | 'MW'
+  | 'MX'
+  | 'MY'
+  | 'MZ'
+  | 'NA'
+  | 'NC'
+  | 'NE'
+  | 'NF'
+  | 'NG'
+  | 'NI'
+  | 'NL'
+  | 'NO'
+  | 'NP'
+  | 'NR'
+  | 'NU'
+  | 'NZ'
+  | 'OM'
+  | 'PA'
+  | 'PE'
+  | 'PF'
+  | 'PG'
+  | 'PH'
+  | 'PK'
+  | 'PL'
+  | 'PM'
+  | 'PN'
+  | 'PR'
+  | 'PS'
+  | 'PT'
+  | 'PW'
+  | 'PY'
+  | 'QA'
+  | 'RE'
+  | 'RO'
+  | 'RS'
+  | 'RU'
+  | 'RW'
+  | 'SA'
+  | 'SB'
+  | 'SC'
+  | 'SD'
+  | 'SE'
+  | 'SG'
+  | 'SH'
+  | 'SI'
+  | 'SJ'
+  | 'SK'
+  | 'SL'
+  | 'SM'
+  | 'SN'
+  | 'SO'
+  | 'SR'
+  | 'SS'
+  | 'ST'
+  | 'SV'
+  | 'SX'
+  | 'SY'
+  | 'SZ'
+  | 'TC'
+  | 'TD'
+  | 'TF'
+  | 'TG'
+  | 'TH'
+  | 'TJ'
+  | 'TK'
+  | 'TL'
+  | 'TM'
+  | 'TN'
+  | 'TO'
+  | 'TR'
+  | 'TT'
+  | 'TV'
+  | 'TW'
+  | 'TZ'
+  | 'UA'
+  | 'UG'
+  | 'UM'
+  | 'US'
+  | 'UY'
+  | 'UZ'
+  | 'VA'
+  | 'VC'
+  | 'VE'
+  | 'VG'
+  | 'VI'
+  | 'VN'
+  | 'VU'
+  | 'WF'
+  | 'WS'
+  | 'YE'
+  | 'YT'
+  | 'ZA'
+  | 'ZM'
+  | 'ZW';
 /** The 2-letter continent codes Cloudflare uses */
-declare type ContinentCode = "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA";
-type CfProperties<HostMetadata = unknown> =
-  | IncomingRequestCfProperties<HostMetadata>
-  | RequestInitCfProperties;
+declare type ContinentCode = 'AF' | 'AN' | 'AS' | 'EU' | 'NA' | 'OC' | 'SA';
+type CfProperties<HostMetadata = unknown> = IncomingRequestCfProperties<HostMetadata> | RequestInitCfProperties;
 interface D1Meta {
   duration: number;
   size_after: number;
@@ -14328,11 +14155,11 @@ type D1SessionConstraint =
   // Indicates that the first query should go to the primary, and the rest queries
   // using the same D1DatabaseSession will go to any replica that is consistent with
   // the bookmark maintained by the session (returned by the first query).
-  | "first-primary"
+  | 'first-primary'
   // Indicates that the first query can go anywhere (primary or replica), and the rest queries
   // using the same D1DatabaseSession will go to any replica that is consistent with
   // the bookmark maintained by the session (returned by the first query).
-  | "first-unconstrained";
+  | 'first-unconstrained';
 type D1SessionBookmark = string;
 declare abstract class D1Database {
   prepare(query: string): D1PreparedStatement;
@@ -14376,7 +14203,7 @@ declare abstract class D1PreparedStatement {
 // TypeScript's interface merging will ensure our empty interface is effectively
 // ignored when `Disposable` is included in the standard lib.
 interface Disposable {}
-declare module "cloudflare:durable-objects" {
+declare module 'cloudflare:durable-objects' {
   /**
    * Marks Durable Object methods as safe to run more than once. The runtime may then retry calls
    * to them after a disconnect that might have happened after the method started. It does not
@@ -14471,14 +14298,14 @@ interface ForwardableEmailMessage extends EmailMessage {
 /** A file attachment for an email message */
 type EmailAttachment =
   | {
-      disposition: "inline";
+      disposition: 'inline';
       contentId: string;
       filename: string;
       type: string;
       content: string | ArrayBuffer | ArrayBufferView;
     }
   | {
-      disposition: "attachment";
+      disposition: 'attachment';
       contentId?: undefined;
       filename: string;
       type: string;
@@ -14542,7 +14369,7 @@ declare type EmailExportedHandler<Env = unknown, Props = unknown> = (
   env: Env,
   ctx: ExecutionContext<Props>,
 ) => void | Promise<void>;
-declare module "cloudflare:email" {
+declare module 'cloudflare:email' {
   let _EmailMessage: {
     prototype: EmailMessage;
     new (from: string, to: string, raw: ReadableStream | string): EmailMessage;
@@ -14571,13 +14398,7 @@ interface FlagshipEvaluationDetails<T> {
   errorCode?: string | undefined;
   errorMessage?: string | undefined;
 }
-type FlagshipWidenedValue<T> = T extends boolean
-  ? boolean
-  : T extends string
-    ? string
-    : T extends number
-      ? number
-      : T;
+type FlagshipWidenedValue<T> = T extends boolean ? boolean : T extends string ? string : T extends number ? number : T;
 interface FlagshipEvaluationError extends Error {}
 /**
  * Feature flags binding for evaluating feature flags from a Cloudflare Workers script.
@@ -14606,11 +14427,7 @@ declare abstract class Flagship {
    * @param context Optional evaluation context for targeting rules.
    * @deprecated Use getValue() instead.
    */
-  get(
-    flagKey: string,
-    defaultValue?: unknown,
-    context?: FlagshipEvaluationContext,
-  ): Promise<unknown>;
+  get(flagKey: string, defaultValue?: unknown, context?: FlagshipEvaluationContext): Promise<unknown>;
   /**
    * Get a flag value, inferring its expected type from the default value.
    * @param flagKey The key of the flag to evaluate.
@@ -14639,44 +14456,28 @@ declare abstract class Flagship {
    * @param defaultValue Default value returned when evaluation fails or the flag type does not match.
    * @param context Optional evaluation context for targeting rules.
    */
-  getBooleanValue(
-    flagKey: string,
-    defaultValue: boolean,
-    context?: FlagshipEvaluationContext,
-  ): Promise<boolean>;
+  getBooleanValue(flagKey: string, defaultValue: boolean, context?: FlagshipEvaluationContext): Promise<boolean>;
   /**
    * Get a string flag value.
    * @param flagKey The key of the flag to evaluate.
    * @param defaultValue Default value returned when evaluation fails or the flag type does not match.
    * @param context Optional evaluation context for targeting rules.
    */
-  getStringValue(
-    flagKey: string,
-    defaultValue: string,
-    context?: FlagshipEvaluationContext,
-  ): Promise<string>;
+  getStringValue(flagKey: string, defaultValue: string, context?: FlagshipEvaluationContext): Promise<string>;
   /**
    * Get a number flag value.
    * @param flagKey The key of the flag to evaluate.
    * @param defaultValue Default value returned when evaluation fails or the flag type does not match.
    * @param context Optional evaluation context for targeting rules.
    */
-  getNumberValue(
-    flagKey: string,
-    defaultValue: number,
-    context?: FlagshipEvaluationContext,
-  ): Promise<number>;
+  getNumberValue(flagKey: string, defaultValue: number, context?: FlagshipEvaluationContext): Promise<number>;
   /**
    * Get an object flag value.
    * @param flagKey The key of the flag to evaluate.
    * @param defaultValue Default value returned when evaluation fails or the flag type does not match.
    * @param context Optional evaluation context for targeting rules.
    */
-  getObjectValue<T extends object>(
-    flagKey: string,
-    defaultValue: T,
-    context?: FlagshipEvaluationContext,
-  ): Promise<T>;
+  getObjectValue<T extends object>(flagKey: string, defaultValue: T, context?: FlagshipEvaluationContext): Promise<T>;
   /**
    * Get a boolean flag value with full evaluation details.
    * @param flagKey The key of the flag to evaluate.
@@ -14871,7 +14672,7 @@ interface HyperdriveDynamicConfig {
 //     https://opensource.org/licenses/Apache-2.0
 type ImageInfoResponse =
   | {
-      format: "image/svg+xml";
+      format: 'image/svg+xml';
     }
   | {
       format: string;
@@ -14918,29 +14719,29 @@ type ImageTransform = {
       };
   brightness?: number;
   contrast?: number;
-  fit?: "scale-down" | "contain" | "pad" | "squeeze" | "cover" | "crop";
-  flip?: "h" | "v" | "hv";
+  fit?: 'scale-down' | 'contain' | 'pad' | 'squeeze' | 'cover' | 'crop';
+  flip?: 'h' | 'v' | 'hv';
   gamma?: number;
-  segment?: "foreground";
+  segment?: 'foreground';
   gravity?:
-    | "face"
-    | "left"
-    | "right"
-    | "top"
-    | "bottom"
-    | "center"
-    | "auto"
-    | "entropy"
+    | 'face'
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'bottom'
+    | 'center'
+    | 'auto'
+    | 'entropy'
     | {
         x?: number;
         y?: number;
-        mode: "remainder" | "box-center";
+        mode: 'remainder' | 'box-center';
       };
   rotate?: 0 | 90 | 180 | 270;
   saturation?: number;
   sharpen?: number;
   trim?:
-    | "border"
+    | 'border'
     | {
         top?: number;
         bottom?: number;
@@ -14968,22 +14769,22 @@ type ImageDrawOptions = {
 };
 type ImageCompositeMode =
   /** Foreground drawn on top of backdrop (default) */
-  | "over"
+  | 'over'
   /** Foreground shown only where backdrop is opaque */
-  | "in"
+  | 'in'
   /** Foreground drawn on top, but clipped to the backdrop's shape */
-  | "atop"
+  | 'atop'
   /** Foreground shown only where backdrop is transparent */
-  | "out"
+  | 'out'
   /** Foreground and backdrop visible only where the other is not */
-  | "xor"
+  | 'xor'
   /** Foreground and backdrop channels added (brightening) */
-  | "lighter";
+  | 'lighter';
 type ImageInputOptions = {
-  encoding?: "base64";
+  encoding?: 'base64';
 };
 type ImageOutputOptions = {
-  format: "image/jpeg" | "image/png" | "image/gif" | "image/webp" | "image/avif" | "rgb" | "rgba";
+  format: 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' | 'image/avif' | 'rgb' | 'rgba';
   quality?: number;
   background?: string;
   anim?: boolean;
@@ -15007,7 +14808,7 @@ interface ImageUploadOptions {
   /**
    * If 'base64', the input data will be decoded from base64 before processing
    */
-  encoding?: "base64";
+  encoding?: 'base64';
 }
 interface ImageUpdateOptions {
   requireSignedURLs?: boolean;
@@ -15029,7 +14830,7 @@ interface ImageListFilter {
 interface ImageListOptions {
   limit?: number;
   cursor?: string;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: 'asc' | 'desc';
   creator?: string;
   filter?: ImageListFilter;
 }
@@ -15099,10 +14900,7 @@ interface HostedImagesBinding {
    * @returns Metadata for the uploaded image
    * @throws {@link ImagesError} if upload fails
    */
-  upload(
-    image: ReadableStream<Uint8Array> | ArrayBuffer,
-    options?: ImageUploadOptions,
-  ): Promise<ImageMetadata>;
+  upload(image: ReadableStream<Uint8Array> | ArrayBuffer, options?: ImageUploadOptions): Promise<ImageMetadata>;
   /**
    * List hosted images with pagination
    * @param options List configuration
@@ -15157,10 +14955,7 @@ interface ImageTransformer {
    * @param image The image (or transformer that will give the image) to draw
    * @param options The options configuring how to draw the image
    */
-  draw(
-    image: ReadableStream<Uint8Array> | ImageTransformer,
-    options?: ImageDrawOptions,
-  ): ImageTransformer;
+  draw(image: ReadableStream<Uint8Array> | ImageTransformer, options?: ImageDrawOptions): ImageTransformer;
   /**
    * Retrieve the image that results from applying the transforms to the
    * provided input
@@ -15169,7 +14964,7 @@ interface ImageTransformer {
   output(options: ImageOutputOptions): Promise<ImageTransformationResult>;
 }
 type ImageTransformationOutputOptions = {
-  encoding?: "base64";
+  encoding?: 'base64';
 };
 type ImageTransformationResponseOptions = {
   headers?: HeadersInit;
@@ -15263,7 +15058,7 @@ interface MediaTransformationResult {
  */
 type MediaTransformationInputOptions = {
   /** How the media should be resized to fit the specified dimensions */
-  fit?: "contain" | "cover" | "scale-down";
+  fit?: 'contain' | 'cover' | 'scale-down';
   /** Target width in pixels */
   width?: number;
   /** Target height in pixels */
@@ -15277,7 +15072,7 @@ type MediaTransformationOutputOptions = {
   /**
    * Output mode determining the type of media to generate
    */
-  mode?: "video" | "spritesheet" | "frame" | "audio";
+  mode?: 'video' | 'spritesheet' | 'frame' | 'audio';
   /** Whether to include audio in the output */
   audio?: boolean;
   /**
@@ -15295,7 +15090,7 @@ type MediaTransformationOutputOptions = {
   /**
    * Output format for the generated media.
    */
-  format?: "jpg" | "png" | "m4a";
+  format?: 'jpg' | 'png' | 'm4a';
 };
 /**
  * Error object for media transformation operations.
@@ -15306,7 +15101,7 @@ interface MediaError extends Error {
   readonly message: string;
   readonly stack?: string;
 }
-declare module "cloudflare:node" {
+declare module 'cloudflare:node' {
   interface NodeStyleServer {
     listen(...args: unknown[]): this;
     address(): {
@@ -15341,11 +15136,7 @@ declare module "cloudflare:node" {
    * `connectHandler()`, for use inside a `connect()` handler, such as a
    * Durable Object's.
    */
-  export function handleAsNodeConnection(
-    socket: Socket,
-    env?: unknown,
-    ctx?: ExecutionContext,
-  ): Promise<void>;
+  export function handleAsNodeConnection(socket: Socket, env?: unknown, ctx?: ExecutionContext): Promise<void>;
 }
 type Params<P extends string = any> = Record<P, string | string[]>;
 type EventContext<Env, P extends string, Data> = {
@@ -15388,13 +15179,13 @@ type PagesPluginFunction<
   Data extends Record<string, unknown> = Record<string, unknown>,
   PluginArgs = unknown,
 > = (context: EventPluginContext<Env, Params, Data, PluginArgs>) => Response | Promise<Response>;
-declare module "assets:*" {
+declare module 'assets:*' {
   export const onRequest: PagesFunction;
 }
 // Copyright (c) 2022-2023 Cloudflare, Inc.
 // Licensed under the Apache 2.0 license found in the LICENSE file or at:
 //     https://opensource.org/licenses/Apache-2.0
-declare module "cloudflare:pipelines" {
+declare module 'cloudflare:pipelines' {
   export abstract class PipelineTransformationEntrypoint<
     Env = unknown,
     I extends PipelineRecord = PipelineRecord,
@@ -15482,11 +15273,11 @@ declare namespace Rpc {
   // TypeScript uses *structural* typing meaning anything with the same shape as type `T` is a `T`.
   // For the classes exported by `cloudflare:workers` we want *nominal* typing (i.e. we only want to
   // accept `WorkerEntrypoint` from `cloudflare:workers`, not any other class with the same shape)
-  export const __RPC_STUB_BRAND: "__RPC_STUB_BRAND";
-  export const __RPC_TARGET_BRAND: "__RPC_TARGET_BRAND";
-  export const __WORKER_ENTRYPOINT_BRAND: "__WORKER_ENTRYPOINT_BRAND";
-  export const __DURABLE_OBJECT_BRAND: "__DURABLE_OBJECT_BRAND";
-  export const __WORKFLOW_ENTRYPOINT_BRAND: "__WORKFLOW_ENTRYPOINT_BRAND";
+  export const __RPC_STUB_BRAND: '__RPC_STUB_BRAND';
+  export const __RPC_TARGET_BRAND: '__RPC_TARGET_BRAND';
+  export const __WORKER_ENTRYPOINT_BRAND: '__WORKER_ENTRYPOINT_BRAND';
+  export const __DURABLE_OBJECT_BRAND: '__DURABLE_OBJECT_BRAND';
+  export const __WORKFLOW_ENTRYPOINT_BRAND: '__WORKFLOW_ENTRYPOINT_BRAND';
   export interface RpcTargetBranded {
     [__RPC_TARGET_BRAND]: never;
   }
@@ -15499,10 +15290,7 @@ declare namespace Rpc {
   export interface WorkflowEntrypointBranded {
     [__WORKFLOW_ENTRYPOINT_BRAND]: never;
   }
-  export type EntrypointBranded =
-    | WorkerEntrypointBranded
-    | DurableObjectBranded
-    | WorkflowEntrypointBranded;
+  export type EntrypointBranded = WorkerEntrypointBranded | DurableObjectBranded | WorkflowEntrypointBranded;
   // Types that can be used through `Stub`s
   export type Stubable = RpcTargetBranded | ((...args: any[]) => any);
   // Types that can be passed over RPC
@@ -15604,10 +15392,7 @@ declare namespace Rpc {
   // Base type for all other types providing RPC-like interfaces.
   // Rewrites all methods/properties to be `MethodOrProperty`s, while preserving callable types.
   // `Reserved` names (e.g. stub method names like `dup()`) and symbols can't be accessed over RPC.
-  export type Provider<
-    T extends object,
-    Reserved extends string = never,
-  > = MaybeCallableProvider<T> &
+  export type Provider<T extends object, Reserved extends string = never> = MaybeCallableProvider<T> &
     Pick<
       {
         [K in keyof T]: MethodOrProperty<T[K]>;
@@ -15644,18 +15429,16 @@ declare namespace Cloudflare {
   interface GlobalProps {}
   // Evaluates to the type of a property in GlobalProps, defaulting to `Default` if it is not
   // present.
-  type GlobalProp<K extends string, Default> = K extends keyof GlobalProps
-    ? GlobalProps[K]
-    : Default;
+  type GlobalProp<K extends string, Default> = K extends keyof GlobalProps ? GlobalProps[K] : Default;
   // The type of the program's main module exports, if known. Requires `GlobalProps` to declare the
   // `mainModule` property.
-  type MainModule = GlobalProp<"mainModule", {}>;
+  type MainModule = GlobalProp<'mainModule', {}>;
   // The type of ctx.exports, which contains loopback bindings for all top-level exports.
   type Exports = {
     [K in keyof MainModule]: LoopbackForExport<MainModule[K]> &
       // If the export is listed in `durableNamespaces`, then it is also a
       // DurableObjectNamespace.
-      (K extends GlobalProp<"durableNamespaces", never>
+      (K extends GlobalProp<'durableNamespaces', never>
         ? MainModule[K] extends new (...args: any[]) => infer DoInstance
           ? DoInstance extends Rpc.DurableObjectBranded
             ? DurableObjectNamespace<DoInstance>
@@ -15673,9 +15456,7 @@ declare namespace CloudflareWorkersModule {
     [Rpc.__RPC_TARGET_BRAND]: never;
   }
   // `protected` fields don't appear in `keyof`s, so can't be accessed over RPC
-  export abstract class WorkerEntrypoint<Env = Cloudflare.Env, Props = {}>
-    implements Rpc.WorkerEntrypointBranded
-  {
+  export abstract class WorkerEntrypoint<Env = Cloudflare.Env, Props = {}> implements Rpc.WorkerEntrypointBranded {
     [Rpc.__WORKER_ENTRYPOINT_BRAND]: never;
     protected ctx: ExecutionContext<Props>;
     protected env: Env;
@@ -15688,16 +15469,11 @@ declare namespace CloudflareWorkersModule {
     tail?(events: TraceItem[]): void | Promise<void>;
     tailStream?(
       event: TailStream.TailEvent<TailStream.Onset>,
-    ):
-      | TailStream.TailEventHandlerType
-      | undefined
-      | Promise<TailStream.TailEventHandlerType | undefined>;
+    ): TailStream.TailEventHandlerType | undefined | Promise<TailStream.TailEventHandlerType | undefined>;
     test?(controller: TestController): void | Promise<void>;
     trace?(traces: TraceItem[]): void | Promise<void>;
   }
-  export abstract class DurableObject<Env = Cloudflare.Env, Props = {}>
-    implements Rpc.DurableObjectBranded
-  {
+  export abstract class DurableObject<Env = Cloudflare.Env, Props = {}> implements Rpc.DurableObjectBranded {
     [Rpc.__DURABLE_OBJECT_BRAND]: never;
     protected ctx: DurableObjectState<Props>;
     protected env: Env;
@@ -15706,23 +15482,11 @@ declare namespace CloudflareWorkersModule {
     fetch?(request: Request): Response | Promise<Response>;
     connect?(socket: Socket): void | Promise<void>;
     webSocketMessage?(ws: WebSocket, message: string | ArrayBuffer): void | Promise<void>;
-    webSocketClose?(
-      ws: WebSocket,
-      code: number,
-      reason: string,
-      wasClean: boolean,
-    ): void | Promise<void>;
+    webSocketClose?(ws: WebSocket, code: number, reason: string, wasClean: boolean): void | Promise<void>;
     webSocketError?(ws: WebSocket, error: unknown): void | Promise<void>;
   }
-  export type WorkflowDurationLabel =
-    | "second"
-    | "minute"
-    | "hour"
-    | "day"
-    | "week"
-    | "month"
-    | "year";
-  export type WorkflowSleepDuration = `${number} ${WorkflowDurationLabel}${"s" | ""}` | number;
+  export type WorkflowDurationLabel = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
+  export type WorkflowSleepDuration = `${number} ${WorkflowDurationLabel}${'s' | ''}` | number;
   export type WorkflowDelayDuration = WorkflowSleepDuration;
   export type WorkflowDynamicDelayContext = {
     ctx: WorkflowStepContext<WorkflowDelayFunction>;
@@ -15733,8 +15497,8 @@ declare namespace CloudflareWorkersModule {
   ) => WorkflowDelayDuration | Promise<WorkflowDelayDuration>;
   export type WorkflowTimeoutDuration = WorkflowSleepDuration;
   export type WorkflowRetentionDuration = WorkflowSleepDuration;
-  export type WorkflowBackoff = "constant" | "linear" | "exponential";
-  export type WorkflowStepSensitivity = "output";
+  export type WorkflowBackoff = 'constant' | 'linear' | 'exponential';
+  export type WorkflowStepSensitivity = 'output';
   export type WorkflowStepConfig = {
     retries?: {
       limit: number;
@@ -15750,21 +15514,21 @@ declare namespace CloudflareWorkersModule {
   // the config argument (rather than on an inferred type parameter, which is
   // lost when the caller supplies an explicit return-type argument). Not
   // exported: they must not widen the public type surface.
-  type WorkflowStepConfigWithStaticDelay = Omit<WorkflowStepConfig, "retries"> & {
+  type WorkflowStepConfigWithStaticDelay = Omit<WorkflowStepConfig, 'retries'> & {
     retries?: {
       limit: number;
       delay: WorkflowDelayDuration | number;
       backoff?: WorkflowBackoff;
     };
   };
-  type WorkflowStepConfigWithDelayFunction = Omit<WorkflowStepConfig, "retries"> & {
+  type WorkflowStepConfigWithDelayFunction = Omit<WorkflowStepConfig, 'retries'> & {
     retries: {
       limit: number;
       delay: WorkflowDelayFunction;
       backoff?: WorkflowBackoff;
     };
   };
-  export type WorkflowStepRollbackConfig = Pick<WorkflowStepConfig, "retries" | "timeout">;
+  export type WorkflowStepRollbackConfig = Pick<WorkflowStepConfig, 'retries' | 'timeout'>;
   export type WorkflowCronSchedule = {
     /** Cron expression that triggered this event. */
     cron: string;
@@ -15864,19 +15628,16 @@ declare namespace CloudflareWorkersModule {
     ): Promise<WorkflowStepEvent<T>>;
   }
   export type WorkflowInstanceStatus =
-    | "queued"
-    | "running"
-    | "paused"
-    | "errored"
-    | "terminated"
-    | "complete"
-    | "waiting"
-    | "waitingForPause"
-    | "unknown";
-  export abstract class WorkflowEntrypoint<
-    Env = unknown,
-    T extends Rpc.Serializable<T> | unknown = unknown,
-  >
+    | 'queued'
+    | 'running'
+    | 'paused'
+    | 'errored'
+    | 'terminated'
+    | 'complete'
+    | 'waiting'
+    | 'waitingForPause'
+    | 'unknown';
+  export abstract class WorkflowEntrypoint<Env = unknown, T extends Rpc.Serializable<T> | unknown = unknown>
     implements Rpc.WorkflowEntrypointBranded
   {
     [Rpc.__WORKFLOW_ENTRYPOINT_BRAND]: never;
@@ -15888,17 +15649,13 @@ declare namespace CloudflareWorkersModule {
   export function waitUntil(promise: Promise<unknown>): void;
   export function withEnv(newEnv: unknown, fn: () => unknown): unknown;
   export function withExports(newExports: unknown, fn: () => unknown): unknown;
-  export function withEnvAndExports(
-    newEnv: unknown,
-    newExports: unknown,
-    fn: () => unknown,
-  ): unknown;
+  export function withEnvAndExports(newEnv: unknown, newExports: unknown, fn: () => unknown): unknown;
   export const env: Cloudflare.Env;
   export const exports: Cloudflare.Exports;
   export const cache: CacheContext;
   export const tracing: Tracing;
 }
-declare module "cloudflare:workers" {
+declare module 'cloudflare:workers' {
   export = CloudflareWorkersModule;
 }
 interface SecretsStoreSecret {
@@ -15908,7 +15665,7 @@ interface SecretsStoreSecret {
    */
   get(): Promise<string>;
 }
-declare module "cloudflare:sockets" {
+declare module 'cloudflare:sockets' {
   function _connect(address: string | SocketAddress, options?: SocketOptions): Socket;
   export { _connect as connect };
 }
@@ -16459,10 +16216,10 @@ type StreamCaption = {
   /**
    * The status of a generated caption.
    */
-  status?: "ready" | "inprogress" | "error";
+  status?: 'ready' | 'inprogress' | 'error';
 };
-type StreamDownloadStatus = "ready" | "inprogress" | "error";
-type StreamDownloadType = "default" | "audio";
+type StreamDownloadStatus = 'ready' | 'inprogress' | 'error';
+type StreamDownloadType = 'default' | 'audio';
 type StreamDownload = {
   /**
    * Indicates the progress as a percentage between 0 and 100.
@@ -16491,7 +16248,7 @@ type StreamDownloadGetResponse = {
    */
   default?: StreamDownload;
 };
-type StreamWatermarkPosition = "upperRight" | "upperLeft" | "lowerLeft" | "lowerRight" | "center";
+type StreamWatermarkPosition = 'upperRight' | 'upperLeft' | 'lowerLeft' | 'lowerRight' | 'center';
 type StreamWatermark = {
   /**
    * The unique identifier for a watermark profile.
@@ -16604,7 +16361,7 @@ type StreamVideosListParams = {
    */
   afterComp?: StreamPaginationComparison;
 };
-type StreamPaginationComparison = "eq" | "gt" | "gte" | "lt" | "lte";
+type StreamPaginationComparison = 'eq' | 'gt' | 'gte' | 'lt' | 'lte';
 /**
  * Error object for Stream binding operations.
  */
@@ -16615,40 +16372,40 @@ interface StreamError extends Error {
   readonly stack?: string;
 }
 interface InternalError extends StreamError {
-  name: "InternalError";
+  name: 'InternalError';
 }
 interface BadRequestError extends StreamError {
-  name: "BadRequestError";
+  name: 'BadRequestError';
 }
 interface NotFoundError extends StreamError {
-  name: "NotFoundError";
+  name: 'NotFoundError';
 }
 interface ForbiddenError extends StreamError {
-  name: "ForbiddenError";
+  name: 'ForbiddenError';
 }
 interface RateLimitedError extends StreamError {
-  name: "RateLimitedError";
+  name: 'RateLimitedError';
 }
 interface QuotaReachedError extends StreamError {
-  name: "QuotaReachedError";
+  name: 'QuotaReachedError';
 }
 interface MaxFileSizeError extends StreamError {
-  name: "MaxFileSizeError";
+  name: 'MaxFileSizeError';
 }
 interface InvalidURLError extends StreamError {
-  name: "InvalidURLError";
+  name: 'InvalidURLError';
 }
 interface AlreadyUploadedError extends StreamError {
-  name: "AlreadyUploadedError";
+  name: 'AlreadyUploadedError';
 }
 interface TooManyWatermarksError extends StreamError {
-  name: "TooManyWatermarksError";
+  name: 'TooManyWatermarksError';
 }
 type MarkdownDocument = {
   name: string;
   blob: Blob;
 };
-type OutputFormat = "markdown" | "text";
+type OutputFormat = 'markdown' | 'text';
 type ConversionResponse =
   | {
       id: string;
@@ -16662,11 +16419,11 @@ type ConversionResponse =
       id: string;
       name: string;
       mimeType: string;
-      format: "error";
+      format: 'error';
       error: string;
     };
 type ImageConversionOptions = {
-  descriptionLanguage?: "en" | "es" | "fr" | "it" | "pt" | "de";
+  descriptionLanguage?: 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de';
 };
 type EmbeddedImageConversionOptions = ImageConversionOptions & {
   convert?: boolean;
@@ -16703,14 +16460,8 @@ type SupportedFileFormat = {
   extension: string;
 };
 declare abstract class ToMarkdownService {
-  transform(
-    files: MarkdownDocument[],
-    options?: ConversionRequestOptions,
-  ): Promise<ConversionResponse[]>;
-  transform(
-    files: MarkdownDocument,
-    options?: ConversionRequestOptions,
-  ): Promise<ConversionResponse>;
+  transform(files: MarkdownDocument[], options?: ConversionRequestOptions): Promise<ConversionResponse[]>;
+  transform(files: MarkdownDocument, options?: ConversionRequestOptions): Promise<ConversionResponse>;
   supported(): Promise<SupportedFileFormat[]>;
 }
 declare namespace TailStream {
@@ -16719,82 +16470,82 @@ declare namespace TailStream {
     readonly value: string;
   }
   interface FetchEventInfo {
-    readonly type: "fetch";
+    readonly type: 'fetch';
     readonly method: string;
     readonly url: string;
     readonly cfJson?: object;
     readonly headers: Header[];
   }
   interface JsRpcEventInfo {
-    readonly type: "jsrpc";
+    readonly type: 'jsrpc';
   }
   interface ScheduledEventInfo {
-    readonly type: "scheduled";
+    readonly type: 'scheduled';
     readonly scheduledTime: Date;
     readonly cron: string;
   }
   interface AlarmEventInfo {
-    readonly type: "alarm";
+    readonly type: 'alarm';
     readonly scheduledTime: Date;
   }
   interface QueueEventInfo {
-    readonly type: "queue";
+    readonly type: 'queue';
     readonly queueName: string;
     readonly batchSize: number;
   }
   interface EmailEventInfo {
-    readonly type: "email";
+    readonly type: 'email';
     readonly mailFrom: string;
     readonly rcptTo: string;
     readonly rawSize: number;
   }
   interface TraceEventInfo {
-    readonly type: "trace";
+    readonly type: 'trace';
     readonly traces: (string | null)[];
   }
   interface HibernatableWebSocketEventInfoMessage {
-    readonly type: "message";
+    readonly type: 'message';
   }
   interface HibernatableWebSocketEventInfoError {
-    readonly type: "error";
+    readonly type: 'error';
   }
   interface HibernatableWebSocketEventInfoClose {
-    readonly type: "close";
+    readonly type: 'close';
     readonly code: number;
     readonly wasClean: boolean;
   }
   interface HibernatableWebSocketEventInfo {
-    readonly type: "hibernatableWebSocket";
+    readonly type: 'hibernatableWebSocket';
     readonly info:
       | HibernatableWebSocketEventInfoClose
       | HibernatableWebSocketEventInfoError
       | HibernatableWebSocketEventInfoMessage;
   }
   interface CustomEventInfo {
-    readonly type: "custom";
+    readonly type: 'custom';
   }
   interface FetchResponseInfo {
-    readonly type: "fetch";
+    readonly type: 'fetch';
     readonly statusCode: number;
   }
   interface ConnectEventInfo {
-    readonly type: "connect";
+    readonly type: 'connect';
   }
   type EventOutcome =
-    | "ok"
-    | "canceled"
-    | "exception"
-    | "unknown"
-    | "killSwitch"
-    | "daemonDown"
-    | "exceededCpu"
-    | "exceededMemory"
-    | "loadShed"
-    | "responseStreamDisconnected"
-    | "scriptNotFound"
-    | "internalError"
-    | "exceededWallTime"
-    | "aborted";
+    | 'ok'
+    | 'canceled'
+    | 'exception'
+    | 'unknown'
+    | 'killSwitch'
+    | 'daemonDown'
+    | 'exceededCpu'
+    | 'exceededMemory'
+    | 'loadShed'
+    | 'responseStreamDisconnected'
+    | 'scriptNotFound'
+    | 'internalError'
+    | 'exceededWallTime'
+    | 'aborted';
   interface ScriptVersion {
     readonly id: string;
     readonly tag?: string;
@@ -16806,7 +16557,7 @@ declare namespace TailStream {
     readonly name: string;
   }
   interface Onset {
-    readonly type: "onset";
+    readonly type: 'onset';
     readonly attributes: Attribute[];
     // id for the span being opened by this Onset event.
     readonly spanId: string;
@@ -16831,48 +16582,48 @@ declare namespace TailStream {
       | CustomEventInfo;
   }
   interface Outcome {
-    readonly type: "outcome";
+    readonly type: 'outcome';
     readonly outcome: EventOutcome;
     readonly cpuTime: number;
     readonly wallTime: number;
   }
-  type SpanStatusCode = "unset" | "ok" | "error";
+  type SpanStatusCode = 'unset' | 'ok' | 'error';
   interface SpanStatus {
     readonly code: SpanStatusCode;
     /** A developer-facing error message, present only when code is "error". */
     readonly message?: string;
   }
   interface SpanOpen {
-    readonly type: "spanOpen";
+    readonly type: 'spanOpen';
     readonly name: string;
     // id for the span being opened by this SpanOpen event.
     readonly spanId: string;
     readonly info?: FetchEventInfo | JsRpcEventInfo | Attributes;
   }
   interface SpanClose {
-    readonly type: "spanClose";
+    readonly type: 'spanClose';
     readonly outcome: EventOutcome;
   }
   type SpanUpdateInfo =
     | {
-        readonly type: "name";
+        readonly type: 'name';
         readonly name: string;
       }
     | {
-        readonly type: "status";
+        readonly type: 'status';
         readonly status: SpanStatus;
       };
   interface SpanUpdate {
-    readonly type: "spanUpdate";
+    readonly type: 'spanUpdate';
     readonly info: SpanUpdateInfo;
   }
   interface DiagnosticChannelEvent {
-    readonly type: "diagnosticChannel";
+    readonly type: 'diagnosticChannel';
     readonly channel: string;
     readonly message: any;
   }
   interface Exception {
-    readonly type: "exception";
+    readonly type: 'exception';
     readonly code?: string | number;
     readonly name: string;
     readonly message: string;
@@ -16884,8 +16635,8 @@ declare namespace TailStream {
     readonly stack?: string;
   }
   type Log = {
-    readonly type: "log";
-    readonly level: "debug" | "error" | "info" | "log" | "warn";
+    readonly type: 'log';
+    readonly level: 'debug' | 'error' | 'info' | 'log' | 'warn';
     readonly errorInfo?: readonly (TailStreamErrorInfo | null)[];
   } & (
     | {
@@ -16898,11 +16649,11 @@ declare namespace TailStream {
       }
   );
   interface DroppedEventsDiagnostic {
-    readonly diagnosticsType: "droppedEvents";
+    readonly diagnosticsType: 'droppedEvents';
     readonly count: number;
   }
   interface StreamDiagnostic {
-    readonly type: "streamDiagnostic";
+    readonly type: 'streamDiagnostic';
     // To add new diagnostic types, define a new interface and add it to this union type.
     readonly diagnostic: DroppedEventsDiagnostic;
   }
@@ -16911,7 +16662,7 @@ declare namespace TailStream {
   // returning. For example - Websockets that return an http upgrade response but then continue
   // streaming information or SSE http connections.
   interface Return {
-    readonly type: "return";
+    readonly type: 'return';
     readonly info?: FetchResponseInfo;
   }
   interface Attribute {
@@ -16919,7 +16670,7 @@ declare namespace TailStream {
     readonly value: string | string[] | boolean | boolean[] | number | number[] | bigint | bigint[];
   }
   interface Attributes {
-    readonly type: "attributes";
+    readonly type: 'attributes';
     readonly info: Attribute[];
   }
   type EventType =
@@ -16963,9 +16714,7 @@ declare namespace TailStream {
     readonly sequence: number;
     readonly event: Event;
   }
-  type TailEventHandler<Event extends EventType = EventType> = (
-    event: TailEvent<Event>,
-  ) => void | Promise<void>;
+  type TailEventHandler<Event extends EventType = EventType> = (event: TailEvent<Event>) => void | Promise<void>;
   type TailEventHandlerObject = {
     outcome?: TailEventHandler<Outcome>;
     spanOpen?: TailEventHandler<SpanOpen>;
@@ -16989,9 +16738,7 @@ type VectorizeVectorMetadataValue = string | number | boolean | string[];
 /**
  * Additional information to associate with a vector.
  */
-type VectorizeVectorMetadata =
-  | VectorizeVectorMetadataValue
-  | Record<string, VectorizeVectorMetadataValue>;
+type VectorizeVectorMetadata = VectorizeVectorMetadataValue | Record<string, VectorizeVectorMetadataValue>;
 type VectorFloatArray = Float32Array | Float64Array;
 interface VectorizeError {
   code?: number;
@@ -17002,8 +16749,8 @@ interface VectorizeError {
  *
  * This list is expected to grow as support for more operations are released.
  */
-type VectorizeVectorMetadataFilterOp = "$eq" | "$ne" | "$lt" | "$lte" | "$gt" | "$gte";
-type VectorizeVectorMetadataFilterCollectionOp = "$in" | "$nin";
+type VectorizeVectorMetadataFilterOp = '$eq' | '$ne' | '$lt' | '$lte' | '$gt' | '$gte';
+type VectorizeVectorMetadataFilterCollectionOp = '$in' | '$nin';
 /**
  * Filter criteria for vector metadata used to limit the retrieved query result set.
  */
@@ -17012,23 +16759,17 @@ type VectorizeVectorMetadataFilter = {
     | Exclude<VectorizeVectorMetadataValue, string[]>
     | null
     | {
-        [Op in VectorizeVectorMetadataFilterOp]?: Exclude<
-          VectorizeVectorMetadataValue,
-          string[]
-        > | null;
+        [Op in VectorizeVectorMetadataFilterOp]?: Exclude<VectorizeVectorMetadataValue, string[]> | null;
       }
     | {
-        [Op in VectorizeVectorMetadataFilterCollectionOp]?: Exclude<
-          VectorizeVectorMetadataValue,
-          string[]
-        >[];
+        [Op in VectorizeVectorMetadataFilterCollectionOp]?: Exclude<VectorizeVectorMetadataValue, string[]>[];
       };
 };
 /**
  * Supported distance metrics for an index.
  * Distance metrics determine how other "similar" vectors are determined.
  */
-type VectorizeDistanceMetric = "euclidean" | "cosine" | "dot-product";
+type VectorizeDistanceMetric = 'euclidean' | 'cosine' | 'dot-product';
 /**
  * Metadata return levels for a Vectorize query.
  *
@@ -17038,7 +16779,7 @@ type VectorizeDistanceMetric = "euclidean" | "cosine" | "dot-product";
  * @property indexed  Return all metadata fields configured for indexing in the vector return set. This level of retrieval is "free" in that no additional overhead is incurred returning this data. However, note that indexed metadata is subject to truncation (especially for larger strings).
  * @property none     No indexed metadata will be returned.
  */
-type VectorizeMetadataRetrievalLevel = "all" | "indexed" | "none";
+type VectorizeMetadataRetrievalLevel = 'all' | 'indexed' | 'none';
 interface VectorizeQueryOptions {
   topK?: number;
   namespace?: string;
@@ -17104,8 +16845,8 @@ interface VectorizeVector {
 /**
  * Represents a matched vector for a query along with its score and (if specified) the matching vector information.
  */
-type VectorizeMatch = Pick<Partial<VectorizeVector>, "values"> &
-  Omit<VectorizeVector, "values"> & {
+type VectorizeMatch = Pick<Partial<VectorizeVector>, 'values'> &
+  Omit<VectorizeVector, 'values'> & {
     /** The score or rank for similarity, when returned as a result */
     score: number;
   };
@@ -17155,10 +16896,7 @@ declare abstract class VectorizeIndex {
    * @param options Configuration options to massage the returned data.
    * @returns A promise that resolves with matched and scored vectors.
    */
-  public query(
-    vector: VectorFloatArray | number[],
-    options?: VectorizeQueryOptions,
-  ): Promise<VectorizeMatches>;
+  public query(vector: VectorFloatArray | number[], options?: VectorizeQueryOptions): Promise<VectorizeMatches>;
   /**
    * Insert a list of vectors into the index dataset. If a provided id exists, an error will be thrown.
    * @param vectors List of vectors that will be inserted.
@@ -17201,10 +16939,7 @@ declare abstract class Vectorize {
    * @param options Configuration options to massage the returned data.
    * @returns A promise that resolves with matched and scored vectors.
    */
-  public query(
-    vector: VectorFloatArray | number[],
-    options?: VectorizeQueryOptions,
-  ): Promise<VectorizeMatches>;
+  public query(vector: VectorFloatArray | number[], options?: VectorizeQueryOptions): Promise<VectorizeMatches>;
   /**
    * Use the provided vector-id to perform a similarity search across the index.
    * @param vectorId Id for a vector in the index against which the index should be queried.
@@ -17384,7 +17119,7 @@ interface DispatchNamespace {
     options?: DynamicDispatchOptions,
   ): Fetcher;
 }
-declare module "cloudflare:workflows" {
+declare module 'cloudflare:workflows' {
   /**
    * NonRetryableError allows for a user to throw a fatal error
    * that makes a Workflow instance fail immediately without triggering a retry
@@ -17412,9 +17147,7 @@ declare abstract class Workflow<PARAMS = unknown> {
    * @param options Options for creating instances by count or from a list of instance options
    * @returns A promise that resolves with the created instance handles and any per-instance errors.
    */
-  public createBatch(
-    options: WorkflowBatchCreateOptions<PARAMS>,
-  ): Promise<WorkflowBatchCreateResult>;
+  public createBatch(options: WorkflowBatchCreateOptions<PARAMS>): Promise<WorkflowBatchCreateResult>;
   /**
    * Create a batch of instances and return handles for the ones that were created.
    * Instances that could not be created, for example because their ID already exists, are omitted from the result without an error.
@@ -17467,23 +17200,23 @@ type WorkflowBatchDeleteResult = {
     message: string;
   }[];
 };
-type WorkflowDurationLabel = "second" | "minute" | "hour" | "day" | "week" | "month" | "year";
-type WorkflowSleepDuration = `${number} ${WorkflowDurationLabel}${"s" | ""}` | number;
+type WorkflowDurationLabel = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
+type WorkflowSleepDuration = `${number} ${WorkflowDurationLabel}${'s' | ''}` | number;
 type WorkflowRetentionDuration = WorkflowSleepDuration;
 /** Geographic regions supported when creating a Workflow instance.
  * Location hints are best-effort placement preferences. */
 type WorkflowInstanceLocationHint =
-  | "wnam"
-  | "enam"
-  | "sam"
-  | "weur"
-  | "eeur"
-  | "apac"
-  | "apac-ne"
-  | "apac-se"
-  | "oc"
-  | "afr"
-  | "me";
+  | 'wnam'
+  | 'enam'
+  | 'sam'
+  | 'weur'
+  | 'eeur'
+  | 'apac'
+  | 'apac-ne'
+  | 'apac-se'
+  | 'oc'
+  | 'afr'
+  | 'me';
 interface WorkflowInstanceCreateOptions<PARAMS = unknown> {
   /**
    * An id for your Workflow instance. Must be unique within the Workflow.
@@ -17507,16 +17240,16 @@ interface WorkflowInstanceCreateOptions<PARAMS = unknown> {
 }
 type InstanceStatus = {
   status:
-    | "queued" // means that instance is waiting to be started (see concurrency limits)
-    | "running"
-    | "paused"
-    | "errored"
-    | "terminated" // user terminated the instance while it was running
-    | "complete"
-    | "waiting" // instance is hibernating and waiting for sleep or event to finish
-    | "waitingForPause" // instance is finishing the current work to pause
-    | "rollingBack"
-    | "unknown";
+    | 'queued' // means that instance is waiting to be started (see concurrency limits)
+    | 'running'
+    | 'paused'
+    | 'errored'
+    | 'terminated' // user terminated the instance while it was running
+    | 'complete'
+    | 'waiting' // instance is hibernating and waiting for sleep or event to finish
+    | 'waitingForPause' // instance is finishing the current work to pause
+    | 'rollingBack'
+    | 'unknown';
   error?: {
     name: string;
     message: string;
@@ -17552,7 +17285,7 @@ interface WorkflowInstanceRestartOptions {
     /**
      * Step type filter. Use when different step types share the same name.
      */
-    type?: "do" | "sleep" | "waitForEvent";
+    type?: 'do' | 'sleep' | 'waitForEvent';
   };
 }
 /** An event emitted by a Workflow instance. */
@@ -17562,72 +17295,72 @@ type WorkflowInstanceEvent = {
   timestamp: number;
 } & (
   | {
-      type: "workflow_queued";
+      type: 'workflow_queued';
     }
   | {
-      type: "workflow_started";
+      type: 'workflow_started';
       params?: unknown;
     }
   | {
-      type: "workflow_running";
+      type: 'workflow_running';
     }
   | {
-      type: "workflow_paused";
+      type: 'workflow_paused';
     }
   | {
-      type: "workflow_waiting_for_pause";
+      type: 'workflow_waiting_for_pause';
     }
   | {
-      type: "workflow_waiting";
+      type: 'workflow_waiting';
     }
   | {
-      type: "workflow_completed";
+      type: 'workflow_completed';
       output?: unknown;
     }
   | {
-      type: "workflow_errored";
+      type: 'workflow_errored';
       error: {
         name: string;
         message: string;
       };
     }
   | {
-      type: "workflow_terminated";
+      type: 'workflow_terminated';
     }
   | {
-      type: "step_started";
+      type: 'step_started';
       stepName: string;
       config?: {
         retries: {
           limit: number;
-          delay: WorkflowSleepDuration | "[dynamic]";
-          backoff?: "constant" | "linear" | "exponential";
+          delay: WorkflowSleepDuration | '[dynamic]';
+          backoff?: 'constant' | 'linear' | 'exponential';
         };
         timeout: WorkflowSleepDuration;
-        sensitive?: "output";
+        sensitive?: 'output';
       };
     }
   | {
-      type: "step_completed";
+      type: 'step_completed';
       stepName: string;
       output?: unknown;
     }
   | {
-      type: "step_errored";
+      type: 'step_errored';
       stepName: string;
     }
   | {
-      type: "attempt_started";
-      stepName: string;
-      attempt: number;
-    }
-  | {
-      type: "attempt_completed";
+      type: 'attempt_started';
       stepName: string;
       attempt: number;
     }
   | {
-      type: "attempt_errored";
+      type: 'attempt_completed';
+      stepName: string;
+      attempt: number;
+    }
+  | {
+      type: 'attempt_errored';
       stepName: string;
       attempt: number;
       retryDelayMs?: number;
@@ -17637,49 +17370,49 @@ type WorkflowInstanceEvent = {
       };
     }
   | {
-      type: "sleep_started";
+      type: 'sleep_started';
       stepName: string;
       durationMs: number;
     }
   | {
-      type: "sleep_completed";
+      type: 'sleep_completed';
       stepName: string;
     }
   | {
-      type: "wait_started";
+      type: 'wait_started';
       stepName: string;
       eventType: string;
     }
   | {
-      type: "wait_completed";
+      type: 'wait_completed';
       stepName: string;
     }
   | {
-      type: "wait_timed_out";
+      type: 'wait_timed_out';
       stepName: string;
     }
   | {
-      type: "rollback_started";
+      type: 'rollback_started';
     }
   | {
-      type: "rollback_step_started";
+      type: 'rollback_step_started';
       stepName: string;
       config?: {
         retries: {
           limit: number;
-          delay: WorkflowSleepDuration | "[dynamic]";
-          backoff?: "constant" | "linear" | "exponential";
+          delay: WorkflowSleepDuration | '[dynamic]';
+          backoff?: 'constant' | 'linear' | 'exponential';
         };
         timeout: WorkflowSleepDuration;
-        sensitive?: "output";
+        sensitive?: 'output';
       };
     }
   | {
-      type: "rollback_step_completed";
+      type: 'rollback_step_completed';
       stepName: string;
     }
   | {
-      type: "rollback_step_errored";
+      type: 'rollback_step_errored';
       stepName: string;
       error: {
         name: string;
@@ -17687,17 +17420,17 @@ type WorkflowInstanceEvent = {
       };
     }
   | {
-      type: "rollback_attempt_started";
+      type: 'rollback_attempt_started';
       stepName: string;
       attempt: number;
     }
   | {
-      type: "rollback_attempt_completed";
+      type: 'rollback_attempt_completed';
       stepName: string;
       attempt: number;
     }
   | {
-      type: "rollback_attempt_errored";
+      type: 'rollback_attempt_errored';
       stepName: string;
       attempt: number;
       retryDelayMs?: number;
@@ -17707,13 +17440,13 @@ type WorkflowInstanceEvent = {
       };
     }
   | {
-      type: "rollback_completed";
+      type: 'rollback_completed';
     }
   | {
-      type: "rollback_errored";
+      type: 'rollback_errored';
     }
 );
-type WorkflowInstanceEventType = WorkflowInstanceEvent["type"];
+type WorkflowInstanceEventType = WorkflowInstanceEvent['type'];
 /** Options available for a Workflow instance subscription. */
 type WorkflowInstanceSubscribeOptions = {
   /** The value from which to start the subscription. */
@@ -17761,7 +17494,5 @@ declare abstract class WorkflowInstance {
   /**
    * Subscribe to events emitted by this instance.
    */
-  public subscribe(
-    options?: WorkflowInstanceSubscribeOptions,
-  ): Promise<WorkflowInstanceSubscription>;
+  public subscribe(options?: WorkflowInstanceSubscribeOptions): Promise<WorkflowInstanceSubscription>;
 }

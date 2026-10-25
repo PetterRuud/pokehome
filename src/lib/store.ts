@@ -1,17 +1,9 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { get, set, del } from "idb-keyval";
-import type {
-  AnyExportPayload,
-  BoxLayout,
-  DexPrefs,
-  ExportPayload,
-  FormView,
-  GameId,
-  SpriteStyle,
-} from "@/lib/types";
-import { EMPTY_BOX_LAYOUT } from "@/lib/box-layout";
-import { migrateCaughtByGame } from "@/lib/caught-by-game";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { get, set, del } from 'idb-keyval';
+import type { AnyExportPayload, BoxLayout, DexPrefs, ExportPayload, FormView, GameId, SpriteStyle } from '@/lib/types';
+import { EMPTY_BOX_LAYOUT } from '@/lib/box-layout';
+import { migrateCaughtByGame } from '@/lib/caught-by-game';
 
 type DexState = {
   caughtByKey: Record<string, boolean>;
@@ -57,7 +49,7 @@ type DexState = {
   setNationalBoxLayout: (layout: BoxLayout) => void;
   renameNationalBox: (boxId: string, title: string, defaultTitle: string) => void;
   exportData: () => ExportPayload;
-  importData: (payload: AnyExportPayload, mode: "merge" | "replace") => void;
+  importData: (payload: AnyExportPayload, mode: 'merge' | 'replace') => void;
   resetAll: () => void;
 };
 
@@ -65,17 +57,17 @@ function normalizeBoxLayout(layout?: Partial<BoxLayout> | null): BoxLayout {
   return {
     // Custom box order removed — keep empty for backup compatibility.
     order: [],
-    titles: layout?.titles && typeof layout.titles === "object" ? { ...layout.titles } : {},
+    titles: layout?.titles && typeof layout.titles === 'object' ? { ...layout.titles } : {},
   };
 }
 
-const FORM_VIEWS: FormView[] = ["default", "shiny", "alpha", "mega", "gmax", "regional"];
-const SPRITE_STYLES: SpriteStyle[] = ["pixel", "home"];
+const FORM_VIEWS: FormView[] = ['default', 'shiny', 'alpha', 'mega', 'gmax', 'regional'];
+const SPRITE_STYLES: SpriteStyle[] = ['pixel', 'home'];
 
 const defaultPrefs: DexPrefs = {
   notificationsEnabled: false,
-  formView: "default",
-  spriteStyle: "pixel",
+  formView: 'default',
+  spriteStyle: 'pixel',
 };
 
 type LegacyPrefs = Partial<DexPrefs> & {
@@ -92,22 +84,21 @@ function migrateFormView(prefs?: LegacyPrefs | null): FormView {
   // Legacy multi-toggle prefs → single view. Old default had several on → All.
   const active = (
     [
-      prefs?.showShiny ? "shiny" : null,
-      prefs?.showAlpha ? "alpha" : null,
-      prefs?.showMega ? "mega" : null,
-      prefs?.showGmax ? "gmax" : null,
+      prefs?.showShiny ? 'shiny' : null,
+      prefs?.showAlpha ? 'alpha' : null,
+      prefs?.showMega ? 'mega' : null,
+      prefs?.showGmax ? 'gmax' : null,
     ] as const
-  ).filter((v): v is "shiny" | "alpha" | "mega" | "gmax" => v != null);
+  ).filter((v): v is 'shiny' | 'alpha' | 'mega' | 'gmax' => v != null);
   if (active.length === 1) return active[0];
-  return "default";
+  return 'default';
 }
 
 function normalizePrefs(prefs?: LegacyPrefs | null): DexPrefs {
   return {
     notificationsEnabled: prefs?.notificationsEnabled ?? false,
     formView: migrateFormView(prefs),
-    spriteStyle:
-      prefs?.spriteStyle && SPRITE_STYLES.includes(prefs.spriteStyle) ? prefs.spriteStyle : "pixel",
+    spriteStyle: prefs?.spriteStyle && SPRITE_STYLES.includes(prefs.spriteStyle) ? prefs.spriteStyle : 'pixel',
   };
 }
 
@@ -128,12 +119,12 @@ function migrateV1Status(statusByKey: Record<string, string> | undefined): Recor
   const out: Record<string, boolean> = {};
   if (!statusByKey) return out;
   for (const [key, status] of Object.entries(statusByKey)) {
-    if (status === "caught" || status === "lv100") out[key] = true;
+    if (status === 'caught' || status === 'lv100') out[key] = true;
   }
   return out;
 }
 
-function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "version" | "exportedAt"> {
+function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'version' | 'exportedAt'> {
   if (payload.version === 5) {
     return {
       caughtByKey: payload.caughtByKey ?? {},
@@ -213,10 +204,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "versio
   };
 }
 
-function mergeGameCaught(
-  a: Record<GameId, Record<string, boolean>>,
-  b: Record<GameId, Record<string, boolean>>,
-) {
+function mergeGameCaught(a: Record<GameId, Record<string, boolean>>, b: Record<GameId, Record<string, boolean>>) {
   const out: Record<GameId, Record<string, boolean>> = { ...a };
   for (const [gameId, map] of Object.entries(b)) {
     out[gameId] = { ...out[gameId], ...map };
@@ -382,9 +370,7 @@ export const useDexStore = create<DexState>()(
         set((s) => {
           const has = s.claimedGiftIds.includes(id);
           return {
-            claimedGiftIds: has
-              ? s.claimedGiftIds.filter((x) => x !== id)
-              : [...s.claimedGiftIds, id],
+            claimedGiftIds: has ? s.claimedGiftIds.filter((x) => x !== id) : [...s.claimedGiftIds, id],
           };
         }),
       markGiftsSeen: (ids) =>
@@ -434,11 +420,11 @@ export const useDexStore = create<DexState>()(
         }
         const next = normalizeImport(payload);
         const cloudTime =
-          "exportedAt" in payload && typeof payload.exportedAt === "string"
+          'exportedAt' in payload && typeof payload.exportedAt === 'string'
             ? payload.exportedAt
             : new Date().toISOString();
         set((s) => {
-          if (mode === "replace") {
+          if (mode === 'replace') {
             return { ...next, localUpdatedAt: cloudTime };
           }
           return {
@@ -453,9 +439,7 @@ export const useDexStore = create<DexState>()(
             lastSeenGiftIds: Array.from(new Set([...s.lastSeenGiftIds, ...next.lastSeenGiftIds])),
             prefs: normalizePrefs({ ...s.prefs, ...next.prefs }),
             nationalBoxLayout:
-              Object.keys(next.nationalBoxLayout.titles).length > 0
-                ? next.nationalBoxLayout
-                : s.nationalBoxLayout,
+              Object.keys(next.nationalBoxLayout.titles).length > 0 ? next.nationalBoxLayout : s.nationalBoxLayout,
             localUpdatedAt: new Date().toISOString(),
           };
         });
@@ -477,7 +461,7 @@ export const useDexStore = create<DexState>()(
         }),
     }),
     {
-      name: "pokehome-dex",
+      name: 'pokehome-dex',
       storage: idbStorage,
       version: 8,
       migrate: (persisted: unknown, fromVersion) => {
@@ -563,17 +547,17 @@ export const useDexStore = create<DexState>()(
 );
 
 const DATA_KEYS = [
-  "caughtByKey",
-  "shinyByKey",
-  "alphaByKey",
-  "megaByKey",
-  "gmaxByKey",
-  "regionalByKey",
-  "caughtByGame",
-  "claimedGiftIds",
-  "lastSeenGiftIds",
-  "prefs",
-  "nationalBoxLayout",
+  'caughtByKey',
+  'shinyByKey',
+  'alphaByKey',
+  'megaByKey',
+  'gmaxByKey',
+  'regionalByKey',
+  'caughtByGame',
+  'claimedGiftIds',
+  'lastSeenGiftIds',
+  'prefs',
+  'nationalBoxLayout',
 ] as const;
 
 /** Bump localUpdatedAt whenever dex data changes (skips cloud apply which sets it explicitly). */

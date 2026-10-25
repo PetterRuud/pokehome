@@ -1,5 +1,5 @@
-import { getGameGroups } from "@/lib/games";
-import { trainerTipsById, type GameTips } from "@/data/trainer-tips";
+import { getGameGroups } from '@/lib/games';
+import { trainerTipsById, type GameTips } from '@/data/trainer-tips';
 
 export type TipFamily = {
   id: string;
@@ -11,7 +11,7 @@ export type TipFamily = {
 
 /** Stable family slug from groupShort (`Z-A` → `za`, `SwSh` → `swsh`). */
 export function tipFamilyId(groupShort: string): string {
-  return groupShort.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  return groupShort.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
 export function getTipFamilies(): TipFamily[] {
@@ -33,5 +33,5 @@ export function getTips(id: string): GameTips | undefined {
 
 export function getDefaultTipFamilyId(): string {
   const families = getTipFamilies();
-  return families.find((f) => f.hasTips)?.id ?? families[0]?.id ?? "za";
+  return families.find((f) => f.hasTips)?.id ?? families[0]?.id ?? 'za';
 }

@@ -1,5 +1,5 @@
-import gamesData from "@/data/games.json";
-import type { GameDex, GameId } from "@/lib/types";
+import gamesData from '@/data/games.json';
+import type { GameDex, GameId } from '@/lib/types';
 
 export type GameGroup = {
   name: string;
@@ -10,8 +10,8 @@ export type GameGroup = {
 
 export function getGames(): GameDex[] {
   const games = gamesData.games as GameDex[];
-  const go = games.filter((g) => g.id === "go");
-  const rest = games.filter((g) => g.id !== "go");
+  const go = games.filter((g) => g.id === 'go');
+  const rest = games.filter((g) => g.id !== 'go');
   return [...rest, ...go];
 }
 
@@ -22,9 +22,7 @@ export function getGame(id: GameId): GameDex | undefined {
 /** Whether a national dex species appears in a game / DLC Pokédex. */
 export function gameHasSpecies(game: GameDex, nationalId: number): boolean {
   const key = `n${nationalId}`;
-  return game.boxes.some((box) =>
-    box.slots.some((slot) => slot.id === nationalId || slot.key === key),
-  );
+  return game.boxes.some((box) => box.slots.some((slot) => slot.id === nationalId || slot.key === key));
 }
 
 export type GameSpeciesNav = {
@@ -97,4 +95,4 @@ export function getGameGroupsForSpecies(nationalId: number): GameGroup[] {
     .filter((group) => group.games.length > 0);
 }
 
-export { LEGACY_GAME_ID_MAP, migrateCaughtByGame } from "@/lib/caught-by-game";
+export { LEGACY_GAME_ID_MAP, migrateCaughtByGame } from '@/lib/caught-by-game';

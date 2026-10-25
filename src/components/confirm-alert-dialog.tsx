@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 
 export type ConfirmRequest = {
   title: string;
@@ -39,7 +39,7 @@ export function ConfirmAlertDialog({
               onOpenChange(false);
             }}
           >
-            {request?.confirmLabel ?? "Confirm"}
+            {request?.confirmLabel ?? 'Confirm'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,10 +1,10 @@
-import type { GameId } from "@/lib/types";
+import type { GameId } from '@/lib/types';
 
 /** Legacy merged game ids → first/main split id. */
 export const LEGACY_GAME_ID_MAP: Record<string, GameId> = {
-  swsh: "swsh-galar",
-  sv: "sv-paldea",
-  za: "za-lumiose",
+  swsh: 'swsh-galar',
+  sv: 'sv-paldea',
+  za: 'za-lumiose',
 };
 
 export function migrateCaughtByGame(

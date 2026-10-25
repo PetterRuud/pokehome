@@ -1,16 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Item, ItemActions, ItemContent, ItemGroup, ItemTitle } from "@/components/ui/item";
-import { EvolutionChart } from "@/components/evolution-chart";
-import { PokemonSprite } from "@/components/pokemon-sprite";
-import { getEvolutionChain, getPokemonSummary } from "@/server/pokemon";
-import { useDexStore } from "@/lib/store";
-import { canGmax, canMega, canRegional } from "@/lib/form-variants";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Switch } from '@/components/ui/switch';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Item, ItemActions, ItemContent, ItemGroup, ItemTitle } from '@/components/ui/item';
+import { EvolutionChart } from '@/components/evolution-chart';
+import { PokemonSprite } from '@/components/pokemon-sprite';
+import { getEvolutionChain, getPokemonSummary } from '@/server/pokemon';
+import { useDexStore } from '@/lib/store';
+import { canGmax, canMega, canRegional } from '@/lib/form-variants';
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -20,15 +20,15 @@ import {
   SparklesIcon,
   EyeIcon,
   ZapIcon,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { gameHasSpecies, gameNeighbors, getGame, getGameGroupsForSpecies } from "@/lib/games";
-import type { GameId } from "@/lib/types";
-import nationalDex from "@/data/national-dex.json";
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { gameHasSpecies, gameNeighbors, getGame, getGameGroupsForSpecies } from '@/lib/games';
+import type { GameId } from '@/lib/types';
+import nationalDex from '@/data/national-dex.json';
 
 type PokemonSearch = {
   /** Opened from a game dex — drives back link + adjacent order. */
-  from?: "games";
+  from?: 'games';
   game?: GameId;
 };
 
@@ -51,13 +51,11 @@ function nationalNeighbors(id: number) {
   };
 }
 
-export const Route = createFileRoute("/pokemon/$id")({
+export const Route = createFileRoute('/pokemon/$id')({
   validateSearch: (search: Record<string, unknown>): PokemonSearch => {
     const game =
-      typeof search.game === "string" && search.game.length > 0 && getGame(search.game)
-        ? search.game
-        : undefined;
-    if (search.from === "games" && game) return { from: "games", game };
+      typeof search.game === 'string' && search.game.length > 0 && getGame(search.game) ? search.game : undefined;
+    if (search.from === 'games' && game) return { from: 'games', game };
     return {};
   },
   loader: async ({ params }) => {
@@ -84,10 +82,7 @@ function PokemonPending() {
 
 function PokemonError() {
   const search = Route.useSearch();
-  const dexSearch =
-    search.from === "games" && search.game
-      ? { tab: "games" as const, game: search.game }
-      : undefined;
+  const dexSearch = search.from === 'games' && search.game ? { tab: 'games' as const, game: search.game } : undefined;
 
   return (
     <div className="mx-auto flex max-w-md flex-col gap-3 py-12 text-center">
@@ -124,12 +119,11 @@ function PokemonPage() {
   const hasGmax = canGmax(summary.id);
   const hasRegional = canRegional(summary.id);
 
-  const fromGame = search.from === "games" && search.game ? getGame(search.game) : undefined;
+  const fromGame = search.from === 'games' && search.game ? getGame(search.game) : undefined;
   const inGameOrder = Boolean(fromGame && gameHasSpecies(fromGame, summary.id));
-  const { prev, next } =
-    inGameOrder && fromGame ? gameNeighbors(fromGame, summary.id) : nationalNeighbors(summary.id);
+  const { prev, next } = inGameOrder && fromGame ? gameNeighbors(fromGame, summary.id) : nationalNeighbors(summary.id);
   const navSearch = fromGame ? search : undefined;
-  const dexSearch = fromGame ? { tab: "games" as const, game: fromGame.id } : undefined;
+  const dexSearch = fromGame ? { tab: 'games' as const, game: fromGame.id } : undefined;
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -154,26 +148,20 @@ function PokemonPage() {
               id={summary.id}
               style={spriteStyle}
               shiny={shiny}
-              variant={mega ? "mega" : gmax ? "gmax" : regional ? "regional" : "default"}
+              variant={mega ? 'mega' : gmax ? 'gmax' : regional ? 'regional' : 'default'}
               slug={summary.slug}
               width={160}
               height={160}
               loading="eager"
-              className={cn("size-36 sm:size-40", (alpha || gmax) && "scale-110")}
+              className={cn('size-36 sm:size-40', (alpha || gmax) && 'scale-110')}
             />
             <div className="text-center">
-              <p className="text-xs text-muted-foreground">
-                #{String(summary.id).padStart(4, "0")}
-              </p>
+              <p className="text-xs text-muted-foreground">#{String(summary.id).padStart(4, '0')}</p>
               <h1 className="text-xl font-bold">{summary.name}</h1>
-              {summary.genus ? (
-                <p className="text-sm text-muted-foreground">{summary.genus}</p>
-              ) : null}
+              {summary.genus ? <p className="text-sm text-muted-foreground">{summary.genus}</p> : null}
             </div>
             <div className="flex flex-wrap justify-center gap-1">
-              <Badge variant={caught ? "default" : "outline"}>
-                {caught ? "Caught" : "Missing"}
-              </Badge>
+              <Badge variant={caught ? 'default' : 'outline'}>{caught ? 'Caught' : 'Missing'}</Badge>
               {shiny ? (
                 <Badge variant="secondary">
                   <SparklesIcon data-icon="inline-start" className="text-amber-500" />
@@ -209,9 +197,7 @@ function PokemonPage() {
         </Card>
 
         <div className="flex min-w-0 flex-1 flex-col gap-4">
-          {summary.flavor ? (
-            <p className="text-sm leading-relaxed text-muted-foreground">{summary.flavor}</p>
-          ) : null}
+          {summary.flavor ? <p className="text-sm leading-relaxed text-muted-foreground">{summary.flavor}</p> : null}
 
           <Card>
             <CardHeader>
@@ -225,11 +211,7 @@ function PokemonPage() {
                     <ItemTitle>Caught</ItemTitle>
                   </ItemContent>
                   <ItemActions>
-                    <Switch
-                      checked={caught}
-                      onCheckedChange={(v) => setCaught(key, v)}
-                      aria-label="Caught"
-                    />
+                    <Switch checked={caught} onCheckedChange={(v) => setCaught(key, v)} aria-label="Caught" />
                   </ItemActions>
                 </Item>
                 <Item variant="outline" size="sm">
@@ -240,11 +222,7 @@ function PokemonPage() {
                     </ItemTitle>
                   </ItemContent>
                   <ItemActions>
-                    <Switch
-                      checked={shiny}
-                      onCheckedChange={(v) => setShiny(key, v)}
-                      aria-label="Shiny"
-                    />
+                    <Switch checked={shiny} onCheckedChange={(v) => setShiny(key, v)} aria-label="Shiny" />
                   </ItemActions>
                 </Item>
                 <Item variant="outline" size="sm">
@@ -255,11 +233,7 @@ function PokemonPage() {
                     </ItemTitle>
                   </ItemContent>
                   <ItemActions>
-                    <Switch
-                      checked={alpha}
-                      onCheckedChange={(v) => setAlpha(key, v)}
-                      aria-label="Alpha"
-                    />
+                    <Switch checked={alpha} onCheckedChange={(v) => setAlpha(key, v)} aria-label="Alpha" />
                   </ItemActions>
                 </Item>
                 {hasMega ? (
@@ -271,11 +245,7 @@ function PokemonPage() {
                       </ItemTitle>
                     </ItemContent>
                     <ItemActions>
-                      <Switch
-                        checked={mega}
-                        onCheckedChange={(v) => setMega(key, v)}
-                        aria-label="Mega"
-                      />
+                      <Switch checked={mega} onCheckedChange={(v) => setMega(key, v)} aria-label="Mega" />
                     </ItemActions>
                   </Item>
                 ) : null}
@@ -288,11 +258,7 @@ function PokemonPage() {
                       </ItemTitle>
                     </ItemContent>
                     <ItemActions>
-                      <Switch
-                        checked={gmax}
-                        onCheckedChange={(v) => setGmax(key, v)}
-                        aria-label="Gigantamax"
-                      />
+                      <Switch checked={gmax} onCheckedChange={(v) => setGmax(key, v)} aria-label="Gigantamax" />
                     </ItemActions>
                   </Item>
                 ) : null}
@@ -305,11 +271,7 @@ function PokemonPage() {
                       </ItemTitle>
                     </ItemContent>
                     <ItemActions>
-                      <Switch
-                        checked={regional}
-                        onCheckedChange={(v) => setRegional(key, v)}
-                        aria-label="Regional"
-                      />
+                      <Switch checked={regional} onCheckedChange={(v) => setRegional(key, v)} aria-label="Regional" />
                     </ItemActions>
                   </Item>
                 ) : null}
@@ -335,7 +297,7 @@ function PokemonPage() {
                           <ItemContent>
                             <ItemTitle>
                               {game.name}
-                              {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
+                              {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
                             </ItemTitle>
                           </ItemContent>
                           <ItemActions>
@@ -360,20 +322,15 @@ function PokemonPage() {
 
       <div className="flex w-full flex-col gap-4">
         <Separator />
-        <PokemonAdjacentNav
-          prev={prev}
-          next={next}
-          search={navSearch}
-          className="w-full justify-between"
-        />
+        <PokemonAdjacentNav prev={prev} next={next} search={navSearch} className="w-full justify-between" />
       </div>
     </div>
   );
 }
 
 function formatNavNumber(entry: { id: number; entryNumber?: number }) {
-  if (entry.entryNumber != null) return `#${String(entry.entryNumber).padStart(3, "0")}`;
-  return `#${String(entry.id).padStart(4, "0")}`;
+  if (entry.entryNumber != null) return `#${String(entry.entryNumber).padStart(3, '0')}`;
+  return `#${String(entry.id).padStart(4, '0')}`;
 }
 
 function PokemonAdjacentNav({
@@ -388,10 +345,7 @@ function PokemonAdjacentNav({
   className?: string;
 }) {
   return (
-    <nav
-      className={cn("flex flex-wrap items-center justify-end gap-2", className)}
-      aria-label="Adjacent Pokémon"
-    >
+    <nav className={cn('flex flex-wrap items-center justify-end gap-2', className)} aria-label="Adjacent Pokémon">
       {prev ? (
         <Button
           variant="outline"
@@ -401,8 +355,7 @@ function PokemonAdjacentNav({
         >
           <ChevronLeftIcon data-icon="inline-start" />
           <span>
-            <span className="text-muted-foreground tabular-nums">{formatNavNumber(prev)}</span>{" "}
-            {prev.name}
+            <span className="text-muted-foreground tabular-nums">{formatNavNumber(prev)}</span> {prev.name}
           </span>
         </Button>
       ) : null}
@@ -410,13 +363,12 @@ function PokemonAdjacentNav({
         <Button
           variant="outline"
           size="sm"
-          className={cn(!prev && "ms-auto")}
+          className={cn(!prev && 'ms-auto')}
           render={<Link to="/pokemon/$id" params={{ id: String(next.id) }} search={search} />}
           nativeButton={false}
         >
           <span>
-            <span className="text-muted-foreground tabular-nums">{formatNavNumber(next)}</span>{" "}
-            {next.name}
+            <span className="text-muted-foreground tabular-nums">{formatNavNumber(next)}</span> {next.name}
           </span>
           <ChevronRightIcon data-icon="inline-end" />
         </Button>

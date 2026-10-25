@@ -1,24 +1,24 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import { Separator } from "@/components/ui/separator";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { GameLogo } from "@/components/game-logo";
-import { DonutCalculator } from "@/components/donut-calculator";
-import { berryDisplayName, berrySpriteUrl } from "@/lib/berries";
-import { getDefaultTipFamilyId, getTipFamilies, getTips } from "@/lib/trainer-tips";
-import type { TipBerry, TipBlock, TipRecipe, TipSection } from "@/data/trainer-tips";
-import { ExternalLinkIcon } from "lucide-react";
+import { createFileRoute } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
+import { Separator } from '@/components/ui/separator';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { GameLogo } from '@/components/game-logo';
+import { DonutCalculator } from '@/components/donut-calculator';
+import { berryDisplayName, berrySpriteUrl } from '@/lib/berries';
+import { getDefaultTipFamilyId, getTipFamilies, getTips } from '@/lib/trainer-tips';
+import type { TipBerry, TipBlock, TipRecipe, TipSection } from '@/data/trainer-tips';
+import { ExternalLinkIcon } from 'lucide-react';
 
 type TipsSearch = {
   game?: string;
 };
 
-export const Route = createFileRoute("/tips")({
+export const Route = createFileRoute('/tips')({
   validateSearch: (search: Record<string, unknown>): TipsSearch => {
     const families = getTipFamilies();
-    const raw = typeof search.game === "string" && search.game.length > 0 ? search.game : undefined;
+    const raw = typeof search.game === 'string' && search.game.length > 0 ? search.game : undefined;
     const game = raw && families.some((f) => f.id === raw) ? raw : undefined;
     return game ? { game } : {};
   },
@@ -36,7 +36,7 @@ function TipsPage() {
   useEffect(() => {
     if (search.game === gameId) return;
     void navigate({
-      to: "/tips",
+      to: '/tips',
       search: { game: gameId },
       replace: true,
     });
@@ -44,7 +44,7 @@ function TipsPage() {
 
   function selectGame(id: string) {
     void navigate({
-      to: "/tips",
+      to: '/tips',
       search: { game: id },
       replace: true,
     });
@@ -89,13 +89,13 @@ function TipsPage() {
           <EmptyHeader>
             <EmptyTitle>No tips yet</EmptyTitle>
             <EmptyDescription>
-              Nothing curated for {family?.name ?? "this game"} yet. Check back later.
+              Nothing curated for {family?.name ?? 'this game'} yet. Check back later.
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <div className="flex flex-col gap-8">
-          {gameId === "za" ? <DonutCalculator /> : null}
+          {gameId === 'za' ? <DonutCalculator /> : null}
           {tips.sections.map((section) => (
             <TipSectionView key={section.title} section={section} />
           ))}
@@ -103,7 +103,7 @@ function TipsPage() {
             <div className="flex flex-col gap-4">
               <Separator />
               <p className="text-xs text-muted-foreground">
-                Curated from{" "}
+                Curated from{' '}
                 <a
                   href={tips.sourceUrl}
                   target="_blank"
@@ -113,7 +113,7 @@ function TipsPage() {
                   Game8 donut recipes
                   <ExternalLinkIcon data-icon="inline-end" aria-hidden />
                 </a>
-                {" · "}
+                {' · '}
                 <a
                   href="https://game8.co/games/Pokemon-Legends-Z-A/archives/563812"
                   target="_blank"
@@ -123,7 +123,7 @@ function TipsPage() {
                   special donuts
                   <ExternalLinkIcon data-icon="inline-end" aria-hidden />
                 </a>
-                {" · "}
+                {' · '}
                 <a
                   href="https://game8.co/games/Pokemon-Legends-Z-A/archives/570326"
                   target="_blank"
@@ -154,11 +154,11 @@ function TipSectionView({ section }: { section: TipSection }) {
 }
 
 function TipBlockView({ block }: { block: TipBlock }) {
-  if (block.type === "text") {
+  if (block.type === 'text') {
     return <p className="text-sm text-muted-foreground">{block.body}</p>;
   }
 
-  if (block.type === "bullets") {
+  if (block.type === 'bullets') {
     return (
       <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm text-muted-foreground">
         {block.items.map((item) => (
@@ -189,7 +189,7 @@ function RecipeRow({ recipe }: { recipe: TipRecipe }) {
       {recipe.label ? <p className="text-sm font-semibold leading-snug">{recipe.label}</p> : null}
       <div className="flex flex-wrap items-center gap-2">
         {recipe.ingredients.map((berry, i) => (
-          <BerryChip key={`${berry.id}-${berry.optional ? "opt" : i}`} berry={berry} />
+          <BerryChip key={`${berry.id}-${berry.optional ? 'opt' : i}`} berry={berry} />
         ))}
       </div>
       {recipe.note ? <p className="text-xs text-muted-foreground">{recipe.note}</p> : null}
@@ -200,15 +200,15 @@ function RecipeRow({ recipe }: { recipe: TipRecipe }) {
 function BerryChip({ berry }: { berry: TipBerry }) {
   const name = berryDisplayName(berry);
   return (
-    <Badge variant={berry.optional ? "ghost" : "outline"} title={name}>
+    <Badge variant={berry.optional ? 'ghost' : 'outline'} title={name}>
       <img
         src={berrySpriteUrl(berry.id, { hyper: berry.hyper })}
         alt=""
-        style={berry.hyper ? undefined : { imageRendering: "pixelated" }}
+        style={berry.hyper ? undefined : { imageRendering: 'pixelated' }}
         loading="lazy"
       />
       ×{berry.count} {capitalize(berry.id)}
-      {berry.optional ? " ?" : ""}
+      {berry.optional ? ' ?' : ''}
     </Badge>
   );
 }

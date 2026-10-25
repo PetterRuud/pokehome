@@ -1,5 +1,5 @@
-import { HYPER_BERRY_IDS, hyperBerryFlavorScore, type HyperBerryId } from "@/lib/berries";
-import { trainerTipsById, type TipBerry, type TipRecipe } from "@/data/trainer-tips";
+import { HYPER_BERRY_IDS, hyperBerryFlavorScore, type HyperBerryId } from '@/lib/berries';
+import { trainerTipsById, type TipBerry, type TipRecipe } from '@/data/trainer-tips';
 
 /** Min total flavor score for each donut ★ (Bulbapedia / Game8). */
 export const DONUT_STAR_FLAVOR: Record<1 | 2 | 3 | 4 | 5, number> = {
@@ -24,7 +24,7 @@ export type StarDonutSuggestion = {
   ingredients: TipBerry[];
 };
 
-export type MixGoal = "stars" | "shiny" | "farm" | "cheap" | "early" | "mid" | "late";
+export type MixGoal = 'stars' | 'shiny' | 'farm' | 'cheap' | 'early' | 'mid' | 'late';
 
 export type TipMixSuggestion = {
   goal: MixGoal;
@@ -37,8 +37,8 @@ export type TipMixSuggestion = {
 
 /** Hyper berries that can stand in for each other in portal recipes. */
 const HYPER_SUBSTITUTES: Record<string, string[]> = {
-  coba: ["rindo"],
-  rindo: ["coba"],
+  coba: ['rindo'],
+  rindo: ['coba'],
 };
 
 /** Full Mega Dimension Hyper Berry inventory list, sorted by name. */
@@ -59,7 +59,7 @@ export function getSpecialDonutRecipes(): TipRecipe[] {
   if (!tips) return [];
   for (const section of tips.sections) {
     for (const block of section.blocks) {
-      if (block.type === "recipes" && block.title === "Special donuts (legendary portals)") {
+      if (block.type === 'recipes' && block.title === 'Special donuts (legendary portals)') {
         return block.recipes.filter((r) => Boolean(r.label));
       }
     }
@@ -86,10 +86,7 @@ function satisfyNeed(pool: Record<string, number>, id: string, need: number): nu
 }
 
 /** How many of this berry you can apply, counting known substitutes. */
-export function availableIncludingSubstitutes(
-  inventory: Record<string, number>,
-  id: string,
-): number {
+export function availableIncludingSubstitutes(inventory: Record<string, number>, id: string): number {
   let n = Math.max(0, inventory[id] ?? 0);
   for (const alt of HYPER_SUBSTITUTES[id] ?? []) {
     n += Math.max(0, inventory[alt] ?? 0);
@@ -97,10 +94,7 @@ export function availableIncludingSubstitutes(
   return n;
 }
 
-export function checkDonutRecipe(
-  inventory: Record<string, number>,
-  recipe: TipRecipe,
-): DonutCheckResult {
+export function checkDonutRecipe(inventory: Record<string, number>, recipe: TipRecipe): DonutCheckResult {
   const pool: Record<string, number> = {};
   for (const [id, n] of Object.entries(inventory)) {
     pool[id] = Math.max(0, Math.floor(n) || 0);
@@ -129,8 +123,8 @@ export function checkDonutRecipe(
 
 /** Short label for selects (before ·). */
 export function donutShortLabel(recipe: TipRecipe): string {
-  const label = recipe.label ?? "Donut";
-  const cut = label.indexOf(" · ");
+  const label = recipe.label ?? 'Donut';
+  const cut = label.indexOf(' · ');
   return cut >= 0 ? label.slice(0, cut) : label;
 }
 
@@ -196,16 +190,13 @@ export function suggestDonutForStars(
     // Can't stay "safe" with abundant berries — take highest flavor left.
     if (!chosen) {
       chosen = [...available].sort(
-        (a, b) =>
-          hyperBerryFlavorScore(b) - hyperBerryFlavorScore(a) || (pool[b] ?? 0) - (pool[a] ?? 0),
+        (a, b) => hyperBerryFlavorScore(b) - hyperBerryFlavorScore(a) || (pool[b] ?? 0) - (pool[a] ?? 0),
       )[0]!;
     }
 
     // Still impossible even with best remaining density.
     if (maxFlavor * slotsLeft < need && hyperBerryFlavorScore(chosen) < maxFlavor) {
-      chosen = [...available].sort(
-        (a, b) => hyperBerryFlavorScore(b) - hyperBerryFlavorScore(a),
-      )[0]!;
+      chosen = [...available].sort((a, b) => hyperBerryFlavorScore(b) - hyperBerryFlavorScore(a))[0]!;
     }
 
     picks.push(chosen);
@@ -221,9 +212,7 @@ export function suggestDonutForStars(
     .map(([id, count]) => ({ id, count, hyper: true as const }))
     .sort(
       (a, b) =>
-        b.count - a.count ||
-        hyperBerryFlavorScore(b.id) - hyperBerryFlavorScore(a.id) ||
-        a.id.localeCompare(b.id),
+        b.count - a.count || hyperBerryFlavorScore(b.id) - hyperBerryFlavorScore(a.id) || a.id.localeCompare(b.id),
     );
 
   return {
@@ -241,7 +230,7 @@ function recipesFromTips(sectionTitle: string, blockTitle: string): TipRecipe[] 
   for (const section of tips.sections) {
     if (section.title !== sectionTitle) continue;
     for (const block of section.blocks) {
-      if (block.type === "recipes" && block.title === blockTitle) {
+      if (block.type === 'recipes' && block.title === blockTitle) {
         return block.recipes;
       }
     }
@@ -249,30 +238,28 @@ function recipesFromTips(sectionTitle: string, blockTitle: string): TipRecipe[] 
   return [];
 }
 
-function stageFromNote(note?: string): "early" | "mid" | "late" | null {
+function stageFromNote(note?: string): 'early' | 'mid' | 'late' | null {
   if (!note) return null;
-  const head = note.split("·")[0]?.trim().toLowerCase() ?? "";
-  if (head.startsWith("early")) return "early";
-  if (head.startsWith("mid")) return "mid";
-  if (head.startsWith("late")) return "late";
+  const head = note.split('·')[0]?.trim().toLowerCase() ?? '';
+  if (head.startsWith('early')) return 'early';
+  if (head.startsWith('mid')) return 'mid';
+  if (head.startsWith('late')) return 'late';
   return null;
 }
 
 /** Tip recipes for shiny / farm / cheap / story-stage goals. */
-export function getTipRecipesForGoal(goal: Exclude<MixGoal, "stars">): TipRecipe[] {
+export function getTipRecipesForGoal(goal: Exclude<MixGoal, 'stars'>): TipRecipe[] {
   switch (goal) {
-    case "shiny":
-      return recipesFromTips("Shiny & Alpha hunting", "Sweet donuts");
-    case "farm":
-      return recipesFromTips("Item & berry farming", "Sour donuts");
-    case "cheap":
-      return recipesFromTips("Item & berry farming", "Cheap berry-farm donut");
-    case "early":
-    case "mid":
-    case "late":
-      return recipesFromTips("Extra story donuts", "More mixes by stage").filter(
-        (r) => stageFromNote(r.note) === goal,
-      );
+    case 'shiny':
+      return recipesFromTips('Shiny & Alpha hunting', 'Sweet donuts');
+    case 'farm':
+      return recipesFromTips('Item & berry farming', 'Sour donuts');
+    case 'cheap':
+      return recipesFromTips('Item & berry farming', 'Cheap berry-farm donut');
+    case 'early':
+    case 'mid':
+    case 'late':
+      return recipesFromTips('Extra story donuts', 'More mixes by stage').filter((r) => stageFromNote(r.note) === goal);
   }
 }
 
@@ -305,7 +292,7 @@ function tipRecipeFit(
  */
 export function suggestTipMix(
   inventory: Record<string, number>,
-  goal: Exclude<MixGoal, "stars">,
+  goal: Exclude<MixGoal, 'stars'>,
 ): TipMixSuggestion | null {
   const recipes = getTipRecipesForGoal(goal);
   if (recipes.length === 0) return null;

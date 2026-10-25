@@ -1,7 +1,7 @@
-import { createServerFn } from "@tanstack/react-start";
-import { auth } from "@clerk/tanstack-react-start/server";
-import { getWorkerEnv } from "@/lib/cloudflare";
-import type { AnyExportPayload, ExportPayload } from "@/lib/types";
+import { createServerFn } from '@tanstack/react-start';
+import { auth } from '@clerk/tanstack-react-start/server';
+import { getWorkerEnv } from '@/lib/cloudflare';
+import type { AnyExportPayload, ExportPayload } from '@/lib/types';
 
 export type CloudSnapshot = {
   payload: ExportPayload;
@@ -9,7 +9,7 @@ export type CloudSnapshot = {
 };
 
 function isExportPayload(value: unknown): value is ExportPayload {
-  if (!value || typeof value !== "object") return false;
+  if (!value || typeof value !== 'object') return false;
   const v = value as AnyExportPayload;
   return v.version === 5;
 }
@@ -17,7 +17,7 @@ function isExportPayload(value: unknown): value is ExportPayload {
 async function requireUserId(): Promise<string> {
   const { userId, isAuthenticated } = await auth();
   if (!isAuthenticated || !userId) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
   return userId;
 }
@@ -25,42 +25,40 @@ async function requireUserId(): Promise<string> {
 async function requireDb() {
   const env = await getWorkerEnv();
   if (!env?.DB) {
-    throw new Error("D1 database not bound");
+    throw new Error('D1 database not bound');
   }
   return env.DB;
 }
 
-export const getCloudSnapshot = createServerFn({ method: "GET" }).handler(
-  async (): Promise<CloudSnapshot | null> => {
-    const userId = await requireUserId();
-    const db = await requireDb();
-    const row = await db
-      .prepare("SELECT payload, updated_at FROM dex_snapshots WHERE user_id = ?")
-      .bind(userId)
-      .first<{ payload: string; updated_at: string }>();
+export const getCloudSnapshot = createServerFn({ method: 'GET' }).handler(async (): Promise<CloudSnapshot | null> => {
+  const userId = await requireUserId();
+  const db = await requireDb();
+  const row = await db
+    .prepare('SELECT payload, updated_at FROM dex_snapshots WHERE user_id = ?')
+    .bind(userId)
+    .first<{ payload: string; updated_at: string }>();
 
-    if (!row) return null;
+  if (!row) return null;
 
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(row.payload);
-    } catch {
-      return null;
-    }
-    if (!isExportPayload(parsed)) return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(row.payload);
+  } catch {
+    return null;
+  }
+  if (!isExportPayload(parsed)) return null;
 
-    return { payload: parsed, updatedAt: row.updated_at };
-  },
-);
+  return { payload: parsed, updatedAt: row.updated_at };
+});
 
-export const putCloudSnapshot = createServerFn({ method: "POST" })
+export const putCloudSnapshot = createServerFn({ method: 'POST' })
   .validator((data: { payload: ExportPayload; updatedAt: string }) => data)
   .handler(async ({ data }): Promise<{ updatedAt: string }> => {
     const userId = await requireUserId();
     const db = await requireDb();
 
     if (!isExportPayload(data.payload)) {
-      throw new Error("Invalid snapshot payload");
+      throw new Error('Invalid snapshot payload');
     }
 
     const updatedAt = data.updatedAt || new Date().toISOString();

@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { get, set, del } from "idb-keyval";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { get, set, del } from 'idb-keyval';
 
 type HyperBerryState = {
   counts: Record<string, number>;
@@ -36,7 +36,7 @@ export const useHyperBerryStore = create<HyperBerryState>()(
       clearAll: () => set({ counts: {} }),
     }),
     {
-      name: "pokehome-hyper-berries",
+      name: 'pokehome-hyper-berries',
       storage: idbStorage,
       partialize: (s) => ({ counts: s.counts }),
     },

@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useMemo, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Field,
   FieldContent,
@@ -19,11 +19,11 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "@/components/ui/field";
-import { canGmax, canMega, canRegional } from "@/lib/form-variants";
-import { getGameGroups } from "@/lib/games";
-import type { GameId } from "@/lib/types";
-import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, SparklesIcon, ZapIcon } from "lucide-react";
+} from '@/components/ui/field';
+import { canGmax, canMega, canRegional } from '@/lib/form-variants';
+import { getGameGroups } from '@/lib/games';
+import type { GameId } from '@/lib/types';
+import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
 
 export type AddStatuses = {
   caught: boolean;
@@ -91,15 +91,15 @@ export function applyAddToOptions(
 
 export function summarizeAddOptions(options: AddToOptions): string {
   const parts: string[] = [];
-  if (options.statuses.caught) parts.push("caught");
-  if (options.statuses.shiny) parts.push("shiny");
-  if (options.statuses.alpha) parts.push("alpha");
-  if (options.statuses.mega) parts.push("mega");
-  if (options.statuses.gmax) parts.push("gmax");
-  if (options.statuses.regional) parts.push("regional");
-  if (options.gameIds.length === 1) parts.push("1 game");
+  if (options.statuses.caught) parts.push('caught');
+  if (options.statuses.shiny) parts.push('shiny');
+  if (options.statuses.alpha) parts.push('alpha');
+  if (options.statuses.mega) parts.push('mega');
+  if (options.statuses.gmax) parts.push('gmax');
+  if (options.statuses.regional) parts.push('regional');
+  if (options.gameIds.length === 1) parts.push('1 game');
   else if (options.gameIds.length > 1) parts.push(`${options.gameIds.length} games`);
-  return parts.length ? parts.join(" · ") : "nothing selected";
+  return parts.length ? parts.join(' · ') : 'nothing selected';
 }
 
 const STATUS_OPTIONS: {
@@ -108,12 +108,12 @@ const STATUS_OPTIONS: {
   icon: typeof CheckIcon;
   iconClassName?: string;
 }[] = [
-  { key: "caught", label: "Caught", icon: CheckIcon },
-  { key: "shiny", label: "Shiny", icon: SparklesIcon, iconClassName: "text-amber-500" },
-  { key: "alpha", label: "Alpha", icon: EyeIcon, iconClassName: "text-red-500" },
-  { key: "mega", label: "Mega", icon: ZapIcon, iconClassName: "text-violet-500" },
-  { key: "gmax", label: "Gigantamax", icon: ExpandIcon, iconClassName: "text-rose-500" },
-  { key: "regional", label: "Regional", icon: GlobeIcon, iconClassName: "text-sky-500" },
+  { key: 'caught', label: 'Caught', icon: CheckIcon },
+  { key: 'shiny', label: 'Shiny', icon: SparklesIcon, iconClassName: 'text-amber-500' },
+  { key: 'alpha', label: 'Alpha', icon: EyeIcon, iconClassName: 'text-red-500' },
+  { key: 'mega', label: 'Mega', icon: ZapIcon, iconClassName: 'text-violet-500' },
+  { key: 'gmax', label: 'Gigantamax', icon: ExpandIcon, iconClassName: 'text-rose-500' },
+  { key: 'regional', label: 'Regional', icon: GlobeIcon, iconClassName: 'text-sky-500' },
 ];
 
 export function AddToDialogButton({
@@ -166,19 +166,17 @@ export function AddToDialogButton({
     setOpen(false);
   }
 
-  const countLabel = selectedCount === 1 ? "1 Pokémon" : `${selectedCount} Pokémon`;
+  const countLabel = selectedCount === 1 ? '1 Pokémon' : `${selectedCount} Pokémon`;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<Button size="sm" disabled={disabled || selectedCount === 0} />}>
-        Add
-      </DialogTrigger>
+      <DialogTrigger render={<Button size="sm" disabled={disabled || selectedCount === 0} />}>Add</DialogTrigger>
       <DialogContent className="sm:max-w-md" showCloseButton>
         <DialogHeader>
           <DialogTitle>Add to living dex</DialogTitle>
           <DialogDescription>
-            Choose what to mark for {countLabel}. Status updates the national dex; games also mark
-            those origin Pokédexes.
+            Choose what to mark for {countLabel}. Status updates the national dex; games also mark those origin
+            Pokédexes.
           </DialogDescription>
         </DialogHeader>
 
@@ -209,9 +207,7 @@ export function AddToDialogButton({
 
           <FieldSet>
             <FieldLegend>Also mark in games</FieldLegend>
-            <FieldDescription>
-              Optional — tick any origin dexes these Pokémon should count toward
-            </FieldDescription>
+            <FieldDescription>Optional — tick any origin dexes these Pokémon should count toward</FieldDescription>
             <div className="flex flex-col gap-4">
               {gameGroups.map((group) => (
                 <div key={group.name} className="flex flex-col gap-2">
@@ -227,12 +223,9 @@ export function AddToDialogButton({
                             onCheckedChange={(v) => toggleGame(game.id, Boolean(v))}
                           />
                           <FieldContent className="min-w-0">
-                            <FieldLabel
-                              htmlFor={id}
-                              className="flex min-w-0 items-center gap-1.5 font-normal"
-                            >
+                            <FieldLabel htmlFor={id} className="flex min-w-0 items-center gap-1.5 font-normal">
                               <span className="truncate">{game.name}</span>
-                              {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
+                              {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
                             </FieldLabel>
                           </FieldContent>
                         </Field>

@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { useDexStore } from "@/lib/store";
-import { categorizeGifts } from "@/lib/gifts";
-import { loadGiftFeed } from "@/server/gifts";
+import { useEffect } from 'react';
+import { toast } from 'sonner';
+import { useDexStore } from '@/lib/store';
+import { categorizeGifts } from '@/lib/gifts';
+import { loadGiftFeed } from '@/server/gifts';
 
 export function GiftNotifier() {
   const hydrated = useDexStore((s) => s.hydrated);
@@ -26,20 +26,18 @@ export function GiftNotifier() {
         if (newOnes.length === 0) return;
 
         const title =
-          newOnes.length === 1
-            ? `Mystery gift: ${newOnes[0]!.name}`
-            : `${newOnes.length} active mystery gifts`;
+          newOnes.length === 1 ? `Mystery gift: ${newOnes[0]!.name}` : `${newOnes.length} active mystery gifts`;
 
         const body =
           newOnes.length === 1
-            ? `${newOnes[0]!.games.join(", ")} · ${newOnes[0]!.method}`
-            : newOnes.map((g) => g.name).join(", ");
+            ? `${newOnes[0]!.games.join(', ')} · ${newOnes[0]!.method}`
+            : newOnes.map((g) => g.name).join(', ');
 
         toast(title, { description: body });
 
-        if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+        if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
           try {
-            new Notification(title, { body, tag: "pokehome-gifts" });
+            new Notification(title, { body, tag: 'pokehome-gifts' });
           } catch {
             // ignore
           }

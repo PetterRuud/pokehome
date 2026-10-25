@@ -1,4 +1,4 @@
-import type { BoxLayout, DexBox } from "@/lib/types";
+import type { BoxLayout, DexBox } from '@/lib/types';
 
 export const EMPTY_BOX_LAYOUT: BoxLayout = {
   order: [],

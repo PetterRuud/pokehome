@@ -1,5 +1,5 @@
-import nationalDex from "@/data/national-dex.json";
-import type { DexSlot, MysteryGift } from "@/lib/types";
+import nationalDex from '@/data/national-dex.json';
+import type { DexSlot, MysteryGift } from '@/lib/types';
 
 /** UTC day boundary so SSR (Worker) and the browser agree on gift windows. */
 function startOfDayUtc(d: Date) {
@@ -41,8 +41,8 @@ export function resolveGiftPokemon(gift: { pokemon?: string; pokemonId?: number 
   const name = gift.pokemon;
   if (!name) return null;
   const cleaned = name
-    .replace(/[★☆✦✧*]/g, "")
-    .replace(/\s*\(.*?\)\s*/g, " ")
+    .replace(/[★☆✦✧*]/g, '')
+    .replace(/\s*\(.*?\)\s*/g, ' ')
     .trim()
     .toLowerCase();
   if (!cleaned) return null;
@@ -50,8 +50,8 @@ export function resolveGiftPokemon(gift: { pokemon?: string; pokemonId?: number 
 }
 
 export function giftSourceLabel(gift: MysteryGift): string | null {
-  if (gift.sourceUrl?.includes("serebii")) return "Serebii";
-  if (gift.sourceUrl?.includes("pokemon.com")) return "Pokémon";
+  if (gift.sourceUrl?.includes('serebii')) return 'Serebii';
+  if (gift.sourceUrl?.includes('pokemon.com')) return 'Pokémon';
   return null;
 }
 

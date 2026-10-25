@@ -1,14 +1,14 @@
-import type { MysteryGift } from "@/lib/types";
-import { fetchSerebiiGiftFeed, healGift } from "@/lib/serebii-feed";
-import fallbackGifts from "@/data/mystery-gifts.json";
+import type { MysteryGift } from '@/lib/types';
+import { fetchSerebiiGiftFeed, healGift } from '@/lib/serebii-feed';
+import fallbackGifts from '@/data/mystery-gifts.json';
 
 /** Bump when cache shape / invalidation rules change (clears sticky fallback). */
-export const GIFT_CACHE_KEY = "https://pokehome.internal/mystery-gifts-v3";
-export const GIFT_CACHE_META_KEY = "https://pokehome.internal/mystery-gifts-meta-v3";
+export const GIFT_CACHE_KEY = 'https://pokehome.internal/mystery-gifts-v3';
+export const GIFT_CACHE_META_KEY = 'https://pokehome.internal/mystery-gifts-meta-v3';
 
 export type GiftFeedPayload = {
   gifts: MysteryGift[];
-  source: "serebii" | "fallback";
+  source: 'serebii' | 'fallback';
   fetchedAt: string;
   error?: string;
 };
@@ -33,7 +33,7 @@ async function cacheGet(key: string): Promise<string | null> {
   const local = memoryGet(key);
   if (local) return local;
   try {
-    const cache = await caches.open("pokehome-gifts");
+    const cache = await caches.open('pokehome-gifts');
     const hit = await cache.match(key);
     if (!hit) return null;
     const text = await hit.text();
@@ -47,13 +47,13 @@ async function cacheGet(key: string): Promise<string | null> {
 async function cachePut(key: string, value: string, maxAgeSeconds: number) {
   memorySet(key, value, maxAgeSeconds * 1000);
   try {
-    const cache = await caches.open("pokehome-gifts");
+    const cache = await caches.open('pokehome-gifts');
     await cache.put(
       key,
       new Response(value, {
         headers: {
-          "content-type": "application/json",
-          "cache-control": `public, max-age=${maxAgeSeconds}`,
+          'content-type': 'application/json',
+          'cache-control': `public, max-age=${maxAgeSeconds}`,
         },
       }),
     );
@@ -76,11 +76,11 @@ export async function refreshGiftFeed(): Promise<GiftFeedPayload> {
   try {
     const gifts = await fetchSerebiiGiftFeed();
     if (gifts.length === 0) {
-      throw new Error("Serebii feed returned 0 events");
+      throw new Error('Serebii feed returned 0 events');
     }
     const payload: GiftFeedPayload = {
       gifts,
-      source: "serebii",
+      source: 'serebii',
       fetchedAt: new Date().toISOString(),
     };
     await cachePut(GIFT_CACHE_KEY, JSON.stringify(payload), 60 * 60 * 36);
@@ -93,17 +93,17 @@ export async function refreshGiftFeed(): Promise<GiftFeedPayload> {
   } catch (err) {
     const cached = await readCachedGiftFeed();
     // Prefer a previous live Serebii cache over curated/static fallback.
-    if (cached?.source === "serebii" && cached.gifts.length) {
+    if (cached?.source === 'serebii' && cached.gifts.length) {
       return healFeed({
         ...cached,
-        error: err instanceof Error ? err.message : "Refresh failed",
+        error: err instanceof Error ? err.message : 'Refresh failed',
       });
     }
     const payload: GiftFeedPayload = {
       gifts: fallbackGifts as MysteryGift[],
-      source: "fallback",
+      source: 'fallback',
       fetchedAt: new Date().toISOString(),
-      error: err instanceof Error ? err.message : "Refresh failed",
+      error: err instanceof Error ? err.message : 'Refresh failed',
     };
     // Short TTL so we keep retrying Serebii instead of sticking on fallback.
     await cachePut(GIFT_CACHE_KEY, JSON.stringify(payload), 60 * 5);
@@ -121,7 +121,7 @@ function healFeed(payload: GiftFeedPayload): GiftFeedPayload {
 export async function getGiftFeed(): Promise<GiftFeedPayload> {
   const cached = await readCachedGiftFeed();
   // Live cache hits are fine; always retry when we only have fallback.
-  if (cached?.source === "serebii" && cached.gifts.length) {
+  if (cached?.source === 'serebii' && cached.gifts.length) {
     return healFeed(cached);
   }
   return healFeed(await refreshGiftFeed());

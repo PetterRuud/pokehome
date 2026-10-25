@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
-import { categorizeGifts } from "@/lib/gifts";
-import { useDexStore } from "@/lib/store";
-import { loadGiftFeed } from "@/server/gifts";
-import type { MysteryGift } from "@/lib/types";
+import { useEffect, useMemo, useState } from 'react';
+import { categorizeGifts } from '@/lib/gifts';
+import { useDexStore } from '@/lib/store';
+import { loadGiftFeed } from '@/server/gifts';
+import type { MysteryGift } from '@/lib/types';
 
 export type ActiveGiftStats = {
   /** Active + ending-soon (claimable now). */

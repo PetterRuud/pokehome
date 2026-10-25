@@ -1,9 +1,9 @@
-import { useAuth } from "@clerk/tanstack-react-start";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getCloudSnapshot, putCloudSnapshot } from "@/server/sync";
-import { useDexStore } from "@/lib/store";
+import { useAuth } from '@clerk/tanstack-react-start';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getCloudSnapshot, putCloudSnapshot } from '@/server/sync';
+import { useDexStore } from '@/lib/store';
 
-export type SyncStatus = "idle" | "syncing" | "ok" | "error";
+export type SyncStatus = 'idle' | 'syncing' | 'ok' | 'error';
 
 export type CloudSyncState = {
   status: SyncStatus;
@@ -23,7 +23,7 @@ export function useCloudSync(): CloudSyncState {
   const exportData = useDexStore((s) => s.exportData);
   const importData = useDexStore((s) => s.importData);
 
-  const [status, setStatus] = useState<SyncStatus>("idle");
+  const [status, setStatus] = useState<SyncStatus>('idle');
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,11 +32,11 @@ export function useCloudSync(): CloudSyncState {
   const syncing = useRef(false);
 
   const runSync = useCallback(
-    async (reason: "login" | "manual" | "auto") => {
+    async (reason: 'login' | 'manual' | 'auto') => {
       if (!isSignedIn || !userId || !hydrated) return;
       if (syncing.current) return;
       syncing.current = true;
-      setStatus("syncing");
+      setStatus('syncing');
       setError(null);
 
       try {
@@ -49,35 +49,35 @@ export function useCloudSync(): CloudSyncState {
             data: { payload, updatedAt: localAt },
           });
           setLastSyncedAt(updatedAt);
-          setStatus("ok");
+          setStatus('ok');
           return;
         }
 
         if (cloud.updatedAt > localAt) {
-          importData(cloud.payload, "replace");
+          importData(cloud.payload, 'replace');
           useDexStore.setState({ localUpdatedAt: cloud.updatedAt });
           setLastSyncedAt(cloud.updatedAt);
-          setStatus("ok");
+          setStatus('ok');
           return;
         }
 
-        if (cloud.updatedAt < localAt || reason === "manual") {
+        if (cloud.updatedAt < localAt || reason === 'manual') {
           const payload = exportData();
           const { updatedAt } = await putCloudSnapshot({
             data: { payload, updatedAt: localAt },
           });
           setLastSyncedAt(updatedAt);
-          setStatus("ok");
+          setStatus('ok');
           return;
         }
 
         // Equal timestamps — already in sync
         setLastSyncedAt(cloud.updatedAt);
-        setStatus("ok");
+        setStatus('ok');
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Sync failed";
+        const message = err instanceof Error ? err.message : 'Sync failed';
         setError(message);
-        setStatus("error");
+        setStatus('error');
       } finally {
         syncing.current = false;
       }
@@ -93,7 +93,7 @@ export function useCloudSync(): CloudSyncState {
     }
     if (pulledForUser.current === userId) return;
     pulledForUser.current = userId;
-    void runSync("login");
+    void runSync('login');
   }, [isLoaded, isSignedIn, userId, hydrated, runSync]);
 
   // Debounced push when local data changes after initial pull
@@ -103,7 +103,7 @@ export function useCloudSync(): CloudSyncState {
 
     if (pushTimer.current) clearTimeout(pushTimer.current);
     pushTimer.current = setTimeout(() => {
-      void runSync("auto");
+      void runSync('auto');
     }, 2000);
 
     return () => {
@@ -115,6 +115,6 @@ export function useCloudSync(): CloudSyncState {
     status,
     lastSyncedAt,
     error,
-    syncNow: () => runSync("manual"),
+    syncNow: () => runSync('manual'),
   };
 }

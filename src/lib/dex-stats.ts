@@ -1,4 +1,4 @@
-import type { DexBox } from "@/lib/types";
+import type { DexBox } from '@/lib/types';
 
 function isSlotAvailable(slot: { available?: boolean }) {
   return slot.available !== false;

@@ -1,6 +1,6 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getWorkerEnv } from "@/lib/cloudflare";
-import { fetchEvolutionChainBySpecies } from "@/lib/evolution";
+import { createServerFn } from '@tanstack/react-start';
+import { getWorkerEnv } from '@/lib/cloudflare';
+import { fetchEvolutionChainBySpecies } from '@/lib/evolution';
 
 const memoryCache = new Map<string, { expires: number; value: string }>();
 
@@ -43,7 +43,7 @@ async function writeCache(key: string, value: string) {
   }
 }
 
-export const getEvolutionChain = createServerFn({ method: "GET" })
+export const getEvolutionChain = createServerFn({ method: 'GET' })
   .validator((data: { id: string }) => data)
   .handler(async ({ data }) => {
     const cacheKey = `evo:${data.id}`;
@@ -55,41 +55,37 @@ export const getEvolutionChain = createServerFn({ method: "GET" })
     return chain;
   });
 
-export const getPokemonSummary = createServerFn({ method: "GET" })
+export const getPokemonSummary = createServerFn({ method: 'GET' })
   .validator((data: { id: string }) => data)
   .handler(async ({ data }) => {
     const cacheKey = `species:${data.id}`;
     const cached = await readCache(cacheKey);
     if (cached) return JSON.parse(cached);
 
-    const species = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${data.id}/`).then(
-      async (r) => {
-        if (!r.ok) throw new Error("Not found");
-        return r.json() as Promise<{
-          id: number;
-          name: string;
-          genera: Array<{ genus: string; language: { name: string } }>;
-          flavor_text_entries: Array<{
-            flavor_text: string;
-            language: { name: string };
-          }>;
+    const species = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${data.id}/`).then(async (r) => {
+      if (!r.ok) throw new Error('Not found');
+      return r.json() as Promise<{
+        id: number;
+        name: string;
+        genera: Array<{ genus: string; language: { name: string } }>;
+        flavor_text_entries: Array<{
+          flavor_text: string;
+          language: { name: string };
         }>;
-      },
-    );
+      }>;
+    });
 
-    const genus = species.genera.find((g) => g.language.name === "en")?.genus ?? "";
+    const genus = species.genera.find((g) => g.language.name === 'en')?.genus ?? '';
     const flavor =
-      species.flavor_text_entries
-        .find((f) => f.language.name === "en")
-        ?.flavor_text.replace(/\f|\n|\r/g, " ") ?? "";
+      species.flavor_text_entries.find((f) => f.language.name === 'en')?.flavor_text.replace(/\f|\n|\r/g, ' ') ?? '';
 
     const summary = {
       id: species.id,
       slug: species.name,
       name: species.name
-        .split("-")
+        .split('-')
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" "),
+        .join(' '),
       genus,
       flavor,
       sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${species.id}.png`,

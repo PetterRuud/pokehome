@@ -2,15 +2,15 @@
  * Builds mega / gmax / regional form maps from PokéAPI (form ids + showdown slugs).
  * Run: node scripts/generate-form-variants.mjs
  */
-import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outPath = join(__dirname, "../src/data/form-variants.json");
+const outPath = join(__dirname, '../src/data/form-variants.json');
 
-const REGIONS = ["alola", "galar", "hisui", "paldea"];
-const REGION_RE = new RegExp(`-(${REGIONS.join("|")})(?:-|$)`);
+const REGIONS = ['alola', 'galar', 'hisui', 'paldea'];
+const REGION_RE = new RegExp(`-(${REGIONS.join('|')})(?:-|$)`);
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -24,11 +24,11 @@ function isMegaName(name) {
 }
 
 function isGmaxName(name) {
-  return name.endsWith("-gmax") || name.endsWith("-gigantamax");
+  return name.endsWith('-gmax') || name.endsWith('-gigantamax');
 }
 
 function isRegionalName(name) {
-  if (name.includes("totem") || name.includes("-cap")) return false;
+  if (name.includes('totem') || name.includes('-cap')) return false;
   return REGION_RE.test(name);
 }
 
@@ -39,24 +39,24 @@ function regionalRegion(name) {
 
 /** Prefer the "main" regional form when multiple exist (e.g. darmanitan zen). */
 function regionalRank(apiSlug) {
-  if (apiSlug.endsWith("-standard")) return 0;
-  if (apiSlug.endsWith("-combat-breed")) return 0;
-  if (apiSlug.endsWith("-zen")) return 2;
+  if (apiSlug.endsWith('-standard')) return 0;
+  if (apiSlug.endsWith('-combat-breed')) return 0;
+  if (apiSlug.endsWith('-zen')) return 2;
   if (/-blaze-breed$|-aqua-breed$/.test(apiSlug)) return 1;
   return 0;
 }
 
 /** Showdown dex files use -megax / -megay (no extra hyphen). */
 function showdownSlug(pokeApiSlug) {
-  return pokeApiSlug.replace(/-mega-x$/, "-megax").replace(/-mega-y$/, "-megay");
+  return pokeApiSlug.replace(/-mega-x$/, '-megax').replace(/-mega-y$/, '-megay');
 }
 
 function speciesIdFromUrl(url) {
-  return Number(url.split("/").filter(Boolean).pop());
+  return Number(url.split('/').filter(Boolean).pop());
 }
 
 async function mapWithConcurrency(items, limit, fn) {
-  const results = new Array(items.length);
+  const results = Array.from({ length: items.length });
   let next = 0;
   async function worker() {
     while (next < items.length) {
@@ -69,11 +69,9 @@ async function mapWithConcurrency(items, limit, fn) {
 }
 
 async function main() {
-  console.log("Fetching Pokémon list…");
-  const list = await fetchJson("https://pokeapi.co/api/v2/pokemon?limit=2000");
-  const candidates = list.results.filter(
-    (p) => isMegaName(p.name) || isGmaxName(p.name) || isRegionalName(p.name),
-  );
+  console.log('Fetching Pokémon list…');
+  const list = await fetchJson('https://pokeapi.co/api/v2/pokemon?limit=2000');
+  const candidates = list.results.filter((p) => isMegaName(p.name) || isGmaxName(p.name) || isRegionalName(p.name));
   console.log(`Found ${candidates.length} mega/gmax/regional forms`);
 
   /** @type {Record<string, any>} */
@@ -102,7 +100,7 @@ async function main() {
         return;
       }
       const preferNew =
-        (apiSlug.endsWith("-mega") && !existing.apiSlug.endsWith("-mega")) ||
+        (apiSlug.endsWith('-mega') && !existing.apiSlug.endsWith('-mega')) ||
         (/mega-x$|megax$/.test(apiSlug) && /mega-y$|megay$/.test(existing.apiSlug));
       if (preferNew) {
         mega[key] = {
@@ -173,7 +171,7 @@ async function main() {
   };
 
   mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, JSON.stringify(payload, null, 2) + "\n");
+  writeFileSync(outPath, JSON.stringify(payload, null, 2) + '\n');
   console.log(
     `Wrote ${outPath} (${payload.megaCount} mega, ${payload.gmaxCount} gmax, ${payload.regionalCount} regional)`,
   );

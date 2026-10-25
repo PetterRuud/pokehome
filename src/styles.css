@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/oxanium";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/oxanium';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,9 +39,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --font-sans: "Poppins", ui-sans-serif, sans-serif, system-ui;
+  --font-sans: 'Poppins', ui-sans-serif, sans-serif, system-ui;
   --font-serif: Georgia, serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
   --radius: 0.875rem;
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -94,9 +94,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --font-sans: "Poppins", ui-sans-serif, sans-serif, system-ui;
+  --font-sans: 'Poppins', ui-sans-serif, sans-serif, system-ui;
   --font-serif: Georgia, serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
   --radius: 0.625rem;
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -148,7 +148,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: "Oxanium Variable", sans-serif;
+  --font-sans: 'Oxanium Variable', sans-serif;
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
@@ -183,7 +183,7 @@
     @apply min-h-dvh font-sans antialiased bg-background text-foreground;
   }
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role='button']:not(:disabled) {
     cursor: pointer;
   }
 }

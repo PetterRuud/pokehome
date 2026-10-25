@@ -1,11 +1,11 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { SignInButton, UserButton, useAuth } from "@clerk/tanstack-react-start";
-import { GiftIcon, Grid2x2Icon, HomeIcon, LightbulbIcon, SettingsIcon } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { PokeballIcon, PokeballLogo } from "@/components/pokeball-logo";
-import { useActiveGiftStats } from "@/hooks/use-active-gift-count";
+import { Link, useRouterState } from '@tanstack/react-router';
+import { SignInButton, UserButton, useAuth } from '@clerk/tanstack-react-start';
+import { GiftIcon, Grid2x2Icon, HomeIcon, LightbulbIcon, SettingsIcon } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { PokeballIcon, PokeballLogo } from '@/components/pokeball-logo';
+import { useActiveGiftStats } from '@/hooks/use-active-gift-count';
 import {
   Sidebar,
   SidebarContent,
@@ -21,25 +21,25 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
 const mainNav = [
-  { to: "/", label: "Home", icon: HomeIcon },
-  { to: "/dex", label: "Dex", icon: Grid2x2Icon },
-  { to: "/tips", label: "Tips", icon: LightbulbIcon },
-  { to: "/gifts", label: "Gifts", icon: GiftIcon },
+  { to: '/', label: 'Home', icon: HomeIcon },
+  { to: '/dex', label: 'Dex', icon: Grid2x2Icon },
+  { to: '/tips', label: 'Tips', icon: LightbulbIcon },
+  { to: '/gifts', label: 'Gifts', icon: GiftIcon },
 ] as const;
 
 const settingsNav = {
-  to: "/settings",
-  label: "Settings",
+  to: '/settings',
+  label: 'Settings',
   icon: SettingsIcon,
 } as const;
 
 const nav = [...mainNav, settingsNav] as const;
 
 function isActivePath(pathname: string, to: string) {
-  return to === "/" ? pathname === "/" : pathname.startsWith(to);
+  return to === '/' ? pathname === '/' : pathname.startsWith(to);
 }
 
 function HeaderAuth() {
@@ -58,13 +58,7 @@ function HeaderAuth() {
   );
 }
 
-function AppSidebar({
-  activeGiftCount,
-  unclaimedGiftCount,
-}: {
-  activeGiftCount: number;
-  unclaimedGiftCount: number;
-}) {
+function AppSidebar({ activeGiftCount, unclaimedGiftCount }: { activeGiftCount: number; unclaimedGiftCount: number }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { isMobile, setOpenMobile } = useSidebar();
   const giftBadge = unclaimedGiftCount > 0 ? unclaimedGiftCount : activeGiftCount;
@@ -100,7 +94,7 @@ function AppSidebar({
             <SidebarMenu>
               {nav.map((item) => {
                 const Icon = item.icon;
-                const isGifts = item.to === "/gifts";
+                const isGifts = item.to === '/gifts';
                 return (
                   <SidebarMenuItem key={item.to}>
                     <SidebarMenuButton
@@ -120,9 +114,7 @@ function AppSidebar({
                       <Icon />
                       <span>{item.label}</span>
                     </SidebarMenuButton>
-                    {isGifts && giftBadge > 0 ? (
-                      <SidebarMenuBadge>{giftBadge}</SidebarMenuBadge>
-                    ) : null}
+                    {isGifts && giftBadge > 0 ? <SidebarMenuBadge>{giftBadge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 );
               })}
@@ -151,11 +143,7 @@ export function AppShell({
       <SidebarInset>
         <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background/90 px-4 backdrop-blur md:px-6">
           <SidebarTrigger className="-ml-1" />
-          <Link
-            to="/"
-            className="shrink-0 text-foreground hover:opacity-90 md:hidden"
-            aria-label="Pokehome home"
-          >
+          <Link to="/" className="shrink-0 text-foreground hover:opacity-90 md:hidden" aria-label="Pokehome home">
             <PokeballLogo size="sm" showWordmark={false} />
           </Link>
           {progress ? (

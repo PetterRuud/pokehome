@@ -1,7 +1,7 @@
-import formVariants from "@/data/form-variants.json";
-import type { DexBox, FormView } from "@/lib/types";
+import formVariants from '@/data/form-variants.json';
+import type { DexBox, FormView } from '@/lib/types';
 
-export type FormRegion = "alola" | "galar" | "hisui" | "paldea";
+export type FormRegion = 'alola' | 'galar' | 'hisui' | 'paldea';
 
 export type FormVariantEntry = {
   formId: number;
@@ -15,8 +15,9 @@ export type FormVariantEntry = {
 
 const megaByNational = formVariants.mega as Record<string, FormVariantEntry>;
 const gmaxByNational = formVariants.gmax as Record<string, FormVariantEntry>;
-const regionalByNational = (formVariants as { regional?: Record<string, FormVariantEntry> })
-  .regional as Record<string, FormVariantEntry> | undefined;
+const regionalByNational = (formVariants as { regional?: Record<string, FormVariantEntry> }).regional as
+  | Record<string, FormVariantEntry>
+  | undefined;
 
 export function getMegaVariant(nationalId: number): FormVariantEntry | undefined {
   return megaByNational[String(nationalId)];
@@ -30,10 +31,7 @@ export function getRegionalVariant(nationalId: number): FormVariantEntry | undef
   return regionalByNational?.[String(nationalId)];
 }
 
-export function getRegionalForRegion(
-  nationalId: number,
-  region: FormRegion,
-): FormVariantEntry | undefined {
+export function getRegionalForRegion(nationalId: number, region: FormRegion): FormVariantEntry | undefined {
   const entry = getRegionalVariant(nationalId);
   if (!entry) return undefined;
   if (entry.region === region) return entry;
@@ -67,8 +65,8 @@ export function regionalSpeciesCount(): number {
 
 /** Narrow boxes to slots that support the active form view (mega/gmax/regional). */
 export function filterBoxesForFormView(boxes: DexBox[], formView: FormView): DexBox[] {
-  if (formView !== "mega" && formView !== "gmax" && formView !== "regional") return boxes;
-  const eligible = formView === "mega" ? canMega : formView === "gmax" ? canGmax : canRegional;
+  if (formView !== 'mega' && formView !== 'gmax' && formView !== 'regional') return boxes;
+  const eligible = formView === 'mega' ? canMega : formView === 'gmax' ? canGmax : canRegional;
 
   return boxes
     .map((box) => ({
@@ -80,26 +78,23 @@ export function filterBoxesForFormView(boxes: DexBox[], formView: FormView): Dex
 
 export function formSpriteSlug(
   nationalId: number,
-  variant: "mega" | "gmax" | "regional",
+  variant: 'mega' | 'gmax' | 'regional',
   fallbackSlug?: string,
 ): string | undefined {
   const entry =
-    variant === "mega"
+    variant === 'mega'
       ? getMegaVariant(nationalId)
-      : variant === "gmax"
+      : variant === 'gmax'
         ? getGmaxVariant(nationalId)
         : getRegionalVariant(nationalId);
   return entry?.slug ?? (fallbackSlug ? `${fallbackSlug}-${variant}` : undefined);
 }
 
-export function formIdsForSprite(
-  nationalId: number,
-  variant: "mega" | "gmax" | "regional",
-): number[] {
+export function formIdsForSprite(nationalId: number, variant: 'mega' | 'gmax' | 'regional'): number[] {
   const entry =
-    variant === "mega"
+    variant === 'mega'
       ? getMegaVariant(nationalId)
-      : variant === "gmax"
+      : variant === 'gmax'
         ? getGmaxVariant(nationalId)
         : getRegionalVariant(nationalId);
   if (!entry) return [];

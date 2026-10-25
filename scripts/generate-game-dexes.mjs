@@ -3,31 +3,31 @@
  * Counts match Pokémon HOME mobile regional dexes (mythicals/events excluded where HOME does).
  * Run: node scripts/generate-game-dexes.mjs
  */
-import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outPath = join(__dirname, "../src/data/games.json");
-const formVariantsPath = join(__dirname, "../src/data/form-variants.json");
+const outPath = join(__dirname, '../src/data/games.json');
+const formVariantsPath = join(__dirname, '../src/data/form-variants.json');
 const BOX_SIZE = 30;
 
 /** Pokedex slug → regional form region used in that dex. */
 const REGION_BY_POKEDEX = {
-  galar: "galar",
-  "isle-of-armor": "galar",
-  "crown-tundra": "galar",
-  hisui: "hisui",
-  paldea: "paldea",
-  kitakami: "paldea",
-  blueberry: "paldea",
+  galar: 'galar',
+  'isle-of-armor': 'galar',
+  'crown-tundra': 'galar',
+  hisui: 'hisui',
+  paldea: 'paldea',
+  kitakami: 'paldea',
+  blueberry: 'paldea',
 };
 
 const REGION_PREFIX = {
-  alola: "Alolan",
-  galar: "Galarian",
-  hisui: "Hisuian",
-  paldea: "Paldean",
+  alola: 'Alolan',
+  galar: 'Galarian',
+  hisui: 'Hisuian',
+  paldea: 'Paldean',
 };
 
 /**
@@ -58,165 +58,165 @@ const COMBINED_MEGA_SPECIES = new Set([
 /** @type {GameDef[]} */
 const GAMES = [
   {
-    id: "lgpe",
+    id: 'lgpe',
     name: "Let's Go Pikachu / Eevee",
-    short: "LGPE",
+    short: 'LGPE',
     group: "Let's Go",
-    groupShort: "LGPE",
-    kind: "main",
-    logo: "lgpe",
-    pokedexSlugs: ["letsgo-kanto"],
+    groupShort: 'LGPE',
+    kind: 'main',
+    logo: 'lgpe',
+    pokedexSlugs: ['letsgo-kanto'],
     // HOME Kanto (LGPE): 150 — exclude Mew, Meltan, Melmetal
     excludeIds: [151, 808, 809],
   },
   {
-    id: "frlg",
-    name: "FireRed / LeafGreen",
-    short: "FRLG",
-    group: "FireRed / LeafGreen",
-    groupShort: "FRLG",
-    kind: "main",
-    logo: "frlg",
-    pokedexSlugs: ["kanto"],
+    id: 'frlg',
+    name: 'FireRed / LeafGreen',
+    short: 'FRLG',
+    group: 'FireRed / LeafGreen',
+    groupShort: 'FRLG',
+    kind: 'main',
+    logo: 'frlg',
+    pokedexSlugs: ['kanto'],
     // HOME Kanto (GBA): 150 — exclude Mew
     excludeIds: [151],
   },
   {
-    id: "swsh-galar",
-    name: "Galar Pokédex",
-    short: "Galar",
-    group: "Sword / Shield",
-    groupShort: "SwSh",
-    kind: "main",
-    logo: "swsh",
-    pokedexSlugs: ["galar"],
+    id: 'swsh-galar',
+    name: 'Galar Pokédex',
+    short: 'Galar',
+    group: 'Sword / Shield',
+    groupShort: 'SwSh',
+    kind: 'main',
+    logo: 'swsh',
+    pokedexSlugs: ['galar'],
   },
   {
-    id: "swsh-ioa",
-    name: "Isle of Armor",
-    short: "IoA",
-    group: "Sword / Shield",
-    groupShort: "SwSh",
-    kind: "dlc",
-    logo: "swsh",
-    pokedexSlugs: ["isle-of-armor"],
+    id: 'swsh-ioa',
+    name: 'Isle of Armor',
+    short: 'IoA',
+    group: 'Sword / Shield',
+    groupShort: 'SwSh',
+    kind: 'dlc',
+    logo: 'swsh',
+    pokedexSlugs: ['isle-of-armor'],
     // HOME: 210 — exclude Zarude
     excludeIds: [893],
   },
   {
-    id: "swsh-ct",
-    name: "Crown Tundra",
-    short: "CT",
-    group: "Sword / Shield",
-    groupShort: "SwSh",
-    kind: "dlc",
-    logo: "swsh",
-    pokedexSlugs: ["crown-tundra"],
+    id: 'swsh-ct',
+    name: 'Crown Tundra',
+    short: 'CT',
+    group: 'Sword / Shield',
+    groupShort: 'SwSh',
+    kind: 'dlc',
+    logo: 'swsh',
+    pokedexSlugs: ['crown-tundra'],
   },
   {
-    id: "bdsp",
-    name: "Brilliant Diamond / Shining Pearl",
-    short: "BDSP",
-    group: "BDSP",
-    groupShort: "BDSP",
-    kind: "main",
-    logo: "bdsp",
-    pokedexSlugs: ["original-sinnoh"],
+    id: 'bdsp',
+    name: 'Brilliant Diamond / Shining Pearl',
+    short: 'BDSP',
+    group: 'BDSP',
+    groupShort: 'BDSP',
+    kind: 'main',
+    logo: 'bdsp',
+    pokedexSlugs: ['original-sinnoh'],
     // HOME Sinnoh: 150 — exclude Manaphy
     excludeIds: [490],
   },
   {
-    id: "pla",
-    name: "Legends: Arceus",
-    short: "PLA",
-    group: "Legends: Arceus",
-    groupShort: "PLA",
-    kind: "main",
-    logo: "pla",
-    pokedexSlugs: ["hisui"],
+    id: 'pla',
+    name: 'Legends: Arceus',
+    short: 'PLA',
+    group: 'Legends: Arceus',
+    groupShort: 'PLA',
+    kind: 'main',
+    logo: 'pla',
+    pokedexSlugs: ['hisui'],
   },
   {
-    id: "sv-paldea",
-    name: "Paldea Pokédex",
-    short: "Paldea",
-    group: "Scarlet / Violet",
-    groupShort: "SV",
-    kind: "main",
-    logo: "sv",
-    pokedexSlugs: ["paldea"],
+    id: 'sv-paldea',
+    name: 'Paldea Pokédex',
+    short: 'Paldea',
+    group: 'Scarlet / Violet',
+    groupShort: 'SV',
+    kind: 'main',
+    logo: 'sv',
+    pokedexSlugs: ['paldea'],
   },
   {
-    id: "sv-kitakami",
-    name: "Kitakami Pokédex",
-    short: "Kitakami",
-    group: "Scarlet / Violet",
-    groupShort: "SV",
-    kind: "dlc",
-    logo: "sv",
-    pokedexSlugs: ["kitakami"],
+    id: 'sv-kitakami',
+    name: 'Kitakami Pokédex',
+    short: 'Kitakami',
+    group: 'Scarlet / Violet',
+    groupShort: 'SV',
+    kind: 'dlc',
+    logo: 'sv',
+    pokedexSlugs: ['kitakami'],
   },
   {
-    id: "sv-blueberry",
-    name: "Blueberry Pokédex",
-    short: "Blueberry",
-    group: "Scarlet / Violet",
-    groupShort: "SV",
-    kind: "dlc",
-    logo: "sv",
-    pokedexSlugs: ["blueberry"],
+    id: 'sv-blueberry',
+    name: 'Blueberry Pokédex',
+    short: 'Blueberry',
+    group: 'Scarlet / Violet',
+    groupShort: 'SV',
+    kind: 'dlc',
+    logo: 'sv',
+    pokedexSlugs: ['blueberry'],
     // HOME: 240 — exclude Walking Wake, Iron Leaves, Pecharunt
     excludeIds: [1009, 1010, 1025],
   },
   {
-    id: "za-lumiose",
-    name: "Lumiose Pokédex",
-    short: "Lumiose",
-    group: "Legends: Z-A",
-    groupShort: "Z-A",
-    kind: "main",
-    logo: "za",
-    pokedexSlugs: ["lumiose-city"],
+    id: 'za-lumiose',
+    name: 'Lumiose Pokédex',
+    short: 'Lumiose',
+    group: 'Legends: Z-A',
+    groupShort: 'Z-A',
+    kind: 'main',
+    logo: 'za',
+    pokedexSlugs: ['lumiose-city'],
     // HOME: 230 — exclude Diancie, Mewtwo
     excludeIds: [719, 150],
   },
   {
-    id: "za-hyperspace",
-    name: "Hyperspace Pokédex",
-    short: "Hyperspace",
-    group: "Legends: Z-A",
-    groupShort: "Z-A",
-    kind: "dlc",
-    logo: "za",
-    pokedexSlugs: ["hyperspace"],
+    id: 'za-hyperspace',
+    name: 'Hyperspace Pokédex',
+    short: 'Hyperspace',
+    group: 'Legends: Z-A',
+    groupShort: 'Z-A',
+    kind: 'dlc',
+    logo: 'za',
+    pokedexSlugs: ['hyperspace'],
     // HOME: 131 — exclude Zeraora
     excludeIds: [807],
   },
   {
-    id: "za-mega",
-    name: "Mega Evolution Pokédex",
-    short: "Mega",
-    group: "Legends: Z-A",
-    groupShort: "Z-A",
-    kind: "special",
-    logo: "mega",
+    id: 'za-mega',
+    name: 'Mega Evolution Pokédex',
+    short: 'Mega',
+    group: 'Legends: Z-A',
+    groupShort: 'Z-A',
+    kind: 'special',
+    logo: 'mega',
     pokedexSlugs: [],
-    source: "mega",
+    source: 'mega',
   },
   {
-    id: "go",
-    name: "Pokémon GO",
-    short: "GO",
-    group: "Pokémon GO",
-    groupShort: "GO",
-    kind: "special",
-    logo: "go",
-    pokedexSlugs: ["national"],
+    id: 'go',
+    name: 'Pokémon GO',
+    short: 'GO',
+    group: 'Pokémon GO',
+    groupShort: 'GO',
+    kind: 'special',
+    logo: 'go',
+    pokedexSlugs: ['national'],
     // Mark unreleased species via pogoapi.net released list (still listed in the dex).
-    source: "go",
+    source: 'go',
   },
 ];
 
-const POGO_RELEASED_URL = "https://pogoapi.net/api/v1/released_pokemon.json";
+const POGO_RELEASED_URL = 'https://pogoapi.net/api/v1/released_pokemon.json';
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -226,13 +226,13 @@ async function fetchJson(url) {
 
 function titleCase(slug) {
   return slug
-    .split("-")
+    .split('-')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 function speciesIdFromUrl(url) {
-  return Number(url.split("/").filter(Boolean).pop());
+  return Number(url.split('/').filter(Boolean).pop());
 }
 
 /**
@@ -251,9 +251,7 @@ function resolveRegionalForm(regionalMap, speciesId, region) {
 function toSlot(speciesName, speciesId, entryNumber, regionalForm = null) {
   const spriteId = regionalForm?.formId ?? speciesId;
   const baseName = titleCase(speciesName);
-  const name = regionalForm
-    ? `${REGION_PREFIX[regionalForm.region] ?? ""} ${baseName}`.trim()
-    : baseName;
+  const name = regionalForm ? `${REGION_PREFIX[regionalForm.region] ?? ''} ${baseName}`.trim() : baseName;
   return {
     id: speciesId,
     key: `n${speciesId}`,
@@ -295,10 +293,7 @@ function buildMegaSlots(megaMap, regionalEntries = {}) {
   for (const speciesId of Object.keys(megaMap).map(Number)) {
     const entry = megaMap[String(speciesId)];
     if (!entry) continue;
-    const speciesName = entry.apiSlug.replace(
-      /-(mega(-[xyz])?|megax|megay|megaz|male-mega|female-mega|.*-mega)$/,
-      "",
-    );
+    const speciesName = entry.apiSlug.replace(/-(mega(-[xyz])?|megax|megay|megaz|male-mega|female-mega|.*-mega)$/, '');
     const forms = COMBINED_MEGA_SPECIES.has(speciesId) ? [entry] : [entry, ...(entry.alts ?? [])];
     const lumioseNo = lumiose?.get(speciesId);
     const hyperspaceNo = hyperspace?.get(speciesId);
@@ -338,7 +333,7 @@ function boxify(slots, gameId) {
     boxes.push({
       id: `${gameId}-box-${boxIndex}`,
       title: `Box ${boxIndex}`,
-      rangeLabel: `#${String(first).padStart(3, "0")}–#${String(last).padStart(3, "0")}`,
+      rangeLabel: `#${String(first).padStart(3, '0')}–#${String(last).padStart(3, '0')}`,
       slots: slice,
     });
   }
@@ -370,11 +365,11 @@ async function main() {
   let regionalMap = {};
   let megaMap = {};
   try {
-    const fv = JSON.parse(readFileSync(formVariantsPath, "utf8"));
+    const fv = JSON.parse(readFileSync(formVariantsPath, 'utf8'));
     regionalMap = fv.regional ?? {};
     megaMap = fv.mega ?? {};
   } catch {
-    console.warn("form-variants.json missing — run generate-form-variants first");
+    console.warn('form-variants.json missing — run generate-form-variants first');
   }
 
   const games = [];
@@ -387,10 +382,10 @@ async function main() {
       /** @type {ReturnType<typeof toSlot>[]} */
       let slots;
 
-      if (game.source === "mega") {
+      if (game.source === 'mega') {
         slots = buildMegaSlots(megaMap, {
-          lumiose: entryByGame.get("za-lumiose"),
-          hyperspace: entryByGame.get("za-hyperspace"),
+          lumiose: entryByGame.get('za-lumiose'),
+          hyperspace: entryByGame.get('za-hyperspace'),
         });
         if (slots.length === 0) {
           console.warn(`  skip ${game.id}: no mega forms in form-variants`);
@@ -418,7 +413,7 @@ async function main() {
         });
         if (regionalHits) console.log(`  (${regionalHits} regional forms)`);
 
-        if (game.source === "go") {
+        if (game.source === 'go') {
           const released = await loadGoReleasedIds();
           let unavailable = 0;
           slots = slots.map((slot) => {

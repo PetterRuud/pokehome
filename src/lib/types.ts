@@ -9,7 +9,7 @@ export type DexSlot = {
   /** PokéAPI form id when this slot shows a regional (or other) form. */
   formId?: number;
   formSlug?: string;
-  region?: "alola" | "galar" | "hisui" | "paldea";
+  region?: 'alola' | 'galar' | 'hisui' | 'paldea';
   /**
    * When false, this species is not obtainable in the game yet (e.g. unreleased in Pokémon GO).
    * Omitted / true means available.
@@ -33,7 +33,7 @@ export type GameDex = {
   /** HOME family grouping, e.g. "Sword / Shield" or "Legends: Z-A". */
   group: string;
   groupShort: string;
-  kind: "main" | "dlc" | "special";
+  kind: 'main' | 'dlc' | 'special';
   /** Logo key shared across a family's DLC entries. */
   logo: string;
   pokedexSlugs: string[];
@@ -54,16 +54,16 @@ export type MysteryGift = {
   region: string;
   start: string;
   end: string | null;
-  method: "serial" | "internet" | "in-game" | "code";
+  method: 'serial' | 'internet' | 'in-game' | 'code';
   notes?: string;
   sourceUrl?: string;
 };
 
 /** Which form overlay / sprite mode the national dex grid uses (one at a time). */
-export type FormView = "default" | "shiny" | "alpha" | "mega" | "gmax" | "regional";
+export type FormView = 'default' | 'shiny' | 'alpha' | 'mega' | 'gmax' | 'regional';
 
 /** Pixel battle sprites vs Pokémon HOME 3D-style renders (PokeAPI). */
-export type SpriteStyle = "pixel" | "home";
+export type SpriteStyle = 'pixel' | 'home';
 
 export type DexPrefs = {
   notificationsEnabled: boolean;
@@ -156,9 +156,4 @@ export type ExportPayloadV1 = {
   };
 };
 
-export type AnyExportPayload =
-  | ExportPayload
-  | ExportPayloadV4
-  | ExportPayloadV3
-  | ExportPayloadV2
-  | ExportPayloadV1;
+export type AnyExportPayload = ExportPayload | ExportPayloadV4 | ExportPayloadV3 | ExportPayloadV2 | ExportPayloadV1;

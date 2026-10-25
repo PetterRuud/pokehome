@@ -1,20 +1,20 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { GameLogo } from "@/components/game-logo";
-import { PokeballLogo } from "@/components/pokeball-logo";
-import { useDexStore } from "@/lib/store";
-import { countFlag, countGameProgress, countProgress } from "@/lib/dex-stats";
-import { categorizeGifts } from "@/lib/gifts";
-import { getGames } from "@/lib/games";
-import { loadGiftFeed } from "@/server/gifts";
-import nationalDex from "@/data/national-dex.json";
-import { ArrowRightIcon, CheckIcon, GiftIcon } from "lucide-react";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useMemo } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { GameLogo } from '@/components/game-logo';
+import { PokeballLogo } from '@/components/pokeball-logo';
+import { useDexStore } from '@/lib/store';
+import { countFlag, countGameProgress, countProgress } from '@/lib/dex-stats';
+import { categorizeGifts } from '@/lib/gifts';
+import { getGames } from '@/lib/games';
+import { loadGiftFeed } from '@/server/gifts';
+import nationalDex from '@/data/national-dex.json';
+import { ArrowRightIcon, CheckIcon, GiftIcon } from 'lucide-react';
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   loader: () => loadGiftFeed(),
   component: HomePage,
 });
@@ -97,53 +97,42 @@ function HomePage() {
           <CardTitle>Game dexes</CardTitle>
           <CardDescription>
             {gameStats.length} origin dexes
-            {gamesComplete > 0 ? ` · ${gamesComplete} complete` : ""}
+            {gamesComplete > 0 ? ` · ${gamesComplete} complete` : ''}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           <ul className="flex flex-col gap-3">
-            {gameStats.map(
-              ({ game, caught: gCaught, total: gTotal, percent: gPercent, complete }) => (
-                <li key={game.id}>
-                  <Link
-                    to="/dex"
-                    search={{ tab: "games", game: game.id }}
-                    className="flex flex-col gap-1.5 rounded-lg border border-border px-3 py-2.5 transition hover:border-primary/40 hover:bg-muted/40"
-                  >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <GameLogo
-                        logo={game.logo}
-                        title={game.name}
-                        variant="wordmark"
-                        className="h-6 max-w-30 shrink-0"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-                          <span className="truncate text-sm font-medium">{game.name}</span>
-                          {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
-                          {complete ? (
-                            <Badge variant="secondary">
-                              <CheckIcon data-icon="inline-start" aria-hidden />
-                              Done
-                            </Badge>
-                          ) : null}
-                        </div>
+            {gameStats.map(({ game, caught: gCaught, total: gTotal, percent: gPercent, complete }) => (
+              <li key={game.id}>
+                <Link
+                  to="/dex"
+                  search={{ tab: 'games', game: game.id }}
+                  className="flex flex-col gap-1.5 rounded-lg border border-border px-3 py-2.5 transition hover:border-primary/40 hover:bg-muted/40"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <GameLogo logo={game.logo} title={game.name} variant="wordmark" className="h-6 max-w-30 shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                        <span className="truncate text-sm font-medium">{game.name}</span>
+                        {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
+                        {complete ? (
+                          <Badge variant="secondary">
+                            <CheckIcon data-icon="inline-start" aria-hidden />
+                            Done
+                          </Badge>
+                        ) : null}
                       </div>
-                      <span className="shrink-0 tabular-nums text-xs text-muted-foreground">
-                        {gCaught}/{gTotal}
-                      </span>
                     </div>
-                    <Progress value={gPercent} className="h-1.5" />
-                  </Link>
-                </li>
-              ),
-            )}
+                    <span className="shrink-0 tabular-nums text-xs text-muted-foreground">
+                      {gCaught}/{gTotal}
+                    </span>
+                  </div>
+                  <Progress value={gPercent} className="h-1.5" />
+                </Link>
+              </li>
+            ))}
           </ul>
-          <Button
-            variant="outline"
-            render={<Link to="/dex" search={{ tab: "games" }} />}
-            nativeButton={false}
-          >
+          <Button variant="outline" render={<Link to="/dex" search={{ tab: 'games' }} />} nativeButton={false}>
             Open game dexes
             <ArrowRightIcon data-icon="inline-end" />
           </Button>
@@ -159,20 +148,15 @@ function HomePage() {
           </CardTitle>
           <CardDescription>
             {activeGiftCount === 0
-              ? "No active gifts right now · live feed from Serebii"
+              ? 'No active gifts right now · live feed from Serebii'
               : unclaimedGiftCount > 0
                 ? `${unclaimedGiftCount} unclaimed of ${activeGiftCount} active`
                 : `${activeGiftCount} active · all claimed`}
-            {endingSoon.length > 0 ? ` · ${endingSoon.length} ending soon` : ""}
+            {endingSoon.length > 0 ? ` · ${endingSoon.length} ending soon` : ''}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button
-            variant="outline"
-            render={<Link to="/gifts" />}
-            nativeButton={false}
-            className="w-full"
-          >
+          <Button variant="outline" render={<Link to="/gifts" />} nativeButton={false} className="w-full">
             View gifts
             <ArrowRightIcon data-icon="inline-end" />
           </Button>

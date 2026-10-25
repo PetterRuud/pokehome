@@ -1,16 +1,16 @@
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMemo, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -18,9 +18,9 @@ import {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { berrySpriteUrl, capitalizeBerryId, hyperBerryHowto } from "@/lib/berries";
+} from '@/components/ui/popover';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { berrySpriteUrl, capitalizeBerryId, hyperBerryHowto } from '@/lib/berries';
 import {
   availableIncludingSubstitutes,
   checkDonutRecipe,
@@ -33,31 +33,23 @@ import {
   suggestTipMix,
   type DonutStar,
   type MixGoal,
-} from "@/lib/donut-calculator";
-import { useHyperBerryStore } from "@/lib/hyper-berry-store";
-import { CheckIcon, ChevronDownIcon, InfoIcon, MinusIcon, PlusIcon, XIcon } from "lucide-react";
+} from '@/lib/donut-calculator';
+import { useHyperBerryStore } from '@/lib/hyper-berry-store';
+import { CheckIcon, ChevronDownIcon, InfoIcon, MinusIcon, PlusIcon, XIcon } from 'lucide-react';
 
 const STAR_OPTIONS: DonutStar[] = [1, 2, 3, 4, 5];
 
 const MIX_GOALS: { id: MixGoal; label: string }[] = [
-  { id: "stars", label: "★ Rank" },
-  { id: "shiny", label: "Shiny" },
-  { id: "farm", label: "Farm" },
-  { id: "cheap", label: "Cheap farm" },
-  { id: "early", label: "Early" },
-  { id: "mid", label: "Mid" },
-  { id: "late", label: "Late" },
+  { id: 'stars', label: '★ Rank' },
+  { id: 'shiny', label: 'Shiny' },
+  { id: 'farm', label: 'Farm' },
+  { id: 'cheap', label: 'Cheap farm' },
+  { id: 'early', label: 'Early' },
+  { id: 'mid', label: 'Mid' },
+  { id: 'late', label: 'Late' },
 ];
 
-function BerryCountStepper({
-  id,
-  value,
-  onChange,
-}: {
-  id: string;
-  value: number;
-  onChange: (next: number) => void;
-}) {
+function BerryCountStepper({ id, value, onChange }: { id: string; value: number; onChange: (next: number) => void }) {
   const label = capitalizeBerryId(id);
   return (
     <div className="flex shrink-0 items-center gap-1">
@@ -101,22 +93,13 @@ export function DonutCalculator() {
   const setCount = useHyperBerryStore((s) => s.setCount);
   const clearAll = useHyperBerryStore((s) => s.clearAll);
   const [recipeIndex, setRecipeIndex] = useState(0);
-  const [mixGoal, setMixGoal] = useState<MixGoal>("stars");
+  const [mixGoal, setMixGoal] = useState<MixGoal>('stars');
   const [targetStars, setTargetStars] = useState<DonutStar>(3);
 
   const recipe = recipes[recipeIndex] ?? recipes[0];
-  const result = useMemo(
-    () => (recipe ? checkDonutRecipe(counts, recipe) : null),
-    [counts, recipe],
-  );
-  const starSuggestion = useMemo(
-    () => suggestDonutForStars(counts, targetStars),
-    [counts, targetStars],
-  );
-  const tipSuggestion = useMemo(
-    () => (mixGoal === "stars" ? null : suggestTipMix(counts, mixGoal)),
-    [counts, mixGoal],
-  );
+  const result = useMemo(() => (recipe ? checkDonutRecipe(counts, recipe) : null), [counts, recipe]);
+  const starSuggestion = useMemo(() => suggestDonutForStars(counts, targetStars), [counts, targetStars]);
+  const tipSuggestion = useMemo(() => (mixGoal === 'stars' ? null : suggestTipMix(counts, mixGoal)), [counts, mixGoal]);
 
   if (recipes.length === 0 || !recipe || !result) return null;
 
@@ -125,9 +108,8 @@ export function DonutCalculator() {
       <CardHeader>
         <CardTitle>Portal donut calculator</CardTitle>
         <CardDescription>
-          Track all {berryIds.length} Mega Dimension Hyper Berries (saved in this browser), pick a
-          legendary portal recipe, and see if you can cook it (optional berries ignored; Coba ↔
-          Rindo substitutes count).
+          Track all {berryIds.length} Mega Dimension Hyper Berries (saved in this browser), pick a legendary portal
+          recipe, and see if you can cook it (optional berries ignored; Coba ↔ Rindo substitutes count).
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
@@ -183,11 +165,7 @@ export function DonutCalculator() {
                       </Popover>
                     ) : null}
                   </div>
-                  <BerryCountStepper
-                    id={id}
-                    value={counts[id] ?? 0}
-                    onChange={(next) => setCount(id, next)}
-                  />
+                  <BerryCountStepper id={id} value={counts[id] ?? 0} onChange={(next) => setCount(id, next)} />
                 </li>
               );
             })}
@@ -213,7 +191,7 @@ export function DonutCalculator() {
             ))}
           </ToggleGroup>
 
-          {mixGoal === "stars" ? (
+          {mixGoal === 'stars' ? (
             <>
               <ToggleGroup
                 variant="outline"
@@ -232,34 +210,26 @@ export function DonutCalculator() {
                 ))}
               </ToggleGroup>
               <p className="text-xs text-muted-foreground">
-                Needs ≥{DONUT_STAR_FLAVOR[targetStars]} flavor · prefers berries you have most of
-                (max 8 slots)
+                Needs ≥{DONUT_STAR_FLAVOR[targetStars]} flavor · prefers berries you have most of (max 8 slots)
               </p>
               {starSuggestion.ingredients.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Add berries to your stash first.</p>
               ) : (
                 <>
-                  <Badge
-                    variant={starSuggestion.canMake ? "default" : "destructive"}
-                    className="w-fit"
-                  >
+                  <Badge variant={starSuggestion.canMake ? 'default' : 'destructive'} className="w-fit">
                     {starSuggestion.canMake ? (
                       <CheckIcon data-icon="inline-start" />
                     ) : (
                       <XIcon data-icon="inline-start" />
                     )}
                     {starSuggestion.flavor}/{starSuggestion.targetFlavor} flavor
-                    {starSuggestion.canMake ? "" : " — short"}
+                    {starSuggestion.canMake ? '' : ' — short'}
                   </Badge>
                   <ul className="flex flex-wrap items-center gap-2">
                     {starSuggestion.ingredients.map((berry) => (
                       <Badge key={berry.id} variant="outline">
-                        <img
-                          src={berrySpriteUrl(berry.id, { hyper: true })}
-                          alt=""
-                          loading="lazy"
-                        />
-                        ×{berry.count} {capitalizeBerryId(berry.id)}
+                        <img src={berrySpriteUrl(berry.id, { hyper: true })} alt="" loading="lazy" />×{berry.count}{' '}
+                        {capitalizeBerryId(berry.id)}
                       </Badge>
                     ))}
                   </ul>
@@ -270,15 +240,11 @@ export function DonutCalculator() {
             <>
               <p className="text-xs text-muted-foreground">
                 Best tip recipe for your stash
-                {tipSuggestion.note ? ` · ${tipSuggestion.note}` : ""}
+                {tipSuggestion.note ? ` · ${tipSuggestion.note}` : ''}
               </p>
-              <Badge variant={tipSuggestion.canMake ? "default" : "destructive"} className="w-fit">
-                {tipSuggestion.canMake ? (
-                  <CheckIcon data-icon="inline-start" />
-                ) : (
-                  <XIcon data-icon="inline-start" />
-                )}
-                {tipSuggestion.canMake ? "Can make" : "Missing berries"}
+              <Badge variant={tipSuggestion.canMake ? 'default' : 'destructive'} className="w-fit">
+                {tipSuggestion.canMake ? <CheckIcon data-icon="inline-start" /> : <XIcon data-icon="inline-start" />}
+                {tipSuggestion.canMake ? 'Can make' : 'Missing berries'}
               </Badge>
               <ul className="flex flex-wrap items-center gap-2">
                 {tipSuggestion.ingredients.map((berry) => (
@@ -287,7 +253,7 @@ export function DonutCalculator() {
                       src={berrySpriteUrl(berry.id, { hyper: berry.hyper !== false })}
                       alt=""
                       loading="lazy"
-                      style={berry.hyper === false ? { imageRendering: "pixelated" } : undefined}
+                      style={berry.hyper === false ? { imageRendering: 'pixelated' } : undefined}
                     />
                     ×{berry.count} {capitalizeBerryId(berry.id)}
                   </Badge>
@@ -311,39 +277,22 @@ export function DonutCalculator() {
         <div className="flex flex-col gap-2">
           <Label>Portal recipe</Label>
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button type="button" variant="outline" className="w-full justify-between" />}
-            >
+            <DropdownMenuTrigger render={<Button type="button" variant="outline" className="w-full justify-between" />}>
               <span className="flex min-w-0 items-center gap-2">
                 {recipe.donut ? (
-                  <img
-                    src={donutSpriteUrl(recipe.donut)}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="size-7 shrink-0"
-                  />
+                  <img src={donutSpriteUrl(recipe.donut)} alt="" width={28} height={28} className="size-7 shrink-0" />
                 ) : null}
                 <span className="truncate">{donutShortLabel(recipe)}</span>
               </span>
               <ChevronDownIcon data-icon="inline-end" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="max-h-72 w-(--anchor-width)">
-              <DropdownMenuRadioGroup
-                value={String(recipeIndex)}
-                onValueChange={(v) => setRecipeIndex(Number(v))}
-              >
+              <DropdownMenuRadioGroup value={String(recipeIndex)} onValueChange={(v) => setRecipeIndex(Number(v))}>
                 {recipes.map((r, i) => (
                   <DropdownMenuRadioItem key={r.label ?? i} value={String(i)}>
                     <span className="flex min-w-0 items-center gap-2">
                       {r.donut ? (
-                        <img
-                          src={donutSpriteUrl(r.donut)}
-                          alt=""
-                          width={24}
-                          height={24}
-                          className="size-6 shrink-0"
-                        />
+                        <img src={donutSpriteUrl(r.donut)} alt="" width={24} height={24} className="size-6 shrink-0" />
                       ) : null}
                       <span className="truncate">{donutShortLabel(r)}</span>
                     </span>
@@ -388,11 +337,7 @@ export function DonutCalculator() {
                   <span className="tabular-nums text-muted-foreground">
                     {have}/{berry.count}
                   </span>
-                  {ok ? (
-                    <Badge variant="secondary">OK</Badge>
-                  ) : (
-                    <Badge variant="destructive">need {short}</Badge>
-                  )}
+                  {ok ? <Badge variant="secondary">OK</Badge> : <Badge variant="destructive">need {short}</Badge>}
                 </li>
               );
             })}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const DRAG_THRESHOLD_PX = 8;
 
@@ -46,7 +46,7 @@ export function useDragSelect(onTap?: (key: string) => void) {
 
   const keyFromPoint = useCallback((x: number, y: number) => {
     const el = document.elementFromPoint(x, y);
-    const slot = el?.closest?.("[data-dex-key]") as HTMLElement | null;
+    const slot = el?.closest?.('[data-dex-key]') as HTMLElement | null;
     return slot?.dataset.dexKey ?? null;
   }, []);
 
@@ -54,7 +54,7 @@ export function useDragSelect(onTap?: (key: string) => void) {
     if (e.button !== 0) return;
     // Don't start drag-select from flag buttons / links
     const target = e.target as HTMLElement;
-    if (target.closest("[data-no-drag-select]")) return;
+    if (target.closest('[data-no-drag-select]')) return;
 
     dragRef.current = {
       active: true,
@@ -136,10 +136,10 @@ export function useDragSelect(onTap?: (key: string) => void) {
   // Escape clears selection
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") clear();
+      if (e.key === 'Escape') clear();
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [clear]);
 
   return {

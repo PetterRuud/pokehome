@@ -1,22 +1,14 @@
-import { Link } from "@tanstack/react-router";
-import type { EvoNode } from "@/lib/evolution";
-import type { GameId, SpriteStyle } from "@/lib/types";
-import { PokemonSprite } from "@/components/pokemon-sprite";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
-import { ArrowRightIcon } from "lucide-react";
+import { Link } from '@tanstack/react-router';
+import type { EvoNode } from '@/lib/evolution';
+import type { GameId, SpriteStyle } from '@/lib/types';
+import { PokemonSprite } from '@/components/pokemon-sprite';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Item, ItemContent, ItemTitle } from '@/components/ui/item';
+import { ArrowRightIcon } from 'lucide-react';
 
-type PokemonNavSearch = { from?: "games"; game?: GameId };
+type PokemonNavSearch = { from?: 'games'; game?: GameId };
 
-function Stage({
-  node,
-  spriteStyle,
-  search,
-}: {
-  node: EvoNode;
-  spriteStyle: SpriteStyle;
-  search?: PokemonNavSearch;
-}) {
+function Stage({ node, spriteStyle, search }: { node: EvoNode; spriteStyle: SpriteStyle; search?: PokemonNavSearch }) {
   return (
     <Item
       variant="outline"
@@ -26,9 +18,7 @@ function Stage({
     >
       <PokemonSprite id={node.id} style={spriteStyle} width={80} height={80} className="size-20" />
       <ItemContent className="w-full items-center text-center">
-        <ItemTitle className="w-full justify-center normal-case tracking-normal">
-          {node.name}
-        </ItemTitle>
+        <ItemTitle className="w-full justify-center normal-case tracking-normal">{node.name}</ItemTitle>
       </ItemContent>
     </Item>
   );
@@ -43,15 +33,7 @@ function MethodLabel({ label }: { label: string }) {
   );
 }
 
-function Branch({
-  node,
-  spriteStyle,
-  search,
-}: {
-  node: EvoNode;
-  spriteStyle: SpriteStyle;
-  search?: PokemonNavSearch;
-}) {
+function Branch({ node, spriteStyle, search }: { node: EvoNode; spriteStyle: SpriteStyle; search?: PokemonNavSearch }) {
   if (node.evolvesTo.length === 0) {
     return <Stage node={node} spriteStyle={spriteStyle} search={search} />;
   }

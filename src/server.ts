@@ -1,5 +1,5 @@
-import handler from "@tanstack/react-start/server-entry";
-import { refreshGiftFeed } from "@/lib/gift-cache";
+import handler from '@tanstack/react-start/server-entry';
+import { refreshGiftFeed } from '@/lib/gift-cache';
 
 type ScheduledController = { scheduledTime: number; cron: string };
 type ScheduledEnv = Record<string, unknown>;
@@ -13,7 +13,7 @@ export default {
         .then((payload) => {
           console.log(
             JSON.stringify({
-              msg: "mystery-gift feed refreshed",
+              msg: 'mystery-gift feed refreshed',
               source: payload.source,
               count: payload.gifts.length,
               fetchedAt: payload.fetchedAt,
@@ -22,7 +22,7 @@ export default {
           );
         })
         .catch((err) => {
-          console.error("mystery-gift feed refresh failed", err);
+          console.error('mystery-gift feed refresh failed', err);
         }),
     );
   },

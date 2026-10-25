@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from 'lucide-react';
 
 export function DexSearchBar({
   value,
@@ -9,7 +9,7 @@ export function DexSearchBar({
   activeIndex,
   onPrev,
   onNext,
-  placeholder = "Search name or #…",
+  placeholder = 'Search name or #…',
 }: {
   value: string;
   onChange: (next: string) => void;
@@ -34,13 +34,13 @@ export function DexSearchBar({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === 'Enter') {
               e.preventDefault();
               if (e.shiftKey) onPrev();
               else onNext();
-            } else if (e.key === "Escape" && value) {
+            } else if (e.key === 'Escape' && value) {
               e.preventDefault();
-              onChange("");
+              onChange('');
             }
           }}
           placeholder={placeholder}
@@ -50,7 +50,7 @@ export function DexSearchBar({
         {hasQuery ? (
           <button
             type="button"
-            onClick={() => onChange("")}
+            onClick={() => onChange('')}
             className="absolute top-1/2 right-1.5 flex size-5 -translate-y-1/2 items-center justify-center rounded text-muted-foreground hover:text-foreground"
             aria-label="Clear search"
           >
@@ -61,7 +61,7 @@ export function DexSearchBar({
       {hasQuery ? (
         <div className="flex shrink-0 items-center gap-0.5">
           <span className="px-1 text-xs tabular-nums text-muted-foreground">
-            {hasMatches ? `${activeIndex + 1}/${matchCount}` : "0"}
+            {hasMatches ? `${activeIndex + 1}/${matchCount}` : '0'}
           </span>
           <Button
             type="button"

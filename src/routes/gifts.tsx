@@ -1,26 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
-import { PokemonSprite } from "@/components/pokemon-sprite";
-import { useDexStore } from "@/lib/store";
-import {
-  categorizeGifts,
-  giftDisplayNotes,
-  giftSourceLabel,
-  giftWindow,
-  resolveGiftPokemon,
-} from "@/lib/gifts";
-import { loadGiftFeed } from "@/server/gifts";
-import type { MysteryGift } from "@/lib/types";
-import { toast } from "sonner";
+import { createFileRoute } from '@tanstack/react-router';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Field, FieldContent, FieldTitle } from '@/components/ui/field';
+import { PokemonSprite } from '@/components/pokemon-sprite';
+import { useDexStore } from '@/lib/store';
+import { categorizeGifts, giftDisplayNotes, giftSourceLabel, giftWindow, resolveGiftPokemon } from '@/lib/gifts';
+import { loadGiftFeed } from '@/server/gifts';
+import type { MysteryGift } from '@/lib/types';
+import { toast } from 'sonner';
 
-export const Route = createFileRoute("/gifts")({
+export const Route = createFileRoute('/gifts')({
   loader: () => loadGiftFeed(),
   pendingComponent: GiftsPending,
   component: GiftsPage,
@@ -55,21 +49,21 @@ function GiftsPage() {
 
   async function enableNotifications(checked: boolean) {
     if (!checked) {
-      setPref("notificationsEnabled", false);
+      setPref('notificationsEnabled', false);
       return;
     }
-    if (typeof Notification === "undefined") {
-      toast.error("Notifications are not supported in this browser");
+    if (typeof Notification === 'undefined') {
+      toast.error('Notifications are not supported in this browser');
       return;
     }
     const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      toast.error("Notification permission denied");
-      setPref("notificationsEnabled", false);
+    if (permission !== 'granted') {
+      toast.error('Notification permission denied');
+      setPref('notificationsEnabled', false);
       return;
     }
-    setPref("notificationsEnabled", true);
-    toast.success("Gift alerts enabled");
+    setPref('notificationsEnabled', true);
+    toast.success('Gift alerts enabled');
   }
 
   return (
@@ -79,12 +73,8 @@ function GiftsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Mystery gifts</h1>
           <p className="text-sm text-muted-foreground">
             Live feed from Serebii · refreshed daily
-            {feed.source === "fallback" ? " · offline fallback" : null}
-            {liveGifts.length > 0
-              ? unclaimedLive > 0
-                ? ` · ${unclaimedLive} unclaimed`
-                : " · all claimed"
-              : null}
+            {feed.source === 'fallback' ? ' · offline fallback' : null}
+            {liveGifts.length > 0 ? (unclaimedLive > 0 ? ` · ${unclaimedLive} unclaimed` : ' · all claimed') : null}
           </p>
         </div>
         <Field orientation="horizontal" className="w-auto items-center">
@@ -152,7 +142,7 @@ function GiftList({
 }: {
   gifts: MysteryGift[];
   claimedGiftIds: string[];
-  spriteStyle: "pixel" | "home";
+  spriteStyle: 'pixel' | 'home';
   onToggle: (id: string) => void;
   empty: string;
 }) {
@@ -175,19 +165,17 @@ function GiftList({
         const species = resolveGiftPokemon(gift);
         const source = giftSourceLabel(gift);
         const notes = giftDisplayNotes(gift);
-        const dateLabel = `${gift.start}${gift.end ? ` → ${gift.end}` : " → ongoing"}`;
+        const dateLabel = `${gift.start}${gift.end ? ` → ${gift.end}` : ' → ongoing'}`;
         const pokemonLabel = gift.pokemon ?? species?.name;
 
         return (
-          <Card key={gift.id} className={claimed ? "opacity-70" : undefined}>
+          <Card key={gift.id} className={claimed ? 'opacity-70' : undefined}>
             <CardHeader className="gap-2">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <CardTitle className="text-base">{gift.name}</CardTitle>
                 <div className="flex flex-wrap gap-1">
                   {w.endingSoon ? (
-                    <Badge variant="destructive">
-                      {w.daysLeft === 0 ? "Ends today" : `${w.daysLeft}d left`}
-                    </Badge>
+                    <Badge variant="destructive">{w.daysLeft === 0 ? 'Ends today' : `${w.daysLeft}d left`}</Badge>
                   ) : null}
                   {gift.shiny ? <Badge variant="secondary">Shiny</Badge> : null}
                   <Badge variant="outline">{gift.method}</Badge>
@@ -225,23 +213,17 @@ function GiftList({
                     {pokemonLabel ? (
                       <span className="text-sm font-medium">
                         {pokemonLabel}
-                        {gift.shiny ? " ★" : ""}
+                        {gift.shiny ? ' ★' : ''}
                       </span>
                     ) : null}
                     {notes ? <p className="text-sm text-muted-foreground">{notes}</p> : null}
-                    {source ? (
-                      <span className="text-xs text-muted-foreground/80">{source}</span>
-                    ) : null}
+                    {source ? <span className="text-xs text-muted-foreground/80">{source}</span> : null}
                   </div>
                 </div>
               ) : null}
               <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  variant={claimed ? "outline" : "default"}
-                  onClick={() => onToggle(gift.id)}
-                >
-                  {claimed ? "Unmark claimed" : "Mark claimed"}
+                <Button size="sm" variant={claimed ? 'outline' : 'default'} onClick={() => onToggle(gift.id)}>
+                  {claimed ? 'Unmark claimed' : 'Mark claimed'}
                 </Button>
                 {gift.sourceUrl ? (
                   <Button
