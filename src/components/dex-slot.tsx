@@ -99,6 +99,14 @@ export function DexSlotButton({
         />
         <span
           className={cn(
+            "w-full truncate text-center text-xs font-semibold leading-tight tabular-nums",
+            !active && "text-muted-foreground/70",
+          )}
+        >
+          #{String(slot.id).padStart(3, "0")}
+        </span>
+        <span
+          className={cn(
             "w-full truncate text-center text-xs font-medium leading-tight",
             !active && "text-muted-foreground/70",
           )}

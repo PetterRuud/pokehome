@@ -76,7 +76,8 @@ const EMPTY_CAUGHT: Record<string, boolean> = {};
 const LIST_ROW_HEIGHT = 104;
 const GRID_ROW_HEIGHT = 148;
 const NAT_HEADER_HEIGHT = 44;
-const NAT_GRID_ROW_HEIGHT = 136;
+/** Matches game-dex grid rows (sprite + dex # + name). */
+const NAT_GRID_ROW_HEIGHT = 148;
 
 type NationalVirtualRow =
   | {
