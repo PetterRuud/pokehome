@@ -11,7 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { berrySpriteUrl, capitalizeBerryId } from "@/lib/berries";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { berrySpriteUrl, capitalizeBerryId, hyperBerryHowto } from "@/lib/berries";
 import {
   availableIncludingSubstitutes,
   checkDonutRecipe,
@@ -21,7 +29,14 @@ import {
   getSpecialDonutRecipes,
 } from "@/lib/donut-calculator";
 import { useHyperBerryStore } from "@/lib/hyper-berry-store";
-import { CheckIcon, ChevronDownIcon, MinusIcon, PlusIcon, XIcon } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  InfoIcon,
+  MinusIcon,
+  PlusIcon,
+  XIcon,
+} from "lucide-react";
 
 function BerryCountStepper({
   id,
@@ -103,29 +118,58 @@ export function DonutCalculator() {
             </Button>
           </div>
           <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {berryIds.map((id) => (
-              <li key={id} className="flex items-center gap-2">
-                <img
-                  src={berrySpriteUrl(id, { hyper: true })}
-                  alt=""
-                  width={28}
-                  height={28}
-                  className="size-7 shrink-0"
-                  loading="lazy"
-                />
-                <Label
-                  htmlFor={`hyper-${id}`}
-                  className="min-w-0 flex-1 text-sm font-normal normal-case tracking-normal"
-                >
-                  {capitalizeBerryId(id)}
-                </Label>
-                <BerryCountStepper
-                  id={id}
-                  value={counts[id] ?? 0}
-                  onChange={(next) => setCount(id, next)}
-                />
-              </li>
-            ))}
+            {berryIds.map((id) => {
+              const howto = hyperBerryHowto(id);
+              const name = capitalizeBerryId(id);
+              return (
+                <li key={id} className="flex items-center gap-2">
+                  <img
+                    src={berrySpriteUrl(id, { hyper: true })}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="size-7 shrink-0"
+                    loading="lazy"
+                  />
+                  <div className="flex min-w-0 flex-1 items-center gap-1">
+                    <Label
+                      htmlFor={`hyper-${id}`}
+                      className="min-w-0 truncate text-sm font-normal normal-case tracking-normal"
+                    >
+                      {name}
+                    </Label>
+                    {howto ? (
+                      <Popover>
+                        <PopoverTrigger
+                          render={
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon-xs"
+                              className="shrink-0"
+                              aria-label={`${name} farming tip`}
+                            />
+                          }
+                        >
+                          <InfoIcon />
+                        </PopoverTrigger>
+                        <PopoverContent side="top" align="start">
+                          <PopoverHeader>
+                            <PopoverTitle>{name}</PopoverTitle>
+                            <PopoverDescription>{howto}</PopoverDescription>
+                          </PopoverHeader>
+                        </PopoverContent>
+                      </Popover>
+                    ) : null}
+                  </div>
+                  <BerryCountStepper
+                    id={id}
+                    value={counts[id] ?? 0}
+                    onChange={(next) => setCount(id, next)}
+                  />
+                </li>
+              );
+            })}
           </ul>
         </div>
 

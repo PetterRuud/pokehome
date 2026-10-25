@@ -218,9 +218,6 @@ function BerryChip({ berry }: { berry: TipBerry }) {
       <img
         src={berrySpriteUrl(berry.id, { hyper: berry.hyper })}
         alt=""
-        width={24}
-        height={24}
-        className="size-6"
         style={berry.hyper ? undefined : { imageRendering: "pixelated" }}
         loading="lazy"
       />
