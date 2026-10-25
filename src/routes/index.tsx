@@ -12,7 +12,6 @@ import { categorizeGifts } from "@/lib/gifts";
 import { getGames } from "@/lib/games";
 import { loadGiftFeed } from "@/server/gifts";
 import nationalDex from "@/data/national-dex.json";
-import { cn } from "@/lib/utils";
 import { ArrowRightIcon, CheckIcon, GiftIcon } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -111,31 +110,26 @@ function HomePage() {
                   <Link
                     to="/dex"
                     search={{ tab: "games", game: game.id }}
-                    className={cn(
-                      "flex flex-col gap-1.5 rounded-lg border border-border px-3 py-2.5 transition hover:border-primary/40 hover:bg-muted/40",
-                      complete && "border-emerald-500/50 bg-emerald-500/5",
-                    )}
+                    className="flex flex-col gap-1.5 rounded-lg border border-border px-3 py-2.5 transition hover:border-primary/40 hover:bg-muted/40"
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       <GameLogo
                         logo={game.logo}
                         title={game.name}
                         variant="wordmark"
-                        className="h-6 max-w-[7.5rem] shrink-0"
+                        className="h-6 max-w-30 shrink-0"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                           <span className="truncate text-sm font-medium">{game.name}</span>
                           {game.kind === "dlc" ? (
-                            <Badge variant="secondary" className="shrink-0">
-                              DLC
-                            </Badge>
+                            <Badge variant="secondary">DLC</Badge>
                           ) : null}
                           {complete ? (
-                            <span className="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                              <CheckIcon className="size-3" aria-hidden />
+                            <Badge variant="secondary">
+                              <CheckIcon data-icon="inline-start" aria-hidden />
                               Done
-                            </span>
+                            </Badge>
                           ) : null}
                         </div>
                       </div>
@@ -166,9 +160,7 @@ function HomePage() {
             <GiftIcon className="size-4" />
             Mystery gifts
             {giftBadge > 0 ? (
-              <Badge variant="secondary" className="tabular-nums">
-                {giftBadge}
-              </Badge>
+              <Badge variant="secondary">{giftBadge}</Badge>
             ) : null}
           </CardTitle>
           <CardDescription>

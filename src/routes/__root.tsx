@@ -46,7 +46,7 @@ export const Route = createRootRoute({
 function NotFoundPage() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 py-12">
-      <Empty className="border border-dashed">
+      <Empty>
         <EmptyHeader>
           <EmptyTitle>Page not found</EmptyTitle>
           <EmptyDescription>

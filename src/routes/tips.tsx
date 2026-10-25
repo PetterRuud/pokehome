@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GameLogo } from "@/components/game-logo";
 import { berryDisplayName, berrySpriteUrl } from "@/lib/berries";
@@ -10,7 +12,6 @@ import {
   getTips,
 } from "@/lib/trainer-tips";
 import type { TipBerry, TipBlock, TipRecipe, TipSection } from "@/data/trainer-tips";
-import { cn } from "@/lib/utils";
 import { ExternalLinkIcon } from "lucide-react";
 
 type TipsSearch = {
@@ -79,11 +80,7 @@ function TipsPage() {
             disabled={!f.hasTips}
             aria-label={f.name}
             title={f.name}
-            className={cn(
-              "h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5 data-[state=on]:bg-primary/10",
-              f.hasTips &&
-                "border-emerald-500/40 data-[state=on]:border-emerald-500 data-[state=on]:bg-emerald-500/10",
-            )}
+            className="h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5"
           >
             <GameLogo
               logo={f.logo}
@@ -97,7 +94,7 @@ function TipsPage() {
       </ToggleGroup>
 
       {!tips || tips.sections.length === 0 ? (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>No tips yet</EmptyTitle>
             <EmptyDescription>
@@ -111,38 +108,41 @@ function TipsPage() {
             <TipSectionView key={section.title} section={section} />
           ))}
           {tips.sourceUrl ? (
-            <p className="border-t border-border pt-4 text-xs text-muted-foreground">
-              Curated from{" "}
-              <a
-                href={tips.sourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
-              >
-                Game8 donut recipes
-                <ExternalLinkIcon className="size-3" aria-hidden />
-              </a>
-              {" · "}
-              <a
-                href="https://game8.co/games/Pokemon-Legends-Z-A/archives/563812"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
-              >
-                special donuts
-                <ExternalLinkIcon className="size-3" aria-hidden />
-              </a>
-              {" · "}
-              <a
-                href="https://game8.co/games/Pokemon-Legends-Z-A/archives/570326"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
-              >
-                story walkthrough
-                <ExternalLinkIcon className="size-3" aria-hidden />
-              </a>
-            </p>
+            <div className="flex flex-col gap-4">
+              <Separator />
+              <p className="text-xs text-muted-foreground">
+                Curated from{" "}
+                <a
+                  href={tips.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
+                >
+                  Game8 donut recipes
+                  <ExternalLinkIcon data-icon="inline-end" aria-hidden />
+                </a>
+                {" · "}
+                <a
+                  href="https://game8.co/games/Pokemon-Legends-Z-A/archives/563812"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
+                >
+                  special donuts
+                  <ExternalLinkIcon data-icon="inline-end" aria-hidden />
+                </a>
+                {" · "}
+                <a
+                  href="https://game8.co/games/Pokemon-Legends-Z-A/archives/570326"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
+                >
+                  story walkthrough
+                  <ExternalLinkIcon data-icon="inline-end" aria-hidden />
+                </a>
+              </p>
+            </div>
           ) : null}
         </div>
       )}
@@ -168,7 +168,7 @@ function TipBlockView({ block }: { block: TipBlock }) {
 
   if (block.type === "bullets") {
     return (
-      <ul className="list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
+      <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm text-muted-foreground">
         {block.items.map((item) => (
           <li key={item}>{item}</li>
         ))}
@@ -212,13 +212,7 @@ function RecipeRow({ recipe }: { recipe: TipRecipe }) {
 function BerryChip({ berry }: { berry: TipBerry }) {
   const name = berryDisplayName(berry);
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded-md border border-border bg-muted/40 py-0.5 pr-2 pl-0.5 text-xs font-medium",
-        berry.optional && "border-dashed opacity-80",
-      )}
-      title={name}
-    >
+    <Badge variant={berry.optional ? "ghost" : "outline"} title={name}>
       <img
         src={berrySpriteUrl(berry.id)}
         alt=""
@@ -228,12 +222,10 @@ function BerryChip({ berry }: { berry: TipBerry }) {
         style={{ imageRendering: "pixelated" }}
         loading="lazy"
       />
-      <span className="tabular-nums">×{berry.count}</span>
-      <span className="max-w-[7rem] truncate text-muted-foreground sm:max-w-none">
-        {berry.hyper ? `Hyper ${capitalize(berry.id)}` : capitalize(berry.id)}
-        {berry.optional ? " ?" : ""}
-      </span>
-    </span>
+      ×{berry.count}{" "}
+      {berry.hyper ? `Hyper ${capitalize(berry.id)}` : capitalize(berry.id)}
+      {berry.optional ? " ?" : ""}
+    </Badge>
   );
 }
 

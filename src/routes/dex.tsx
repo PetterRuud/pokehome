@@ -17,6 +17,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -25,6 +27,13 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
 import {
   AddToDialogButton,
   applyAddToOptions,
@@ -55,6 +64,7 @@ import type { DexBox, DexSlot, FormView, GameId, SpriteStyle } from "@/lib/types
 import { cn } from "@/lib/utils";
 import {
   CheckIcon,
+  ChevronDownIcon,
   ExpandIcon,
   EyeIcon,
   CheckCheckIcon,
@@ -112,8 +122,8 @@ const DEX_STICKY_TOOLBAR =
 
 const EMPTY_CAUGHT: Record<string, boolean> = {};
 const LIST_ROW_HEIGHT = 104;
-/** Shared national/game grid row: sprite + dex # + name (+ padding). */
-const GRID_ROW_HEIGHT = 168;
+/** Shared national/game grid row: Item tile (sprite + # + name + padding/gaps). */
+const GRID_ROW_HEIGHT = 220;
 const NAT_HEADER_HEIGHT = 44;
 const NAT_GRID_ROW_HEIGHT = GRID_ROW_HEIGHT;
 
@@ -139,40 +149,116 @@ const FORM_VIEW_OPTIONS: {
   value: FormView;
   label: string;
   icon: typeof SparklesIcon;
-  className?: string;
+  iconClassName?: string;
 }[] = [
   { value: "default", label: "All", icon: LayoutGridIcon },
-  {
-    value: "shiny",
-    label: "Shiny",
-    icon: SparklesIcon,
-    className: "text-amber-500",
-  },
-  {
-    value: "alpha",
-    label: "Alpha",
-    icon: EyeIcon,
-    className: "text-red-500",
-  },
-  {
-    value: "mega",
-    label: "Mega",
-    icon: ZapIcon,
-    className: "text-violet-500",
-  },
-  {
-    value: "gmax",
-    label: "Gmax",
-    icon: ExpandIcon,
-    className: "text-rose-500",
-  },
-  {
-    value: "regional",
-    label: "Regional",
-    icon: GlobeIcon,
-    className: "text-sky-500",
-  },
+  { value: "shiny", label: "Shiny", icon: SparklesIcon, iconClassName: "text-amber-500" },
+  { value: "alpha", label: "Alpha", icon: EyeIcon, iconClassName: "text-red-500" },
+  { value: "mega", label: "Mega", icon: ZapIcon, iconClassName: "text-violet-500" },
+  { value: "gmax", label: "Gmax", icon: ExpandIcon, iconClassName: "text-rose-500" },
+  { value: "regional", label: "Regional", icon: GlobeIcon, iconClassName: "text-sky-500" },
 ];
+
+function FormViewMenu({
+  value,
+  onChange,
+  className,
+}: {
+  value: FormView;
+  onChange: (value: FormView) => void;
+  className?: string;
+}) {
+  const current = FORM_VIEW_OPTIONS.find((opt) => opt.value === value) ?? FORM_VIEW_OPTIONS[0];
+  const CurrentIcon = current.icon;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className={className}
+            aria-label={`Form view: ${current.label}`}
+          />
+        }
+      >
+        <CurrentIcon data-icon="inline-start" className={current.iconClassName} />
+        {current.label}
+        <ChevronDownIcon data-icon="inline-end" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup
+          value={value}
+          onValueChange={(next) => onChange(next as FormView)}
+        >
+          {FORM_VIEW_OPTIONS.map((opt) => {
+            const Icon = opt.icon;
+            return (
+              <DropdownMenuRadioItem key={opt.value} value={opt.value}>
+                <Icon className={opt.iconClassName} />
+                {opt.label}
+              </DropdownMenuRadioItem>
+            );
+          })}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+const GAME_FILTER_OPTIONS = [
+  { value: "all", label: "All" },
+  { value: "missing", label: "Missing" },
+  { value: "caught", label: "Caught" },
+] as const;
+
+type GameFilter = (typeof GAME_FILTER_OPTIONS)[number]["value"];
+
+function GameFilterMenu({
+  value,
+  onChange,
+  className,
+}: {
+  value: GameFilter;
+  onChange: (value: GameFilter) => void;
+  className?: string;
+}) {
+  const current =
+    GAME_FILTER_OPTIONS.find((opt) => opt.value === value) ?? GAME_FILTER_OPTIONS[0];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className={className}
+            aria-label={`Filter: ${current.label}`}
+          />
+        }
+      >
+        {current.label}
+        <ChevronDownIcon data-icon="inline-end" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup
+          value={value}
+          onValueChange={(next) => onChange(next as GameFilter)}
+        >
+          {GAME_FILTER_OPTIONS.map((opt) => (
+            <DropdownMenuRadioItem key={opt.value} value={opt.value}>
+              {opt.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 type DexSearch = {
   tab?: "national" | "games";
@@ -278,11 +364,7 @@ function DexPage() {
                       : `${game.name}, ${caught} of ${total} caught`
                   }
                   title={game.name}
-                  className={cn(
-                    "h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5 data-[state=on]:bg-primary/10",
-                    complete &&
-                      "border-emerald-500/70 data-[state=on]:border-emerald-500 data-[state=on]:bg-emerald-500/10",
-                  )}
+                  className="h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5"
                 >
                   <GameLogo
                     logo={game.logo}
@@ -295,16 +377,14 @@ function DexPage() {
                       {game.name}
                     </span>
                     {game.kind === "dlc" ? (
-                      <Badge variant="secondary" className="shrink-0">
-                        DLC
-                      </Badge>
+                      <Badge variant="secondary">DLC</Badge>
                     ) : null}
                   </span>
                   {complete ? (
-                    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                      <CheckIcon className="size-3.5" aria-hidden />
+                    <Badge variant="secondary">
+                      <CheckIcon data-icon="inline-start" aria-hidden />
                       Complete
-                    </span>
+                    </Badge>
                   ) : (
                     <span className="tabular-nums text-xs text-muted-foreground">
                       {caught}/{total}
@@ -467,9 +547,9 @@ function NationalDexView() {
     scrollMargin,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     virtualizer.measure();
-  }, [colCount, scrollMargin, virtualRows.length, virtualizer]);
+  }, [colCount, scrollMargin, virtualRows.length, formView, virtualizer]);
 
   useEffect(() => {
     if (!search.activeKey) return;
@@ -556,18 +636,14 @@ function NationalDexView() {
   return (
     <div className="flex flex-col gap-3">
       <div className={DEX_STICKY_TOOLBAR}>
-        <label className="flex items-center gap-2 text-sm">
-          <Checkbox
-            checked={allSelected}
-            indeterminate={someSelected && !allSelected}
-            onCheckedChange={(v) => toggleSelectAll(v)}
-            aria-label="Select all"
-          />
-          <span className="text-muted-foreground">
-            Select all
-            {selectedCount > 0 ? ` · ${selectedCount}` : ""}
-          </span>
-        </label>
+        <Checkbox
+          checked={allSelected}
+          indeterminate={someSelected && !allSelected}
+          onCheckedChange={(v) => toggleSelectAll(v)}
+          aria-label={
+            selectedCount > 0 ? `Select all · ${selectedCount} selected` : "Select all"
+          }
+        />
         <AddToDialogButton
           selectedCount={selectedCount}
           disabled={selectedCount === 0}
@@ -584,33 +660,11 @@ function NationalDexView() {
           onPrev={search.goPrev}
           onNext={search.goNext}
         />
-        <ToggleGroup
-          variant="outline"
-          size="sm"
-          value={[formView]}
-          onValueChange={(next) => {
-            const value = next[0] as FormView | undefined;
-            if (value) setPref("formView", value);
-          }}
-          className="ml-auto flex flex-wrap justify-start"
-          aria-label="Form view"
-        >
-          {FORM_VIEW_OPTIONS.map((opt) => {
-            const Icon = opt.icon;
-            return (
-              <ToggleGroupItem
-                key={opt.value}
-                value={opt.value}
-                aria-label={opt.label}
-                title={opt.label}
-                className="gap-1.5 px-2.5"
-              >
-                <Icon className={cn("size-3.5", opt.className)} />
-                <span className="hidden text-xs sm:inline">{opt.label}</span>
-              </ToggleGroupItem>
-            );
-          })}
-        </ToggleGroup>
+        <FormViewMenu
+          value={formView}
+          onChange={(value) => setPref("formView", value)}
+          className="ml-auto"
+        />
       </div>
 
       <p className="text-sm text-muted-foreground">
@@ -626,7 +680,7 @@ function NationalDexView() {
       </p>
 
       {boxes.length === 0 ? (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>No Pokémon here</EmptyTitle>
             <EmptyDescription>Try another form view.</EmptyDescription>
@@ -870,7 +924,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? EMPTY_CAUGHT);
   const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
   const setGameCaughtMany = useDexStore((s) => s.setGameCaughtMany);
-  const [filter, setFilter] = useState<"missing" | "caught" | "all">("all");
+  const [filter, setFilter] = useState<GameFilter>("all");
   const [layout, setLayout] = useState<"list" | "grid">("grid");
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
@@ -921,9 +975,9 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     scrollMargin,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     virtualizer.measure();
-  }, [layout, colCount, scrollMargin, virtualizer]);
+  }, [layout, colCount, scrollMargin, visible.length, gameId, virtualizer]);
 
   // Jump to match: widen filter to All if the hit is hidden by caught/missing.
   useEffect(() => {
@@ -1008,8 +1062,6 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     return <p className="text-sm text-muted-foreground">No game data available.</p>;
   }
 
-  const { caught, total, percent } = countGameProgress(game.boxes, caughtMap);
-  const missingCount = total - caught;
   const virtualItems = virtualizer.getVirtualItems();
 
   return (
@@ -1017,18 +1069,16 @@ function GameDexView({ gameId }: { gameId: GameId }) {
       <div className={DEX_STICKY_TOOLBAR}>
         {visible.length > 0 ? (
           <>
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox
-                checked={allVisibleSelected}
-                indeterminate={someVisibleSelected && !allVisibleSelected}
-                onCheckedChange={(v) => toggleSelectAll(v)}
-                aria-label="Select all visible"
-              />
-              <span className="text-muted-foreground">
-                Select all
-                {selectedCount > 0 ? ` · ${selectedCount}` : ""}
-              </span>
-            </label>
+            <Checkbox
+              checked={allVisibleSelected}
+              indeterminate={someVisibleSelected && !allVisibleSelected}
+              onCheckedChange={(v) => toggleSelectAll(v)}
+              aria-label={
+                selectedCount > 0
+                  ? `Select all visible · ${selectedCount} selected`
+                  : "Select all visible"
+              }
+            />
             <Button
               size="sm"
               disabled={selectedCount === 0}
@@ -1056,24 +1106,12 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           onNext={search.goNext}
         />
 
-        <ToggleGroup
-          variant="outline"
-          size="sm"
-          value={[filter]}
-          onValueChange={(next) => {
-            const v = next[0] as typeof filter | undefined;
-            if (v) setFilter(v);
-          }}
-          className="justify-start"
-        >
-          <ToggleGroupItem value="all">All</ToggleGroupItem>
-          <ToggleGroupItem value="missing">Missing</ToggleGroupItem>
-          <ToggleGroupItem value="caught">Caught</ToggleGroupItem>
-        </ToggleGroup>
+        <GameFilterMenu value={filter} onChange={setFilter} />
 
         <ToggleGroup
           variant="outline"
           size="sm"
+          spacing={0}
           value={[layout]}
           onValueChange={(next) => {
             const v = next[0] as typeof layout | undefined;
@@ -1083,28 +1121,16 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           aria-label="Layout"
         >
           <ToggleGroupItem value="grid" aria-label="Grid view" title="Grid">
-            <LayoutGridIcon className="size-3.5" />
+            <LayoutGridIcon />
           </ToggleGroupItem>
           <ToggleGroupItem value="list" aria-label="List view" title="List">
-            <ListIcon className="size-3.5" />
+            <ListIcon />
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="outline">
-          {caught}/{total} · {percent}%
-        </Badge>
-        {missingCount > 0 ? (
-          <Badge variant="secondary">{missingCount} missing</Badge>
-        ) : (
-          <Badge variant="secondary">Complete</Badge>
-        )}
-        {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
-      </div>
-
       {visible.length === 0 ? (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>{filter === "missing" ? "Nothing missing" : "No Pokémon here"}</EmptyTitle>
             <EmptyDescription>
@@ -1226,24 +1252,23 @@ function GameDexRow({
 }) {
   const unavailable = slot.available === false;
   const pokemonSearch = { from: "games" as const, game: gameId };
+  const variant = selected
+    ? "secondary"
+    : caught
+      ? "primary"
+      : searchActive || searchHit
+        ? "outline"
+        : "muted";
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-3 px-3 py-2.5 sm:gap-4 sm:py-3",
-        !caught && "bg-muted/40",
-        selected && "bg-primary/10",
-        searchHit && !searchActive && !selected && "bg-amber-500/10",
-        searchActive && "bg-amber-500/20 ring-2 ring-inset ring-amber-500",
-        unavailable && "opacity-70",
-      )}
-    >
+    <Item variant={variant} size="sm" className={cn(unavailable && "opacity-70")}>
       <Checkbox
         checked={selected}
         disabled={unavailable}
         onCheckedChange={(v) => onSelectedChange(v === true)}
         aria-label={`Select ${slot.name}`}
       />
+      <ItemMedia>
         <PokemonSprite
           id={slot.id}
           style={spriteStyle}
@@ -1252,23 +1277,22 @@ function GameDexRow({
           width={72}
           height={72}
           className={cn(
-            "size-[4.5rem] shrink-0 sm:size-20",
+            "size-18 sm:size-20",
             (!caught || unavailable) && "opacity-40 grayscale",
           )}
         />
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-base font-medium">
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>
           <GameDexNumbers slot={slot} />
-          <span className="ml-1.5">{slot.name}</span>
-        </p>
+          <span>{slot.name}</span>
+        </ItemTitle>
         {unavailable ? (
-          <Badge variant="secondary" className="mt-0.5">
-            Unavailable
-          </Badge>
+          <Badge variant="secondary">Unavailable</Badge>
         ) : caught ? (
-          <p className="text-xs text-muted-foreground">Caught</p>
+          <ItemDescription>Caught</ItemDescription>
         ) : null}
-      </div>
+      </ItemContent>
       <Button
         variant="ghost"
         size="icon-xs"
@@ -1282,9 +1306,9 @@ function GameDexRow({
         nativeButton={false}
         aria-label={`${slot.name} details`}
       >
-        <InfoIcon className="size-3.5" />
+        <InfoIcon />
       </Button>
-    </div>
+    </Item>
   );
 }
 
@@ -1310,38 +1334,36 @@ function GameDexGridCard({
   const unavailable = slot.available === false;
   const active = caught && !unavailable;
   const pokemonSearch = { from: "games" as const, game: gameId };
+  const variant = selected
+    ? "secondary"
+    : active
+      ? "primary"
+      : searchActive || searchHit
+        ? "outline"
+        : "muted";
 
   return (
-    <div
-      className={cn(
-        "relative rounded-md",
-        selected && !unavailable && "ring-2 ring-primary/50 ring-offset-1 ring-offset-background",
-        searchHit &&
-          !searchActive &&
-          !selected &&
-          "ring-2 ring-amber-400/60 ring-offset-1 ring-offset-background",
-        searchActive && "ring-2 ring-amber-500 ring-offset-2 ring-offset-background",
-      )}
-    >
+    <div className="relative">
       <Checkbox
         checked={selected}
         disabled={unavailable}
         onCheckedChange={(v) => onSelectedChange(v === true)}
         aria-label={`Select ${slot.name}`}
-        className="absolute top-1.5 left-1.5 z-10"
+        className="absolute top-2 left-2 z-10"
       />
-      <button
-        type="button"
-        disabled={unavailable}
-        onClick={() => onSelectedChange(!selected)}
-        aria-label={`${slot.name}: ${unavailable ? "unavailable" : caught ? "caught" : "missing"}. Tap to select.`}
-        aria-pressed={selected}
-        className={cn(
-          "flex min-h-20 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-md border-2 p-1.5 pt-7 transition active:scale-[0.97] disabled:pointer-events-none sm:min-h-24 sm:p-2 sm:pt-7",
-          !active && "border-border/60 bg-muted/80 text-muted-foreground",
-          active && !selected && "border-primary/50 bg-primary/10 text-foreground",
-          selected && !unavailable && "border-primary bg-primary/15 text-foreground",
-        )}
+      <Item
+        variant={variant}
+        size="sm"
+        render={
+          <button
+            type="button"
+            disabled={unavailable}
+            onClick={() => onSelectedChange(!selected)}
+            aria-label={`${slot.name}: ${unavailable ? "unavailable" : caught ? "caught" : "missing"}. Tap to select.`}
+            aria-pressed={selected}
+          />
+        }
+        className="flex-col items-center pt-8"
       >
         <PokemonSprite
           id={slot.id}
@@ -1351,42 +1373,35 @@ function GameDexGridCard({
           width={80}
           height={80}
           className={cn(
-            "size-16 sm:size-[4.5rem] md:size-20",
+            "size-16 sm:size-20",
             !active && "opacity-35 grayscale",
           )}
         />
-        <span
-          className={cn(
-            "w-full truncate text-center text-xs font-semibold leading-tight tabular-nums",
-            !active && "text-muted-foreground/70",
-          )}
-        >
-          <GameDexNumbers slot={slot} />
-        </span>
-        <span
-          className={cn(
-            "w-full truncate text-center text-xs font-medium leading-tight",
-            !active && "text-muted-foreground/70",
-          )}
-        >
-          {slot.name}
-        </span>
-        {unavailable ? (
-          <Badge variant="secondary" className="max-w-full truncate">
-            Unavailable
-          </Badge>
-        ) : null}
-      </button>
-      <Link
-        to="/pokemon/$id"
-        params={{ id: String(slot.id) }}
-        search={pokemonSearch}
-        aria-label={`${slot.name} details`}
-        className="absolute top-1 right-1 z-10 flex size-6 items-center justify-center rounded-full border border-border bg-background/90 text-muted-foreground shadow-sm transition hover:text-foreground sm:size-7"
-        onClick={(e) => e.stopPropagation()}
+        <ItemContent className="w-full items-center text-center">
+          <ItemTitle className="w-full justify-center tabular-nums">
+            <GameDexNumbers slot={slot} />
+          </ItemTitle>
+          <ItemDescription className="w-full text-center">{slot.name}</ItemDescription>
+          {unavailable ? <Badge variant="secondary">Unavailable</Badge> : null}
+        </ItemContent>
+      </Item>
+      <Button
+        variant="outline"
+        size="icon-sm"
+        className="absolute top-1 right-1 z-10"
+        render={
+          <Link
+            to="/pokemon/$id"
+            params={{ id: String(slot.id) }}
+            search={pokemonSearch}
+            aria-label={`${slot.name} details`}
+            onClick={(e) => e.stopPropagation()}
+          />
+        }
+        nativeButton={false}
       >
-        <InfoIcon className="size-3.5" />
-      </Link>
+        <InfoIcon />
+      </Button>
     </div>
   );
 }

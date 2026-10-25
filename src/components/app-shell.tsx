@@ -171,9 +171,8 @@ export function AppShell({
           {progress ? (
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <Progress value={progress.percent} className="h-1.5 flex-1" />
-              <Badge variant="outline" className="shrink-0 tabular-nums">
-                {progress.caught}/{progress.total}
-                <span className="text-muted-foreground"> · {progress.percent}%</span>
+              <Badge variant="outline">
+                {progress.caught}/{progress.total} · {progress.percent}%
               </Badge>
             </div>
           ) : (

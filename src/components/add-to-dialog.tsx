@@ -116,36 +116,11 @@ const STATUS_OPTIONS: {
   iconClassName?: string;
 }[] = [
   { key: "caught", label: "Caught", icon: CheckIcon },
-  {
-    key: "shiny",
-    label: "Shiny",
-    icon: SparklesIcon,
-    iconClassName: "text-amber-500",
-  },
-  {
-    key: "alpha",
-    label: "Alpha",
-    icon: EyeIcon,
-    iconClassName: "text-red-500",
-  },
-  {
-    key: "mega",
-    label: "Mega",
-    icon: ZapIcon,
-    iconClassName: "text-violet-500",
-  },
-  {
-    key: "gmax",
-    label: "Gigantamax",
-    icon: ExpandIcon,
-    iconClassName: "text-rose-500",
-  },
-  {
-    key: "regional",
-    label: "Regional",
-    icon: GlobeIcon,
-    iconClassName: "text-sky-500",
-  },
+  { key: "shiny", label: "Shiny", icon: SparklesIcon, iconClassName: "text-amber-500" },
+  { key: "alpha", label: "Alpha", icon: EyeIcon, iconClassName: "text-red-500" },
+  { key: "mega", label: "Mega", icon: ZapIcon, iconClassName: "text-violet-500" },
+  { key: "gmax", label: "Gigantamax", icon: ExpandIcon, iconClassName: "text-rose-500" },
+  { key: "regional", label: "Regional", icon: GlobeIcon, iconClassName: "text-sky-500" },
 ];
 
 export function AddToDialogButton({
@@ -270,9 +245,7 @@ export function AddToDialogButton({
                             >
                               <span className="truncate">{game.name}</span>
                               {game.kind === "dlc" ? (
-                                <Badge variant="secondary" className="shrink-0">
-                                  DLC
-                                </Badge>
+                                <Badge variant="secondary">DLC</Badge>
                               ) : null}
                             </FieldLabel>
                           </FieldContent>

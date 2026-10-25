@@ -27,14 +27,7 @@ export const Route = createFileRoute("/gifts")({
 });
 
 function TabCount({ n }: { n: number }) {
-  return (
-    <Badge
-      variant="secondary"
-      className="h-5 min-w-5 justify-center px-1.5 text-xs tabular-nums"
-    >
-      {n}
-    </Badge>
-  );
+  return <Badge variant="secondary">{n}</Badge>;
 }
 
 function GiftsPending() {
@@ -165,7 +158,7 @@ function GiftList({
 }) {
   if (gifts.length === 0) {
     return (
-      <Empty className="border border-dashed">
+      <Empty>
         <EmptyHeader>
           <EmptyTitle>Nothing here</EmptyTitle>
           <EmptyDescription>{empty}</EmptyDescription>
@@ -196,14 +189,7 @@ function GiftList({
                       {w.daysLeft === 0 ? "Ends today" : `${w.daysLeft}d left`}
                     </Badge>
                   ) : null}
-                  {gift.shiny ? (
-                    <Badge
-                      variant="secondary"
-                      className="border-amber-400/60 bg-amber-500/15 text-amber-700 dark:text-amber-300"
-                    >
-                      Shiny
-                    </Badge>
-                  ) : null}
+                  {gift.shiny ? <Badge variant="secondary">Shiny</Badge> : null}
                   <Badge variant="outline">{gift.method}</Badge>
                   {claimed ? <Badge variant="secondary">Claimed</Badge> : null}
                 </div>

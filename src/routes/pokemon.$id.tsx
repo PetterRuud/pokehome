@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -166,22 +167,7 @@ function PokemonPage() {
       </div>
 
       <div className="flex flex-col gap-6 md:flex-row md:items-start">
-        <Card
-          className={cn(
-            "items-center border-2 md:w-56 md:shrink-0",
-            shiny
-              ? "border-amber-400 shadow-[0_0_16px_rgba(232,121,249,0.35)]"
-              : alpha
-                ? "border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.3)]"
-                : mega
-                  ? "border-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.3)]"
-                  : gmax
-                    ? "border-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.3)]"
-                    : regional
-                      ? "border-sky-500 shadow-[0_0_12px_rgba(14,165,233,0.3)]"
-                      : undefined,
-          )}
-        >
+        <Card className="items-center md:w-56 md:shrink-0">
           <CardContent className="flex flex-col items-center gap-3 pt-6">
             <PokemonSprite
               id={summary.id}
@@ -253,7 +239,7 @@ function PokemonPage() {
             </CardHeader>
             <CardContent>
               <ItemGroup className="flex-row flex-wrap gap-2">
-                <Item variant="outline" size="sm" className="w-fit max-w-full">
+                <Item variant="outline" size="sm">
                   <ItemContent>
                     <ItemTitle>Caught</ItemTitle>
                   </ItemContent>
@@ -265,10 +251,10 @@ function PokemonPage() {
                     />
                   </ItemActions>
                 </Item>
-                <Item variant="outline" size="sm" className="w-fit max-w-full">
+                <Item variant="outline" size="sm">
                   <ItemContent>
                     <ItemTitle className="flex items-center gap-1.5">
-                      <SparklesIcon className="size-4 text-amber-500" />
+                      <SparklesIcon className="text-amber-500" />
                       Shiny
                     </ItemTitle>
                   </ItemContent>
@@ -280,10 +266,10 @@ function PokemonPage() {
                     />
                   </ItemActions>
                 </Item>
-                <Item variant="outline" size="sm" className="w-fit max-w-full">
+                <Item variant="outline" size="sm">
                   <ItemContent>
                     <ItemTitle className="flex items-center gap-1.5">
-                      <EyeIcon className="size-4 text-red-500" />
+                      <EyeIcon className="text-red-500" />
                       Alpha
                     </ItemTitle>
                   </ItemContent>
@@ -296,10 +282,10 @@ function PokemonPage() {
                   </ItemActions>
                 </Item>
                 {hasMega ? (
-                  <Item variant="outline" size="sm" className="w-fit max-w-full">
+                  <Item variant="outline" size="sm">
                     <ItemContent>
                       <ItemTitle className="flex items-center gap-1.5">
-                        <ZapIcon className="size-4 text-violet-500" />
+                        <ZapIcon className="text-violet-500" />
                         Mega
                       </ItemTitle>
                     </ItemContent>
@@ -313,10 +299,10 @@ function PokemonPage() {
                   </Item>
                 ) : null}
                 {hasGmax ? (
-                  <Item variant="outline" size="sm" className="w-fit max-w-full">
+                  <Item variant="outline" size="sm">
                     <ItemContent>
                       <ItemTitle className="flex items-center gap-1.5">
-                        <ExpandIcon className="size-4 text-rose-500" />
+                        <ExpandIcon className="text-rose-500" />
                         Gigantamax
                       </ItemTitle>
                     </ItemContent>
@@ -330,10 +316,10 @@ function PokemonPage() {
                   </Item>
                 ) : null}
                 {hasRegional ? (
-                  <Item variant="outline" size="sm" className="w-fit max-w-full">
+                  <Item variant="outline" size="sm">
                     <ItemContent>
                       <ItemTitle className="flex items-center gap-1.5">
-                        <GlobeIcon className="size-4 text-sky-500" />
+                        <GlobeIcon className="text-sky-500" />
                         Regional
                       </ItemTitle>
                     </ItemContent>
@@ -364,14 +350,12 @@ function PokemonPage() {
                     group.games.map((game) => {
                       const inGame = Boolean(caughtByGame[game.id]?.[key]);
                       return (
-                        <Item key={game.id} variant="outline" size="sm" className="w-fit max-w-full">
+                        <Item key={game.id} variant="outline" size="sm">
                           <ItemContent>
                             <ItemTitle>
                               {game.name}
                               {game.kind === "dlc" ? (
-                                <Badge variant="secondary" className="shrink-0">
-                                  DLC
-                                </Badge>
+                                <Badge variant="secondary">DLC</Badge>
                               ) : null}
                             </ItemTitle>
                           </ItemContent>
@@ -395,12 +379,10 @@ function PokemonPage() {
         </div>
       </div>
 
-      <PokemonAdjacentNav
-        prev={prev}
-        next={next}
-        search={navSearch}
-        className="w-full justify-between border-t border-border pt-4"
-      />
+      <div className="flex w-full flex-col gap-4">
+        <Separator />
+        <PokemonAdjacentNav prev={prev} next={next} search={navSearch} className="w-full justify-between" />
+      </div>
     </div>
   );
 }
