@@ -1,10 +1,15 @@
 import type { DexBox } from "@/lib/types";
 
+function isSlotAvailable(slot: { available?: boolean }) {
+  return slot.available !== false;
+}
+
 export function countProgress(boxes: DexBox[], caughtByKey: Record<string, boolean>) {
   let total = 0;
   let caught = 0;
   for (const box of boxes) {
     for (const slot of box.slots) {
+      if (!isSlotAvailable(slot)) continue;
       total += 1;
       if (caughtByKey[slot.key]) caught += 1;
     }

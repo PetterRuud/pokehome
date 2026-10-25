@@ -566,7 +566,6 @@ function NationalDexView() {
               : formView === "shiny" || formView === "alpha"
                 ? `${trackLabel} · ${formProgress.caught} marked`
                 : `National · ${formProgress.caught} / ${formProgress.total}`}
-        {" · select, then Add"}
       </p>
 
       {boxes.length === 0 ? (
@@ -828,8 +827,11 @@ function GameDexView({ gameId }: { gameId: GameId }) {
 
   const visible = useMemo(() => {
     if (filter === "all") return slots;
-    if (filter === "caught") return slots.filter((s) => caughtMap[s.key]);
-    return slots.filter((s) => !caughtMap[s.key]);
+    if (filter === "caught") {
+      return slots.filter((s) => s.available !== false && caughtMap[s.key]);
+    }
+    // Missing: obtainable but not caught (skip unreleased)
+    return slots.filter((s) => s.available !== false && !caughtMap[s.key]);
   }, [slots, filter, caughtMap]);
 
   useLayoutEffect(() => {
@@ -863,12 +865,18 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     virtualizer.measure();
   }, [layout, colCount, scrollMargin, virtualizer]);
 
-  const visibleKeys = useMemo(() => visible.map((s) => s.key), [visible]);
+  const selectableVisible = useMemo(
+    () => visible.filter((s) => s.available !== false),
+    [visible],
+  );
+  const visibleKeys = useMemo(() => selectableVisible.map((s) => s.key), [selectableVisible]);
   const allVisibleSelected = visibleKeys.length > 0 && visibleKeys.every((k) => selected.has(k));
   const someVisibleSelected = visibleKeys.some((k) => selected.has(k));
   const selectedCount = selected.size;
 
   function toggleSelected(key: string, next: boolean) {
+    const slot = slots.find((s) => s.key === key);
+    if (slot?.available === false) return;
     setSelected((prev) => {
       const out = new Set(prev);
       if (next) out.add(key);
@@ -880,9 +888,10 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   function toggleSelectAll(next: boolean) {
     setSelected((prev) => {
       const out = new Set(prev);
-      for (const key of visibleKeys) {
-        if (next) out.add(key);
-        else out.delete(key);
+      for (const slot of visible) {
+        if (slot.available === false) continue;
+        if (next) out.add(slot.key);
+        else out.delete(slot.key);
       }
       return out;
     });
@@ -890,7 +899,11 @@ function GameDexView({ gameId }: { gameId: GameId }) {
 
   function addSelected() {
     if (selectedCount === 0) return;
-    const keys = Array.from(selected);
+    const keys = Array.from(selected).filter((key) => {
+      const slot = slots.find((s) => s.key === key);
+      return slot?.available !== false;
+    });
+    if (keys.length === 0) return;
     setGameCaughtMany(gameId, keys, true);
     setSelected(new Set());
     toast.success(keys.length === 1 ? "Marked 1 as caught" : `Marked ${keys.length} as caught`);
@@ -944,7 +957,6 @@ function GameDexView({ gameId }: { gameId: GameId }) {
             </label>
             <Button
               size="sm"
-              variant="secondary"
               disabled={selectedCount === 0}
               onClick={addSelected}
             >
@@ -1100,6 +1112,7 @@ function GameDexRow({
   onSelectedChange: (selected: boolean) => void;
 }) {
   const entry = slot.entryNumber ?? slot.id;
+  const unavailable = slot.available === false;
 
   return (
     <div
@@ -1107,10 +1120,12 @@ function GameDexRow({
         "flex items-center gap-3 px-3 py-2.5 sm:gap-4 sm:py-3",
         !caught && "bg-muted/40",
         selected && "bg-primary/10",
+        unavailable && "opacity-70",
       )}
     >
       <Checkbox
         checked={selected}
+        disabled={unavailable}
         onCheckedChange={(v) => onSelectedChange(v === true)}
         aria-label={`Select ${slot.name}`}
       />
@@ -1121,7 +1136,10 @@ function GameDexRow({
           slug={slot.slug}
           width={72}
           height={72}
-          className={cn("size-[4.5rem] shrink-0 sm:size-20", !caught && "opacity-40 grayscale")}
+          className={cn(
+            "size-[4.5rem] shrink-0 sm:size-20",
+            (!caught || unavailable) && "opacity-40 grayscale",
+          )}
         />
       <div className="min-w-0 flex-1">
         <p className="truncate text-base font-medium">
@@ -1130,7 +1148,13 @@ function GameDexRow({
           </span>
           {slot.name}
         </p>
-        {caught ? <p className="text-xs text-muted-foreground">Caught</p> : null}
+        {unavailable ? (
+          <Badge variant="secondary" className="mt-0.5">
+            Unavailable
+          </Badge>
+        ) : caught ? (
+          <p className="text-xs text-muted-foreground">Caught</p>
+        ) : null}
       </div>
       <Button
         variant="ghost"
@@ -1159,19 +1183,25 @@ function GameDexGridCard({
   onSelectedChange: (selected: boolean) => void;
 }) {
   const entry = slot.entryNumber ?? slot.id;
+  const unavailable = slot.available === false;
 
   return (
     <div
       className={cn(
         "relative flex flex-col items-center gap-1 rounded-md border-2 p-1.5 pt-7 transition",
-        !caught && "border-border/60 bg-muted/80 text-muted-foreground",
-        caught && !selected && "border-primary/50 bg-primary/10 text-foreground",
+        (!caught || unavailable) && "border-border/60 bg-muted/80 text-muted-foreground",
+        caught &&
+          !unavailable &&
+          !selected &&
+          "border-primary/50 bg-primary/10 text-foreground",
         selected &&
+          !unavailable &&
           "border-primary bg-primary/15 text-foreground shadow-[0_0_0_1px_hsl(var(--primary)/0.35)]",
       )}
     >
       <Checkbox
         checked={selected}
+        disabled={unavailable}
         onCheckedChange={(v) => onSelectedChange(v === true)}
         aria-label={`Select ${slot.name}`}
         className="absolute top-1.5 left-1.5"
@@ -1186,8 +1216,9 @@ function GameDexGridCard({
       </Link>
       <button
         type="button"
+        disabled={unavailable}
         onClick={() => onSelectedChange(!selected)}
-        className="flex w-full flex-col items-center gap-1"
+        className="flex w-full flex-col items-center gap-1 disabled:pointer-events-none"
       >
         <PokemonSprite
           id={slot.id}
@@ -1196,7 +1227,10 @@ function GameDexGridCard({
           slug={slot.slug}
           width={72}
           height={72}
-          className={cn("size-14 sm:size-16", !caught && "opacity-40 grayscale")}
+          className={cn(
+            "size-14 sm:size-16",
+            (!caught || unavailable) && "opacity-40 grayscale",
+          )}
         />
         <span className="w-full truncate text-center text-xs font-medium leading-tight">
           <span className="tabular-nums text-muted-foreground">
@@ -1204,6 +1238,11 @@ function GameDexGridCard({
           </span>
           {slot.name}
         </span>
+        {unavailable ? (
+          <Badge variant="secondary" className="max-w-full truncate">
+            Unavailable
+          </Badge>
+        ) : null}
       </button>
     </div>
   );

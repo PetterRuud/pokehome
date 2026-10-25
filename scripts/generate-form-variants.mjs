@@ -19,7 +19,8 @@ async function fetchJson(url) {
 }
 
 function isMegaName(name) {
-  return /-(mega(-[xy])?|megax|megay)$/.test(name);
+  // Includes classic -mega / -mega-x/y, showdown -megax/y, and Z-A -mega-z.
+  return /-(mega(-[xyz])?|megax|megay|megaz)$/.test(name);
 }
 
 function isGmaxName(name) {

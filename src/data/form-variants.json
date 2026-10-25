@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-25T07:22:51.781Z",
+  "generatedAt": "2026-10-25T13:08:50.070Z",
   "megaCount": 87,
   "gmaxCount": 32,
   "regionalCount": 54,
@@ -234,7 +234,14 @@
     "359": {
       "formId": 10057,
       "slug": "absol-mega",
-      "apiSlug": "absol-mega"
+      "apiSlug": "absol-mega",
+      "alts": [
+        {
+          "formId": 10307,
+          "slug": "absol-mega-z",
+          "apiSlug": "absol-mega-z"
+        }
+      ]
     },
     "362": {
       "formId": 10074,
@@ -279,12 +286,26 @@
     "445": {
       "formId": 10058,
       "slug": "garchomp-mega",
-      "apiSlug": "garchomp-mega"
+      "apiSlug": "garchomp-mega",
+      "alts": [
+        {
+          "formId": 10309,
+          "slug": "garchomp-mega-z",
+          "apiSlug": "garchomp-mega-z"
+        }
+      ]
     },
     "448": {
       "formId": 10059,
       "slug": "lucario-mega",
-      "apiSlug": "lucario-mega"
+      "apiSlug": "lucario-mega",
+      "alts": [
+        {
+          "formId": 10310,
+          "slug": "lucario-mega-z",
+          "apiSlug": "lucario-mega-z"
+        }
+      ]
     },
     "460": {
       "formId": 10060,
@@ -434,14 +455,14 @@
       "apiSlug": "drampa-mega"
     },
     "801": {
-      "formId": 10317,
-      "slug": "magearna-mega",
-      "apiSlug": "magearna-mega",
+      "formId": 10318,
+      "slug": "magearna-original-mega",
+      "apiSlug": "magearna-original-mega",
       "alts": [
         {
-          "formId": 10318,
-          "slug": "magearna-original-mega",
-          "apiSlug": "magearna-original-mega"
+          "formId": 10317,
+          "slug": "magearna-mega",
+          "apiSlug": "magearna-mega"
         }
       ]
     },
@@ -466,19 +487,19 @@
       "apiSlug": "glimmora-mega"
     },
     "978": {
-      "formId": 10323,
-      "slug": "tatsugiri-droopy-mega",
-      "apiSlug": "tatsugiri-droopy-mega",
+      "formId": 10322,
+      "slug": "tatsugiri-curly-mega",
+      "apiSlug": "tatsugiri-curly-mega",
       "alts": [
+        {
+          "formId": 10323,
+          "slug": "tatsugiri-droopy-mega",
+          "apiSlug": "tatsugiri-droopy-mega"
+        },
         {
           "formId": 10324,
           "slug": "tatsugiri-stretchy-mega",
           "apiSlug": "tatsugiri-stretchy-mega"
-        },
-        {
-          "formId": 10322,
-          "slug": "tatsugiri-curly-mega",
-          "apiSlug": "tatsugiri-curly-mega"
         }
       ]
     },
@@ -610,9 +631,9 @@
       "apiSlug": "sandaconda-gmax"
     },
     "849": {
-      "formId": 10219,
-      "slug": "toxtricity-amped-gmax",
-      "apiSlug": "toxtricity-amped-gmax"
+      "formId": 10228,
+      "slug": "toxtricity-low-key-gmax",
+      "apiSlug": "toxtricity-low-key-gmax"
     },
     "851": {
       "formId": 10220,
@@ -645,9 +666,9 @@
       "apiSlug": "duraludon-gmax"
     },
     "892": {
-      "formId": 10226,
-      "slug": "urshifu-single-strike-gmax",
-      "apiSlug": "urshifu-single-strike-gmax"
+      "formId": 10227,
+      "slug": "urshifu-rapid-strike-gmax",
+      "apiSlug": "urshifu-rapid-strike-gmax"
     }
   },
   "regional": {

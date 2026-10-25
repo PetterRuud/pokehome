@@ -10,6 +10,11 @@ export type DexSlot = {
   formId?: number;
   formSlug?: string;
   region?: "alola" | "galar" | "hisui" | "paldea";
+  /**
+   * When false, this species is not obtainable in the game yet (e.g. unreleased in Pokémon GO).
+   * Omitted / true means available.
+   */
+  available?: boolean;
 };
 
 export type DexBox = {

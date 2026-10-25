@@ -59,7 +59,8 @@ const DEFAULT_OPTIONS: AddToOptions = {
 };
 
 export function parseNationalId(key: string): number {
-  return Number(key.replace(/^n/, ""));
+  const match = /^n(\d+)/.exec(key);
+  return match ? Number(match[1]) : Number.NaN;
 }
 
 /** Apply status + game marks for the given keys. */

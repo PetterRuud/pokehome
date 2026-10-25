@@ -1,9 +1,9 @@
 /**
- * Generates HOME-style game + DLC dex boxes from PokéAPI.
- * Each main game and DLC is a separate entry (matches HOME's National Pokédexes page).
+ * Generates HOME-style game + DLC dex boxes from PokéAPI (+ form-variants for Mega).
+ * Counts match Pokémon HOME mobile regional dexes (mythicals/events excluded where HOME does).
  * Run: node scripts/generate-game-dexes.mjs
  */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,6 +31,16 @@ const REGION_PREFIX = {
 };
 
 /**
+ * Species whose multiple mega forms share one HOME Mega Evolution Pokédex entry.
+ * @type {Set<number>}
+ */
+const COMBINED_MEGA_SPECIES = new Set([
+  678, // Meowstic
+  801, // Magearna
+  978, // Tatsugiri
+]);
+
+/**
  * @typedef {{
  *   id: string,
  *   name: string,
@@ -40,6 +50,8 @@ const REGION_PREFIX = {
  *   kind: 'main' | 'dlc' | 'special',
  *   logo: string,
  *   pokedexSlugs: string[],
+ *   excludeIds?: number[],
+ *   source?: 'pokedex' | 'mega' | 'go',
  * }} GameDef
  */
 
@@ -54,6 +66,8 @@ const GAMES = [
     kind: "main",
     logo: "lgpe",
     pokedexSlugs: ["letsgo-kanto"],
+    // HOME Kanto (LGPE): 150 — exclude Mew, Meltan, Melmetal
+    excludeIds: [151, 808, 809],
   },
   {
     id: "frlg",
@@ -64,6 +78,8 @@ const GAMES = [
     kind: "main",
     logo: "frlg",
     pokedexSlugs: ["kanto"],
+    // HOME Kanto (GBA): 150 — exclude Mew
+    excludeIds: [151],
   },
   {
     id: "swsh-galar",
@@ -84,6 +100,8 @@ const GAMES = [
     kind: "dlc",
     logo: "swsh",
     pokedexSlugs: ["isle-of-armor"],
+    // HOME: 210 — exclude Zarude
+    excludeIds: [893],
   },
   {
     id: "swsh-ct",
@@ -104,6 +122,8 @@ const GAMES = [
     kind: "main",
     logo: "bdsp",
     pokedexSlugs: ["original-sinnoh"],
+    // HOME Sinnoh: 150 — exclude Manaphy
+    excludeIds: [490],
   },
   {
     id: "pla",
@@ -144,6 +164,8 @@ const GAMES = [
     kind: "dlc",
     logo: "sv",
     pokedexSlugs: ["blueberry"],
+    // HOME: 240 — exclude Walking Wake, Iron Leaves, Pecharunt
+    excludeIds: [1009, 1010, 1025],
   },
   {
     id: "za-lumiose",
@@ -154,6 +176,8 @@ const GAMES = [
     kind: "main",
     logo: "za",
     pokedexSlugs: ["lumiose-city"],
+    // HOME: 230 — exclude Diancie, Mewtwo
+    excludeIds: [719, 150],
   },
   {
     id: "za-hyperspace",
@@ -164,6 +188,8 @@ const GAMES = [
     kind: "dlc",
     logo: "za",
     pokedexSlugs: ["hyperspace"],
+    // HOME: 131 — exclude Zeraora
+    excludeIds: [807],
   },
   {
     id: "za-mega",
@@ -173,8 +199,8 @@ const GAMES = [
     groupShort: "Z-A",
     kind: "special",
     logo: "mega",
-    // PokéAPI "champions" lists mega-capable species used as Mega dex proxy.
-    pokedexSlugs: ["champions"],
+    pokedexSlugs: [],
+    source: "mega",
   },
   {
     id: "go",
@@ -184,10 +210,13 @@ const GAMES = [
     groupShort: "GO",
     kind: "special",
     logo: "go",
-    // HOME's GO National Dex tracks origin-from-GO; species pool ≈ national.
     pokedexSlugs: ["national"],
+    // Mark unreleased species via pogoapi.net released list (still listed in the dex).
+    source: "go",
   },
 ];
+
+const POGO_RELEASED_URL = "https://pogoapi.net/api/v1/released_pokemon.json";
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -243,6 +272,56 @@ function toSlot(speciesName, speciesId, entryNumber, regionalForm = null) {
   };
 }
 
+function megaDisplayName(speciesName, apiSlug) {
+  const base = titleCase(speciesName);
+  if (/-mega-x$|-megax$/.test(apiSlug)) return `Mega ${base} X`;
+  if (/-mega-y$|-megay$/.test(apiSlug)) return `Mega ${base} Y`;
+  if (/-mega-z$|-megaz$/.test(apiSlug)) return `Mega ${base} Z`;
+  return `Mega ${base}`;
+}
+
+/**
+ * Build HOME Mega Evolution Pokédex slots (93) from form-variants mega map.
+ * Dual megas (X/Y/Z) are separate entries; Meowstic / Magearna / Tatsugiri are combined.
+ * @param {Record<string, any>} megaMap
+ */
+function buildMegaSlots(megaMap) {
+  const slots = [];
+  let entryNumber = 0;
+  const speciesIds = Object.keys(megaMap)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  for (const speciesId of speciesIds) {
+    const entry = megaMap[String(speciesId)];
+    if (!entry) continue;
+    const speciesName = entry.apiSlug.replace(
+      /-(mega(-[xyz])?|megax|megay|megaz|male-mega|female-mega|.*-mega)$/,
+      "",
+    );
+    const forms = COMBINED_MEGA_SPECIES.has(speciesId)
+      ? [entry]
+      : [entry, ...(entry.alts ?? [])];
+
+    for (const form of forms) {
+      entryNumber += 1;
+      const spriteId = form.formId;
+      slots.push({
+        id: speciesId,
+        key: `n${speciesId}-${form.apiSlug}`,
+        slug: form.apiSlug,
+        name: megaDisplayName(speciesName, form.apiSlug),
+        entryNumber,
+        formId: form.formId,
+        formSlug: form.apiSlug,
+        sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${spriteId}.png`,
+        shinySprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${spriteId}.png`,
+      });
+    }
+  }
+  return slots;
+}
+
 function boxify(slots, gameId) {
   const boxes = [];
   for (let i = 0; i < slots.length; i += BOX_SIZE) {
@@ -271,34 +350,71 @@ async function loadDex(slug) {
     .sort((a, b) => a.entryNumber - b.entryNumber || a.id - b.id);
 }
 
+/** @returns {Promise<Set<number>>} */
+async function loadGoReleasedIds() {
+  const data = await fetchJson(POGO_RELEASED_URL);
+  return new Set(Object.keys(data).map(Number).filter((n) => Number.isFinite(n) && n > 0));
+}
+
 async function main() {
-  const { readFileSync } = await import("node:fs");
   let regionalMap = {};
+  let megaMap = {};
   try {
     const fv = JSON.parse(readFileSync(formVariantsPath, "utf8"));
     regionalMap = fv.regional ?? {};
+    megaMap = fv.mega ?? {};
   } catch {
-    console.warn("form-variants.json missing regional map — run generate-form-variants first");
+    console.warn("form-variants.json missing — run generate-form-variants first");
   }
 
   const games = [];
 
   for (const game of GAMES) {
-    const slug = game.pokedexSlugs[0];
-    const region = REGION_BY_POKEDEX[slug];
-    console.log(`Fetching ${game.id} (${slug}${region ? `, ${region}` : ""})…`);
+    console.log(`Building ${game.id}…`);
     try {
-      const species = await loadDex(slug);
-      if (species.length === 0) {
-        console.warn(`  skip ${game.id}: empty dex`);
-        continue;
+      /** @type {ReturnType<typeof toSlot>[]} */
+      let slots;
+
+      if (game.source === "mega") {
+        slots = buildMegaSlots(megaMap);
+        if (slots.length === 0) {
+          console.warn(`  skip ${game.id}: no mega forms in form-variants`);
+          continue;
+        }
+      } else {
+        const slug = game.pokedexSlugs[0];
+        const region = REGION_BY_POKEDEX[slug];
+        const exclude = new Set(game.excludeIds ?? []);
+        let species = await loadDex(slug);
+        if (exclude.size) {
+          species = species.filter((s) => !exclude.has(s.id));
+        }
+        if (species.length === 0) {
+          console.warn(`  skip ${game.id}: empty dex`);
+          continue;
+        }
+        // Re-number entries after exclusions so boxes stay contiguous for HOME totals.
+        species = species.map((s, i) => ({ ...s, entryNumber: i + 1 }));
+        let regionalHits = 0;
+        slots = species.map((s) => {
+          const form = resolveRegionalForm(regionalMap, s.id, region);
+          if (form) regionalHits += 1;
+          return toSlot(s.name, s.id, s.entryNumber, form);
+        });
+        if (regionalHits) console.log(`  (${regionalHits} regional forms)`);
+
+        if (game.source === "go") {
+          const released = await loadGoReleasedIds();
+          let unavailable = 0;
+          slots = slots.map((slot) => {
+            if (released.has(slot.id)) return slot;
+            unavailable += 1;
+            return { ...slot, available: false };
+          });
+          console.log(`  (${unavailable} not yet in Pokémon GO)`);
+        }
       }
-      let regionalHits = 0;
-      const slots = species.map((s) => {
-        const form = resolveRegionalForm(regionalMap, s.id, region);
-        if (form) regionalHits += 1;
-        return toSlot(s.name, s.id, s.entryNumber, form);
-      });
+
       games.push({
         id: game.id,
         name: game.name,
@@ -312,7 +428,7 @@ async function main() {
         boxSize: BOX_SIZE,
         boxes: boxify(slots, game.id),
       });
-      console.log(`  ${slots.length} Pokémon${regionalHits ? ` (${regionalHits} regional forms)` : ""}`);
+      console.log(`  ${slots.length} Pokémon`);
     } catch (err) {
       console.warn(`  skip ${game.id}:`, err.message);
     }
