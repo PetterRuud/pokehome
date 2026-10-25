@@ -35,14 +35,7 @@ import {
   type MixGoal,
 } from "@/lib/donut-calculator";
 import { useHyperBerryStore } from "@/lib/hyper-berry-store";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  InfoIcon,
-  MinusIcon,
-  PlusIcon,
-  XIcon,
-} from "lucide-react";
+import { CheckIcon, ChevronDownIcon, InfoIcon, MinusIcon, PlusIcon, XIcon } from "lucide-react";
 
 const STAR_OPTIONS: DonutStar[] = [1, 2, 3, 4, 5];
 
@@ -132,9 +125,9 @@ export function DonutCalculator() {
       <CardHeader>
         <CardTitle>Portal donut calculator</CardTitle>
         <CardDescription>
-          Track all {berryIds.length} Mega Dimension Hyper Berries (saved in this browser),
-          pick a legendary portal recipe, and see if you can cook it (optional berries
-          ignored; Coba ↔ Rindo substitutes count).
+          Track all {berryIds.length} Mega Dimension Hyper Berries (saved in this browser), pick a
+          legendary portal recipe, and see if you can cook it (optional berries ignored; Coba ↔
+          Rindo substitutes count).
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
@@ -279,10 +272,7 @@ export function DonutCalculator() {
                 Best tip recipe for your stash
                 {tipSuggestion.note ? ` · ${tipSuggestion.note}` : ""}
               </p>
-              <Badge
-                variant={tipSuggestion.canMake ? "default" : "destructive"}
-                className="w-fit"
-              >
+              <Badge variant={tipSuggestion.canMake ? "default" : "destructive"} className="w-fit">
                 {tipSuggestion.canMake ? (
                   <CheckIcon data-icon="inline-start" />
                 ) : (
@@ -322,9 +312,7 @@ export function DonutCalculator() {
           <Label>Portal recipe</Label>
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={
-                <Button type="button" variant="outline" className="w-full justify-between" />
-              }
+              render={<Button type="button" variant="outline" className="w-full justify-between" />}
             >
               <span className="flex min-w-0 items-center gap-2">
                 {recipe.donut ? (
@@ -364,12 +352,8 @@ export function DonutCalculator() {
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          {recipe.label ? (
-            <p className="text-xs text-muted-foreground">{recipe.label}</p>
-          ) : null}
-          {recipe.note ? (
-            <p className="text-xs text-muted-foreground">{recipe.note}</p>
-          ) : null}
+          {recipe.label ? <p className="text-xs text-muted-foreground">{recipe.label}</p> : null}
+          {recipe.note ? <p className="text-xs text-muted-foreground">{recipe.note}</p> : null}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -400,9 +384,7 @@ export function DonutCalculator() {
                     className="size-6 shrink-0"
                     loading="lazy"
                   />
-                  <span className="min-w-0 flex-1 truncate">
-                    {capitalizeBerryId(berry.id)}
-                  </span>
+                  <span className="min-w-0 flex-1 truncate">{capitalizeBerryId(berry.id)}</span>
                   <span className="tabular-nums text-muted-foreground">
                     {have}/{berry.count}
                   </span>

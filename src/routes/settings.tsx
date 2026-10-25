@@ -1,10 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  useAuth,
-} from "@clerk/tanstack-react-start";
+import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/tanstack-react-start";
 import { useRef, useState } from "react";
 import {
   Card,
@@ -17,10 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { FieldDescription, FieldTitle } from "@/components/ui/field";
-import {
-  ConfirmAlertDialog,
-  type ConfirmRequest,
-} from "@/components/confirm-alert-dialog";
+import { ConfirmAlertDialog, type ConfirmRequest } from "@/components/confirm-alert-dialog";
 import { useCloudSyncContext } from "@/components/cloud-sync-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useDexStore } from "@/lib/store";
@@ -83,8 +75,7 @@ function SettingsPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
         <p className="text-sm text-muted-foreground">
-          Local-first IndexedDB — optional cloud backup when signed in
-          (last-write-wins).
+          Local-first IndexedDB — optional cloud backup when signed in (last-write-wins).
         </p>
       </div>
 
@@ -95,8 +86,8 @@ function SettingsPage() {
             Account & sync
           </CardTitle>
           <CardDescription>
-            Sign in to sync progress across devices. If cloud data is newer, it
-            replaces this browser. Export a file backup first if unsure.
+            Sign in to sync progress across devices. If cloud data is newer, it replaces this
+            browser. Export a file backup first if unsure.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">

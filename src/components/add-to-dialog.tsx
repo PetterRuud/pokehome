@@ -23,14 +23,7 @@ import {
 import { canGmax, canMega, canRegional } from "@/lib/form-variants";
 import { getGameGroups } from "@/lib/games";
 import type { GameId } from "@/lib/types";
-import {
-  CheckIcon,
-  ExpandIcon,
-  EyeIcon,
-  GlobeIcon,
-  SparklesIcon,
-  ZapIcon,
-} from "lucide-react";
+import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, SparklesIcon, ZapIcon } from "lucide-react";
 
 export type AddStatuses = {
   caught: boolean;
@@ -173,24 +166,19 @@ export function AddToDialogButton({
     setOpen(false);
   }
 
-  const countLabel =
-    selectedCount === 1 ? "1 Pokémon" : `${selectedCount} Pokémon`;
+  const countLabel = selectedCount === 1 ? "1 Pokémon" : `${selectedCount} Pokémon`;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={
-          <Button size="sm" disabled={disabled || selectedCount === 0} />
-        }
-      >
+      <DialogTrigger render={<Button size="sm" disabled={disabled || selectedCount === 0} />}>
         Add
       </DialogTrigger>
       <DialogContent className="sm:max-w-md" showCloseButton>
         <DialogHeader>
           <DialogTitle>Add to living dex</DialogTitle>
           <DialogDescription>
-            Choose what to mark for {countLabel}. Status updates the national
-            dex; games also mark those origin Pokédexes.
+            Choose what to mark for {countLabel}. Status updates the national dex; games also mark
+            those origin Pokédexes.
           </DialogDescription>
         </DialogHeader>
 
@@ -244,9 +232,7 @@ export function AddToDialogButton({
                               className="flex min-w-0 items-center gap-1.5 font-normal"
                             >
                               <span className="truncate">{game.name}</span>
-                              {game.kind === "dlc" ? (
-                                <Badge variant="secondary">DLC</Badge>
-                              ) : null}
+                              {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
                             </FieldLabel>
                           </FieldContent>
                         </Field>

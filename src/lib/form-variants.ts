@@ -68,8 +68,7 @@ export function regionalSpeciesCount(): number {
 /** Narrow boxes to slots that support the active form view (mega/gmax/regional). */
 export function filterBoxesForFormView(boxes: DexBox[], formView: FormView): DexBox[] {
   if (formView !== "mega" && formView !== "gmax" && formView !== "regional") return boxes;
-  const eligible =
-    formView === "mega" ? canMega : formView === "gmax" ? canGmax : canRegional;
+  const eligible = formView === "mega" ? canMega : formView === "gmax" ? canGmax : canRegional;
 
   return boxes
     .map((box) => ({

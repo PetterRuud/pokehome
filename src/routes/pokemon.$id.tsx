@@ -5,13 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemGroup,
-  ItemTitle,
-} from "@/components/ui/item";
+import { Item, ItemActions, ItemContent, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { EvolutionChart } from "@/components/evolution-chart";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { getEvolutionChain, getPokemonSummary } from "@/server/pokemon";
@@ -28,12 +22,7 @@ import {
   ZapIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  gameHasSpecies,
-  gameNeighbors,
-  getGame,
-  getGameGroupsForSpecies,
-} from "@/lib/games";
+import { gameHasSpecies, gameNeighbors, getGame, getGameGroupsForSpecies } from "@/lib/games";
 import type { GameId } from "@/lib/types";
 import nationalDex from "@/data/national-dex.json";
 
@@ -103,11 +92,7 @@ function PokemonError() {
   return (
     <div className="mx-auto flex max-w-md flex-col gap-3 py-12 text-center">
       <p className="font-semibold">Pokémon not found</p>
-      <Button
-        variant="outline"
-        render={<Link to="/dex" search={dexSearch} />}
-        nativeButton={false}
-      >
+      <Button variant="outline" render={<Link to="/dex" search={dexSearch} />} nativeButton={false}>
         Back to dex
       </Button>
     </div>
@@ -142,13 +127,9 @@ function PokemonPage() {
   const fromGame = search.from === "games" && search.game ? getGame(search.game) : undefined;
   const inGameOrder = Boolean(fromGame && gameHasSpecies(fromGame, summary.id));
   const { prev, next } =
-    inGameOrder && fromGame
-      ? gameNeighbors(fromGame, summary.id)
-      : nationalNeighbors(summary.id);
+    inGameOrder && fromGame ? gameNeighbors(fromGame, summary.id) : nationalNeighbors(summary.id);
   const navSearch = fromGame ? search : undefined;
-  const dexSearch = fromGame
-    ? { tab: "games" as const, game: fromGame.id }
-    : undefined;
+  const dexSearch = fromGame ? { tab: "games" as const, game: fromGame.id } : undefined;
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -354,9 +335,7 @@ function PokemonPage() {
                           <ItemContent>
                             <ItemTitle>
                               {game.name}
-                              {game.kind === "dlc" ? (
-                                <Badge variant="secondary">DLC</Badge>
-                              ) : null}
+                              {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
                             </ItemTitle>
                           </ItemContent>
                           <ItemActions>
@@ -381,7 +360,12 @@ function PokemonPage() {
 
       <div className="flex w-full flex-col gap-4">
         <Separator />
-        <PokemonAdjacentNav prev={prev} next={next} search={navSearch} className="w-full justify-between" />
+        <PokemonAdjacentNav
+          prev={prev}
+          next={next}
+          search={navSearch}
+          className="w-full justify-between"
+        />
       </div>
     </div>
   );
@@ -412,9 +396,7 @@ function PokemonAdjacentNav({
         <Button
           variant="outline"
           size="sm"
-          render={
-            <Link to="/pokemon/$id" params={{ id: String(prev.id) }} search={search} />
-          }
+          render={<Link to="/pokemon/$id" params={{ id: String(prev.id) }} search={search} />}
           nativeButton={false}
         >
           <ChevronLeftIcon data-icon="inline-start" />
@@ -429,9 +411,7 @@ function PokemonAdjacentNav({
           variant="outline"
           size="sm"
           className={cn(!prev && "ms-auto")}
-          render={
-            <Link to="/pokemon/$id" params={{ id: String(next.id) }} search={search} />
-          }
+          render={<Link to="/pokemon/$id" params={{ id: String(next.id) }} search={search} />}
           nativeButton={false}
         >
           <span>

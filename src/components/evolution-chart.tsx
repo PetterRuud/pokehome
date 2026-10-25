@@ -21,9 +21,7 @@ function Stage({
     <Item
       variant="outline"
       size="sm"
-      render={
-        <Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />
-      }
+      render={<Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />}
       className="w-28 flex-col items-center"
     >
       <PokemonSprite id={node.id} style={spriteStyle} width={80} height={80} className="size-20" />

@@ -1,16 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  SignInButton,
-  UserButton,
-  useAuth,
-} from "@clerk/tanstack-react-start";
-import {
-  GiftIcon,
-  Grid2x2Icon,
-  HomeIcon,
-  LightbulbIcon,
-  SettingsIcon,
-} from "lucide-react";
+import { SignInButton, UserButton, useAuth } from "@clerk/tanstack-react-start";
+import { GiftIcon, Grid2x2Icon, HomeIcon, LightbulbIcon, SettingsIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

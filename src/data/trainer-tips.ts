@@ -80,10 +80,7 @@ export const trainerTipsById: Record<string, GameTips> = {
               },
               {
                 label: "Mega Heatran · Survey No. 5 · 4★ arena",
-                ingredients: [
-                  b("coba", 4, { hyper: H }),
-                  b("charti", 4, { hyper: H }),
-                ],
+                ingredients: [b("coba", 4, { hyper: H }), b("charti", 4, { hyper: H })],
                 note: "4★ · Spicy/Bitter for offense/defense powers · Ground ×4",
               },
             ],

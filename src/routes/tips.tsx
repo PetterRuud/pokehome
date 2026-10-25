@@ -7,11 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GameLogo } from "@/components/game-logo";
 import { DonutCalculator } from "@/components/donut-calculator";
 import { berryDisplayName, berrySpriteUrl } from "@/lib/berries";
-import {
-  getDefaultTipFamilyId,
-  getTipFamilies,
-  getTips,
-} from "@/lib/trainer-tips";
+import { getDefaultTipFamilyId, getTipFamilies, getTips } from "@/lib/trainer-tips";
 import type { TipBerry, TipBlock, TipRecipe, TipSection } from "@/data/trainer-tips";
 import { ExternalLinkIcon } from "lucide-react";
 
@@ -22,8 +18,7 @@ type TipsSearch = {
 export const Route = createFileRoute("/tips")({
   validateSearch: (search: Record<string, unknown>): TipsSearch => {
     const families = getTipFamilies();
-    const raw =
-      typeof search.game === "string" && search.game.length > 0 ? search.game : undefined;
+    const raw = typeof search.game === "string" && search.game.length > 0 ? search.game : undefined;
     const game = raw && families.some((f) => f.id === raw) ? raw : undefined;
     return game ? { game } : {};
   },
@@ -83,12 +78,7 @@ function TipsPage() {
             title={f.name}
             className="h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5"
           >
-            <GameLogo
-              logo={f.logo}
-              title={f.name}
-              variant="wordmark"
-              className="h-7 max-w-full"
-            />
+            <GameLogo logo={f.logo} title={f.name} variant="wordmark" className="h-7 max-w-full" />
             <span className="text-center text-xs leading-tight font-medium">{f.short}</span>
           </ToggleGroupItem>
         ))}
@@ -196,17 +186,13 @@ function TipBlockView({ block }: { block: TipBlock }) {
 function RecipeRow({ recipe }: { recipe: TipRecipe }) {
   return (
     <li className="flex flex-col gap-2 px-3 py-2.5">
-      {recipe.label ? (
-        <p className="text-sm font-semibold leading-snug">{recipe.label}</p>
-      ) : null}
+      {recipe.label ? <p className="text-sm font-semibold leading-snug">{recipe.label}</p> : null}
       <div className="flex flex-wrap items-center gap-2">
         {recipe.ingredients.map((berry, i) => (
           <BerryChip key={`${berry.id}-${berry.optional ? "opt" : i}`} berry={berry} />
         ))}
       </div>
-      {recipe.note ? (
-        <p className="text-xs text-muted-foreground">{recipe.note}</p>
-      ) : null}
+      {recipe.note ? <p className="text-xs text-muted-foreground">{recipe.note}</p> : null}
     </li>
   );
 }

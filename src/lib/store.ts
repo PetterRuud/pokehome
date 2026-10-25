@@ -219,7 +219,7 @@ function mergeGameCaught(
 ) {
   const out: Record<GameId, Record<string, boolean>> = { ...a };
   for (const [gameId, map] of Object.entries(b)) {
-    out[gameId] = { ...(out[gameId] ?? {}), ...map };
+    out[gameId] = { ...out[gameId], ...map };
   }
   return out;
 }
@@ -357,12 +357,12 @@ export const useDexStore = create<DexState>()(
         set((s) => ({
           caughtByGame: {
             ...s.caughtByGame,
-            [gameId]: { ...(s.caughtByGame[gameId] ?? {}), [key]: caught },
+            [gameId]: { ...s.caughtByGame[gameId], [key]: caught },
           },
         })),
       setGameCaughtMany: (gameId, keys, caught) =>
         set((s) => {
-          const game = { ...(s.caughtByGame[gameId] ?? {}) };
+          const game = { ...s.caughtByGame[gameId] };
           for (const key of keys) game[key] = caught;
           return {
             caughtByGame: { ...s.caughtByGame, [gameId]: game },
@@ -372,7 +372,7 @@ export const useDexStore = create<DexState>()(
         set((s) => {
           const caughtByGame = { ...s.caughtByGame };
           for (const gameId of gameIds) {
-            const game = { ...(caughtByGame[gameId] ?? {}) };
+            const game = { ...caughtByGame[gameId] };
             for (const key of keys) game[key] = caught;
             caughtByGame[gameId] = game;
           }

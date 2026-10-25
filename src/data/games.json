@@ -10,9 +10,7 @@
       "groupShort": "LGPE",
       "kind": "main",
       "logo": "lgpe",
-      "pokedexSlugs": [
-        "letsgo-kanto"
-      ],
+      "pokedexSlugs": ["letsgo-kanto"],
       "total": 150,
       "boxSize": 30,
       "boxes": [
@@ -1411,9 +1409,7 @@
       "groupShort": "FRLG",
       "kind": "main",
       "logo": "frlg",
-      "pokedexSlugs": [
-        "kanto"
-      ],
+      "pokedexSlugs": ["kanto"],
       "total": 150,
       "boxSize": 30,
       "boxes": [
@@ -2812,9 +2808,7 @@
       "groupShort": "SwSh",
       "kind": "main",
       "logo": "swsh",
-      "pokedexSlugs": [
-        "galar"
-      ],
+      "pokedexSlugs": ["galar"],
       "total": 400,
       "boxSize": 30,
       "boxes": [
@@ -6565,9 +6559,7 @@
       "groupShort": "SwSh",
       "kind": "dlc",
       "logo": "swsh",
-      "pokedexSlugs": [
-        "isle-of-armor"
-      ],
+      "pokedexSlugs": ["isle-of-armor"],
       "total": 210,
       "boxSize": 30,
       "boxes": [
@@ -8529,9 +8521,7 @@
       "groupShort": "SwSh",
       "kind": "dlc",
       "logo": "swsh",
-      "pokedexSlugs": [
-        "crown-tundra"
-      ],
+      "pokedexSlugs": ["crown-tundra"],
       "total": 210,
       "boxSize": 30,
       "boxes": [
@@ -10514,9 +10504,7 @@
       "groupShort": "BDSP",
       "kind": "main",
       "logo": "bdsp",
-      "pokedexSlugs": [
-        "original-sinnoh"
-      ],
+      "pokedexSlugs": ["original-sinnoh"],
       "total": 150,
       "boxSize": 30,
       "boxes": [
@@ -11915,9 +11903,7 @@
       "groupShort": "PLA",
       "kind": "main",
       "logo": "pla",
-      "pokedexSlugs": [
-        "hisui"
-      ],
+      "pokedexSlugs": ["hisui"],
       "total": 242,
       "boxSize": 30,
       "boxes": [
@@ -14220,9 +14206,7 @@
       "groupShort": "SV",
       "kind": "main",
       "logo": "sv",
-      "pokedexSlugs": [
-        "paldea"
-      ],
+      "pokedexSlugs": ["paldea"],
       "total": 400,
       "boxSize": 30,
       "boxes": [
@@ -17940,9 +17924,7 @@
       "groupShort": "SV",
       "kind": "dlc",
       "logo": "sv",
-      "pokedexSlugs": [
-        "kitakami"
-      ],
+      "pokedexSlugs": ["kitakami"],
       "total": 200,
       "boxSize": 30,
       "boxes": [
@@ -19808,9 +19790,7 @@
       "groupShort": "SV",
       "kind": "dlc",
       "logo": "sv",
-      "pokedexSlugs": [
-        "blueberry"
-      ],
+      "pokedexSlugs": ["blueberry"],
       "total": 240,
       "boxSize": 30,
       "boxes": [
@@ -22043,9 +22023,7 @@
       "groupShort": "Z-A",
       "kind": "main",
       "logo": "za",
-      "pokedexSlugs": [
-        "lumiose-city"
-      ],
+      "pokedexSlugs": ["lumiose-city"],
       "total": 230,
       "boxSize": 30,
       "boxes": [
@@ -24185,9 +24163,7 @@
       "groupShort": "Z-A",
       "kind": "dlc",
       "logo": "za",
-      "pokedexSlugs": [
-        "hyperspace"
-      ],
+      "pokedexSlugs": ["hyperspace"],
       "total": 131,
       "boxSize": 30,
       "boxes": [
@@ -26480,9 +26456,7 @@
       "groupShort": "GO",
       "kind": "special",
       "logo": "go",
-      "pokedexSlugs": [
-        "national"
-      ],
+      "pokedexSlugs": ["national"],
       "total": 1025,
       "boxSize": 30,
       "boxes": [

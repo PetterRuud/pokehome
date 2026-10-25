@@ -39,9 +39,9 @@ function regionalRegion(name) {
 
 /** Prefer the "main" regional form when multiple exist (e.g. darmanitan zen). */
 function regionalRank(apiSlug) {
-  if (/-standard$/.test(apiSlug)) return 0;
-  if (/-combat-breed$/.test(apiSlug)) return 0;
-  if (/-zen$/.test(apiSlug)) return 2;
+  if (apiSlug.endsWith("-standard")) return 0;
+  if (apiSlug.endsWith("-combat-breed")) return 0;
+  if (apiSlug.endsWith("-zen")) return 2;
   if (/-blaze-breed$|-aqua-breed$/.test(apiSlug)) return 1;
   return 0;
 }

@@ -33,10 +33,7 @@ const speciesById = (() => {
 })();
 
 /** Resolve a gift to a national dex slot via id and/or name. */
-export function resolveGiftPokemon(gift: {
-  pokemon?: string;
-  pokemonId?: number;
-}): DexSlot | null {
+export function resolveGiftPokemon(gift: { pokemon?: string; pokemonId?: number }): DexSlot | null {
   if (gift.pokemonId != null) {
     const byId = speciesById.get(gift.pokemonId);
     if (byId) return byId;
@@ -49,11 +46,7 @@ export function resolveGiftPokemon(gift: {
     .trim()
     .toLowerCase();
   if (!cleaned) return null;
-  return (
-    speciesByName.get(cleaned) ??
-    speciesByName.get(cleaned.split(/\s+/)[0]!) ??
-    null
-  );
+  return speciesByName.get(cleaned) ?? speciesByName.get(cleaned.split(/\s+/)[0]!) ?? null;
 }
 
 export function giftSourceLabel(gift: MysteryGift): string | null {

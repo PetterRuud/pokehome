@@ -35,9 +35,7 @@ export const getCloudSnapshot = createServerFn({ method: "GET" }).handler(
     const userId = await requireUserId();
     const db = await requireDb();
     const row = await db
-      .prepare(
-        "SELECT payload, updated_at FROM dex_snapshots WHERE user_id = ?",
-      )
+      .prepare("SELECT payload, updated_at FROM dex_snapshots WHERE user_id = ?")
       .bind(userId)
       .first<{ payload: string; updated_at: string }>();
 

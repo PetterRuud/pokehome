@@ -27,23 +27,14 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import {
   AddToDialogButton,
   applyAddToOptions,
   summarizeAddOptions,
   type AddToOptions,
 } from "@/components/add-to-dialog";
-import {
-  ConfirmAlertDialog,
-  type ConfirmRequest,
-} from "@/components/confirm-alert-dialog";
+import { ConfirmAlertDialog, type ConfirmRequest } from "@/components/confirm-alert-dialog";
 import { DexSearchBar } from "@/components/dex-search";
 import { DexSlotButton } from "@/components/dex-slot";
 import { GameLogo } from "@/components/game-logo";
@@ -90,7 +81,7 @@ function useDexSearchState(slots: DexSlot[]) {
   }, [query]);
 
   const safeIndex = matches.length === 0 ? -1 : Math.min(activeIndex, matches.length - 1);
-  const activeKey = safeIndex >= 0 ? matches[safeIndex]?.key ?? null : null;
+  const activeKey = safeIndex >= 0 ? (matches[safeIndex]?.key ?? null) : null;
   const hitKeys = useMemo(() => new Set(matches.map((s) => s.key)), [matches]);
 
   function goNext() {
@@ -189,10 +180,7 @@ function FormViewMenu({
         <ChevronDownIcon data-icon="inline-end" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuRadioGroup
-          value={value}
-          onValueChange={(next) => onChange(next as FormView)}
-        >
+        <DropdownMenuRadioGroup value={value} onValueChange={(next) => onChange(next as FormView)}>
           {FORM_VIEW_OPTIONS.map((opt) => {
             const Icon = opt.icon;
             return (
@@ -225,8 +213,7 @@ function GameFilterMenu({
   onChange: (value: GameFilter) => void;
   className?: string;
 }) {
-  const current =
-    GAME_FILTER_OPTIONS.find((opt) => opt.value === value) ?? GAME_FILTER_OPTIONS[0];
+  const current = GAME_FILTER_OPTIONS.find((opt) => opt.value === value) ?? GAME_FILTER_OPTIONS[0];
 
   return (
     <DropdownMenu>
@@ -376,9 +363,7 @@ function DexPage() {
                     <span className="text-center text-xs leading-tight font-medium">
                       {game.name}
                     </span>
-                    {game.kind === "dlc" ? (
-                      <Badge variant="secondary">DLC</Badge>
-                    ) : null}
+                    {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
                   </span>
                   {complete ? (
                     <Badge variant="secondary">
@@ -554,8 +539,7 @@ function NationalDexView() {
   useEffect(() => {
     if (!search.activeKey) return;
     const rowIndex = virtualRows.findIndex(
-      (row) =>
-        row.type === "grid" && row.slots.some((slot) => slot.key === search.activeKey),
+      (row) => row.type === "grid" && row.slots.some((slot) => slot.key === search.activeKey),
     );
     if (rowIndex >= 0) {
       virtualizer.scrollToIndex(rowIndex, { align: "center" });
@@ -640,9 +624,7 @@ function NationalDexView() {
           checked={allSelected}
           indeterminate={someSelected && !allSelected}
           onCheckedChange={(v) => toggleSelectAll(v)}
-          aria-label={
-            selectedCount > 0 ? `Select all · ${selectedCount} selected` : "Select all"
-          }
+          aria-label={selectedCount > 0 ? `Select all · ${selectedCount} selected` : "Select all"}
         />
         <AddToDialogButton
           selectedCount={selectedCount}
@@ -728,9 +710,7 @@ function NationalDexView() {
                       const keys = row.keys;
                       setConfirm({
                         title:
-                          keys.length === 1
-                            ? `Clear ${trackLabel}?`
-                            : `Clear box ${trackLabel}?`,
+                          keys.length === 1 ? `Clear ${trackLabel}?` : `Clear box ${trackLabel}?`,
                         description:
                           keys.length === 1
                             ? `This removes the ${trackLabel} mark for this Pokémon.`
@@ -993,10 +973,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     virtualizer.scrollToIndex(rowIndex, { align: "center" });
   }, [search.activeKey, visible, filter, layout, colCount, virtualizer]);
 
-  const selectableVisible = useMemo(
-    () => visible.filter((s) => s.available !== false),
-    [visible],
-  );
+  const selectableVisible = useMemo(() => visible.filter((s) => s.available !== false), [visible]);
   const visibleKeys = useMemo(() => selectableVisible.map((s) => s.key), [selectableVisible]);
   const allVisibleSelected = visibleKeys.length > 0 && visibleKeys.every((k) => selected.has(k));
   const someVisibleSelected = visibleKeys.some((k) => selected.has(k));
@@ -1041,10 +1018,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     if (selectedCount === 0) return;
     const keys = Array.from(selected);
     setConfirm({
-      title:
-        selectedCount === 1
-          ? "Clear from this dex?"
-          : `Clear ${selectedCount} from this dex?`,
+      title: selectedCount === 1 ? "Clear from this dex?" : `Clear ${selectedCount} from this dex?`,
       description:
         selectedCount === 1
           ? "This unmarks the selected Pokémon in this game dex only."
@@ -1079,11 +1053,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                   : "Select all visible"
               }
             />
-            <Button
-              size="sm"
-              disabled={selectedCount === 0}
-              onClick={addSelected}
-            >
+            <Button size="sm" disabled={selectedCount === 0} onClick={addSelected}>
               Add
             </Button>
             <Button
@@ -1281,10 +1251,7 @@ function GameDexRow({
           slug={slot.slug}
           width={72}
           height={72}
-          className={cn(
-            "size-18 sm:size-20",
-            (!caught || unavailable) && "opacity-40 grayscale",
-          )}
+          className={cn("size-18 sm:size-20", (!caught || unavailable) && "opacity-40 grayscale")}
         />
       </ItemMedia>
       <ItemContent>
@@ -1301,13 +1268,7 @@ function GameDexRow({
       <Button
         variant="ghost"
         size="icon-xs"
-        render={
-          <Link
-            to="/pokemon/$id"
-            params={{ id: String(slot.id) }}
-            search={pokemonSearch}
-          />
-        }
+        render={<Link to="/pokemon/$id" params={{ id: String(slot.id) }} search={pokemonSearch} />}
         nativeButton={false}
         aria-label={`${slot.name} details`}
       >
@@ -1378,10 +1339,7 @@ function GameDexGridCard({
           slug={slot.slug}
           width={80}
           height={80}
-          className={cn(
-            "size-16 sm:size-20",
-            !active && "opacity-35 grayscale",
-          )}
+          className={cn("size-16 sm:size-20", !active && "opacity-35 grayscale")}
         />
         <ItemContent className="w-full items-center text-center">
           <ItemTitle className="w-full justify-center tabular-nums">

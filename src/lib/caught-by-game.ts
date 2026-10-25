@@ -14,7 +14,7 @@ export function migrateCaughtByGame(
   const out: Record<GameId, Record<string, boolean>> = {};
   for (const [id, map] of Object.entries(caughtByGame)) {
     const nextId = LEGACY_GAME_ID_MAP[id] ?? id;
-    out[nextId] = { ...(out[nextId] ?? {}), ...map };
+    out[nextId] = { ...out[nextId], ...map };
   }
   return out;
 }

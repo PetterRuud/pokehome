@@ -1,8 +1,4 @@
-import {
-  HYPER_BERRY_IDS,
-  hyperBerryFlavorScore,
-  type HyperBerryId,
-} from "@/lib/berries";
+import { HYPER_BERRY_IDS, hyperBerryFlavorScore, type HyperBerryId } from "@/lib/berries";
 import { trainerTipsById, type TipBerry, type TipRecipe } from "@/data/trainer-tips";
 
 /** Min total flavor score for each donut ★ (Bulbapedia / Game8). */
@@ -28,14 +24,7 @@ export type StarDonutSuggestion = {
   ingredients: TipBerry[];
 };
 
-export type MixGoal =
-  | "stars"
-  | "shiny"
-  | "farm"
-  | "cheap"
-  | "early"
-  | "mid"
-  | "late";
+export type MixGoal = "stars" | "shiny" | "farm" | "cheap" | "early" | "mid" | "late";
 
 export type TipMixSuggestion = {
   goal: MixGoal;
@@ -86,11 +75,7 @@ function takeFromPool(pool: Record<string, number>, id: string, need: number): n
 }
 
 /** Spend inventory toward a required berry, allowing known substitutes. */
-function satisfyNeed(
-  pool: Record<string, number>,
-  id: string,
-  need: number,
-): number {
+function satisfyNeed(pool: Record<string, number>, id: string, need: number): number {
   let remaining = takeFromPool(pool, id, need);
   if (remaining <= 0) return 0;
   for (const alt of HYPER_SUBSTITUTES[id] ?? []) {
@@ -212,8 +197,7 @@ export function suggestDonutForStars(
     if (!chosen) {
       chosen = [...available].sort(
         (a, b) =>
-          hyperBerryFlavorScore(b) - hyperBerryFlavorScore(a) ||
-          (pool[b] ?? 0) - (pool[a] ?? 0),
+          hyperBerryFlavorScore(b) - hyperBerryFlavorScore(a) || (pool[b] ?? 0) - (pool[a] ?? 0),
       )[0]!;
     }
 

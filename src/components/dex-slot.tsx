@@ -6,12 +6,7 @@ import { PokemonSprite } from "@/components/pokemon-sprite";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@/components/ui/item";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { InfoIcon } from "lucide-react";
 
 export function DexSlotButton({

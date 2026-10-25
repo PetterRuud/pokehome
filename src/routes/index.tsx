@@ -83,9 +83,7 @@ function HomePage() {
             {alphaCount > 0 ? <Badge variant="outline">{alphaCount} alpha</Badge> : null}
             {megaCount > 0 ? <Badge variant="outline">{megaCount} mega</Badge> : null}
             {gmaxCount > 0 ? <Badge variant="outline">{gmaxCount} gmax</Badge> : null}
-            {regionalCount > 0 ? (
-              <Badge variant="outline">{regionalCount} regional</Badge>
-            ) : null}
+            {regionalCount > 0 ? <Badge variant="outline">{regionalCount} regional</Badge> : null}
           </div>
           <Button render={<Link to="/dex" />} nativeButton={false}>
             Open dex
@@ -122,9 +120,7 @@ function HomePage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                           <span className="truncate text-sm font-medium">{game.name}</span>
-                          {game.kind === "dlc" ? (
-                            <Badge variant="secondary">DLC</Badge>
-                          ) : null}
+                          {game.kind === "dlc" ? <Badge variant="secondary">DLC</Badge> : null}
                           {complete ? (
                             <Badge variant="secondary">
                               <CheckIcon data-icon="inline-start" aria-hidden />
@@ -159,9 +155,7 @@ function HomePage() {
           <CardTitle className="flex items-center gap-2 text-base">
             <GiftIcon className="size-4" />
             Mystery gifts
-            {giftBadge > 0 ? (
-              <Badge variant="secondary">{giftBadge}</Badge>
-            ) : null}
+            {giftBadge > 0 ? <Badge variant="secondary">{giftBadge}</Badge> : null}
           </CardTitle>
           <CardDescription>
             {activeGiftCount === 0

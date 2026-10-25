@@ -26,15 +26,15 @@ Claim the Clerk app for production: `npx clerk@latest auth login` then `npx cler
 
 ## Scripts
 
-| Command | Purpose |
-| --- | --- |
-| `pnpm run dev` | Local Vite / Workers preview |
-| `pnpm run build` | Production build |
-| `pnpm run preview` | Preview production build |
-| `pnpm run deploy` | Build + `wrangler deploy` |
-| `pnpm run cf-typegen` | Regenerate Worker `Env` types |
-| `pnpm run generate-dex` | Refresh national box layout from PokéAPI |
-| `pnpm run generate-form-variants` | Mega/gmax eligibility + form ids |
+| Command                           | Purpose                                  |
+| --------------------------------- | ---------------------------------------- |
+| `pnpm run dev`                    | Local Vite / Workers preview             |
+| `pnpm run build`                  | Production build                         |
+| `pnpm run preview`                | Preview production build                 |
+| `pnpm run deploy`                 | Build + `wrangler deploy`                |
+| `pnpm run cf-typegen`             | Regenerate Worker `Env` types            |
+| `pnpm run generate-dex`           | Refresh national box layout from PokéAPI |
+| `pnpm run generate-form-variants` | Mega/gmax eligibility + form ids         |
 
 ## Data
 

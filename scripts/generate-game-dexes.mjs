@@ -299,15 +299,12 @@ function buildMegaSlots(megaMap, regionalEntries = {}) {
       /-(mega(-[xyz])?|megax|megay|megaz|male-mega|female-mega|.*-mega)$/,
       "",
     );
-    const forms = COMBINED_MEGA_SPECIES.has(speciesId)
-      ? [entry]
-      : [entry, ...(entry.alts ?? [])];
+    const forms = COMBINED_MEGA_SPECIES.has(speciesId) ? [entry] : [entry, ...(entry.alts ?? [])];
     const lumioseNo = lumiose?.get(speciesId);
     const hyperspaceNo = hyperspace?.get(speciesId);
     const entryNumber = lumioseNo ?? hyperspaceNo ?? speciesId;
     // Lumiose megas first (as in Z-A), then Hyperspace — numbers overlap across dexes.
-    const sortKey =
-      lumioseNo != null ? lumioseNo : 1000 + (hyperspaceNo ?? speciesId);
+    const sortKey = lumioseNo != null ? lumioseNo : 1000 + (hyperspaceNo ?? speciesId);
 
     for (const form of forms) {
       const spriteId = form.formId;
@@ -327,9 +324,7 @@ function buildMegaSlots(megaMap, regionalEntries = {}) {
   }
 
   return slots
-    .sort(
-      (a, b) => a.sortKey - b.sortKey || a.id - b.id || a.slug.localeCompare(b.slug),
-    )
+    .sort((a, b) => a.sortKey - b.sortKey || a.id - b.id || a.slug.localeCompare(b.slug))
     .map(({ sortKey: _sortKey, ...slot }) => slot);
 }
 
@@ -364,7 +359,11 @@ async function loadDex(slug) {
 /** @returns {Promise<Set<number>>} */
 async function loadGoReleasedIds() {
   const data = await fetchJson(POGO_RELEASED_URL);
-  return new Set(Object.keys(data).map(Number).filter((n) => Number.isFinite(n) && n > 0));
+  return new Set(
+    Object.keys(data)
+      .map(Number)
+      .filter((n) => Number.isFinite(n) && n > 0),
+  );
 }
 
 async function main() {
@@ -404,13 +403,8 @@ async function main() {
         const fullSpecies = await loadDex(slug);
         // Full map (pre-exclude) so Mega dex can use in-game Lumiose/Hyperspace numbers
         // even for species HOME omits from those living dexes (e.g. Mewtwo).
-        entryByGame.set(
-          game.id,
-          new Map(fullSpecies.map((s) => [s.id, s.entryNumber])),
-        );
-        let species = exclude.size
-          ? fullSpecies.filter((s) => !exclude.has(s.id))
-          : fullSpecies;
+        entryByGame.set(game.id, new Map(fullSpecies.map((s) => [s.id, s.entryNumber])));
+        let species = exclude.size ? fullSpecies.filter((s) => !exclude.has(s.id)) : fullSpecies;
         if (species.length === 0) {
           console.warn(`  skip ${game.id}: empty dex`);
           continue;

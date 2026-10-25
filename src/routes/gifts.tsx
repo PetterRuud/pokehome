@@ -201,9 +201,7 @@ function GiftList({
                       {game}
                     </Badge>
                   ))}
-                  {gift.region ? (
-                    <Badge variant="outline">{gift.region}</Badge>
-                  ) : null}
+                  {gift.region ? <Badge variant="outline">{gift.region}</Badge> : null}
                 </div>
                 <p className="text-sm font-semibold text-foreground">{dateLabel}</p>
               </div>
@@ -230,13 +228,9 @@ function GiftList({
                         {gift.shiny ? " ★" : ""}
                       </span>
                     ) : null}
-                    {notes ? (
-                      <p className="text-sm text-muted-foreground">{notes}</p>
-                    ) : null}
+                    {notes ? <p className="text-sm text-muted-foreground">{notes}</p> : null}
                     {source ? (
-                      <span className="text-xs text-muted-foreground/80">
-                        {source}
-                      </span>
+                      <span className="text-xs text-muted-foreground/80">{source}</span>
                     ) : null}
                   </div>
                 </div>

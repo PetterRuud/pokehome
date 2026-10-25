@@ -4,9 +4,7 @@
     "name": "Pokémon FireRed & LeafGreen PokéDex Completion Gift",
     "pokemon": "Celebi",
     "pokemonId": 251,
-    "games": [
-      "HOME"
-    ],
+    "games": ["HOME"],
     "region": "Global",
     "start": "2026-09-30",
     "end": null,
@@ -18,9 +16,7 @@
     "name": "Pokémon World Championships Distribution",
     "pokemon": "Greninja",
     "pokemonId": 658,
-    "games": [
-      "Legends: Z-A"
-    ],
+    "games": ["Legends: Z-A"],
     "region": "Global",
     "start": "2026-08-27",
     "end": "2026-08-29",
@@ -31,9 +27,7 @@
     "id": "serebii-2026-pok-mon-japan-championships-distribution-2026-06-05",
     "name": "Pokémon Japan Championships Distribution",
     "pokemonId": 445,
-    "games": [
-      "HOME"
-    ],
+    "games": ["HOME"],
     "region": "Global",
     "start": "2026-06-05",
     "end": "2026-06-06",
@@ -46,9 +40,7 @@
     "pokemon": "Volcanion",
     "pokemonId": 721,
     "shiny": true,
-    "games": [
-      "HOME"
-    ],
+    "games": ["HOME"],
     "region": "Global",
     "start": "2026-04-26",
     "end": null,
@@ -60,9 +52,7 @@
     "name": "Pokémon Legends: Z-A Deposit Gift",
     "pokemon": "Totodile",
     "pokemonId": 158,
-    "games": [
-      "HOME"
-    ],
+    "games": ["HOME"],
     "region": "Global",
     "start": "2026-04-01",
     "end": null,
@@ -73,10 +63,7 @@
     "id": "serebii-2026-pok-mon-europe-international-championships-distribution-code-2025-02-12",
     "name": "Pokémon Europe International Championships Distribution - Code:",
     "pokemonId": 157,
-    "games": [
-      "Scarlet",
-      "Violet"
-    ],
+    "games": ["Scarlet", "Violet"],
     "region": "Global",
     "start": "2025-02-12",
     "end": "2025-02-19",
