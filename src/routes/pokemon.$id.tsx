@@ -374,37 +374,34 @@ function PokemonAdjacentNav({
 }) {
   return (
     <nav
-      className={cn("flex min-w-0 items-center justify-end gap-2", className)}
+      className={cn("flex flex-wrap items-center justify-end gap-2", className)}
       aria-label="Adjacent Pokémon"
     >
       {prev ? (
         <Button
           variant="outline"
           size="sm"
-          className="min-w-0 max-w-[48%] justify-start"
           render={<Link to="/pokemon/$id" params={{ id: String(prev.id) }} />}
           nativeButton={false}
         >
           <ChevronLeftIcon data-icon="inline-start" />
-          <span className="truncate">
+          <span>
             <span className="text-muted-foreground tabular-nums">
               #{String(prev.id).padStart(4, "0")}
             </span>{" "}
             {prev.name}
           </span>
         </Button>
-      ) : (
-        <span className="min-w-0 max-w-[48%]" aria-hidden />
-      )}
+      ) : null}
       {next ? (
         <Button
           variant="outline"
           size="sm"
-          className="min-w-0 max-w-[48%] justify-end"
+          className={cn(!prev && "ms-auto")}
           render={<Link to="/pokemon/$id" params={{ id: String(next.id) }} />}
           nativeButton={false}
         >
-          <span className="truncate">
+          <span>
             <span className="text-muted-foreground tabular-nums">
               #{String(next.id).padStart(4, "0")}
             </span>{" "}
@@ -412,9 +409,7 @@ function PokemonAdjacentNav({
           </span>
           <ChevronRightIcon data-icon="inline-end" />
         </Button>
-      ) : (
-        <span className="min-w-0 max-w-[48%]" aria-hidden />
-      )}
+      ) : null}
     </nav>
   );
 }
