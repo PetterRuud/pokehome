@@ -11,7 +11,6 @@ import {
   LightbulbIcon,
   SettingsIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -147,44 +146,6 @@ function AppSidebar({
   );
 }
 
-function MobileBottomNav({ giftBadge }: { giftBadge: number }) {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-safe backdrop-blur md:hidden">
-      <div className="mx-auto grid max-w-lg grid-cols-4 gap-1 px-2 pt-2">
-        {nav.map((item) => {
-          const active = isActivePath(pathname, item.to);
-          const Icon = item.icon;
-          const isGifts = item.to === "/gifts";
-          return (
-            <Button
-              key={item.to}
-              variant="ghost"
-              className={cn(
-                "relative h-auto min-h-11 flex-col gap-0.5 rounded-lg text-xs font-medium",
-                active ? "text-primary" : "text-muted-foreground",
-              )}
-              render={<Link to={item.to} />}
-              nativeButton={false}
-            >
-              <span className="relative">
-                <Icon className="size-5" />
-                {isGifts && giftBadge > 0 ? (
-                  <span className="absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-xs font-semibold text-primary-foreground tabular-nums">
-                    {giftBadge}
-                  </span>
-                ) : null}
-              </span>
-              {item.label}
-            </Button>
-          );
-        })}
-      </div>
-    </nav>
-  );
-}
-
 export function AppShell({
   children,
   progressPercent,
@@ -193,7 +154,6 @@ export function AppShell({
   progressPercent?: number;
 }) {
   const { activeCount, unclaimedCount } = useActiveGiftStats();
-  const giftBadge = unclaimedCount > 0 ? unclaimedCount : activeCount;
 
   return (
     <SidebarProvider defaultOpen={false}>
@@ -223,11 +183,8 @@ export function AppShell({
           </div>
         </header>
 
-
         {/* SidebarInset is already a <main> — nesting another breaks HTML hydration */}
-        <div className="mb-nav flex-1 px-4 py-4 md:mb-0 md:px-6 md:py-6">{children}</div>
-
-        <MobileBottomNav giftBadge={giftBadge} />
+        <div className="flex-1 px-4 py-4 md:px-6 md:py-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -182,16 +182,3 @@
     cursor: pointer;
   }
 }
-
-/* Safe area for mobile bottom nav */
-.pb-safe {
-  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-}
-.mb-nav {
-  margin-bottom: calc(4.25rem + env(safe-area-inset-bottom));
-}
-@media (min-width: 768px) {
-  .mb-nav {
-    margin-bottom: 0;
-  }
-}
