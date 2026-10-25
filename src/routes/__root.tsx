@@ -2,7 +2,6 @@ import { ClerkProvider } from "@clerk/tanstack-react-start";
 import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Toaster } from "@/components/ui/sonner";
@@ -10,9 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppShell } from "@/components/app-shell";
 import { CloudSyncProvider } from "@/components/cloud-sync-provider";
 import { GiftNotifier } from "@/components/gift-notifier";
-import { useDexStore } from "@/lib/store";
-import { countProgress } from "@/lib/dex-stats";
-import nationalDex from "@/data/national-dex.json";
+import { useShellProgressPercent } from "@/hooks/use-shell-progress";
 import appCss from "../styles.css?url";
 
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`;
@@ -87,11 +84,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  const caughtByKey = useDexStore((s) => s.caughtByKey);
-  const percent = useMemo(
-    () => countProgress(nationalDex.boxes, caughtByKey).percent,
-    [caughtByKey],
-  );
+  const percent = useShellProgressPercent();
 
   return (
     <TooltipProvider>
