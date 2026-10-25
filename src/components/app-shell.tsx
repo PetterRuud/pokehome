@@ -4,7 +4,13 @@ import {
   UserButton,
   useAuth,
 } from "@clerk/tanstack-react-start";
-import { GiftIcon, HomeIcon, SettingsIcon, Grid2x2Icon } from "lucide-react";
+import {
+  GiftIcon,
+  Grid2x2Icon,
+  HomeIcon,
+  LightbulbIcon,
+  SettingsIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -31,6 +37,7 @@ import {
 const mainNav = [
   { to: "/", label: "Home", icon: HomeIcon },
   { to: "/dex", label: "Dex", icon: Grid2x2Icon },
+  { to: "/tips", label: "Tips", icon: LightbulbIcon },
   { to: "/gifts", label: "Gifts", icon: GiftIcon },
 ] as const;
 

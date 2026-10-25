@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DexRouteImport } from './routes/dex'
 import { Route as GiftsRouteImport } from './routes/gifts'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TipsRouteImport } from './routes/tips'
 import { Route as PokemonIdRouteImport } from './routes/pokemon.$id'
 import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
 import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
@@ -37,6 +38,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TipsRoute = TipsRouteImport.update({
+  id: '/tips',
+  path: '/tips',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PokemonIdRoute = PokemonIdRouteImport.update({
   id: '/pokemon/$id',
   path: '/pokemon/$id',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/dex': typeof DexRoute
   '/gifts': typeof GiftsRoute
   '/settings': typeof SettingsRoute
+  '/tips': typeof TipsRoute
   '/pokemon/$id': typeof PokemonIdRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/dex': typeof DexRoute
   '/gifts': typeof GiftsRoute
   '/settings': typeof SettingsRoute
+  '/tips': typeof TipsRoute
   '/pokemon/$id': typeof PokemonIdRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/dex': typeof DexRoute
   '/gifts': typeof GiftsRoute
   '/settings': typeof SettingsRoute
+  '/tips': typeof TipsRoute
   '/pokemon/$id': typeof PokemonIdRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/dex'
     | '/gifts'
     | '/settings'
+    | '/tips'
     | '/pokemon/$id'
     | '/sign-in/$'
     | '/sign-up/$'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/dex'
     | '/gifts'
     | '/settings'
+    | '/tips'
     | '/pokemon/$id'
     | '/sign-in/$'
     | '/sign-up/$'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/dex'
     | '/gifts'
     | '/settings'
+    | '/tips'
     | '/pokemon/$id'
     | '/sign-in/$'
     | '/sign-up/$'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   DexRoute: typeof DexRoute
   GiftsRoute: typeof GiftsRoute
   SettingsRoute: typeof SettingsRoute
+  TipsRoute: typeof TipsRoute
   PokemonIdRoute: typeof PokemonIdRoute
   SignInSplatRoute: typeof SignInSplatRoute
   SignUpSplatRoute: typeof SignUpSplatRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tips': {
+      id: '/tips'
+      path: '/tips'
+      fullPath: '/tips'
+      preLoaderRoute: typeof TipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pokemon/$id': {
       id: '/pokemon/$id'
       path: '/pokemon/$id'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   DexRoute: DexRoute,
   GiftsRoute: GiftsRoute,
   SettingsRoute: SettingsRoute,
+  TipsRoute: TipsRoute,
   PokemonIdRoute: PokemonIdRoute,
   SignInSplatRoute: SignInSplatRoute,
   SignUpSplatRoute: SignUpSplatRoute,
