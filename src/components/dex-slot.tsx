@@ -13,6 +13,8 @@ export function DexSlotButton({
   flagged,
   spriteStyle,
   selected,
+  searchHit,
+  searchActive,
   onSelectedChange,
 }: {
   slot: DexSlot;
@@ -22,6 +24,10 @@ export function DexSlotButton({
   flagged: boolean;
   spriteStyle: SpriteStyle;
   selected: boolean;
+  /** Matched by in-app dex search. */
+  searchHit?: boolean;
+  /** Current active search match. */
+  searchActive?: boolean;
   onSelectedChange: (selected: boolean) => void;
 }) {
   const trackingForm = formView !== "default";
@@ -52,6 +58,8 @@ export function DexSlotButton({
       className={cn(
         "relative rounded-md",
         selected && "ring-2 ring-primary/50 ring-offset-1 ring-offset-background",
+        searchHit && !searchActive && !selected && "ring-2 ring-amber-400/60 ring-offset-1 ring-offset-background",
+        searchActive && "ring-2 ring-amber-500 ring-offset-2 ring-offset-background",
       )}
     >
       <Checkbox

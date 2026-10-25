@@ -35,10 +35,12 @@ import {
   ConfirmAlertDialog,
   type ConfirmRequest,
 } from "@/components/confirm-alert-dialog";
+import { DexSearchBar } from "@/components/dex-search";
 import { DexSlotButton } from "@/components/dex-slot";
 import { GameLogo } from "@/components/game-logo";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { applyBoxLayout } from "@/lib/box-layout";
+import { filterSlotsByQuery } from "@/lib/dex-search";
 import { useDexStore } from "@/lib/store";
 import { countGameProgress, countProgress } from "@/lib/dex-stats";
 import {
@@ -66,6 +68,42 @@ import {
   SparklesIcon,
   ZapIcon,
 } from "lucide-react";
+
+function useDexSearchState(slots: DexSlot[]) {
+  const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const matches = useMemo(() => filterSlotsByQuery(slots, query), [slots, query]);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query]);
+
+  const safeIndex = matches.length === 0 ? -1 : Math.min(activeIndex, matches.length - 1);
+  const activeKey = safeIndex >= 0 ? matches[safeIndex]?.key ?? null : null;
+  const hitKeys = useMemo(() => new Set(matches.map((s) => s.key)), [matches]);
+
+  function goNext() {
+    if (matches.length === 0) return;
+    setActiveIndex((i) => (i + 1) % matches.length);
+  }
+
+  function goPrev() {
+    if (matches.length === 0) return;
+    setActiveIndex((i) => (i - 1 + matches.length) % matches.length);
+  }
+
+  return {
+    query,
+    setQuery,
+    matches,
+    activeIndex: safeIndex,
+    activeKey,
+    hitKeys,
+    goNext,
+    goPrev,
+  };
+}
 import { toast } from "sonner";
 
 /** Sit under the app shell sticky header (h-14). */
@@ -370,13 +408,12 @@ function NationalDexView() {
               ? "gmax"
               : "regional";
 
-  const allKeys = useMemo(
-    () => boxes.flatMap((box) => box.slots.map((s) => s.key)),
-    [boxes],
-  );
+  const allSlots = useMemo(() => boxes.flatMap((box) => box.slots), [boxes]);
+  const allKeys = useMemo(() => allSlots.map((s) => s.key), [allSlots]);
   const selectedCount = selected.size;
   const allSelected = allKeys.length > 0 && allKeys.every((k) => selected.has(k));
   const someSelected = allKeys.some((k) => selected.has(k));
+  const search = useDexSearchState(allSlots);
 
   useLayoutEffect(() => {
     const el = listRef.current;
@@ -433,6 +470,17 @@ function NationalDexView() {
   useEffect(() => {
     virtualizer.measure();
   }, [colCount, scrollMargin, virtualRows.length, virtualizer]);
+
+  useEffect(() => {
+    if (!search.activeKey) return;
+    const rowIndex = virtualRows.findIndex(
+      (row) =>
+        row.type === "grid" && row.slots.some((slot) => slot.key === search.activeKey),
+    );
+    if (rowIndex >= 0) {
+      virtualizer.scrollToIndex(rowIndex, { align: "center" });
+    }
+  }, [search.activeKey, virtualRows, virtualizer]);
 
   function setMany(keys: string[], value: boolean) {
     if (formView === "shiny") setShinyMany(keys, value);
@@ -528,6 +576,14 @@ function NationalDexView() {
         <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
+        <DexSearchBar
+          value={search.query}
+          onChange={search.setQuery}
+          matchCount={search.matches.length}
+          activeIndex={search.activeIndex}
+          onPrev={search.goPrev}
+          onNext={search.goNext}
+        />
         <ToggleGroup
           variant="outline"
           size="sm"
@@ -661,6 +717,8 @@ function NationalDexView() {
                     flagged={Boolean(flagByKey?.[slot.key])}
                     spriteStyle={spriteStyle}
                     selected={selected.has(slot.key)}
+                    searchHit={search.hitKeys.has(slot.key)}
+                    searchActive={search.activeKey === slot.key}
                     onSelectedChange={(next) => toggleSelected(slot.key, next)}
                   />
                 ))}
@@ -825,6 +883,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   }, [gameId, filter]);
 
   const slots = useMemo(() => game?.boxes.flatMap((box) => box.slots) ?? [], [game]);
+  const search = useDexSearchState(slots);
 
   const visible = useMemo(() => {
     if (filter === "all") return slots;
@@ -865,6 +924,20 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   useEffect(() => {
     virtualizer.measure();
   }, [layout, colCount, scrollMargin, virtualizer]);
+
+  // Jump to match: widen filter to All if the hit is hidden by caught/missing.
+  useEffect(() => {
+    if (!search.activeKey) return;
+    const inVisible = visible.some((s) => s.key === search.activeKey);
+    if (!inVisible && filter !== "all") {
+      setFilter("all");
+      return;
+    }
+    const slotIndex = visible.findIndex((s) => s.key === search.activeKey);
+    if (slotIndex < 0) return;
+    const rowIndex = layout === "grid" ? Math.floor(slotIndex / colCount) : slotIndex;
+    virtualizer.scrollToIndex(rowIndex, { align: "center" });
+  }, [search.activeKey, visible, filter, layout, colCount, virtualizer]);
 
   const selectableVisible = useMemo(
     () => visible.filter((s) => s.available !== false),
@@ -974,6 +1047,15 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           </>
         ) : null}
 
+        <DexSearchBar
+          value={search.query}
+          onChange={search.setQuery}
+          matchCount={search.matches.length}
+          activeIndex={search.activeIndex}
+          onPrev={search.goPrev}
+          onNext={search.goNext}
+        />
+
         <ToggleGroup
           variant="outline"
           size="sm"
@@ -1054,6 +1136,8 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     gameId={gameId}
                     caught={Boolean(caughtMap[slot.key])}
                     selected={selected.has(slot.key)}
+                    searchHit={search.hitKeys.has(slot.key)}
+                    searchActive={search.activeKey === slot.key}
                     spriteStyle={spriteStyle}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
                   />
@@ -1081,6 +1165,8 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     gameId={gameId}
                     caught={Boolean(caughtMap[slot.key])}
                     selected={selected.has(slot.key)}
+                    searchHit={search.hitKeys.has(slot.key)}
+                    searchActive={search.activeKey === slot.key}
                     spriteStyle={spriteStyle}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
                   />
@@ -1124,6 +1210,8 @@ function GameDexRow({
   gameId,
   caught,
   selected,
+  searchHit,
+  searchActive,
   spriteStyle,
   onSelectedChange,
 }: {
@@ -1131,6 +1219,8 @@ function GameDexRow({
   gameId: GameId;
   caught: boolean;
   selected: boolean;
+  searchHit?: boolean;
+  searchActive?: boolean;
   spriteStyle: SpriteStyle;
   onSelectedChange: (selected: boolean) => void;
 }) {
@@ -1143,6 +1233,8 @@ function GameDexRow({
         "flex items-center gap-3 px-3 py-2.5 sm:gap-4 sm:py-3",
         !caught && "bg-muted/40",
         selected && "bg-primary/10",
+        searchHit && !searchActive && !selected && "bg-amber-500/10",
+        searchActive && "bg-amber-500/20 ring-2 ring-inset ring-amber-500",
         unavailable && "opacity-70",
       )}
     >
@@ -1201,6 +1293,8 @@ function GameDexGridCard({
   gameId,
   caught,
   selected,
+  searchHit,
+  searchActive,
   spriteStyle,
   onSelectedChange,
 }: {
@@ -1208,6 +1302,8 @@ function GameDexGridCard({
   gameId: GameId;
   caught: boolean;
   selected: boolean;
+  searchHit?: boolean;
+  searchActive?: boolean;
   spriteStyle: SpriteStyle;
   onSelectedChange: (selected: boolean) => void;
 }) {
@@ -1220,6 +1316,11 @@ function GameDexGridCard({
       className={cn(
         "relative rounded-md",
         selected && !unavailable && "ring-2 ring-primary/50 ring-offset-1 ring-offset-background",
+        searchHit &&
+          !searchActive &&
+          !selected &&
+          "ring-2 ring-amber-400/60 ring-offset-1 ring-offset-background",
+        searchActive && "ring-2 ring-amber-500 ring-offset-2 ring-offset-background",
       )}
     >
       <Checkbox
