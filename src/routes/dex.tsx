@@ -815,7 +815,7 @@ function NationalBoxHeader({
   onClearAll: () => void;
 }) {
   return (
-    <div className="flex items-center gap-1 border-b border-border bg-background/80 px-1 py-1.5 backdrop-blur">
+    <div className="flex items-center gap-1 bg-background/80 px-1 py-1.5 backdrop-blur">
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 pl-1">
         <span className="truncate font-semibold">{box.title}</span>
         <span className="text-xs text-muted-foreground">{box.rangeLabel}</span>
