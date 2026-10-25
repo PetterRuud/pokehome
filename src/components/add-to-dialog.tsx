@@ -20,13 +20,14 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import { canGmax, canMega } from "@/lib/form-variants";
+import { canGmax, canMega, canRegional } from "@/lib/form-variants";
 import { getGameGroups } from "@/lib/games";
 import type { GameId } from "@/lib/types";
 import {
   CheckIcon,
   ExpandIcon,
   EyeIcon,
+  GlobeIcon,
   SparklesIcon,
   ZapIcon,
 } from "lucide-react";
@@ -37,6 +38,7 @@ export type AddStatuses = {
   alpha: boolean;
   mega: boolean;
   gmax: boolean;
+  regional: boolean;
 };
 
 export type AddToOptions = {
@@ -51,6 +53,7 @@ const DEFAULT_OPTIONS: AddToOptions = {
     alpha: false,
     mega: false,
     gmax: false,
+    regional: false,
   },
   gameIds: [],
 };
@@ -69,6 +72,7 @@ export function applyAddToOptions(
     setAlphaMany: (keys: string[], value: boolean) => void;
     setMegaMany: (keys: string[], value: boolean) => void;
     setGmaxMany: (keys: string[], value: boolean) => void;
+    setRegionalMany: (keys: string[], value: boolean) => void;
     setGamesCaughtMany: (gameIds: GameId[], keys: string[], value: boolean) => void;
   },
 ) {
@@ -84,6 +88,10 @@ export function applyAddToOptions(
     const gmaxKeys = keys.filter((key) => canGmax(parseNationalId(key)));
     if (gmaxKeys.length) actions.setGmaxMany(gmaxKeys, true);
   }
+  if (statuses.regional) {
+    const regionalKeys = keys.filter((key) => canRegional(parseNationalId(key)));
+    if (regionalKeys.length) actions.setRegionalMany(regionalKeys, true);
+  }
   if (gameIds.length) actions.setGamesCaughtMany(gameIds, keys, true);
 }
 
@@ -94,6 +102,7 @@ export function summarizeAddOptions(options: AddToOptions): string {
   if (options.statuses.alpha) parts.push("alpha");
   if (options.statuses.mega) parts.push("mega");
   if (options.statuses.gmax) parts.push("gmax");
+  if (options.statuses.regional) parts.push("regional");
   if (options.gameIds.length === 1) parts.push("1 game");
   else if (options.gameIds.length > 1) parts.push(`${options.gameIds.length} games`);
   return parts.length ? parts.join(" · ") : "nothing selected";
@@ -130,6 +139,12 @@ const STATUS_OPTIONS: {
     icon: ExpandIcon,
     iconClassName: "text-rose-500",
   },
+  {
+    key: "regional",
+    label: "Regional",
+    icon: GlobeIcon,
+    iconClassName: "text-sky-500",
+  },
 ];
 
 export function AddToDialogButton({
@@ -152,6 +167,7 @@ export function AddToDialogButton({
       options.statuses.alpha ||
       options.statuses.mega ||
       options.statuses.gmax ||
+      options.statuses.regional ||
       options.gameIds.length > 0);
 
   function toggleStatus(key: keyof AddStatuses, next: boolean) {

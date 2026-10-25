@@ -1,8 +1,9 @@
 {
-  "version": 1,
-  "generatedAt": "2026-10-24T18:28:45.755Z",
+  "version": 2,
+  "generatedAt": "2026-10-25T07:22:51.781Z",
   "megaCount": 87,
   "gmaxCount": 32,
+  "regionalCount": 54,
   "mega": {
     "3": {
       "formId": 10033,
@@ -465,19 +466,19 @@
       "apiSlug": "glimmora-mega"
     },
     "978": {
-      "formId": 10322,
-      "slug": "tatsugiri-curly-mega",
-      "apiSlug": "tatsugiri-curly-mega",
+      "formId": 10323,
+      "slug": "tatsugiri-droopy-mega",
+      "apiSlug": "tatsugiri-droopy-mega",
       "alts": [
-        {
-          "formId": 10323,
-          "slug": "tatsugiri-droopy-mega",
-          "apiSlug": "tatsugiri-droopy-mega"
-        },
         {
           "formId": 10324,
           "slug": "tatsugiri-stretchy-mega",
           "apiSlug": "tatsugiri-stretchy-mega"
+        },
+        {
+          "formId": 10322,
+          "slug": "tatsugiri-curly-mega",
+          "apiSlug": "tatsugiri-curly-mega"
         }
       ]
     },
@@ -609,9 +610,9 @@
       "apiSlug": "sandaconda-gmax"
     },
     "849": {
-      "formId": 10228,
-      "slug": "toxtricity-low-key-gmax",
-      "apiSlug": "toxtricity-low-key-gmax"
+      "formId": 10219,
+      "slug": "toxtricity-amped-gmax",
+      "apiSlug": "toxtricity-amped-gmax"
     },
     "851": {
       "formId": 10220,
@@ -644,9 +645,396 @@
       "apiSlug": "duraludon-gmax"
     },
     "892": {
-      "formId": 10227,
-      "slug": "urshifu-rapid-strike-gmax",
-      "apiSlug": "urshifu-rapid-strike-gmax"
+      "formId": 10226,
+      "slug": "urshifu-single-strike-gmax",
+      "apiSlug": "urshifu-single-strike-gmax"
+    }
+  },
+  "regional": {
+    "19": {
+      "formId": 10091,
+      "slug": "rattata-alola",
+      "apiSlug": "rattata-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "20": {
+      "formId": 10092,
+      "slug": "raticate-alola",
+      "apiSlug": "raticate-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "26": {
+      "formId": 10100,
+      "slug": "raichu-alola",
+      "apiSlug": "raichu-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "27": {
+      "formId": 10101,
+      "slug": "sandshrew-alola",
+      "apiSlug": "sandshrew-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "28": {
+      "formId": 10102,
+      "slug": "sandslash-alola",
+      "apiSlug": "sandslash-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "37": {
+      "formId": 10103,
+      "slug": "vulpix-alola",
+      "apiSlug": "vulpix-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "38": {
+      "formId": 10104,
+      "slug": "ninetales-alola",
+      "apiSlug": "ninetales-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "50": {
+      "formId": 10105,
+      "slug": "diglett-alola",
+      "apiSlug": "diglett-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "51": {
+      "formId": 10106,
+      "slug": "dugtrio-alola",
+      "apiSlug": "dugtrio-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "52": {
+      "formId": 10107,
+      "slug": "meowth-alola",
+      "apiSlug": "meowth-alola",
+      "region": "alola",
+      "alts": [
+        {
+          "formId": 10161,
+          "slug": "meowth-galar",
+          "apiSlug": "meowth-galar",
+          "region": "galar"
+        }
+      ]
+    },
+    "53": {
+      "formId": 10108,
+      "slug": "persian-alola",
+      "apiSlug": "persian-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "58": {
+      "formId": 10229,
+      "slug": "growlithe-hisui",
+      "apiSlug": "growlithe-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "59": {
+      "formId": 10230,
+      "slug": "arcanine-hisui",
+      "apiSlug": "arcanine-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "74": {
+      "formId": 10109,
+      "slug": "geodude-alola",
+      "apiSlug": "geodude-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "75": {
+      "formId": 10110,
+      "slug": "graveler-alola",
+      "apiSlug": "graveler-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "76": {
+      "formId": 10111,
+      "slug": "golem-alola",
+      "apiSlug": "golem-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "77": {
+      "formId": 10162,
+      "slug": "ponyta-galar",
+      "apiSlug": "ponyta-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "78": {
+      "formId": 10163,
+      "slug": "rapidash-galar",
+      "apiSlug": "rapidash-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "79": {
+      "formId": 10164,
+      "slug": "slowpoke-galar",
+      "apiSlug": "slowpoke-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "80": {
+      "formId": 10165,
+      "slug": "slowbro-galar",
+      "apiSlug": "slowbro-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "83": {
+      "formId": 10166,
+      "slug": "farfetchd-galar",
+      "apiSlug": "farfetchd-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "88": {
+      "formId": 10112,
+      "slug": "grimer-alola",
+      "apiSlug": "grimer-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "89": {
+      "formId": 10113,
+      "slug": "muk-alola",
+      "apiSlug": "muk-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "100": {
+      "formId": 10231,
+      "slug": "voltorb-hisui",
+      "apiSlug": "voltorb-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "101": {
+      "formId": 10232,
+      "slug": "electrode-hisui",
+      "apiSlug": "electrode-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "103": {
+      "formId": 10114,
+      "slug": "exeggutor-alola",
+      "apiSlug": "exeggutor-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "105": {
+      "formId": 10115,
+      "slug": "marowak-alola",
+      "apiSlug": "marowak-alola",
+      "region": "alola",
+      "alts": []
+    },
+    "110": {
+      "formId": 10167,
+      "slug": "weezing-galar",
+      "apiSlug": "weezing-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "122": {
+      "formId": 10168,
+      "slug": "mr-mime-galar",
+      "apiSlug": "mr-mime-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "128": {
+      "formId": 10250,
+      "slug": "tauros-paldea-combat-breed",
+      "apiSlug": "tauros-paldea-combat-breed",
+      "region": "paldea",
+      "alts": []
+    },
+    "144": {
+      "formId": 10169,
+      "slug": "articuno-galar",
+      "apiSlug": "articuno-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "145": {
+      "formId": 10170,
+      "slug": "zapdos-galar",
+      "apiSlug": "zapdos-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "146": {
+      "formId": 10171,
+      "slug": "moltres-galar",
+      "apiSlug": "moltres-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "157": {
+      "formId": 10233,
+      "slug": "typhlosion-hisui",
+      "apiSlug": "typhlosion-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "194": {
+      "formId": 10253,
+      "slug": "wooper-paldea",
+      "apiSlug": "wooper-paldea",
+      "region": "paldea",
+      "alts": []
+    },
+    "199": {
+      "formId": 10172,
+      "slug": "slowking-galar",
+      "apiSlug": "slowking-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "211": {
+      "formId": 10234,
+      "slug": "qwilfish-hisui",
+      "apiSlug": "qwilfish-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "215": {
+      "formId": 10235,
+      "slug": "sneasel-hisui",
+      "apiSlug": "sneasel-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "222": {
+      "formId": 10173,
+      "slug": "corsola-galar",
+      "apiSlug": "corsola-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "263": {
+      "formId": 10174,
+      "slug": "zigzagoon-galar",
+      "apiSlug": "zigzagoon-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "264": {
+      "formId": 10175,
+      "slug": "linoone-galar",
+      "apiSlug": "linoone-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "503": {
+      "formId": 10236,
+      "slug": "samurott-hisui",
+      "apiSlug": "samurott-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "549": {
+      "formId": 10237,
+      "slug": "lilligant-hisui",
+      "apiSlug": "lilligant-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "554": {
+      "formId": 10176,
+      "slug": "darumaka-galar",
+      "apiSlug": "darumaka-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "555": {
+      "formId": 10177,
+      "slug": "darmanitan-galar-standard",
+      "apiSlug": "darmanitan-galar-standard",
+      "region": "galar",
+      "alts": []
+    },
+    "562": {
+      "formId": 10179,
+      "slug": "yamask-galar",
+      "apiSlug": "yamask-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "570": {
+      "formId": 10238,
+      "slug": "zorua-hisui",
+      "apiSlug": "zorua-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "571": {
+      "formId": 10239,
+      "slug": "zoroark-hisui",
+      "apiSlug": "zoroark-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "618": {
+      "formId": 10180,
+      "slug": "stunfisk-galar",
+      "apiSlug": "stunfisk-galar",
+      "region": "galar",
+      "alts": []
+    },
+    "628": {
+      "formId": 10240,
+      "slug": "braviary-hisui",
+      "apiSlug": "braviary-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "705": {
+      "formId": 10241,
+      "slug": "sliggoo-hisui",
+      "apiSlug": "sliggoo-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "706": {
+      "formId": 10242,
+      "slug": "goodra-hisui",
+      "apiSlug": "goodra-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "713": {
+      "formId": 10243,
+      "slug": "avalugg-hisui",
+      "apiSlug": "avalugg-hisui",
+      "region": "hisui",
+      "alts": []
+    },
+    "724": {
+      "formId": 10244,
+      "slug": "decidueye-hisui",
+      "apiSlug": "decidueye-hisui",
+      "region": "hisui",
+      "alts": []
     }
   }
 }

@@ -18,12 +18,13 @@ import { GameLogo } from "@/components/game-logo";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { getEvolutionChain, getPokemonSummary } from "@/server/pokemon";
 import { useDexStore } from "@/lib/store";
-import { canGmax, canMega } from "@/lib/form-variants";
+import { canGmax, canMega, canRegional } from "@/lib/form-variants";
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ExpandIcon,
+  GlobeIcon,
   SparklesIcon,
   EyeIcon,
   ZapIcon,
@@ -93,18 +94,21 @@ function PokemonPage() {
   const alpha = useDexStore((s) => Boolean(s.alphaByKey[key]));
   const mega = useDexStore((s) => Boolean(s.megaByKey[key]));
   const gmax = useDexStore((s) => Boolean(s.gmaxByKey[key]));
+  const regional = useDexStore((s) => Boolean(s.regionalByKey[key]));
   const caughtByGame = useDexStore((s) => s.caughtByGame);
   const setCaught = useDexStore((s) => s.setCaught);
   const setShiny = useDexStore((s) => s.setShiny);
   const setAlpha = useDexStore((s) => s.setAlpha);
   const setMega = useDexStore((s) => s.setMega);
   const setGmax = useDexStore((s) => s.setGmax);
+  const setRegional = useDexStore((s) => s.setRegional);
   const setGameCaught = useDexStore((s) => s.setGameCaught);
   const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
 
   const gameGroups = getGameGroupsForSpecies(summary.id);
   const hasMega = canMega(summary.id);
   const hasGmax = canGmax(summary.id);
+  const hasRegional = canRegional(summary.id);
   const { prev, next } = nationalNeighbors(summary.id);
 
   return (
@@ -135,7 +139,9 @@ function PokemonPage() {
                   ? "border-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.3)]"
                   : gmax
                     ? "border-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.3)]"
-                    : undefined,
+                    : regional
+                      ? "border-sky-500 shadow-[0_0_12px_rgba(14,165,233,0.3)]"
+                      : undefined,
           )}
         >
           <CardContent className="flex flex-col items-center gap-3 pt-6">
@@ -143,7 +149,7 @@ function PokemonPage() {
               id={summary.id}
               style={spriteStyle}
               shiny={shiny}
-              variant={mega ? "mega" : gmax ? "gmax" : "default"}
+              variant={mega ? "mega" : gmax ? "gmax" : regional ? "regional" : "default"}
               slug={summary.slug}
               width={160}
               height={160}
@@ -185,6 +191,12 @@ function PokemonPage() {
                 <Badge variant="secondary">
                   <ExpandIcon data-icon="inline-start" />
                   Gigantamax
+                </Badge>
+              ) : null}
+              {regional ? (
+                <Badge variant="secondary">
+                  <GlobeIcon data-icon="inline-start" />
+                  Regional
                 </Badge>
               ) : null}
             </div>
@@ -247,6 +259,17 @@ function PokemonPage() {
                       </FieldLabel>
                     </FieldContent>
                     <Switch checked={gmax} onCheckedChange={(v) => setGmax(key, v)} />
+                  </Field>
+                ) : null}
+                {hasRegional ? (
+                  <Field orientation="horizontal">
+                    <FieldContent>
+                      <FieldLabel className="flex items-center gap-1.5">
+                        <GlobeIcon className="size-4 text-sky-500" />
+                        Regional
+                      </FieldLabel>
+                    </FieldContent>
+                    <Switch checked={regional} onCheckedChange={(v) => setRegional(key, v)} />
                   </Field>
                 ) : null}
               </div>

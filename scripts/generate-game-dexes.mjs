@@ -9,7 +9,26 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outPath = join(__dirname, "../src/data/games.json");
+const formVariantsPath = join(__dirname, "../src/data/form-variants.json");
 const BOX_SIZE = 30;
+
+/** Pokedex slug → regional form region used in that dex. */
+const REGION_BY_POKEDEX = {
+  galar: "galar",
+  "isle-of-armor": "galar",
+  "crown-tundra": "galar",
+  hisui: "hisui",
+  paldea: "paldea",
+  kitakami: "paldea",
+  blueberry: "paldea",
+};
+
+const REGION_PREFIX = {
+  alola: "Alolan",
+  galar: "Galarian",
+  hisui: "Hisuian",
+  paldea: "Paldean",
+};
 
 /**
  * @typedef {{
@@ -177,15 +196,40 @@ function speciesIdFromUrl(url) {
   return Number(url.split("/").filter(Boolean).pop());
 }
 
-function toSlot(speciesName, speciesId, entryNumber) {
+/**
+ * @param {Record<string, any>} regionalMap
+ * @param {number} speciesId
+ * @param {string | undefined} region
+ */
+function resolveRegionalForm(regionalMap, speciesId, region) {
+  if (!region) return null;
+  const entry = regionalMap[String(speciesId)];
+  if (!entry) return null;
+  if (entry.region === region) return entry;
+  return (entry.alts ?? []).find((a) => a.region === region) ?? null;
+}
+
+function toSlot(speciesName, speciesId, entryNumber, regionalForm = null) {
+  const spriteId = regionalForm?.formId ?? speciesId;
+  const baseName = titleCase(speciesName);
+  const name = regionalForm
+    ? `${REGION_PREFIX[regionalForm.region] ?? ""} ${baseName}`.trim()
+    : baseName;
   return {
     id: speciesId,
     key: `n${speciesId}`,
-    slug: speciesName,
-    name: titleCase(speciesName),
+    slug: regionalForm?.apiSlug ?? speciesName,
+    name,
     entryNumber,
-    sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${speciesId}.png`,
-    shinySprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${speciesId}.png`,
+    ...(regionalForm
+      ? {
+          formId: regionalForm.formId,
+          formSlug: regionalForm.apiSlug,
+          region: regionalForm.region,
+        }
+      : {}),
+    sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${spriteId}.png`,
+    shinySprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${spriteId}.png`,
   };
 }
 
@@ -218,18 +262,33 @@ async function loadDex(slug) {
 }
 
 async function main() {
+  const { readFileSync } = await import("node:fs");
+  let regionalMap = {};
+  try {
+    const fv = JSON.parse(readFileSync(formVariantsPath, "utf8"));
+    regionalMap = fv.regional ?? {};
+  } catch {
+    console.warn("form-variants.json missing regional map — run generate-form-variants first");
+  }
+
   const games = [];
 
   for (const game of GAMES) {
     const slug = game.pokedexSlugs[0];
-    console.log(`Fetching ${game.id} (${slug})…`);
+    const region = REGION_BY_POKEDEX[slug];
+    console.log(`Fetching ${game.id} (${slug}${region ? `, ${region}` : ""})…`);
     try {
       const species = await loadDex(slug);
       if (species.length === 0) {
         console.warn(`  skip ${game.id}: empty dex`);
         continue;
       }
-      const slots = species.map((s) => toSlot(s.name, s.id, s.entryNumber));
+      let regionalHits = 0;
+      const slots = species.map((s) => {
+        const form = resolveRegionalForm(regionalMap, s.id, region);
+        if (form) regionalHits += 1;
+        return toSlot(s.name, s.id, s.entryNumber, form);
+      });
       games.push({
         id: game.id,
         name: game.name,
@@ -243,7 +302,7 @@ async function main() {
         boxSize: BOX_SIZE,
         boxes: boxify(slots, game.id),
       });
-      console.log(`  ${slots.length} Pokémon`);
+      console.log(`  ${slots.length} Pokémon${regionalHits ? ` (${regionalHits} regional forms)` : ""}`);
     } catch (err) {
       console.warn(`  skip ${game.id}:`, err.message);
     }

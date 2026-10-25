@@ -45,6 +45,7 @@ import {
   filterBoxesForFormView,
   gmaxSpeciesCount,
   megaSpeciesCount,
+  regionalSpeciesCount,
 } from "@/lib/form-variants";
 import { getGame, getGames } from "@/lib/games";
 import nationalDex from "@/data/national-dex.json";
@@ -56,6 +57,7 @@ import {
   EyeIcon,
   CheckCheckIcon,
   EraserIcon,
+  GlobeIcon,
   InfoIcon,
   LayoutGridIcon,
   ListIcon,
@@ -124,6 +126,12 @@ const FORM_VIEW_OPTIONS: {
     label: "Gmax",
     icon: ExpandIcon,
     className: "text-rose-500",
+  },
+  {
+    value: "regional",
+    label: "Regional",
+    icon: GlobeIcon,
+    className: "text-sky-500",
   },
 ];
 
@@ -285,11 +293,13 @@ function NationalDexView() {
   const alphaByKey = useDexStore((s) => s.alphaByKey);
   const megaByKey = useDexStore((s) => s.megaByKey);
   const gmaxByKey = useDexStore((s) => s.gmaxByKey);
+  const regionalByKey = useDexStore((s) => s.regionalByKey);
   const setCaughtMany = useDexStore((s) => s.setCaughtMany);
   const setShinyMany = useDexStore((s) => s.setShinyMany);
   const setAlphaMany = useDexStore((s) => s.setAlphaMany);
   const setMegaMany = useDexStore((s) => s.setMegaMany);
   const setGmaxMany = useDexStore((s) => s.setGmaxMany);
+  const setRegionalMany = useDexStore((s) => s.setRegionalMany);
   const setGamesCaughtMany = useDexStore((s) => s.setGamesCaughtMany);
   const nationalBoxLayout = useDexStore((s) => s.nationalBoxLayout);
   const renameNationalBox = useDexStore((s) => s.renameNationalBox);
@@ -329,7 +339,9 @@ function NationalDexView() {
           ? megaByKey
           : formView === "gmax"
             ? gmaxByKey
-            : null;
+            : formView === "regional"
+              ? regionalByKey
+              : null;
 
   const progressByKey = flagByKey ?? caughtByKey;
 
@@ -337,7 +349,7 @@ function NationalDexView() {
     if (formView === "default") {
       return countProgress(boxes, caughtByKey);
     }
-    if (formView === "mega" || formView === "gmax") {
+    if (formView === "mega" || formView === "gmax" || formView === "regional") {
       return countProgress(boxes, flagByKey ?? {});
     }
     const flagged = Object.values(flagByKey ?? {}).filter(Boolean).length;
@@ -358,7 +370,9 @@ function NationalDexView() {
           ? "alpha"
           : formView === "mega"
             ? "mega"
-            : "gmax";
+            : formView === "gmax"
+              ? "gmax"
+              : "regional";
 
   const allKeys = useMemo(
     () => boxes.flatMap((box) => box.slots.map((s) => s.key)),
@@ -429,6 +443,7 @@ function NationalDexView() {
     else if (formView === "alpha") setAlphaMany(keys, value);
     else if (formView === "mega") setMegaMany(keys, value);
     else if (formView === "gmax") setGmaxMany(keys, value);
+    else if (formView === "regional") setRegionalMany(keys, value);
     else setCaughtMany(keys, value);
   }
 
@@ -461,6 +476,7 @@ function NationalDexView() {
       setAlphaMany,
       setMegaMany,
       setGmaxMany,
+      setRegionalMany,
       setGamesCaughtMany,
     });
     setSelected(new Set());
@@ -550,9 +566,11 @@ function NationalDexView() {
           ? `Mega · ${formProgress.caught} / ${megaSpeciesCount()}`
           : formView === "gmax"
             ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
-            : formView === "shiny" || formView === "alpha"
-              ? `${trackLabel} · ${formProgress.caught} marked`
-              : `National · ${formProgress.caught} / ${formProgress.total}`}
+            : formView === "regional"
+              ? `Regional · ${formProgress.caught} / ${regionalSpeciesCount()}`
+              : formView === "shiny" || formView === "alpha"
+                ? `${trackLabel} · ${formProgress.caught} marked`
+                : `National · ${formProgress.caught} / ${formProgress.total}`}
         {" · select, then Add"}
       </p>
 
@@ -1101,13 +1119,15 @@ function GameDexRow({
         onCheckedChange={(v) => onSelectedChange(v === true)}
         aria-label={`Select ${slot.name}`}
       />
-      <PokemonSprite
-        id={slot.id}
-        style={spriteStyle}
-        width={72}
-        height={72}
-        className={cn("size-[4.5rem] shrink-0 sm:size-20", !caught && "opacity-40 grayscale")}
-      />
+        <PokemonSprite
+          id={slot.id}
+          style={spriteStyle}
+          formId={slot.formId}
+          slug={slot.slug}
+          width={72}
+          height={72}
+          className={cn("size-[4.5rem] shrink-0 sm:size-20", !caught && "opacity-40 grayscale")}
+        />
       <div className="min-w-0 flex-1">
         <p className="truncate text-base font-medium">
           <span className="mr-1.5 tabular-nums text-muted-foreground">
@@ -1177,6 +1197,8 @@ function GameDexGridCard({
         <PokemonSprite
           id={slot.id}
           style={spriteStyle}
+          formId={slot.formId}
+          slug={slot.slug}
           width={72}
           height={72}
           className={cn("size-14 sm:size-16", !caught && "opacity-40 grayscale")}

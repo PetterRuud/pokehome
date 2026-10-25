@@ -6,6 +6,10 @@ export type DexSlot = {
   sprite: string;
   shinySprite: string;
   entryNumber?: number;
+  /** PokéAPI form id when this slot shows a regional (or other) form. */
+  formId?: number;
+  formSlug?: string;
+  region?: "alola" | "galar" | "hisui" | "paldea";
 };
 
 export type DexBox = {
@@ -51,7 +55,7 @@ export type MysteryGift = {
 };
 
 /** Which form overlay / sprite mode the national dex grid uses (one at a time). */
-export type FormView = "default" | "shiny" | "alpha" | "mega" | "gmax";
+export type FormView = "default" | "shiny" | "alpha" | "mega" | "gmax" | "regional";
 
 /** Pixel battle sprites vs Pokémon HOME 3D-style renders (PokeAPI). */
 export type SpriteStyle = "pixel" | "home";
@@ -76,6 +80,8 @@ export type ExportPayload = {
   alphaByKey: Record<string, boolean>;
   megaByKey: Record<string, boolean>;
   gmaxByKey: Record<string, boolean>;
+  /** Present on new exports; older v5 backups may omit it. */
+  regionalByKey?: Record<string, boolean>;
   caughtByGame: Record<GameId, Record<string, boolean>>;
   claimedGiftIds: string[];
   lastSeenGiftIds: string[];

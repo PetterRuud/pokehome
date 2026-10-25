@@ -13,6 +13,8 @@ type PokemonSpriteProps = {
   shiny?: boolean;
   variant?: SpriteVariant;
   slug?: string;
+  /** PokéAPI form id for regional (or other) forms. */
+  formId?: number;
   alt?: string;
   width?: number;
   height?: number;
@@ -21,7 +23,7 @@ type PokemonSpriteProps = {
 };
 
 /**
- * Species art from PokeAPI / Showdown — pixel, HOME 3D, or mega/gmax dex art.
+ * Species art from PokeAPI / Showdown — pixel, HOME 3D, or mega/gmax/regional art.
  */
 export function PokemonSprite({
   id,
@@ -29,19 +31,20 @@ export function PokemonSprite({
   shiny = false,
   variant = "default",
   slug,
+  formId,
   alt = "",
   width = 80,
   height = 80,
   className,
   loading = "lazy",
 }: PokemonSpriteProps) {
-  const opts = { shiny, variant, slug };
+  const opts = { shiny, variant, slug, formId };
   const primary = spriteUrl(id, style, opts);
   const fallbacks = spriteFallbackChain(id, style, opts);
 
   return (
     <img
-      key={`${id}-${style}-${variant}-${shiny ? "s" : "n"}-${slug ?? ""}`}
+      key={`${id}-${style}-${variant}-${shiny ? "s" : "n"}-${slug ?? ""}-${formId ?? ""}`}
       src={primary}
       alt={alt}
       width={width}

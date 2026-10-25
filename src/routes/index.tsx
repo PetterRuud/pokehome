@@ -27,6 +27,7 @@ function HomePage() {
   const alphaByKey = useDexStore((s) => s.alphaByKey);
   const megaByKey = useDexStore((s) => s.megaByKey);
   const gmaxByKey = useDexStore((s) => s.gmaxByKey);
+  const regionalByKey = useDexStore((s) => s.regionalByKey);
   const caughtByGame = useDexStore((s) => s.caughtByGame);
   const claimedGiftIds = useDexStore((s) => s.claimedGiftIds);
 
@@ -35,6 +36,7 @@ function HomePage() {
   const alphaCount = countFlag(alphaByKey);
   const megaCount = countFlag(megaByKey);
   const gmaxCount = countFlag(gmaxByKey);
+  const regionalCount = countFlag(regionalByKey);
 
   const gameStats = useMemo(() => {
     return getGames().map((game) => {
@@ -82,6 +84,9 @@ function HomePage() {
             {alphaCount > 0 ? <Badge variant="outline">{alphaCount} alpha</Badge> : null}
             {megaCount > 0 ? <Badge variant="outline">{megaCount} mega</Badge> : null}
             {gmaxCount > 0 ? <Badge variant="outline">{gmaxCount} gmax</Badge> : null}
+            {regionalCount > 0 ? (
+              <Badge variant="outline">{regionalCount} regional</Badge>
+            ) : null}
           </div>
           <Button render={<Link to="/dex" />} nativeButton={false}>
             Open dex

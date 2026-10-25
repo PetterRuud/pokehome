@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { canGmax, canMega } from "@/lib/form-variants";
+import { canGmax, canMega, canRegional } from "@/lib/form-variants";
 import type { DexSlot, FormView, SpriteStyle } from "@/lib/types";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,7 +29,9 @@ export function DexSlotButton({
   const showAlpha = formView === "alpha" && flagged;
   const showMega = formView === "mega" && flagged;
   const showGmax = formView === "gmax" && flagged;
-  const showForm = (showShiny && flagged) || showAlpha || showMega || showGmax;
+  const showRegional = formView === "regional" && flagged;
+  const showForm =
+    (showShiny && flagged) || showAlpha || showMega || showGmax || showRegional;
   /** In form views, “owned” means flagged; in All, it means caught. */
   const active = trackingForm ? flagged : caught;
   const spriteVariant =
@@ -37,7 +39,9 @@ export function DexSlotButton({
       ? "mega"
       : formView === "gmax" && canGmax(slot.id)
         ? "gmax"
-        : "default";
+        : formView === "regional" && canRegional(slot.id)
+          ? "regional"
+          : "default";
   const label =
     formView === "default"
       ? `${slot.name}: ${caught ? "caught" : "missing"}. Tap to select.`
@@ -75,6 +79,8 @@ export function DexSlotButton({
             "border-violet-500 bg-gradient-to-b from-violet-400/25 to-fuchsia-500/10 text-foreground shadow-[0_0_10px_rgba(139,92,246,0.35)]",
           showGmax &&
             "border-rose-500 bg-gradient-to-b from-rose-400/25 to-red-900/15 text-foreground shadow-[0_0_10px_rgba(244,63,94,0.35)]",
+          showRegional &&
+            "border-sky-500 bg-gradient-to-b from-sky-400/25 to-cyan-900/10 text-foreground shadow-[0_0_10px_rgba(14,165,233,0.35)]",
         )}
       >
         <PokemonSprite
@@ -99,7 +105,7 @@ export function DexSlotButton({
         >
           {slot.name}
         </span>
-        {(showAlpha || showMega || showGmax) && (
+        {(showAlpha || showMega || showGmax || showRegional) && (
           <span className="flex gap-0.5">
             {showAlpha ? (
               <span className="rounded bg-red-500/90 px-0.5 text-[8px] font-bold text-white">
@@ -114,6 +120,11 @@ export function DexSlotButton({
             {showGmax ? (
               <span className="rounded bg-rose-600/90 px-0.5 text-[8px] font-bold text-white">
                 G
+              </span>
+            ) : null}
+            {showRegional ? (
+              <span className="rounded bg-sky-600/90 px-0.5 text-[8px] font-bold text-white">
+                R
               </span>
             ) : null}
           </span>

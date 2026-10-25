@@ -19,6 +19,7 @@ type DexState = {
   alphaByKey: Record<string, boolean>;
   megaByKey: Record<string, boolean>;
   gmaxByKey: Record<string, boolean>;
+  regionalByKey: Record<string, boolean>;
   caughtByGame: Record<GameId, Record<string, boolean>>;
   claimedGiftIds: string[];
   lastSeenGiftIds: string[];
@@ -43,6 +44,9 @@ type DexState = {
   toggleGmax: (key: string) => void;
   setGmax: (key: string, gmax: boolean) => void;
   setGmaxMany: (keys: string[], gmax: boolean) => void;
+  toggleRegional: (key: string) => void;
+  setRegional: (key: string, regional: boolean) => void;
+  setRegionalMany: (keys: string[], regional: boolean) => void;
   toggleGameCaught: (gameId: GameId, key: string) => void;
   setGameCaught: (gameId: GameId, key: string, caught: boolean) => void;
   setGameCaughtMany: (gameId: GameId, keys: string[], caught: boolean) => void;
@@ -65,7 +69,7 @@ function normalizeBoxLayout(layout?: Partial<BoxLayout> | null): BoxLayout {
   };
 }
 
-const FORM_VIEWS: FormView[] = ["default", "shiny", "alpha", "mega", "gmax"];
+const FORM_VIEWS: FormView[] = ["default", "shiny", "alpha", "mega", "gmax", "regional"];
 const SPRITE_STYLES: SpriteStyle[] = ["pixel", "home"];
 
 const defaultPrefs: DexPrefs = {
@@ -93,7 +97,7 @@ function migrateFormView(prefs?: LegacyPrefs | null): FormView {
       prefs?.showMega ? "mega" : null,
       prefs?.showGmax ? "gmax" : null,
     ] as const
-  ).filter((v): v is Exclude<FormView, "default"> => v != null);
+  ).filter((v): v is "shiny" | "alpha" | "mega" | "gmax" => v != null);
   if (active.length === 1) return active[0];
   return "default";
 }
@@ -137,6 +141,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "versio
       alphaByKey: payload.alphaByKey ?? {},
       megaByKey: payload.megaByKey ?? {},
       gmaxByKey: payload.gmaxByKey ?? {},
+      regionalByKey: payload.regionalByKey ?? {},
       caughtByGame: migrateCaughtByGame(payload.caughtByGame),
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
@@ -152,6 +157,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "versio
       alphaByKey: payload.alphaByKey ?? {},
       megaByKey: payload.megaByKey ?? {},
       gmaxByKey: payload.gmaxByKey ?? {},
+      regionalByKey: {},
       caughtByGame: migrateCaughtByGame(payload.caughtByGame),
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
@@ -167,6 +173,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "versio
       alphaByKey: payload.alphaByKey ?? {},
       megaByKey: payload.megaByKey ?? {},
       gmaxByKey: {},
+      regionalByKey: {},
       caughtByGame: migrateCaughtByGame(payload.caughtByGame),
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
@@ -182,6 +189,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "versio
       alphaByKey: {},
       megaByKey: {},
       gmaxByKey: {},
+      regionalByKey: {},
       caughtByGame: {},
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
@@ -196,6 +204,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, "versio
     alphaByKey: {},
     megaByKey: {},
     gmaxByKey: {},
+    regionalByKey: {},
     caughtByGame: {},
     claimedGiftIds: payload.claimedGiftIds ?? [],
     lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
@@ -223,6 +232,7 @@ export const useDexStore = create<DexState>()(
       alphaByKey: {},
       megaByKey: {},
       gmaxByKey: {},
+      regionalByKey: {},
       caughtByGame: {},
       claimedGiftIds: [],
       lastSeenGiftIds: [],
@@ -316,6 +326,23 @@ export const useDexStore = create<DexState>()(
           for (const key of keys) next[key] = gmax;
           return { gmaxByKey: next };
         }),
+      toggleRegional: (key) =>
+        set((s) => ({
+          regionalByKey: {
+            ...s.regionalByKey,
+            [key]: !s.regionalByKey[key],
+          },
+        })),
+      setRegional: (key, regional) =>
+        set((s) => ({
+          regionalByKey: { ...s.regionalByKey, [key]: regional },
+        })),
+      setRegionalMany: (keys, regional) =>
+        set((s) => {
+          const next = { ...s.regionalByKey };
+          for (const key of keys) next[key] = regional;
+          return { regionalByKey: next };
+        }),
       toggleGameCaught: (gameId, key) =>
         set((s) => {
           const game = s.caughtByGame[gameId] ?? {};
@@ -387,6 +414,7 @@ export const useDexStore = create<DexState>()(
           alphaByKey: s.alphaByKey,
           megaByKey: s.megaByKey,
           gmaxByKey: s.gmaxByKey,
+          regionalByKey: s.regionalByKey,
           caughtByGame: s.caughtByGame,
           claimedGiftIds: s.claimedGiftIds,
           lastSeenGiftIds: s.lastSeenGiftIds,
@@ -419,6 +447,7 @@ export const useDexStore = create<DexState>()(
             alphaByKey: { ...s.alphaByKey, ...next.alphaByKey },
             megaByKey: { ...s.megaByKey, ...next.megaByKey },
             gmaxByKey: { ...s.gmaxByKey, ...next.gmaxByKey },
+            regionalByKey: { ...s.regionalByKey, ...next.regionalByKey },
             caughtByGame: mergeGameCaught(s.caughtByGame, next.caughtByGame),
             claimedGiftIds: Array.from(new Set([...s.claimedGiftIds, ...next.claimedGiftIds])),
             lastSeenGiftIds: Array.from(new Set([...s.lastSeenGiftIds, ...next.lastSeenGiftIds])),
@@ -438,6 +467,7 @@ export const useDexStore = create<DexState>()(
           alphaByKey: {},
           megaByKey: {},
           gmaxByKey: {},
+          regionalByKey: {},
           caughtByGame: {},
           claimedGiftIds: [],
           lastSeenGiftIds: [],
@@ -449,7 +479,7 @@ export const useDexStore = create<DexState>()(
     {
       name: "pokehome-dex",
       storage: idbStorage,
-      version: 7,
+      version: 8,
       migrate: (persisted: unknown, fromVersion) => {
         const state = persisted as Partial<DexState> & {
           statusByKey?: Record<string, string>;
@@ -495,7 +525,14 @@ export const useDexStore = create<DexState>()(
           };
         }
 
-        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt
+        if (fromVersion < 8) {
+          next = {
+            ...next,
+            regionalByKey: state.regionalByKey ?? {},
+          };
+        }
+
+        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional
         return {
           ...next,
           caughtByGame: migrateCaughtByGame(next.caughtByGame),
@@ -510,6 +547,7 @@ export const useDexStore = create<DexState>()(
         alphaByKey: s.alphaByKey,
         megaByKey: s.megaByKey,
         gmaxByKey: s.gmaxByKey,
+        regionalByKey: s.regionalByKey,
         caughtByGame: s.caughtByGame,
         claimedGiftIds: s.claimedGiftIds,
         lastSeenGiftIds: s.lastSeenGiftIds,
@@ -530,6 +568,7 @@ const DATA_KEYS = [
   "alphaByKey",
   "megaByKey",
   "gmaxByKey",
+  "regionalByKey",
   "caughtByGame",
   "claimedGiftIds",
   "lastSeenGiftIds",
