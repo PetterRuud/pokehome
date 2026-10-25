@@ -41,7 +41,7 @@ Claim the Clerk app for production: `npx clerk@latest auth login` then `npx cler
 - Catch progress, prefs, gift claims: **browser IndexedDB** (export/import in Settings)
 - When signed in: full snapshot upserted to **D1** `dex_snapshots` (newer `updated_at` wins)
 - Species catalog: `src/data/national-dex.json`
-- Mystery gifts: Serebii feed (daily cron) with curated JSON fallback
+- Mystery gifts: Serebii feed (daily cron) with last-good / snapshot JSON fallback
 
 ## Cloudflare bindings
 

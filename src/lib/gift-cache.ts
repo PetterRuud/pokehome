@@ -2,8 +2,9 @@ import type { MysteryGift } from "@/lib/types";
 import { fetchSerebiiGiftFeed, healGift } from "@/lib/serebii-feed";
 import fallbackGifts from "@/data/mystery-gifts.json";
 
-export const GIFT_CACHE_KEY = "https://pokehome.internal/mystery-gifts-v2";
-export const GIFT_CACHE_META_KEY = "https://pokehome.internal/mystery-gifts-meta-v2";
+/** Bump when cache shape / invalidation rules change (clears sticky fallback). */
+export const GIFT_CACHE_KEY = "https://pokehome.internal/mystery-gifts-v3";
+export const GIFT_CACHE_META_KEY = "https://pokehome.internal/mystery-gifts-meta-v3";
 
 export type GiftFeedPayload = {
   gifts: MysteryGift[];
@@ -91,7 +92,8 @@ export async function refreshGiftFeed(): Promise<GiftFeedPayload> {
     return healFeed(payload);
   } catch (err) {
     const cached = await readCachedGiftFeed();
-    if (cached?.gifts.length) {
+    // Prefer a previous live Serebii cache over curated/static fallback.
+    if (cached?.source === "serebii" && cached.gifts.length) {
       return healFeed({
         ...cached,
         error: err instanceof Error ? err.message : "Refresh failed",
@@ -103,7 +105,8 @@ export async function refreshGiftFeed(): Promise<GiftFeedPayload> {
       fetchedAt: new Date().toISOString(),
       error: err instanceof Error ? err.message : "Refresh failed",
     };
-    await cachePut(GIFT_CACHE_KEY, JSON.stringify(payload), 60 * 60 * 6);
+    // Short TTL so we keep retrying Serebii instead of sticking on fallback.
+    await cachePut(GIFT_CACHE_KEY, JSON.stringify(payload), 60 * 5);
     return healFeed(payload);
   }
 }
@@ -117,6 +120,9 @@ function healFeed(payload: GiftFeedPayload): GiftFeedPayload {
 
 export async function getGiftFeed(): Promise<GiftFeedPayload> {
   const cached = await readCachedGiftFeed();
-  if (cached?.gifts.length) return healFeed(cached);
+  // Live cache hits are fine; always retry when we only have fallback.
+  if (cached?.source === "serebii" && cached.gifts.length) {
+    return healFeed(cached);
+  }
   return healFeed(await refreshGiftFeed());
 }

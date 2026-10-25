@@ -1,62 +1,86 @@
 [
   {
-    "id": "home-celebi-2026",
-    "name": "Celebi",
+    "id": "serebii-2026-pok-mon-firered-leafgreen-pok-dex-completion-gift-2026-09-30",
+    "name": "Pokémon FireRed & LeafGreen PokéDex Completion Gift",
     "pokemon": "Celebi",
-    "games": ["HOME"],
+    "pokemonId": 251,
+    "games": [
+      "HOME"
+    ],
     "region": "Global",
-    "start": "2026-10-01",
+    "start": "2026-09-30",
     "end": null,
     "method": "serial",
-    "notes": "Serial code via Pokémon HOME (example curated entry — update with real codes).",
-    "sourceUrl": "https://www.pokemon.com"
+    "sourceUrl": "https://www.serebii.net/events/2026.shtml"
   },
   {
-    "id": "sv-fidough-2025",
-    "name": "Fidough",
-    "pokemon": "Fidough",
-    "games": ["Scarlet", "Violet"],
+    "id": "serebii-2026-pok-mon-world-championships-distribution-2026-08-27",
+    "name": "Pokémon World Championships Distribution",
+    "pokemon": "Greninja",
+    "pokemonId": 658,
+    "games": [
+      "Legends: Z-A"
+    ],
     "region": "Global",
-    "start": "2025-11-01",
-    "end": "2026-10-31",
+    "start": "2026-08-27",
+    "end": "2026-08-29",
     "method": "serial",
-    "notes": "Serial code distribution for Scarlet/Violet.",
-    "sourceUrl": "https://www.pokemon.com"
+    "sourceUrl": "https://www.serebii.net/events/2026.shtml"
   },
   {
-    "id": "za-audino-2025",
-    "name": "Audino",
-    "pokemon": "Audino",
-    "games": ["Legends: Z-A"],
+    "id": "serebii-2026-pok-mon-japan-championships-distribution-2026-06-05",
+    "name": "Pokémon Japan Championships Distribution",
+    "pokemonId": 445,
+    "games": [
+      "HOME"
+    ],
     "region": "Global",
-    "start": "2025-11-01",
-    "end": "2026-10-31",
-    "method": "serial",
-    "notes": "Serial code for Legends: Z-A.",
-    "sourceUrl": "https://www.pokemon.com"
+    "start": "2026-06-05",
+    "end": "2026-06-06",
+    "method": "in-game",
+    "sourceUrl": "https://www.serebii.net/events/2026.shtml"
   },
   {
-    "id": "home-keldeo-shiny",
-    "name": "Keldeo★",
-    "pokemon": "Keldeo",
-    "games": ["HOME"],
+    "id": "serebii-2026-pok-mon-legends-z-a-pok-dex-completion-gift-2026-04-26",
+    "name": "Pokémon Legends: Z-A PokéDex Completion Gift",
+    "pokemon": "Volcanion",
+    "pokemonId": 721,
+    "shiny": true,
+    "games": [
+      "HOME"
+    ],
+    "region": "Global",
+    "start": "2026-04-26",
+    "end": null,
+    "method": "serial",
+    "sourceUrl": "https://www.serebii.net/events/2026.shtml"
+  },
+  {
+    "id": "serebii-2026-pok-mon-legends-z-a-deposit-gift-2026-04-01",
+    "name": "Pokémon Legends: Z-A Deposit Gift",
+    "pokemon": "Totodile",
+    "pokemonId": 158,
+    "games": [
+      "HOME"
+    ],
+    "region": "Global",
+    "start": "2026-04-01",
+    "end": null,
+    "method": "serial",
+    "sourceUrl": "https://www.serebii.net/events/2026.shtml"
+  },
+  {
+    "id": "serebii-2026-pok-mon-europe-international-championships-distribution-code-2025-02-12",
+    "name": "Pokémon Europe International Championships Distribution - Code:",
+    "pokemonId": 157,
+    "games": [
+      "Scarlet",
+      "Violet"
+    ],
     "region": "Global",
     "start": "2025-02-12",
-    "end": null,
+    "end": "2025-02-19",
     "method": "serial",
-    "notes": "Shiny Keldeo via HOME serial (curated placeholder).",
-    "sourceUrl": "https://www.pokemon.com"
-  },
-  {
-    "id": "upcoming-demo-2027",
-    "name": "Demo Upcoming Gift",
-    "pokemon": "Mew",
-    "games": ["HOME"],
-    "region": "Global",
-    "start": "2027-01-01",
-    "end": "2027-01-31",
-    "method": "internet",
-    "notes": "Placeholder upcoming event so the Upcoming tab has content.",
-    "sourceUrl": "https://www.pokemon.com"
+    "sourceUrl": "https://www.serebii.net/events/2026.shtml"
   }
 ]
