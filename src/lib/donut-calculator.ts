@@ -7,9 +7,9 @@ const HYPER_SUBSTITUTES: Record<string, string[]> = {
   rindo: ["coba"],
 };
 
-/** Full Mega Dimension Hyper Berry inventory list. */
+/** Full Mega Dimension Hyper Berry inventory list, sorted by name. */
 export function getAllHyperBerryIds(): readonly string[] {
-  return HYPER_BERRY_IDS;
+  return [...HYPER_BERRY_IDS].sort((a, b) => a.localeCompare(b));
 }
 
 export type DonutCheckResult = {

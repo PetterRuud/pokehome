@@ -88,9 +88,9 @@ export function DonutCalculator() {
       <CardHeader>
         <CardTitle>Portal donut calculator</CardTitle>
         <CardDescription>
-          Track all {berryIds.length} Mega Dimension Hyper Berries, pick a legendary portal
-          recipe, and see if you can cook it (optional berries ignored; Coba ↔ Rindo
-          substitutes count).
+          Track all {berryIds.length} Mega Dimension Hyper Berries (saved in this browser),
+          pick a legendary portal recipe, and see if you can cook it (optional berries
+          ignored; Coba ↔ Rindo substitutes count).
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
