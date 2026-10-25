@@ -1098,6 +1098,24 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   );
 }
 
+function formatDexEntry(n: number) {
+  return `#${String(n).padStart(3, "0")}`;
+}
+
+/** Game dex # plus national # when they differ (easier cross-checking). */
+function GameDexNumbers({ slot }: { slot: DexSlot }) {
+  const entry = slot.entryNumber ?? slot.id;
+  const showNational = slot.entryNumber != null && slot.entryNumber !== slot.id;
+  return (
+    <span className="tabular-nums">
+      <span className="font-semibold text-foreground">{formatDexEntry(entry)}</span>
+      {showNational ? (
+        <span className="text-muted-foreground"> · N{slot.id}</span>
+      ) : null}
+    </span>
+  );
+}
+
 function GameDexRow({
   slot,
   caught,
@@ -1111,7 +1129,6 @@ function GameDexRow({
   spriteStyle: SpriteStyle;
   onSelectedChange: (selected: boolean) => void;
 }) {
-  const entry = slot.entryNumber ?? slot.id;
   const unavailable = slot.available === false;
 
   return (
@@ -1143,10 +1160,8 @@ function GameDexRow({
         />
       <div className="min-w-0 flex-1">
         <p className="truncate text-base font-medium">
-          <span className="mr-1.5 tabular-nums text-muted-foreground">
-            #{String(entry).padStart(3, "0")}
-          </span>
-          {slot.name}
+          <GameDexNumbers slot={slot} />
+          <span className="ml-1.5">{slot.name}</span>
         </p>
         {unavailable ? (
           <Badge variant="secondary" className="mt-0.5">
@@ -1182,7 +1197,6 @@ function GameDexGridCard({
   spriteStyle: SpriteStyle;
   onSelectedChange: (selected: boolean) => void;
 }) {
-  const entry = slot.entryNumber ?? slot.id;
   const unavailable = slot.available === false;
 
   return (
@@ -1232,10 +1246,10 @@ function GameDexGridCard({
             (!caught || unavailable) && "opacity-40 grayscale",
           )}
         />
+        <span className="w-full truncate text-center text-xs leading-tight">
+          <GameDexNumbers slot={slot} />
+        </span>
         <span className="w-full truncate text-center text-xs font-medium leading-tight">
-          <span className="tabular-nums text-muted-foreground">
-            #{String(entry).padStart(3, "0")}{" "}
-          </span>
           {slot.name}
         </span>
         {unavailable ? (

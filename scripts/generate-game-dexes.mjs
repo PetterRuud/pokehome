@@ -283,16 +283,16 @@ function megaDisplayName(speciesName, apiSlug) {
 /**
  * Build HOME Mega Evolution Pokédex slots (93) from form-variants mega map.
  * Dual megas (X/Y/Z) are separate entries; Meowstic / Magearna / Tatsugiri are combined.
+ * Entry numbers use Lumiose / Hyperspace dex numbers (as in Z-A / HOME), not 1…93.
  * @param {Record<string, any>} megaMap
+ * @param {{ lumiose?: Map<number, number>, hyperspace?: Map<number, number> }} regionalEntries
  */
-function buildMegaSlots(megaMap) {
+function buildMegaSlots(megaMap, regionalEntries = {}) {
+  const { lumiose, hyperspace } = regionalEntries;
+  /** @type {Array<ReturnType<typeof toSlot> & { sortKey: number }>} */
   const slots = [];
-  let entryNumber = 0;
-  const speciesIds = Object.keys(megaMap)
-    .map(Number)
-    .sort((a, b) => a - b);
 
-  for (const speciesId of speciesIds) {
+  for (const speciesId of Object.keys(megaMap).map(Number)) {
     const entry = megaMap[String(speciesId)];
     if (!entry) continue;
     const speciesName = entry.apiSlug.replace(
@@ -302,9 +302,14 @@ function buildMegaSlots(megaMap) {
     const forms = COMBINED_MEGA_SPECIES.has(speciesId)
       ? [entry]
       : [entry, ...(entry.alts ?? [])];
+    const lumioseNo = lumiose?.get(speciesId);
+    const hyperspaceNo = hyperspace?.get(speciesId);
+    const entryNumber = lumioseNo ?? hyperspaceNo ?? speciesId;
+    // Lumiose megas first (as in Z-A), then Hyperspace — numbers overlap across dexes.
+    const sortKey =
+      lumioseNo != null ? lumioseNo : 1000 + (hyperspaceNo ?? speciesId);
 
     for (const form of forms) {
-      entryNumber += 1;
       const spriteId = form.formId;
       slots.push({
         id: speciesId,
@@ -316,10 +321,16 @@ function buildMegaSlots(megaMap) {
         formSlug: form.apiSlug,
         sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${spriteId}.png`,
         shinySprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${spriteId}.png`,
+        sortKey,
       });
     }
   }
-  return slots;
+
+  return slots
+    .sort(
+      (a, b) => a.sortKey - b.sortKey || a.id - b.id || a.slug.localeCompare(b.slug),
+    )
+    .map(({ sortKey: _sortKey, ...slot }) => slot);
 }
 
 function boxify(slots, gameId) {
@@ -368,6 +379,8 @@ async function main() {
   }
 
   const games = [];
+  /** @type {Map<string, Map<number, number>>} */
+  const entryByGame = new Map();
 
   for (const game of GAMES) {
     console.log(`Building ${game.id}…`);
@@ -376,7 +389,10 @@ async function main() {
       let slots;
 
       if (game.source === "mega") {
-        slots = buildMegaSlots(megaMap);
+        slots = buildMegaSlots(megaMap, {
+          lumiose: entryByGame.get("za-lumiose"),
+          hyperspace: entryByGame.get("za-hyperspace"),
+        });
         if (slots.length === 0) {
           console.warn(`  skip ${game.id}: no mega forms in form-variants`);
           continue;
@@ -385,16 +401,21 @@ async function main() {
         const slug = game.pokedexSlugs[0];
         const region = REGION_BY_POKEDEX[slug];
         const exclude = new Set(game.excludeIds ?? []);
-        let species = await loadDex(slug);
-        if (exclude.size) {
-          species = species.filter((s) => !exclude.has(s.id));
-        }
+        const fullSpecies = await loadDex(slug);
+        // Full map (pre-exclude) so Mega dex can use in-game Lumiose/Hyperspace numbers
+        // even for species HOME omits from those living dexes (e.g. Mewtwo).
+        entryByGame.set(
+          game.id,
+          new Map(fullSpecies.map((s) => [s.id, s.entryNumber])),
+        );
+        let species = exclude.size
+          ? fullSpecies.filter((s) => !exclude.has(s.id))
+          : fullSpecies;
         if (species.length === 0) {
           console.warn(`  skip ${game.id}: empty dex`);
           continue;
         }
-        // Re-number entries after exclusions so boxes stay contiguous for HOME totals.
-        species = species.map((s, i) => ({ ...s, entryNumber: i + 1 }));
+        // Keep each game's own Pokédex entry numbers (do not renumber after excludes).
         let regionalHits = 0;
         slots = species.map((s) => {
           const form = resolveRegionalForm(regionalMap, s.id, region);
