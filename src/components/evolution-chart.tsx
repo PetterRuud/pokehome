@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import type { EvoNode } from "@/lib/evolution";
 import type { GameId, SpriteStyle } from "@/lib/types";
 import { PokemonSprite } from "@/components/pokemon-sprite";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import { ArrowRightIcon } from "lucide-react";
 
 type PokemonNavSearch = { from?: "games"; game?: GameId };
@@ -16,22 +18,28 @@ function Stage({
   search?: PokemonNavSearch;
 }) {
   return (
-    <Link
-      to="/pokemon/$id"
-      params={{ id: String(node.id) }}
-      search={search}
-      className="flex w-28 shrink-0 flex-col items-center gap-1.5 rounded-lg border border-border bg-card p-2.5 text-center transition hover:border-primary/40"
+    <Item
+      variant="outline"
+      size="sm"
+      render={
+        <Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />
+      }
+      className="w-28 flex-col items-center"
     >
       <PokemonSprite id={node.id} style={spriteStyle} width={80} height={80} className="size-20" />
-      <span className="text-sm font-medium leading-tight">{node.name}</span>
-    </Link>
+      <ItemContent className="w-full items-center text-center">
+        <ItemTitle className="w-full justify-center normal-case tracking-normal">
+          {node.name}
+        </ItemTitle>
+      </ItemContent>
+    </Item>
   );
 }
 
 function MethodLabel({ label }: { label: string }) {
   return (
     <div className="flex shrink-0 flex-col items-center gap-0.5 px-1 text-muted-foreground">
-      <ArrowRightIcon className="size-4" />
+      <ArrowRightIcon />
       <span className="max-w-24 text-center text-xs font-semibold leading-tight">{label}</span>
     </div>
   );
@@ -86,11 +94,15 @@ export function EvolutionChart({
   search?: PokemonNavSearch;
 }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-muted/30 p-4">
-      <p className="mb-3 text-sm font-semibold">Evolution</p>
-      <div className="flex min-w-min justify-center md:justify-start">
-        <Branch node={chain} spriteStyle={spriteStyle} search={search} />
-      </div>
-    </div>
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle>Evolution</CardTitle>
+      </CardHeader>
+      <CardContent className="overflow-x-auto">
+        <div className="flex min-w-min justify-center md:justify-start">
+          <Branch node={chain} spriteStyle={spriteStyle} search={search} />
+        </div>
+      </CardContent>
+    </Card>
   );
 }

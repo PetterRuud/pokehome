@@ -195,31 +195,31 @@ function PokemonPage() {
               </Badge>
               {shiny ? (
                 <Badge variant="secondary">
-                  <SparklesIcon data-icon="inline-start" />
+                  <SparklesIcon data-icon="inline-start" className="text-amber-500" />
                   Shiny
                 </Badge>
               ) : null}
               {alpha ? (
                 <Badge variant="secondary">
-                  <EyeIcon data-icon="inline-start" />
+                  <EyeIcon data-icon="inline-start" className="text-red-500" />
                   Alpha
                 </Badge>
               ) : null}
               {mega ? (
                 <Badge variant="secondary">
-                  <ZapIcon data-icon="inline-start" />
+                  <ZapIcon data-icon="inline-start" className="text-violet-500" />
                   Mega
                 </Badge>
               ) : null}
               {gmax ? (
                 <Badge variant="secondary">
-                  <ExpandIcon data-icon="inline-start" />
+                  <ExpandIcon data-icon="inline-start" className="text-rose-500" />
                   Gigantamax
                 </Badge>
               ) : null}
               {regional ? (
                 <Badge variant="secondary">
-                  <GlobeIcon data-icon="inline-start" />
+                  <GlobeIcon data-icon="inline-start" className="text-sky-500" />
                   Regional
                 </Badge>
               ) : null}
