@@ -155,7 +155,7 @@ function MobileBottomNav({ giftBadge }: { giftBadge: number }) {
               key={item.to}
               variant="ghost"
               className={cn(
-                "relative h-auto min-h-11 flex-col gap-0.5 rounded-lg text-[11px] font-medium",
+                "relative h-auto min-h-11 flex-col gap-0.5 rounded-lg text-xs font-medium",
                 active ? "text-primary" : "text-muted-foreground",
               )}
               render={<Link to={item.to} />}
@@ -164,7 +164,7 @@ function MobileBottomNav({ giftBadge }: { giftBadge: number }) {
               <span className="relative">
                 <Icon className="size-5" />
                 {isGifts && giftBadge > 0 ? (
-                  <span className="absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-semibold text-primary-foreground tabular-nums">
+                  <span className="absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-xs font-semibold text-primary-foreground tabular-nums">
                     {giftBadge}
                   </span>
                 ) : null}

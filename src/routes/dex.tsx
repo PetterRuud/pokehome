@@ -198,12 +198,7 @@ function DexPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Living dex</h1>
-        <p className="text-sm text-muted-foreground">
-          National + HOME game / DLC dexes · select slots, then Add or Clear
-        </p>
-      </div>
+      <h1 className="text-2xl font-bold tracking-tight">Living dex</h1>
 
       <Tabs
         value={tab}
@@ -261,18 +256,18 @@ function DexPage() {
                       {game.name}
                     </span>
                     {game.kind === "dlc" ? (
-                      <Badge variant="secondary" className="shrink-0 text-[9px]">
+                      <Badge variant="secondary" className="shrink-0">
                         DLC
                       </Badge>
                     ) : null}
                   </span>
                   {complete ? (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                       <CheckIcon className="size-3.5" aria-hidden />
                       Complete
                     </span>
                   ) : (
-                    <span className="tabular-nums text-[10px] text-muted-foreground">
+                    <span className="tabular-nums text-xs text-muted-foreground">
                       {caught}/{total}
                     </span>
                   )}
@@ -1203,7 +1198,7 @@ function GameDexGridCard({
           height={72}
           className={cn("size-14 sm:size-16", !caught && "opacity-40 grayscale")}
         />
-        <span className="w-full truncate text-center text-[10px] font-medium leading-tight sm:text-xs">
+        <span className="w-full truncate text-center text-xs font-medium leading-tight">
           <span className="tabular-nums text-muted-foreground">
             #{String(entry).padStart(3, "0")}{" "}
           </span>

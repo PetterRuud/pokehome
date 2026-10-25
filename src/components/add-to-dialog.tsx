@@ -269,7 +269,7 @@ export function AddToDialogButton({
                             >
                               <span className="truncate">{game.name}</span>
                               {game.kind === "dlc" ? (
-                                <Badge variant="secondary" className="shrink-0 text-[9px]">
+                                <Badge variant="secondary" className="shrink-0">
                                   DLC
                                 </Badge>
                               ) : null}

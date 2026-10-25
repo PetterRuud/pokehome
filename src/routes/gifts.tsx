@@ -30,7 +30,7 @@ function TabCount({ n }: { n: number }) {
   return (
     <Badge
       variant="secondary"
-      className="h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
+      className="h-5 min-w-5 justify-center px-1.5 text-xs tabular-nums"
     >
       {n}
     </Badge>
@@ -248,7 +248,7 @@ function GiftList({
                       <p className="text-sm text-muted-foreground">{notes}</p>
                     ) : null}
                     {source ? (
-                      <span className="text-[11px] text-muted-foreground/80">
+                      <span className="text-xs text-muted-foreground/80">
                         {source}
                       </span>
                     ) : null}

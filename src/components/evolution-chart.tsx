@@ -21,7 +21,7 @@ function MethodLabel({ label }: { label: string }) {
   return (
     <div className="flex shrink-0 flex-col items-center gap-0.5 px-1 text-muted-foreground">
       <ArrowRightIcon className="size-4" />
-      <span className="max-w-24 text-center text-[10px] font-semibold leading-tight">{label}</span>
+      <span className="max-w-24 text-center text-xs font-semibold leading-tight">{label}</span>
     </div>
   );
 }

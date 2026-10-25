@@ -5,16 +5,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Field,
-  FieldContent,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-  FieldTitle,
-} from "@/components/ui/field";
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item";
 import { EvolutionChart } from "@/components/evolution-chart";
-import { GameLogo } from "@/components/game-logo";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { getEvolutionChain, getPokemonSummary } from "@/server/pokemon";
 import { useDexStore } from "@/lib/store";
@@ -214,65 +211,101 @@ function PokemonPage() {
               <CardDescription>Living dex status and form flags for this species.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Field orientation="horizontal">
-                  <FieldContent>
-                    <FieldTitle>Caught</FieldTitle>
-                  </FieldContent>
-                  <Switch checked={caught} onCheckedChange={(v) => setCaught(key, v)} />
-                </Field>
-                <Field orientation="horizontal">
-                  <FieldContent>
-                    <FieldLabel className="flex items-center gap-1.5">
+              <ItemGroup className="flex-row flex-wrap gap-2">
+                <Item variant="outline" size="sm" className="w-fit max-w-full">
+                  <ItemContent>
+                    <ItemTitle>Caught</ItemTitle>
+                  </ItemContent>
+                  <ItemActions>
+                    <Switch
+                      checked={caught}
+                      onCheckedChange={(v) => setCaught(key, v)}
+                      aria-label="Caught"
+                    />
+                  </ItemActions>
+                </Item>
+                <Item variant="outline" size="sm" className="w-fit max-w-full">
+                  <ItemContent>
+                    <ItemTitle className="flex items-center gap-1.5">
                       <SparklesIcon className="size-4 text-amber-500" />
                       Shiny
-                    </FieldLabel>
-                  </FieldContent>
-                  <Switch checked={shiny} onCheckedChange={(v) => setShiny(key, v)} />
-                </Field>
-                <Field orientation="horizontal">
-                  <FieldContent>
-                    <FieldLabel className="flex items-center gap-1.5">
+                    </ItemTitle>
+                  </ItemContent>
+                  <ItemActions>
+                    <Switch
+                      checked={shiny}
+                      onCheckedChange={(v) => setShiny(key, v)}
+                      aria-label="Shiny"
+                    />
+                  </ItemActions>
+                </Item>
+                <Item variant="outline" size="sm" className="w-fit max-w-full">
+                  <ItemContent>
+                    <ItemTitle className="flex items-center gap-1.5">
                       <EyeIcon className="size-4 text-red-500" />
                       Alpha
-                    </FieldLabel>
-                  </FieldContent>
-                  <Switch checked={alpha} onCheckedChange={(v) => setAlpha(key, v)} />
-                </Field>
+                    </ItemTitle>
+                  </ItemContent>
+                  <ItemActions>
+                    <Switch
+                      checked={alpha}
+                      onCheckedChange={(v) => setAlpha(key, v)}
+                      aria-label="Alpha"
+                    />
+                  </ItemActions>
+                </Item>
                 {hasMega ? (
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldLabel className="flex items-center gap-1.5">
+                  <Item variant="outline" size="sm" className="w-fit max-w-full">
+                    <ItemContent>
+                      <ItemTitle className="flex items-center gap-1.5">
                         <ZapIcon className="size-4 text-violet-500" />
                         Mega
-                      </FieldLabel>
-                    </FieldContent>
-                    <Switch checked={mega} onCheckedChange={(v) => setMega(key, v)} />
-                  </Field>
+                      </ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <Switch
+                        checked={mega}
+                        onCheckedChange={(v) => setMega(key, v)}
+                        aria-label="Mega"
+                      />
+                    </ItemActions>
+                  </Item>
                 ) : null}
                 {hasGmax ? (
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldLabel className="flex items-center gap-1.5">
+                  <Item variant="outline" size="sm" className="w-fit max-w-full">
+                    <ItemContent>
+                      <ItemTitle className="flex items-center gap-1.5">
                         <ExpandIcon className="size-4 text-rose-500" />
                         Gigantamax
-                      </FieldLabel>
-                    </FieldContent>
-                    <Switch checked={gmax} onCheckedChange={(v) => setGmax(key, v)} />
-                  </Field>
+                      </ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <Switch
+                        checked={gmax}
+                        onCheckedChange={(v) => setGmax(key, v)}
+                        aria-label="Gigantamax"
+                      />
+                    </ItemActions>
+                  </Item>
                 ) : null}
                 {hasRegional ? (
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldLabel className="flex items-center gap-1.5">
+                  <Item variant="outline" size="sm" className="w-fit max-w-full">
+                    <ItemContent>
+                      <ItemTitle className="flex items-center gap-1.5">
                         <GlobeIcon className="size-4 text-sky-500" />
                         Regional
-                      </FieldLabel>
-                    </FieldContent>
-                    <Switch checked={regional} onCheckedChange={(v) => setRegional(key, v)} />
-                  </Field>
+                      </ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <Switch
+                        checked={regional}
+                        onCheckedChange={(v) => setRegional(key, v)}
+                        aria-label="Regional"
+                      />
+                    </ItemActions>
+                  </Item>
                 ) : null}
-              </div>
+              </ItemGroup>
             </CardContent>
           </Card>
 
@@ -285,44 +318,34 @@ function PokemonPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <FieldSet>
-                  <FieldLegend className="sr-only">Game caught</FieldLegend>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {gameGroups.map((group) => (
-                      <div key={group.name} className="flex min-w-0 flex-col gap-2">
-                        <GameLogo
-                          logo={group.logo}
-                          title={group.name}
-                          variant="wordmark"
-                          className="h-7 max-w-full"
-                        />
-                        <FieldGroup className="gap-2">
-                          {group.games.map((game) => {
-                            const inGame = Boolean(caughtByGame[game.id]?.[key]);
-                            return (
-                              <Field key={game.id} orientation="horizontal" className="min-w-0">
-                                <FieldContent className="min-w-0">
-                                  <FieldTitle className="flex min-w-0 items-center gap-1.5 text-sm">
-                                    <span className="truncate">{game.name}</span>
-                                    {game.kind === "dlc" ? (
-                                      <Badge variant="secondary" className="shrink-0 text-[9px]">
-                                        DLC
-                                      </Badge>
-                                    ) : null}
-                                  </FieldTitle>
-                                </FieldContent>
-                                <Switch
-                                  checked={inGame}
-                                  onCheckedChange={(v) => setGameCaught(game.id, key, v)}
-                                />
-                              </Field>
-                            );
-                          })}
-                        </FieldGroup>
-                      </div>
-                    ))}
-                  </div>
-                </FieldSet>
+                <ItemGroup className="flex-row flex-wrap gap-2">
+                  {gameGroups.flatMap((group) =>
+                    group.games.map((game) => {
+                      const inGame = Boolean(caughtByGame[game.id]?.[key]);
+                      return (
+                        <Item key={game.id} variant="outline" size="sm" className="w-fit max-w-full">
+                          <ItemContent>
+                            <ItemTitle>
+                              {game.name}
+                              {game.kind === "dlc" ? (
+                                <Badge variant="secondary" className="shrink-0">
+                                  DLC
+                                </Badge>
+                              ) : null}
+                            </ItemTitle>
+                          </ItemContent>
+                          <ItemActions>
+                            <Switch
+                              checked={inGame}
+                              onCheckedChange={(v) => setGameCaught(game.id, key, v)}
+                              aria-label={`Caught in ${game.name}`}
+                            />
+                          </ItemActions>
+                        </Item>
+                      );
+                    }),
+                  )}
+                </ItemGroup>
               </CardContent>
             </Card>
           ) : null}

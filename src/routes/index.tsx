@@ -127,12 +127,12 @@ function HomePage() {
                         <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                           <span className="truncate text-sm font-medium">{game.name}</span>
                           {game.kind === "dlc" ? (
-                            <Badge variant="secondary" className="shrink-0 text-[9px]">
+                            <Badge variant="secondary" className="shrink-0">
                               DLC
                             </Badge>
                           ) : null}
                           {complete ? (
-                            <span className="flex shrink-0 items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                            <span className="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                               <CheckIcon className="size-3" aria-hidden />
                               Done
                             </span>

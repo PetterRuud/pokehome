@@ -99,7 +99,7 @@ export function DexSlotButton({
         />
         <span
           className={cn(
-            "w-full truncate text-center text-[10px] font-medium leading-tight sm:text-xs",
+            "w-full truncate text-center text-xs font-medium leading-tight",
             !active && "text-muted-foreground/70",
           )}
         >
@@ -108,22 +108,22 @@ export function DexSlotButton({
         {(showAlpha || showMega || showGmax || showRegional) && (
           <span className="flex gap-0.5">
             {showAlpha ? (
-              <span className="rounded bg-red-500/90 px-0.5 text-[8px] font-bold text-white">
+              <span className="rounded bg-red-500/90 px-0.5 text-xs font-bold text-white">
                 α
               </span>
             ) : null}
             {showMega ? (
-              <span className="rounded bg-violet-600/90 px-0.5 text-[8px] font-bold text-white">
+              <span className="rounded bg-violet-600/90 px-0.5 text-xs font-bold text-white">
                 M
               </span>
             ) : null}
             {showGmax ? (
-              <span className="rounded bg-rose-600/90 px-0.5 text-[8px] font-bold text-white">
+              <span className="rounded bg-rose-600/90 px-0.5 text-xs font-bold text-white">
                 G
               </span>
             ) : null}
             {showRegional ? (
-              <span className="rounded bg-sky-600/90 px-0.5 text-[8px] font-bold text-white">
+              <span className="rounded bg-sky-600/90 px-0.5 text-xs font-bold text-white">
                 R
               </span>
             ) : null}

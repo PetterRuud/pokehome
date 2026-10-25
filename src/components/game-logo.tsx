@@ -54,7 +54,7 @@ function FallbackIcon({ className, title, ...props }: IconProps) {
     <svg viewBox="0 0 24 24" className={className} role={title ? "img" : undefined} {...props}>
       {title ? <title>{title}</title> : null}
       <circle cx="12" cy="12" r="10" className="fill-muted stroke-border" strokeWidth="1.5" />
-      <text x="12" y="16" textAnchor="middle" className="fill-foreground text-[10px] font-bold">
+      <text x="12" y="16" textAnchor="middle" className="fill-foreground text-xs font-bold">
         ?
       </text>
     </svg>
@@ -143,7 +143,7 @@ function ZaIcon({ className, title, ...props }: IconProps) {
     <svg viewBox="0 0 24 24" className={className} role={title ? "img" : undefined} {...props}>
       {title ? <title>{title}</title> : null}
       <circle cx="12" cy="12" r="10" className="fill-fuchsia-700" />
-      <text x="12" y="15.5" textAnchor="middle" className="fill-fuchsia-50 text-[8px] font-bold">
+      <text x="12" y="15.5" textAnchor="middle" className="fill-fuchsia-50 text-xs font-bold">
         Z-A
       </text>
     </svg>
