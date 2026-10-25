@@ -14,7 +14,7 @@ export function countProgress(boxes: DexBox[], caughtByKey: Record<string, boole
       if (caughtByKey[slot.key]) caught += 1;
     }
   }
-  const percent = total === 0 ? 0 : Math.round((caught / total) * 100);
+  const percent = total === 0 ? 0 : Math.floor((caught / total) * 100);
   return { total, caught, percent };
 }
 

@@ -391,7 +391,7 @@ function NationalDexView() {
     return {
       total,
       caught: flagged,
-      percent: total === 0 ? 0 : Math.round((flagged / total) * 100),
+      percent: total === 0 ? 0 : Math.floor((flagged / total) * 100),
     };
   }, [formView, boxes, caughtByKey, flagByKey]);
 
