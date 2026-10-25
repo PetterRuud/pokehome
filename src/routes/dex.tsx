@@ -74,10 +74,10 @@ const DEX_STICKY_TOOLBAR =
 
 const EMPTY_CAUGHT: Record<string, boolean> = {};
 const LIST_ROW_HEIGHT = 104;
-const GRID_ROW_HEIGHT = 148;
+/** Shared national/game grid row: sprite + dex # + name (+ padding). */
+const GRID_ROW_HEIGHT = 168;
 const NAT_HEADER_HEIGHT = 44;
-/** Matches game-dex grid rows (sprite + dex # + name). */
-const NAT_GRID_ROW_HEIGHT = 148;
+const NAT_GRID_ROW_HEIGHT = GRID_ROW_HEIGHT;
 
 type NationalVirtualRow =
   | {
@@ -1033,7 +1033,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
       ) : (
         <div
           ref={listRef}
-          className="relative w-full rounded-lg border border-border"
+          className="relative w-full"
           style={{ height: virtualizer.getTotalSize() }}
         >
           {virtualItems.map((item) => {
@@ -1068,7 +1068,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                 key={item.key}
                 data-index={item.index}
                 ref={virtualizer.measureElement}
-                className="absolute top-0 left-0 grid w-full gap-2 px-2 py-1"
+                className="absolute top-0 left-0 grid w-full gap-1.5 px-0.5 py-1 sm:gap-2"
                 style={{
                   transform: `translateY(${item.start - scrollMargin}px)`,
                   gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`,
@@ -1110,12 +1110,12 @@ function GameDexNumbers({ slot }: { slot: DexSlot }) {
   const entry = slot.entryNumber ?? slot.id;
   const showNational = slot.entryNumber != null && slot.entryNumber !== slot.id;
   return (
-    <span className="tabular-nums">
-      <span className="font-semibold text-foreground">{formatDexEntry(entry)}</span>
+    <>
+      <span className="font-semibold">{formatDexEntry(entry)}</span>
       {showNational ? (
-        <span className="text-muted-foreground"> · N{slot.id}</span>
+        <span className="font-normal text-muted-foreground"> · N{slot.id}</span>
       ) : null}
-    </span>
+    </>
   );
 }
 
@@ -1212,20 +1212,14 @@ function GameDexGridCard({
   onSelectedChange: (selected: boolean) => void;
 }) {
   const unavailable = slot.available === false;
+  const active = caught && !unavailable;
   const pokemonSearch = { from: "games" as const, game: gameId };
 
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center gap-1 rounded-md border-2 p-1.5 pt-7 transition",
-        (!caught || unavailable) && "border-border/60 bg-muted/80 text-muted-foreground",
-        caught &&
-          !unavailable &&
-          !selected &&
-          "border-primary/50 bg-primary/10 text-foreground",
-        selected &&
-          !unavailable &&
-          "border-primary bg-primary/15 text-foreground shadow-[0_0_0_1px_hsl(var(--primary)/0.35)]",
+        "relative rounded-md",
+        selected && !unavailable && "ring-2 ring-primary/50 ring-offset-1 ring-offset-background",
       )}
     >
       <Checkbox
@@ -1233,39 +1227,47 @@ function GameDexGridCard({
         disabled={unavailable}
         onCheckedChange={(v) => onSelectedChange(v === true)}
         aria-label={`Select ${slot.name}`}
-        className="absolute top-1.5 left-1.5"
+        className="absolute top-1.5 left-1.5 z-10"
       />
-      <Link
-        to="/pokemon/$id"
-        params={{ id: String(slot.id) }}
-        search={pokemonSearch}
-        aria-label={`${slot.name} details`}
-        className="absolute top-1 right-1 flex size-6 items-center justify-center rounded-full border border-border bg-background/90 text-muted-foreground shadow-sm transition hover:text-foreground"
-      >
-        <InfoIcon className="size-3.5" />
-      </Link>
       <button
         type="button"
         disabled={unavailable}
         onClick={() => onSelectedChange(!selected)}
-        className="flex w-full flex-col items-center gap-1 disabled:pointer-events-none"
+        aria-label={`${slot.name}: ${unavailable ? "unavailable" : caught ? "caught" : "missing"}. Tap to select.`}
+        aria-pressed={selected}
+        className={cn(
+          "flex min-h-20 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-md border-2 p-1.5 pt-7 transition active:scale-[0.97] disabled:pointer-events-none sm:min-h-24 sm:p-2 sm:pt-7",
+          !active && "border-border/60 bg-muted/80 text-muted-foreground",
+          active && !selected && "border-primary/50 bg-primary/10 text-foreground",
+          selected && !unavailable && "border-primary bg-primary/15 text-foreground",
+        )}
       >
         <PokemonSprite
           id={slot.id}
           style={spriteStyle}
           formId={slot.formId}
           slug={slot.slug}
-          width={72}
-          height={72}
+          width={80}
+          height={80}
           className={cn(
-            "size-14 sm:size-16",
-            (!caught || unavailable) && "opacity-40 grayscale",
+            "size-16 sm:size-[4.5rem] md:size-20",
+            !active && "opacity-35 grayscale",
           )}
         />
-        <span className="w-full truncate text-center text-xs leading-tight">
+        <span
+          className={cn(
+            "w-full truncate text-center text-xs font-semibold leading-tight tabular-nums",
+            !active && "text-muted-foreground/70",
+          )}
+        >
           <GameDexNumbers slot={slot} />
         </span>
-        <span className="w-full truncate text-center text-xs font-medium leading-tight">
+        <span
+          className={cn(
+            "w-full truncate text-center text-xs font-medium leading-tight",
+            !active && "text-muted-foreground/70",
+          )}
+        >
           {slot.name}
         </span>
         {unavailable ? (
@@ -1274,6 +1276,16 @@ function GameDexGridCard({
           </Badge>
         ) : null}
       </button>
+      <Link
+        to="/pokemon/$id"
+        params={{ id: String(slot.id) }}
+        search={pokemonSearch}
+        aria-label={`${slot.name} details`}
+        className="absolute top-1 right-1 z-10 flex size-6 items-center justify-center rounded-full border border-border bg-background/90 text-muted-foreground shadow-sm transition hover:text-foreground sm:size-7"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <InfoIcon className="size-3.5" />
+      </Link>
     </div>
   );
 }
