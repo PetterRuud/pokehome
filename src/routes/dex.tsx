@@ -42,7 +42,7 @@ import { PokemonSprite } from "@/components/pokemon-sprite";
 import { applyBoxLayout } from "@/lib/box-layout";
 import { filterSlotsByQuery } from "@/lib/dex-search";
 import { useDexStore } from "@/lib/store";
-import { countGameProgress, countProgress } from "@/lib/dex-stats";
+import { countGameProgress, countProgress, toPercent } from "@/lib/dex-stats";
 import {
   filterBoxesForFormView,
   gmaxSpeciesCount,
@@ -391,7 +391,7 @@ function NationalDexView() {
     return {
       total,
       caught: flagged,
-      percent: total === 0 ? 0 : Math.floor((flagged / total) * 100),
+      percent: toPercent(flagged, total),
     };
   }, [formView, boxes, caughtByKey, flagByKey]);
 

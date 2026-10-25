@@ -148,10 +148,10 @@ function AppSidebar({
 
 export function AppShell({
   children,
-  progressPercent,
+  progress,
 }: {
   children: React.ReactNode;
-  progressPercent?: number;
+  progress?: { caught: number; total: number; percent: number };
 }) {
   const { activeCount, unclaimedCount } = useActiveGiftStats();
 
@@ -168,11 +168,12 @@ export function AppShell({
           >
             <PokeballLogo size="sm" showWordmark={false} />
           </Link>
-          {typeof progressPercent === "number" ? (
+          {progress ? (
             <div className="flex min-w-0 flex-1 items-center gap-2">
-              <Progress value={progressPercent} className="h-1.5 flex-1" />
+              <Progress value={progress.percent} className="h-1.5 flex-1" />
               <Badge variant="outline" className="shrink-0 tabular-nums">
-                {progressPercent}%
+                {progress.caught}/{progress.total}
+                <span className="text-muted-foreground"> · {progress.percent}%</span>
               </Badge>
             </div>
           ) : (

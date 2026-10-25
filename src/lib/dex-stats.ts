@@ -4,6 +4,13 @@ function isSlotAvailable(slot: { available?: boolean }) {
   return slot.available !== false;
 }
 
+/** Percent of a dex: 0 when empty, 100 only when complete, otherwise 1–99 via floor. */
+export function toPercent(caught: number, total: number): number {
+  if (total <= 0 || caught <= 0) return 0;
+  if (caught >= total) return 100;
+  return Math.min(99, Math.max(1, Math.floor((caught / total) * 100)));
+}
+
 export function countProgress(boxes: DexBox[], caughtByKey: Record<string, boolean>) {
   let total = 0;
   let caught = 0;
@@ -14,8 +21,7 @@ export function countProgress(boxes: DexBox[], caughtByKey: Record<string, boole
       if (caughtByKey[slot.key]) caught += 1;
     }
   }
-  const percent = total === 0 ? 0 : Math.floor((caught / total) * 100);
-  return { total, caught, percent };
+  return { total, caught, percent: toPercent(caught, total) };
 }
 
 export function countGameProgress(boxes: DexBox[], caughtMap: Record<string, boolean> | undefined) {
