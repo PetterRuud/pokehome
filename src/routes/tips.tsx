@@ -5,6 +5,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/u
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GameLogo } from "@/components/game-logo";
+import { DonutCalculator } from "@/components/donut-calculator";
 import { berryDisplayName, berrySpriteUrl } from "@/lib/berries";
 import {
   getDefaultTipFamilyId,
@@ -104,6 +105,7 @@ function TipsPage() {
         </Empty>
       ) : (
         <div className="flex flex-col gap-8">
+          {gameId === "za" ? <DonutCalculator /> : null}
           {tips.sections.map((section) => (
             <TipSectionView key={section.title} section={section} />
           ))}
@@ -214,12 +216,12 @@ function BerryChip({ berry }: { berry: TipBerry }) {
   return (
     <Badge variant={berry.optional ? "ghost" : "outline"} title={name}>
       <img
-        src={berrySpriteUrl(berry.id)}
+        src={berrySpriteUrl(berry.id, { hyper: berry.hyper })}
         alt=""
         width={24}
         height={24}
         className="size-6"
-        style={{ imageRendering: "pixelated" }}
+        style={berry.hyper ? undefined : { imageRendering: "pixelated" }}
         loading="lazy"
       />
       ×{berry.count}{" "}

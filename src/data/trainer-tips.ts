@@ -1,4 +1,4 @@
-/** Berry slug matching PokeAPI item sprites (`haban` → `haban-berry.png`). */
+/** Berry slug: regular PokeAPI art, or `/berries/hyper/{id}.png` when `hyper`. */
 export type TipBerry = {
   id: string;
   count: number;
