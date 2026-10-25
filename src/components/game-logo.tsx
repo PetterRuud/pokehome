@@ -6,6 +6,7 @@ type IconProps = SVGProps<SVGSVGElement> & { title?: string };
 const WORDMARKS: Record<string, string> = {
   go: "/logos/go.svg",
   lgpe: "/logos/lgpe.png",
+  frlg: "/logos/frlg.png",
   swsh: "/logos/swsh.png",
   bdsp: "/logos/bdsp.png",
   pla: "/logos/pla.png",
@@ -90,6 +91,17 @@ function LgpeIcon({ className, title, ...props }: IconProps) {
   );
 }
 
+function FrlgIcon({ className, title, ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} role={title ? "img" : undefined} {...props}>
+      {title ? <title>{title}</title> : null}
+      <circle cx="12" cy="12" r="10" className="fill-red-600" />
+      <path d="M12 2a10 10 0 0 0 0 20Z" className="fill-lime-500" />
+      <circle cx="12" cy="12" r="3" className="fill-background" />
+    </svg>
+  );
+}
+
 function SwshIcon({ className, title, ...props }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} role={title ? "img" : undefined} {...props}>
@@ -166,6 +178,7 @@ function MegaIcon({ className, title, ...props }: IconProps) {
 const ICONS: Record<string, (props: IconProps) => JSX.Element> = {
   go: GoIcon,
   lgpe: LgpeIcon,
+  frlg: FrlgIcon,
   swsh: SwshIcon,
   bdsp: BdspIcon,
   pla: PlaIcon,

@@ -56,6 +56,16 @@ const GAMES = [
     pokedexSlugs: ["letsgo-kanto"],
   },
   {
+    id: "frlg",
+    name: "FireRed / LeafGreen",
+    short: "FRLG",
+    group: "FireRed / LeafGreen",
+    groupShort: "FRLG",
+    kind: "main",
+    logo: "frlg",
+    pokedexSlugs: ["kanto"],
+  },
+  {
     id: "swsh-galar",
     name: "Galar Pokédex",
     short: "Galar",
