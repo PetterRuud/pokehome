@@ -31,7 +31,6 @@ export function ConfirmAlertDialog({
           <AlertDialogDescription>{request?.description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
             onClick={() => {
@@ -41,6 +40,7 @@ export function ConfirmAlertDialog({
           >
             {request?.confirmLabel ?? 'Confirm'}
           </AlertDialogAction>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

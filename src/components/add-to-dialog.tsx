@@ -21,25 +21,43 @@ import {
   FieldSet,
 } from '@/components/ui/field';
 import { canGmax, canMega, canRegional } from '@/lib/form-variants';
-import { getGameGroups } from '@/lib/games';
+import { getGameGroups, getGames } from '@/lib/games';
+import { useDexStore } from '@/lib/store';
 import type { GameId } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, HomeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
 
+/** Explicit on/off, or mixed (leave each Pokémon unchanged). */
+export type TriState = boolean | 'indeterminate';
+
 export type AddStatuses = {
-  caught: boolean;
-  home: boolean;
-  shiny: boolean;
-  alpha: boolean;
-  mega: boolean;
-  gmax: boolean;
-  regional: boolean;
+  caught: TriState;
+  home: TriState;
+  shiny: TriState;
+  alpha: TriState;
+  mega: TriState;
+  gmax: TriState;
+  regional: TriState;
 };
 
 export type AddToOptions = {
   statuses: AddStatuses;
-  gameIds: GameId[];
+  /** Per-game caught mark. Missing / indeterminate → leave unchanged. */
+  games: Partial<Record<GameId, TriState>>;
 };
+
+function aggregateFlag(keys: string[], map: Record<string, boolean> | undefined): TriState {
+  if (keys.length === 0) return false;
+  let any = false;
+  let all = true;
+  for (const key of keys) {
+    if (map?.[key]) any = true;
+    else all = false;
+  }
+  if (all) return true;
+  if (!any) return false;
+  return 'indeterminate';
+}
 
 const DEFAULT_OPTIONS: AddToOptions = {
   statuses: {
@@ -51,7 +69,7 @@ const DEFAULT_OPTIONS: AddToOptions = {
     gmax: false,
     regional: false,
   },
-  gameIds: [],
+  games: {},
 };
 
 export function parseNationalId(key: string): number {
@@ -59,7 +77,16 @@ export function parseNationalId(key: string): number {
   return match ? Number(match[1]) : Number.NaN;
 }
 
-/** Apply status + game marks for the given keys. */
+function applyTriState(
+  state: TriState | undefined,
+  keys: string[],
+  setMany: (keys: string[], value: boolean) => void,
+) {
+  if (state === undefined || state === 'indeterminate' || keys.length === 0) return;
+  setMany(keys, state);
+}
+
+/** Apply status + game marks for the given keys. Indeterminate values are left alone. */
 export function applyAddToOptions(
   keys: string[],
   options: AddToOptions,
@@ -75,33 +102,43 @@ export function applyAddToOptions(
     setGamesHomeMany: (gameIds: GameId[], keys: string[], value: boolean) => void;
   },
 ) {
-  const { statuses, gameIds } = options;
-  if (statuses.caught) actions.setCaughtMany(keys, true);
-  if (statuses.home) actions.setHomeMany(keys, true);
-  if (statuses.shiny) actions.setShinyMany(keys, true);
-  if (statuses.alpha) actions.setAlphaMany(keys, true);
-  if (statuses.mega) {
+  const { statuses, games } = options;
+  applyTriState(statuses.caught, keys, actions.setCaughtMany);
+  applyTriState(statuses.home, keys, actions.setHomeMany);
+  applyTriState(statuses.shiny, keys, actions.setShinyMany);
+  applyTriState(statuses.alpha, keys, actions.setAlphaMany);
+
+  if (statuses.mega !== 'indeterminate') {
     const megaKeys = keys.filter((key) => canMega(parseNationalId(key)));
-    if (megaKeys.length) actions.setMegaMany(megaKeys, true);
+    applyTriState(statuses.mega, megaKeys, actions.setMegaMany);
   }
-  if (statuses.gmax) {
+  if (statuses.gmax !== 'indeterminate') {
     const gmaxKeys = keys.filter((key) => canGmax(parseNationalId(key)));
-    if (gmaxKeys.length) actions.setGmaxMany(gmaxKeys, true);
+    applyTriState(statuses.gmax, gmaxKeys, actions.setGmaxMany);
   }
-  if (statuses.regional) {
+  if (statuses.regional !== 'indeterminate') {
     const regionalKeys = keys.filter((key) => canRegional(parseNationalId(key)));
-    if (regionalKeys.length) actions.setRegionalMany(regionalKeys, true);
+    applyTriState(statuses.regional, regionalKeys, actions.setRegionalMany);
   }
-  if (gameIds.length) {
-    // Games list means origin caught; HOME status also banks those origins.
-    actions.setGamesCaughtMany(gameIds, keys, true);
-    if (statuses.home) actions.setGamesHomeMany(gameIds, keys, true);
+
+  // Only entries present in `games` are written; omitted games stay unchanged.
+  const markHome = statuses.home;
+  for (const [gameId, state] of Object.entries(games) as [GameId, TriState][]) {
+    if (state === 'indeterminate') continue;
+    actions.setGamesCaughtMany([gameId], keys, state);
+    if (state === false) {
+      actions.setGamesHomeMany([gameId], keys, false);
+    } else if (markHome === true) {
+      actions.setGamesHomeMany([gameId], keys, true);
+    } else if (markHome === false) {
+      actions.setGamesHomeMany([gameId], keys, false);
+    }
   }
 }
 
 export type GameAddOptions = {
-  gameCaught: boolean;
-  gameHome: boolean;
+  gameCaught: TriState;
+  gameHome: TriState;
 };
 
 const DEFAULT_GAME_OPTIONS: GameAddOptions = {
@@ -118,29 +155,48 @@ export function applyGameAddOptions(
     setGameHomeMany: (gameId: GameId, keys: string[], value: boolean) => void;
   },
 ) {
-  if (options.gameCaught) actions.setGameCaughtMany(gameId, keys, true);
-  if (options.gameHome) actions.setGameHomeMany(gameId, keys, true);
+  if (options.gameCaught !== 'indeterminate') {
+    actions.setGameCaughtMany(gameId, keys, options.gameCaught);
+  }
+  if (options.gameHome !== 'indeterminate') {
+    actions.setGameHomeMany(gameId, keys, options.gameHome);
+  }
+}
+
+function summarizeTri(label: string, state: TriState | undefined, parts: string[]) {
+  if (state === true) parts.push(label);
+  else if (state === false) parts.push(`−${label}`);
 }
 
 export function summarizeGameAddOptions(options: GameAddOptions): string {
   const parts: string[] = [];
-  if (options.gameCaught) parts.push('caught');
-  if (options.gameHome) parts.push('HOME');
-  return parts.length ? parts.join(' · ') : 'nothing selected';
+  summarizeTri('caught', options.gameCaught, parts);
+  summarizeTri('HOME', options.gameHome, parts);
+  return parts.length ? parts.join(' · ') : 'no changes';
 }
 
 export function summarizeAddOptions(options: AddToOptions): string {
   const parts: string[] = [];
-  if (options.statuses.caught) parts.push('caught');
-  if (options.statuses.home) parts.push('HOME');
-  if (options.statuses.shiny) parts.push('shiny');
-  if (options.statuses.alpha) parts.push('alpha');
-  if (options.statuses.mega) parts.push('mega');
-  if (options.statuses.gmax) parts.push('gmax');
-  if (options.statuses.regional) parts.push('regional');
-  if (options.gameIds.length === 1) parts.push('1 game');
-  else if (options.gameIds.length > 1) parts.push(`${options.gameIds.length} games`);
-  return parts.length ? parts.join(' · ') : 'nothing selected';
+  summarizeTri('caught', options.statuses.caught, parts);
+  summarizeTri('HOME', options.statuses.home, parts);
+  summarizeTri('shiny', options.statuses.shiny, parts);
+  summarizeTri('alpha', options.statuses.alpha, parts);
+  summarizeTri('mega', options.statuses.mega, parts);
+  summarizeTri('gmax', options.statuses.gmax, parts);
+  summarizeTri('regional', options.statuses.regional, parts);
+
+  let gamesOn = 0;
+  let gamesOff = 0;
+  for (const state of Object.values(options.games)) {
+    if (state === true) gamesOn += 1;
+    else if (state === false) gamesOff += 1;
+  }
+  if (gamesOn === 1) parts.push('1 game');
+  else if (gamesOn > 1) parts.push(`${gamesOn} games`);
+  if (gamesOff === 1) parts.push('−1 game');
+  else if (gamesOff > 1) parts.push(`−${gamesOff} games`);
+
+  return parts.length ? parts.join(' · ') : 'no changes';
 }
 
 const STATUS_OPTIONS: {
@@ -158,29 +214,61 @@ const STATUS_OPTIONS: {
   { key: 'regional', label: 'Regional', icon: GlobeIcon, iconClassName: 'text-sky-500' },
 ];
 
+function triChecked(value: TriState): boolean {
+  return value === true;
+}
+
+function triIndeterminate(value: TriState): boolean {
+  return value === 'indeterminate';
+}
+
 export function AddToDialogButton({
   disabled,
-  selectedCount,
+  selectedKeys,
   onAdd,
 }: {
   disabled?: boolean;
-  selectedCount: number;
+  selectedKeys: string[];
   onAdd: (options: AddToOptions) => void;
 }) {
   const gameGroups = useMemo(() => getGameGroups(), []);
+  const caughtByKey = useDexStore((s) => s.caughtByKey);
+  const homeByKey = useDexStore((s) => s.homeByKey);
+  const shinyByKey = useDexStore((s) => s.shinyByKey);
+  const alphaByKey = useDexStore((s) => s.alphaByKey);
+  const megaByKey = useDexStore((s) => s.megaByKey);
+  const gmaxByKey = useDexStore((s) => s.gmaxByKey);
+  const regionalByKey = useDexStore((s) => s.regionalByKey);
+  const caughtByGame = useDexStore((s) => s.caughtByGame);
+
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<AddToOptions>(DEFAULT_OPTIONS);
 
-  const canApply =
-    selectedCount > 0 &&
-    (options.statuses.caught ||
-      options.statuses.home ||
-      options.statuses.shiny ||
-      options.statuses.alpha ||
-      options.statuses.mega ||
-      options.statuses.gmax ||
-      options.statuses.regional ||
-      options.gameIds.length > 0);
+  const selectedCount = selectedKeys.length;
+
+  function buildOptionsFromSelection(keys: string[]): AddToOptions {
+    // Omit games where none of the selection is marked — applying must not clear
+    // unmarked games. Include checked + mixed so Apply can set or leave alone.
+    const games: Partial<Record<GameId, TriState>> = {};
+    for (const game of getGames()) {
+      const state = aggregateFlag(keys, caughtByGame[game.id]);
+      if (state !== false) games[game.id] = state;
+    }
+    return {
+      statuses: {
+        caught: aggregateFlag(keys, caughtByKey),
+        home: aggregateFlag(keys, homeByKey),
+        shiny: aggregateFlag(keys, shinyByKey),
+        alpha: aggregateFlag(keys, alphaByKey),
+        mega: aggregateFlag(keys, megaByKey),
+        gmax: aggregateFlag(keys, gmaxByKey),
+        regional: aggregateFlag(keys, regionalByKey),
+      },
+      games,
+    };
+  }
+
+  const canApply = selectedCount > 0;
 
   function toggleStatus(key: keyof AddStatuses, next: boolean) {
     setOptions((prev) => ({
@@ -190,17 +278,15 @@ export function AddToDialogButton({
   }
 
   function toggleGame(gameId: GameId, next: boolean) {
-    setOptions((prev) => {
-      const set = new Set(prev.gameIds);
-      if (next) set.add(gameId);
-      else set.delete(gameId);
-      return { ...prev, gameIds: Array.from(set) };
-    });
+    setOptions((prev) => ({
+      ...prev,
+      games: { ...prev.games, [gameId]: next },
+    }));
   }
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
-    if (next) setOptions(DEFAULT_OPTIONS);
+    if (next) setOptions(buildOptionsFromSelection(selectedKeys));
   }
 
   function handleAdd() {
@@ -218,8 +304,8 @@ export function AddToDialogButton({
         <DialogHeader>
           <DialogTitle>Add to living dex</DialogTitle>
           <DialogDescription>
-            Choose what to mark for {countLabel}. Status updates the national dex; games also mark those origin
-            Pokédexes.
+            Choose what to mark for {countLabel}. Mixed checkboxes keep each Pokémon’s current value. Status updates
+            the national dex; games also mark those origin Pokédexes.
           </DialogDescription>
         </DialogHeader>
 
@@ -231,11 +317,13 @@ export function AddToDialogButton({
               {STATUS_OPTIONS.map((opt) => {
                 const Icon = opt.icon;
                 const id = `add-status-${opt.key}`;
+                const value = options.statuses[opt.key];
                 return (
                   <Field key={opt.key} orientation="horizontal" className="min-w-0">
                     <Checkbox
                       id={id}
-                      checked={options.statuses[opt.key]}
+                      checked={triChecked(value)}
+                      indeterminate={triIndeterminate(value)}
                       onCheckedChange={(v) => toggleStatus(opt.key, Boolean(v))}
                     />
                     <FieldLabel htmlFor={id} className="flex min-w-0 items-center gap-1.5 font-medium">
@@ -258,11 +346,13 @@ export function AddToDialogButton({
                   <FieldGroup className="gap-1.5">
                     {group.games.map((game) => {
                       const id = `add-game-${game.id}`;
+                      const value = options.games[game.id] ?? false;
                       return (
                         <Field key={game.id} orientation="horizontal" className="min-w-0">
                           <Checkbox
                             id={id}
-                            checked={options.gameIds.includes(game.id)}
+                            checked={triChecked(value)}
+                            indeterminate={triIndeterminate(value)}
                             onCheckedChange={(v) => toggleGame(game.id, Boolean(v))}
                           />
                           <FieldContent className="min-w-0">
@@ -282,11 +372,11 @@ export function AddToDialogButton({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
           <Button disabled={!canApply} onClick={handleAdd}>
             Add {countLabel}
+          </Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -318,19 +408,31 @@ const GAME_STATUS_OPTIONS: {
 
 export function GameAddDialogButton({
   disabled,
-  selectedCount,
+  selectedKeys,
+  gameId,
   gameName,
   onAdd,
 }: {
   disabled?: boolean;
-  selectedCount: number;
+  selectedKeys: string[];
+  gameId: GameId;
   gameName: string;
   onAdd: (options: GameAddOptions) => void;
 }) {
+  const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? {});
+  const homeMap = useDexStore((s) => s.homeByGame[gameId] ?? {});
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<GameAddOptions>(DEFAULT_GAME_OPTIONS);
 
-  const canApply = selectedCount > 0 && (options.gameCaught || options.gameHome);
+  const selectedCount = selectedKeys.length;
+  const canApply = selectedCount > 0;
+
+  function buildOptionsFromSelection(keys: string[]): GameAddOptions {
+    return {
+      gameCaught: aggregateFlag(keys, caughtMap),
+      gameHome: aggregateFlag(keys, homeMap),
+    };
+  }
 
   function toggle(key: keyof GameAddOptions, next: boolean) {
     setOptions((prev) => ({ ...prev, [key]: next }));
@@ -338,7 +440,7 @@ export function GameAddDialogButton({
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
-    if (next) setOptions(DEFAULT_GAME_OPTIONS);
+    if (next) setOptions(buildOptionsFromSelection(selectedKeys));
   }
 
   function handleAdd() {
@@ -356,7 +458,8 @@ export function GameAddDialogButton({
         <DialogHeader>
           <DialogTitle>Add to {gameName}</DialogTitle>
           <DialogDescription>
-            Choose what to mark for {countLabel}. Game Caught/HOME also update the matching national flags.
+            Choose what to mark for {countLabel}. Mixed checkboxes keep each Pokémon’s current value. Game Caught/HOME
+            also update the matching national flags.
           </DialogDescription>
         </DialogHeader>
 
@@ -366,9 +469,15 @@ export function GameAddDialogButton({
             {GAME_STATUS_OPTIONS.map((opt) => {
               const Icon = opt.icon;
               const id = `game-add-${opt.key}`;
+              const value = options[opt.key];
               return (
                 <Field key={opt.key} orientation="horizontal">
-                  <Checkbox id={id} checked={options[opt.key]} onCheckedChange={(v) => toggle(opt.key, Boolean(v))} />
+                  <Checkbox
+                    id={id}
+                    checked={triChecked(value)}
+                    indeterminate={triIndeterminate(value)}
+                    onCheckedChange={(v) => toggle(opt.key, Boolean(v))}
+                  />
                   <FieldContent>
                     <FieldLabel htmlFor={id} className="flex items-center gap-1.5 font-medium">
                       <Icon className={opt.iconClassName} />
@@ -383,11 +492,11 @@ export function GameAddDialogButton({
         </FieldSet>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
           <Button disabled={!canApply} onClick={handleAdd}>
             Add {countLabel}
+          </Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
           </Button>
         </DialogFooter>
       </DialogContent>

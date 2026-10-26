@@ -673,7 +673,11 @@ function NationalDexView() {
           onCheckedChange={(v) => toggleSelectAll(v)}
           aria-label={selectedCount > 0 ? `Select all · ${selectedCount} selected` : 'Select all'}
         />
-        <AddToDialogButton selectedCount={selectedCount} disabled={selectedCount === 0} onAdd={addSelected} />
+        <AddToDialogButton
+          selectedKeys={Array.from(selected)}
+          disabled={selectedCount === 0}
+          onAdd={addSelected}
+        />
         <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
@@ -824,9 +828,6 @@ function NationalDexView() {
             />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setRenameBox(null)}>
-              Cancel
-            </Button>
             <Button
               type="button"
               onClick={() => {
@@ -837,6 +838,9 @@ function NationalDexView() {
               }}
             >
               Save
+            </Button>
+            <Button type="button" variant="outline" onClick={() => setRenameBox(null)}>
+              Cancel
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1105,8 +1109,9 @@ function GameDexView({ gameId }: { gameId: GameId }) {
               aria-label={selectedCount > 0 ? `Select all visible · ${selectedCount} selected` : 'Select all visible'}
             />
             <GameAddDialogButton
-              selectedCount={selectedCount}
+              selectedKeys={Array.from(selected)}
               disabled={selectedCount === 0}
+              gameId={gameId}
               gameName={game.short || game.name}
               onAdd={addSelected}
             />
