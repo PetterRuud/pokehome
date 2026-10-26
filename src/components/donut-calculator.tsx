@@ -29,6 +29,7 @@ import {
   donutSpriteUrl,
   getAllHyperBerryIds,
   getSpecialDonutRecipes,
+  inventoryAfterSpend,
   suggestDonutForStars,
   suggestTipMix,
   type DonutStar,
@@ -91,6 +92,7 @@ export function DonutCalculator() {
   const berryIds = useMemo(() => getAllHyperBerryIds(), []);
   const counts = useHyperBerryStore((s) => s.counts);
   const setCount = useHyperBerryStore((s) => s.setCount);
+  const setCounts = useHyperBerryStore((s) => s.setCounts);
   const clearAll = useHyperBerryStore((s) => s.clearAll);
   const [recipeIndex, setRecipeIndex] = useState(0);
   const [mixGoal, setMixGoal] = useState<MixGoal>('stars');
@@ -100,6 +102,11 @@ export function DonutCalculator() {
   const result = useMemo(() => (recipe ? checkDonutRecipe(counts, recipe) : null), [counts, recipe]);
   const starSuggestion = useMemo(() => suggestDonutForStars(counts, targetStars), [counts, targetStars]);
   const tipSuggestion = useMemo(() => (mixGoal === 'stars' ? null : suggestTipMix(counts, mixGoal)), [counts, mixGoal]);
+
+  function makeSuggestedMix(ingredients: { id: string; count: number }[], substitutes: boolean) {
+    const next = inventoryAfterSpend(counts, ingredients, { substitutes });
+    if (next) setCounts(next);
+  }
 
   if (recipes.length === 0 || !recipe || !result) return null;
 
@@ -225,14 +232,24 @@ export function DonutCalculator() {
                     {starSuggestion.flavor}/{starSuggestion.targetFlavor} flavor
                     {starSuggestion.canMake ? '' : ' — short'}
                   </Badge>
-                  <ul className="flex flex-wrap items-center gap-2">
-                    {starSuggestion.ingredients.map((berry) => (
-                      <Badge key={berry.id} variant="outline">
-                        <img src={berrySpriteUrl(berry.id, { hyper: true })} alt="" loading="lazy" />×{berry.count}{' '}
-                        {capitalizeBerryId(berry.id)}
-                      </Badge>
-                    ))}
-                  </ul>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <ul className="flex flex-wrap items-center gap-2">
+                      {starSuggestion.ingredients.map((berry) => (
+                        <Badge key={berry.id} variant="outline">
+                          <img src={berrySpriteUrl(berry.id, { hyper: true })} alt="" loading="lazy" />×{berry.count}{' '}
+                          {capitalizeBerryId(berry.id)}
+                        </Badge>
+                      ))}
+                    </ul>
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={!starSuggestion.canMake}
+                      onClick={() => makeSuggestedMix(starSuggestion.ingredients, false)}
+                    >
+                      Make
+                    </Button>
+                  </div>
                 </>
               )}
             </>
@@ -246,19 +263,29 @@ export function DonutCalculator() {
                 {tipSuggestion.canMake ? <CheckIcon data-icon="inline-start" /> : <XIcon data-icon="inline-start" />}
                 {tipSuggestion.canMake ? 'Can make' : 'Missing berries'}
               </Badge>
-              <ul className="flex flex-wrap items-center gap-2">
-                {tipSuggestion.ingredients.map((berry) => (
-                  <Badge key={berry.id} variant="outline">
-                    <img
-                      src={berrySpriteUrl(berry.id, { hyper: berry.hyper !== false })}
-                      alt=""
-                      loading="lazy"
-                      style={berry.hyper === false ? { imageRendering: 'pixelated' } : undefined}
-                    />
-                    ×{berry.count} {capitalizeBerryId(berry.id)}
-                  </Badge>
-                ))}
-              </ul>
+              <div className="flex flex-wrap items-center gap-2">
+                <ul className="flex flex-wrap items-center gap-2">
+                  {tipSuggestion.ingredients.map((berry) => (
+                    <Badge key={berry.id} variant="outline">
+                      <img
+                        src={berrySpriteUrl(berry.id, { hyper: berry.hyper !== false })}
+                        alt=""
+                        loading="lazy"
+                        style={berry.hyper === false ? { imageRendering: 'pixelated' } : undefined}
+                      />
+                      ×{berry.count} {capitalizeBerryId(berry.id)}
+                    </Badge>
+                  ))}
+                </ul>
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={!tipSuggestion.canMake}
+                  onClick={() => makeSuggestedMix(tipSuggestion.ingredients, true)}
+                >
+                  Make
+                </Button>
+              </div>
               {!tipSuggestion.canMake && tipSuggestion.missing.length > 0 ? (
                 <ul className="flex flex-col gap-1.5">
                   {tipSuggestion.missing.map((berry) => (
@@ -306,17 +333,27 @@ export function DonutCalculator() {
         </div>
 
         <div className="flex flex-col gap-2">
-          {result.canMake ? (
-            <Badge variant="default" className="w-fit">
-              <CheckIcon data-icon="inline-start" />
-              Can make
-            </Badge>
-          ) : (
-            <Badge variant="destructive" className="w-fit">
-              <XIcon data-icon="inline-start" />
-              Missing berries
-            </Badge>
-          )}
+          <div className="flex flex-wrap items-center gap-2">
+            {result.canMake ? (
+              <Badge variant="default" className="w-fit">
+                <CheckIcon data-icon="inline-start" />
+                Can make
+              </Badge>
+            ) : (
+              <Badge variant="destructive" className="w-fit">
+                <XIcon data-icon="inline-start" />
+                Missing berries
+              </Badge>
+            )}
+            <Button
+              type="button"
+              size="sm"
+              disabled={!result.canMake}
+              onClick={() => makeSuggestedMix(result.required, true)}
+            >
+              Make
+            </Button>
+          </div>
 
           <ul className="flex flex-col gap-1.5">
             {result.required.map((berry) => {

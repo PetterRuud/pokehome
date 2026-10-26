@@ -5,6 +5,7 @@ import { get, set, del } from 'idb-keyval';
 type HyperBerryState = {
   counts: Record<string, number>;
   setCount: (id: string, count: number) => void;
+  setCounts: (counts: Record<string, number>) => void;
   clearAll: () => void;
 };
 
@@ -33,6 +34,14 @@ export const useHyperBerryStore = create<HyperBerryState>()(
           else next[id] = n;
           return { counts: next };
         }),
+      setCounts: (counts) => {
+        const next: Record<string, number> = {};
+        for (const [id, count] of Object.entries(counts)) {
+          const n = Math.max(0, Math.floor(Number(count)) || 0);
+          if (n > 0) next[id] = n;
+        }
+        set({ counts: next });
+      },
       clearAll: () => set({ counts: {} }),
     }),
     {

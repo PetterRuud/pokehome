@@ -121,6 +121,35 @@ export function checkDonutRecipe(inventory: Record<string, number>, recipe: TipR
   return { canMake: missing.length === 0, missing, required };
 }
 
+/**
+ * Inventory left after spending `needs`. Returns null if the stash cannot cover them.
+ * When `substitutes` is true, Coba ↔ Rindo (etc.) may be spent in place of a required id.
+ */
+export function inventoryAfterSpend(
+  inventory: Record<string, number>,
+  needs: readonly { id: string; count: number }[],
+  options?: { substitutes?: boolean },
+): Record<string, number> | null {
+  const pool: Record<string, number> = {};
+  for (const [id, n] of Object.entries(inventory)) {
+    pool[id] = Math.max(0, Math.floor(n) || 0);
+  }
+
+  const useSubs = options?.substitutes === true;
+  for (const berry of needs) {
+    const short = useSubs
+      ? satisfyNeed(pool, berry.id, berry.count)
+      : takeFromPool(pool, berry.id, berry.count);
+    if (short > 0) return null;
+  }
+
+  const next: Record<string, number> = {};
+  for (const [id, n] of Object.entries(pool)) {
+    if (n > 0) next[id] = n;
+  }
+  return next;
+}
+
 /** Short label for selects (before ·). */
 export function donutShortLabel(recipe: TipRecipe): string {
   const label = recipe.label ?? 'Donut';
