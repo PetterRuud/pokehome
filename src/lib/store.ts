@@ -7,6 +7,7 @@ import { migrateCaughtByGame } from '@/lib/caught-by-game';
 
 type DexState = {
   caughtByKey: Record<string, boolean>;
+  homeByKey: Record<string, boolean>;
   shinyByKey: Record<string, boolean>;
   alphaByKey: Record<string, boolean>;
   megaByKey: Record<string, boolean>;
@@ -24,6 +25,9 @@ type DexState = {
   toggleCaught: (key: string) => void;
   setCaught: (key: string, caught: boolean) => void;
   setCaughtMany: (keys: string[], caught: boolean) => void;
+  toggleHome: (key: string) => void;
+  setHome: (key: string, home: boolean) => void;
+  setHomeMany: (keys: string[], home: boolean) => void;
   toggleShiny: (key: string) => void;
   setShiny: (key: string, shiny: boolean) => void;
   setShinyMany: (keys: string[], shiny: boolean) => void;
@@ -61,7 +65,7 @@ function normalizeBoxLayout(layout?: Partial<BoxLayout> | null): BoxLayout {
   };
 }
 
-const FORM_VIEWS: FormView[] = ['default', 'shiny', 'alpha', 'mega', 'gmax', 'regional'];
+const FORM_VIEWS: FormView[] = ['default', 'home', 'shiny', 'alpha', 'mega', 'gmax', 'regional'];
 const SPRITE_STYLES: SpriteStyle[] = ['pixel', 'home'];
 
 const defaultPrefs: DexPrefs = {
@@ -128,6 +132,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
   if (payload.version === 5) {
     return {
       caughtByKey: payload.caughtByKey ?? {},
+      homeByKey: payload.homeByKey ?? {},
       shinyByKey: payload.shinyByKey ?? {},
       alphaByKey: payload.alphaByKey ?? {},
       megaByKey: payload.megaByKey ?? {},
@@ -144,6 +149,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
   if (payload.version === 4) {
     return {
       caughtByKey: payload.caughtByKey ?? {},
+      homeByKey: {},
       shinyByKey: payload.shinyByKey ?? {},
       alphaByKey: payload.alphaByKey ?? {},
       megaByKey: payload.megaByKey ?? {},
@@ -160,6 +166,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
   if (payload.version === 3) {
     return {
       caughtByKey: payload.caughtByKey ?? {},
+      homeByKey: {},
       shinyByKey: payload.shinyByKey ?? {},
       alphaByKey: payload.alphaByKey ?? {},
       megaByKey: payload.megaByKey ?? {},
@@ -176,6 +183,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
   if (payload.version === 2) {
     return {
       caughtByKey: payload.caughtByKey ?? {},
+      homeByKey: {},
       shinyByKey: payload.shinyByKey ?? {},
       alphaByKey: {},
       megaByKey: {},
@@ -191,6 +199,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
 
   return {
     caughtByKey: migrateV1Status(payload.statusByKey),
+    homeByKey: {},
     shinyByKey: {},
     alphaByKey: {},
     megaByKey: {},
@@ -216,6 +225,7 @@ export const useDexStore = create<DexState>()(
   persist(
     (set, get) => ({
       caughtByKey: {},
+      homeByKey: {},
       shinyByKey: {},
       alphaByKey: {},
       megaByKey: {},
@@ -245,6 +255,23 @@ export const useDexStore = create<DexState>()(
           const next = { ...s.caughtByKey };
           for (const key of keys) next[key] = caught;
           return { caughtByKey: next };
+        }),
+      toggleHome: (key) =>
+        set((s) => ({
+          homeByKey: {
+            ...s.homeByKey,
+            [key]: !s.homeByKey[key],
+          },
+        })),
+      setHome: (key, home) =>
+        set((s) => ({
+          homeByKey: { ...s.homeByKey, [key]: home },
+        })),
+      setHomeMany: (keys, home) =>
+        set((s) => {
+          const next = { ...s.homeByKey };
+          for (const key of keys) next[key] = home;
+          return { homeByKey: next };
         }),
       toggleShiny: (key) =>
         set((s) => ({
@@ -396,6 +423,7 @@ export const useDexStore = create<DexState>()(
           version: 5 as const,
           exportedAt,
           caughtByKey: s.caughtByKey,
+          homeByKey: s.homeByKey,
           shinyByKey: s.shinyByKey,
           alphaByKey: s.alphaByKey,
           megaByKey: s.megaByKey,
@@ -429,6 +457,7 @@ export const useDexStore = create<DexState>()(
           }
           return {
             caughtByKey: { ...s.caughtByKey, ...next.caughtByKey },
+            homeByKey: { ...s.homeByKey, ...next.homeByKey },
             shinyByKey: { ...s.shinyByKey, ...next.shinyByKey },
             alphaByKey: { ...s.alphaByKey, ...next.alphaByKey },
             megaByKey: { ...s.megaByKey, ...next.megaByKey },
@@ -447,6 +476,7 @@ export const useDexStore = create<DexState>()(
       resetAll: () =>
         set({
           caughtByKey: {},
+          homeByKey: {},
           shinyByKey: {},
           alphaByKey: {},
           megaByKey: {},
@@ -463,7 +493,7 @@ export const useDexStore = create<DexState>()(
     {
       name: 'pokehome-dex',
       storage: idbStorage,
-      version: 8,
+      version: 9,
       migrate: (persisted: unknown, fromVersion) => {
         const state = persisted as Partial<DexState> & {
           statusByKey?: Record<string, string>;
@@ -516,7 +546,14 @@ export const useDexStore = create<DexState>()(
           };
         }
 
-        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional
+        if (fromVersion < 9) {
+          next = {
+            ...next,
+            homeByKey: state.homeByKey ?? {},
+          };
+        }
+
+        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home
         return {
           ...next,
           caughtByGame: migrateCaughtByGame(next.caughtByGame),
@@ -527,6 +564,7 @@ export const useDexStore = create<DexState>()(
       },
       partialize: (s) => ({
         caughtByKey: s.caughtByKey,
+        homeByKey: s.homeByKey,
         shinyByKey: s.shinyByKey,
         alphaByKey: s.alphaByKey,
         megaByKey: s.megaByKey,
@@ -548,6 +586,7 @@ export const useDexStore = create<DexState>()(
 
 const DATA_KEYS = [
   'caughtByKey',
+  'homeByKey',
   'shinyByKey',
   'alphaByKey',
   'megaByKey',

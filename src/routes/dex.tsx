@@ -56,6 +56,7 @@ import {
   CheckCheckIcon,
   EraserIcon,
   GlobeIcon,
+  HomeIcon,
   InfoIcon,
   LayoutGridIcon,
   ListIcon,
@@ -138,7 +139,8 @@ const FORM_VIEW_OPTIONS: {
   icon: typeof SparklesIcon;
   iconClassName?: string;
 }[] = [
-  { value: 'default', label: 'All', icon: LayoutGridIcon },
+  { value: 'default', label: 'Caught', icon: CheckIcon },
+  { value: 'home', label: 'HOME', icon: HomeIcon, iconClassName: 'text-emerald-600' },
   { value: 'shiny', label: 'Shiny', icon: SparklesIcon, iconClassName: 'text-amber-500' },
   { value: 'alpha', label: 'Alpha', icon: EyeIcon, iconClassName: 'text-red-500' },
   { value: 'mega', label: 'Mega', icon: ZapIcon, iconClassName: 'text-violet-500' },
@@ -360,12 +362,14 @@ function DexPage() {
 
 function NationalDexView() {
   const caughtByKey = useDexStore((s) => s.caughtByKey);
+  const homeByKey = useDexStore((s) => s.homeByKey);
   const shinyByKey = useDexStore((s) => s.shinyByKey);
   const alphaByKey = useDexStore((s) => s.alphaByKey);
   const megaByKey = useDexStore((s) => s.megaByKey);
   const gmaxByKey = useDexStore((s) => s.gmaxByKey);
   const regionalByKey = useDexStore((s) => s.regionalByKey);
   const setCaughtMany = useDexStore((s) => s.setCaughtMany);
+  const setHomeMany = useDexStore((s) => s.setHomeMany);
   const setShinyMany = useDexStore((s) => s.setShinyMany);
   const setAlphaMany = useDexStore((s) => s.setAlphaMany);
   const setMegaMany = useDexStore((s) => s.setMegaMany);
@@ -402,17 +406,19 @@ function NationalDexView() {
   }, []);
 
   const flagByKey =
-    formView === 'shiny'
-      ? shinyByKey
-      : formView === 'alpha'
-        ? alphaByKey
-        : formView === 'mega'
-          ? megaByKey
-          : formView === 'gmax'
-            ? gmaxByKey
-            : formView === 'regional'
-              ? regionalByKey
-              : null;
+    formView === 'home'
+      ? homeByKey
+      : formView === 'shiny'
+        ? shinyByKey
+        : formView === 'alpha'
+          ? alphaByKey
+          : formView === 'mega'
+            ? megaByKey
+            : formView === 'gmax'
+              ? gmaxByKey
+              : formView === 'regional'
+                ? regionalByKey
+                : null;
 
   const progressByKey = flagByKey ?? caughtByKey;
 
@@ -435,15 +441,17 @@ function NationalDexView() {
   const trackLabel =
     formView === 'default'
       ? 'caught'
-      : formView === 'shiny'
-        ? 'shiny'
-        : formView === 'alpha'
-          ? 'alpha'
-          : formView === 'mega'
-            ? 'mega'
-            : formView === 'gmax'
-              ? 'gmax'
-              : 'regional';
+      : formView === 'home'
+        ? 'HOME'
+        : formView === 'shiny'
+          ? 'shiny'
+          : formView === 'alpha'
+            ? 'alpha'
+            : formView === 'mega'
+              ? 'mega'
+              : formView === 'gmax'
+                ? 'gmax'
+                : 'regional';
 
   const allSlots = useMemo(() => boxes.flatMap((box) => box.slots), [boxes]);
   const allKeys = useMemo(() => allSlots.map((s) => s.key), [allSlots]);
@@ -519,7 +527,8 @@ function NationalDexView() {
   }, [search.activeKey, virtualRows, virtualizer]);
 
   function setMany(keys: string[], value: boolean) {
-    if (formView === 'shiny') setShinyMany(keys, value);
+    if (formView === 'home') setHomeMany(keys, value);
+    else if (formView === 'shiny') setShinyMany(keys, value);
     else if (formView === 'alpha') setAlphaMany(keys, value);
     else if (formView === 'mega') setMegaMany(keys, value);
     else if (formView === 'gmax') setGmaxMany(keys, value);
@@ -552,6 +561,7 @@ function NationalDexView() {
     const keys = Array.from(selected);
     applyAddToOptions(keys, options, {
       setCaughtMany,
+      setHomeMany,
       setShinyMany,
       setAlphaMany,
       setMegaMany,
@@ -618,7 +628,7 @@ function NationalDexView() {
             ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
             : formView === 'regional'
               ? `Regional · ${formProgress.caught} / ${regionalSpeciesCount()}`
-              : formView === 'shiny' || formView === 'alpha'
+              : formView === 'home' || formView === 'shiny' || formView === 'alpha'
                 ? `${trackLabel} · ${formProgress.caught} marked`
                 : `National · ${formProgress.caught} / ${formProgress.total}`}
       </p>

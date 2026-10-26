@@ -52,7 +52,9 @@ export function DexSlotButton({
   const label =
     formView === 'default'
       ? `${slot.name}: ${caught ? 'caught' : 'missing'}. Tap to select.`
-      : `${slot.name}: ${flagged ? `has ${formView}` : `no ${formView}`}. Tap to select.`;
+      : formView === 'home'
+        ? `${slot.name}: ${flagged ? 'in HOME' : 'not in HOME'}. Tap to select.`
+        : `${slot.name}: ${flagged ? `has ${formView}` : `no ${formView}`}. Tap to select.`;
 
   const variant = selected ? 'secondary' : active ? 'primary' : 'muted';
 

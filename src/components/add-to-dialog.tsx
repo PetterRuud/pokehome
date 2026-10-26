@@ -23,10 +23,11 @@ import {
 import { canGmax, canMega, canRegional } from '@/lib/form-variants';
 import { getGameGroups } from '@/lib/games';
 import type { GameId } from '@/lib/types';
-import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
+import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, HomeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
 
 export type AddStatuses = {
   caught: boolean;
+  home: boolean;
   shiny: boolean;
   alpha: boolean;
   mega: boolean;
@@ -42,6 +43,7 @@ export type AddToOptions = {
 const DEFAULT_OPTIONS: AddToOptions = {
   statuses: {
     caught: true,
+    home: false,
     shiny: false,
     alpha: false,
     mega: false,
@@ -62,6 +64,7 @@ export function applyAddToOptions(
   options: AddToOptions,
   actions: {
     setCaughtMany: (keys: string[], value: boolean) => void;
+    setHomeMany: (keys: string[], value: boolean) => void;
     setShinyMany: (keys: string[], value: boolean) => void;
     setAlphaMany: (keys: string[], value: boolean) => void;
     setMegaMany: (keys: string[], value: boolean) => void;
@@ -72,6 +75,7 @@ export function applyAddToOptions(
 ) {
   const { statuses, gameIds } = options;
   if (statuses.caught) actions.setCaughtMany(keys, true);
+  if (statuses.home) actions.setHomeMany(keys, true);
   if (statuses.shiny) actions.setShinyMany(keys, true);
   if (statuses.alpha) actions.setAlphaMany(keys, true);
   if (statuses.mega) {
@@ -92,6 +96,7 @@ export function applyAddToOptions(
 export function summarizeAddOptions(options: AddToOptions): string {
   const parts: string[] = [];
   if (options.statuses.caught) parts.push('caught');
+  if (options.statuses.home) parts.push('HOME');
   if (options.statuses.shiny) parts.push('shiny');
   if (options.statuses.alpha) parts.push('alpha');
   if (options.statuses.mega) parts.push('mega');
@@ -109,6 +114,7 @@ const STATUS_OPTIONS: {
   iconClassName?: string;
 }[] = [
   { key: 'caught', label: 'Caught', icon: CheckIcon },
+  { key: 'home', label: 'HOME', icon: HomeIcon, iconClassName: 'text-emerald-600' },
   { key: 'shiny', label: 'Shiny', icon: SparklesIcon, iconClassName: 'text-amber-500' },
   { key: 'alpha', label: 'Alpha', icon: EyeIcon, iconClassName: 'text-red-500' },
   { key: 'mega', label: 'Mega', icon: ZapIcon, iconClassName: 'text-violet-500' },
@@ -132,6 +138,7 @@ export function AddToDialogButton({
   const canApply =
     selectedCount > 0 &&
     (options.statuses.caught ||
+      options.statuses.home ||
       options.statuses.shiny ||
       options.statuses.alpha ||
       options.statuses.mega ||

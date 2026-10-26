@@ -17,6 +17,7 @@ import {
   ChevronRightIcon,
   ExpandIcon,
   GlobeIcon,
+  HomeIcon,
   SparklesIcon,
   EyeIcon,
   ZapIcon,
@@ -99,6 +100,7 @@ function PokemonPage() {
   const search = Route.useSearch();
   const key = `n${summary.id}`;
   const caught = useDexStore((s) => Boolean(s.caughtByKey[key]));
+  const home = useDexStore((s) => Boolean(s.homeByKey[key]));
   const shiny = useDexStore((s) => Boolean(s.shinyByKey[key]));
   const alpha = useDexStore((s) => Boolean(s.alphaByKey[key]));
   const mega = useDexStore((s) => Boolean(s.megaByKey[key]));
@@ -106,6 +108,7 @@ function PokemonPage() {
   const regional = useDexStore((s) => Boolean(s.regionalByKey[key]));
   const caughtByGame = useDexStore((s) => s.caughtByGame);
   const setCaught = useDexStore((s) => s.setCaught);
+  const setHome = useDexStore((s) => s.setHome);
   const setShiny = useDexStore((s) => s.setShiny);
   const setAlpha = useDexStore((s) => s.setAlpha);
   const setMega = useDexStore((s) => s.setMega);
@@ -162,6 +165,12 @@ function PokemonPage() {
             </div>
             <div className="flex flex-wrap justify-center gap-1">
               <Badge variant={caught ? 'default' : 'outline'}>{caught ? 'Caught' : 'Missing'}</Badge>
+              {home ? (
+                <Badge variant="secondary">
+                  <HomeIcon data-icon="inline-start" className="text-emerald-600" />
+                  HOME
+                </Badge>
+              ) : null}
               {shiny ? (
                 <Badge variant="secondary">
                   <SparklesIcon data-icon="inline-start" className="text-amber-500" />
@@ -212,6 +221,17 @@ function PokemonPage() {
                   </ItemContent>
                   <ItemActions>
                     <Switch checked={caught} onCheckedChange={(v) => setCaught(key, v)} aria-label="Caught" />
+                  </ItemActions>
+                </Item>
+                <Item variant="outline" size="sm">
+                  <ItemContent>
+                    <ItemTitle className="flex items-center gap-1.5">
+                      <HomeIcon className="text-emerald-600" />
+                      HOME
+                    </ItemTitle>
+                  </ItemContent>
+                  <ItemActions>
+                    <Switch checked={home} onCheckedChange={(v) => setHome(key, v)} aria-label="HOME" />
                   </ItemActions>
                 </Item>
                 <Item variant="outline" size="sm">

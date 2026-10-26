@@ -60,7 +60,7 @@ export type MysteryGift = {
 };
 
 /** Which form overlay / sprite mode the national dex grid uses (one at a time). */
-export type FormView = 'default' | 'shiny' | 'alpha' | 'mega' | 'gmax' | 'regional';
+export type FormView = 'default' | 'home' | 'shiny' | 'alpha' | 'mega' | 'gmax' | 'regional';
 
 /** Pixel battle sprites vs Pokémon HOME 3D-style renders (PokeAPI). */
 export type SpriteStyle = 'pixel' | 'home';
@@ -87,6 +87,8 @@ export type ExportPayload = {
   gmaxByKey: Record<string, boolean>;
   /** Present on new exports; older v5 backups may omit it. */
   regionalByKey?: Record<string, boolean>;
+  /** Deposited in Pokémon HOME. Older v5 backups may omit it. */
+  homeByKey?: Record<string, boolean>;
   caughtByGame: Record<GameId, Record<string, boolean>>;
   claimedGiftIds: string[];
   lastSeenGiftIds: string[];

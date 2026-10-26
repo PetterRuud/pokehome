@@ -12,7 +12,16 @@ import { categorizeGifts } from '@/lib/gifts';
 import { getGames } from '@/lib/games';
 import { loadGiftFeed } from '@/server/gifts';
 import nationalDex from '@/data/national-dex.json';
-import { ArrowRightIcon, CheckIcon, GiftIcon } from 'lucide-react';
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  ExpandIcon,
+  EyeIcon,
+  GiftIcon,
+  GlobeIcon,
+  SparklesIcon,
+  ZapIcon,
+} from 'lucide-react';
 
 export const Route = createFileRoute('/')({
   loader: () => loadGiftFeed(),
@@ -22,6 +31,7 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const feed = Route.useLoaderData();
   const caughtByKey = useDexStore((s) => s.caughtByKey);
+  const homeByKey = useDexStore((s) => s.homeByKey);
   const shinyByKey = useDexStore((s) => s.shinyByKey);
   const alphaByKey = useDexStore((s) => s.alphaByKey);
   const megaByKey = useDexStore((s) => s.megaByKey);
@@ -30,7 +40,8 @@ function HomePage() {
   const caughtByGame = useDexStore((s) => s.caughtByGame);
   const claimedGiftIds = useDexStore((s) => s.claimedGiftIds);
 
-  const { total, caught, percent } = countProgress(nationalDex.boxes, caughtByKey);
+  const { total, caught: home, percent } = countProgress(nationalDex.boxes, homeByKey);
+  const caughtCount = countFlag(caughtByKey);
   const shinyCount = countFlag(shinyByKey);
   const alphaCount = countFlag(alphaByKey);
   const megaCount = countFlag(megaByKey);
@@ -71,19 +82,50 @@ function HomePage() {
         <CardHeader className="gap-2">
           <CardTitle>National progress</CardTitle>
           <CardDescription>
-            {caught} / {total} caught · {nationalDex.boxes.length} boxes
+            {home} / {total} in HOME · {nationalDex.boxes.length} boxes
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           <Progress value={percent} className="h-2" />
           <div className="flex flex-wrap gap-2">
             <Badge variant="secondary">{percent}% complete</Badge>
-            <Badge variant="outline">{total - caught} missing</Badge>
-            {shinyCount > 0 ? <Badge variant="outline">{shinyCount} shiny</Badge> : null}
-            {alphaCount > 0 ? <Badge variant="outline">{alphaCount} alpha</Badge> : null}
-            {megaCount > 0 ? <Badge variant="outline">{megaCount} mega</Badge> : null}
-            {gmaxCount > 0 ? <Badge variant="outline">{gmaxCount} gmax</Badge> : null}
-            {regionalCount > 0 ? <Badge variant="outline">{regionalCount} regional</Badge> : null}
+            <Badge variant="outline">{total - home} missing</Badge>
+            {caughtCount > 0 ? (
+              <Badge variant="outline">
+                <CheckIcon data-icon="inline-start" />
+                {caughtCount} caught
+              </Badge>
+            ) : null}
+            {shinyCount > 0 ? (
+              <Badge variant="outline">
+                <SparklesIcon data-icon="inline-start" className="text-amber-500" />
+                {shinyCount} shiny
+              </Badge>
+            ) : null}
+            {alphaCount > 0 ? (
+              <Badge variant="outline">
+                <EyeIcon data-icon="inline-start" className="text-red-500" />
+                {alphaCount} alpha
+              </Badge>
+            ) : null}
+            {megaCount > 0 ? (
+              <Badge variant="outline">
+                <ZapIcon data-icon="inline-start" className="text-violet-500" />
+                {megaCount} mega
+              </Badge>
+            ) : null}
+            {gmaxCount > 0 ? (
+              <Badge variant="outline">
+                <ExpandIcon data-icon="inline-start" className="text-rose-500" />
+                {gmaxCount} gmax
+              </Badge>
+            ) : null}
+            {regionalCount > 0 ? (
+              <Badge variant="outline">
+                <GlobeIcon data-icon="inline-start" className="text-sky-500" />
+                {regionalCount} regional
+              </Badge>
+            ) : null}
           </div>
           <Button render={<Link to="/dex" />} nativeButton={false}>
             Open dex
