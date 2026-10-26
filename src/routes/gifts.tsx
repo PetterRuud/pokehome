@@ -70,11 +70,16 @@ function GiftsPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Mystery gifts</h1>
+          <h1 className="flex flex-wrap items-center gap-2 text-2xl font-bold tracking-tight">
+            Mystery gifts
+            {unclaimedLive > 0 ? <Badge variant="secondary">{unclaimedLive}</Badge> : null}
+          </h1>
           <p className="text-sm text-muted-foreground">
-            Live feed from Serebii · refreshed daily
-            {feed.source === 'fallback' ? ' · offline fallback' : null}
-            {liveGifts.length > 0 ? (unclaimedLive > 0 ? ` · ${unclaimedLive} unclaimed` : ' · all claimed') : null}
+            Live feed from Serebii · refreshed daily · updated{' '}
+            {new Date(feed.fetchedAt).toLocaleString(undefined, {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+            })}
           </p>
         </div>
         <Field orientation="horizontal" className="w-auto items-center">
