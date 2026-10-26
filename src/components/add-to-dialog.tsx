@@ -406,6 +406,8 @@ const GAME_STATUS_OPTIONS: {
   },
 ];
 
+const EMPTY_GAME_FLAGS: Record<string, boolean> = {};
+
 export function GameAddDialogButton({
   disabled,
   selectedKeys,
@@ -419,8 +421,9 @@ export function GameAddDialogButton({
   gameName: string;
   onAdd: (options: GameAddOptions) => void;
 }) {
-  const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? {});
-  const homeMap = useDexStore((s) => s.homeByGame[gameId] ?? {});
+  // Stable empty fallback — `?? {}` would allocate every select and infinite-loop zustand.
+  const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? EMPTY_GAME_FLAGS);
+  const homeMap = useDexStore((s) => s.homeByGame[gameId] ?? EMPTY_GAME_FLAGS);
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<GameAddOptions>(DEFAULT_GAME_OPTIONS);
 
