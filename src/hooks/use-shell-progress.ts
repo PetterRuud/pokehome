@@ -12,10 +12,10 @@ export type ShellProgress = {
   percent: number;
 };
 
-/** Header progress: active game dex on /dex?tab=games, else national HOME. */
+/** Header progress: active game HOME on /dex?tab=games, else national HOME. */
 export function useShellProgress(): ShellProgress {
   const homeByKey = useDexStore((s) => s.homeByKey);
-  const caughtByGame = useDexStore((s) => s.caughtByGame);
+  const homeByGame = useDexStore((s) => s.homeByGame);
   const { pathname, search } = useRouterState({
     select: (s) => ({
       pathname: s.location.pathname,
@@ -27,9 +27,9 @@ export function useShellProgress(): ShellProgress {
     if (pathname === '/dex' && search.tab === 'games' && search.game) {
       const game = getGame(search.game);
       if (game) {
-        return countGameProgress(game.boxes, caughtByGame[game.id]);
+        return countGameProgress(game.boxes, homeByGame[game.id]);
       }
     }
     return countProgress(nationalDex.boxes, homeByKey);
-  }, [pathname, search.tab, search.game, homeByKey, caughtByGame]);
+  }, [pathname, search.tab, search.game, homeByKey, homeByGame]);
 }

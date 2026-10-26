@@ -203,8 +203,8 @@ const GAME_TRACK_OPTIONS: {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   iconClassName?: string;
 }[] = [
-  { value: 'caught', label: 'Caught', icon: CheckIcon },
   { value: 'home', label: 'HOME', icon: HomeIcon, iconClassName: 'text-emerald-600' },
+  { value: 'caught', label: 'Caught', icon: CheckIcon },
 ];
 
 function GameTrackMenu({
@@ -324,7 +324,7 @@ export const Route = createFileRoute('/dex')({
 });
 
 function DexPage() {
-  const caughtByGame = useDexStore((s) => s.caughtByGame);
+  const homeByGame = useDexStore((s) => s.homeByGame);
   const games = getGames();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
@@ -387,13 +387,15 @@ function DexPage() {
             className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4"
           >
             {games.map((game) => {
-              const { caught, total } = countGameProgress(game.boxes, caughtByGame[game.id]);
+              const { caught, total } = countGameProgress(game.boxes, homeByGame[game.id]);
               const complete = total > 0 && caught === total;
               return (
                 <ToggleGroupItem
                   key={game.id}
                   value={game.id}
-                  aria-label={complete ? `${game.name}, complete` : `${game.name}, ${caught} of ${total} caught`}
+                  aria-label={
+                    complete ? `${game.name}, complete` : `${game.name}, ${caught} of ${total} in HOME`
+                  }
                   title={game.name}
                   className="h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5"
                 >
@@ -931,7 +933,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const cardLayout = cardSizeConfig(cardSize);
   const setGameCaughtMany = useDexStore((s) => s.setGameCaughtMany);
   const setGameHomeMany = useDexStore((s) => s.setGameHomeMany);
-  const [track, setTrack] = useState<GameTrack>('caught');
+  const [track, setTrack] = useState<GameTrack>('home');
   const [filter, setFilter] = useState<GameFilter>('all');
   const [layout, setLayout] = useState<'list' | 'grid'>('grid');
   const [selected, setSelected] = useState<Set<string>>(() => new Set());

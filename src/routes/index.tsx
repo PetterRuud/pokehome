@@ -37,7 +37,7 @@ function HomePage() {
   const megaByKey = useDexStore((s) => s.megaByKey);
   const gmaxByKey = useDexStore((s) => s.gmaxByKey);
   const regionalByKey = useDexStore((s) => s.regionalByKey);
-  const caughtByGame = useDexStore((s) => s.caughtByGame);
+  const homeByGame = useDexStore((s) => s.homeByGame);
   const claimedGiftIds = useDexStore((s) => s.claimedGiftIds);
 
   const { total, caught: home, percent } = countProgress(nationalDex.boxes, homeByKey);
@@ -50,14 +50,14 @@ function HomePage() {
 
   const gameStats = useMemo(() => {
     return getGames().map((game) => {
-      const progress = countGameProgress(game.boxes, caughtByGame[game.id]);
+      const progress = countGameProgress(game.boxes, homeByGame[game.id]);
       return {
         game,
         ...progress,
         complete: progress.total > 0 && progress.caught === progress.total,
       };
     });
-  }, [caughtByGame]);
+  }, [homeByGame]);
 
   const gamesComplete = gameStats.filter((g) => g.complete).length;
   const { active, endingSoon } = categorizeGifts(feed.gifts);
