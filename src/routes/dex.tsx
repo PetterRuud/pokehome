@@ -393,9 +393,7 @@ function DexPage() {
                 <ToggleGroupItem
                   key={game.id}
                   value={game.id}
-                  aria-label={
-                    complete ? `${game.name}, complete` : `${game.name}, ${caught} of ${total} in HOME`
-                  }
+                  aria-label={complete ? `${game.name}, complete` : `${game.name}, ${caught} of ${total} in HOME`}
                   title={game.name}
                   className="h-auto min-w-0 flex-col gap-1.5 whitespace-normal px-2.5 py-2.5"
                 >

@@ -137,9 +137,7 @@ export function inventoryAfterSpend(
 
   const useSubs = options?.substitutes === true;
   for (const berry of needs) {
-    const short = useSubs
-      ? satisfyNeed(pool, berry.id, berry.count)
-      : takeFromPool(pool, berry.id, berry.count);
+    const short = useSubs ? satisfyNeed(pool, berry.id, berry.count) : takeFromPool(pool, berry.id, berry.count);
     if (short > 0) return null;
   }
 
