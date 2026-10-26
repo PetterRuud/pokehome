@@ -31,8 +31,12 @@ import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/comp
 import {
   AddToDialogButton,
   applyAddToOptions,
+  applyGameAddOptions,
+  GameAddDialogButton,
   summarizeAddOptions,
+  summarizeGameAddOptions,
   type AddToOptions,
+  type GameAddOptions,
 } from '@/components/add-to-dialog';
 import { ConfirmAlertDialog, type ConfirmRequest } from '@/components/confirm-alert-dialog';
 import { DexSearchBar } from '@/components/dex-search';
@@ -112,6 +116,7 @@ const DEX_STICKY_TOOLBAR =
   'sticky top-14 z-30 -mx-4 flex flex-wrap items-center gap-2 border-b border-border bg-background/95 px-4 py-2 backdrop-blur md:-mx-6 md:px-6';
 
 const EMPTY_CAUGHT: Record<string, boolean> = {};
+const EMPTY_HOME: Record<string, boolean> = {};
 const NAT_HEADER_HEIGHT = 44;
 
 type NationalVirtualRow =
@@ -190,10 +195,68 @@ function FormViewMenu({
   );
 }
 
+type GameTrack = 'caught' | 'home';
+
+const GAME_TRACK_OPTIONS: {
+  value: GameTrack;
+  label: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  iconClassName?: string;
+}[] = [
+  { value: 'caught', label: 'Caught', icon: CheckIcon },
+  { value: 'home', label: 'HOME', icon: HomeIcon, iconClassName: 'text-emerald-600' },
+];
+
+function GameTrackMenu({
+  value,
+  onChange,
+  className,
+}: {
+  value: GameTrack;
+  onChange: (value: GameTrack) => void;
+  className?: string;
+}) {
+  const current = GAME_TRACK_OPTIONS.find((opt) => opt.value === value) ?? GAME_TRACK_OPTIONS[0];
+  const CurrentIcon = current.icon;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className={className}
+            aria-label={`Track: ${current.label}`}
+          />
+        }
+      >
+        <CurrentIcon data-icon="inline-start" className={current.iconClassName} />
+        {current.label}
+        <ChevronDownIcon data-icon="inline-end" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup value={value} onValueChange={(next) => onChange(next as GameTrack)}>
+          {GAME_TRACK_OPTIONS.map((opt) => {
+            const Icon = opt.icon;
+            return (
+              <DropdownMenuRadioItem key={opt.value} value={opt.value}>
+                <Icon className={opt.iconClassName} />
+                {opt.label}
+              </DropdownMenuRadioItem>
+            );
+          })}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 const GAME_FILTER_OPTIONS = [
   { value: 'all', label: 'All' },
   { value: 'missing', label: 'Missing' },
-  { value: 'caught', label: 'Caught' },
+  { value: 'done', label: 'Done' },
 ] as const;
 
 type GameFilter = (typeof GAME_FILTER_OPTIONS)[number]['value'];
@@ -201,13 +264,17 @@ type GameFilter = (typeof GAME_FILTER_OPTIONS)[number]['value'];
 function GameFilterMenu({
   value,
   onChange,
+  track,
   className,
 }: {
   value: GameFilter;
   onChange: (value: GameFilter) => void;
+  track: GameTrack;
   className?: string;
 }) {
-  const current = GAME_FILTER_OPTIONS.find((opt) => opt.value === value) ?? GAME_FILTER_OPTIONS[0];
+  const doneLabel = track === 'home' ? 'HOME' : 'Caught';
+  const options = GAME_FILTER_OPTIONS.map((opt) => (opt.value === 'done' ? { ...opt, label: doneLabel } : opt));
+  const current = options.find((opt) => opt.value === value) ?? options[0];
 
   return (
     <DropdownMenu>
@@ -227,7 +294,7 @@ function GameFilterMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuRadioGroup value={value} onValueChange={(next) => onChange(next as GameFilter)}>
-          {GAME_FILTER_OPTIONS.map((opt) => (
+          {options.map((opt) => (
             <DropdownMenuRadioItem key={opt.value} value={opt.value}>
               {opt.label}
             </DropdownMenuRadioItem>
@@ -372,6 +439,7 @@ function NationalDexView() {
   const setGmaxMany = useDexStore((s) => s.setGmaxMany);
   const setRegionalMany = useDexStore((s) => s.setRegionalMany);
   const setGamesCaughtMany = useDexStore((s) => s.setGamesCaughtMany);
+  const setGamesHomeMany = useDexStore((s) => s.setGamesHomeMany);
   const nationalBoxLayout = useDexStore((s) => s.nationalBoxLayout);
   const renameNationalBox = useDexStore((s) => s.renameNationalBox);
   const prefs = useDexStore((s) => s.prefs);
@@ -566,6 +634,7 @@ function NationalDexView() {
       setGmaxMany,
       setRegionalMany,
       setGamesCaughtMany,
+      setGamesHomeMany,
     });
     setSelected(new Set());
     toast.success(
@@ -856,10 +925,13 @@ function NationalBoxHeader({
 function GameDexView({ gameId }: { gameId: GameId }) {
   const game = getGame(gameId);
   const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? EMPTY_CAUGHT);
+  const homeMap = useDexStore((s) => s.homeByGame[gameId] ?? EMPTY_HOME);
   const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
   const cardSize = useDexStore((s) => resolveCardSize(s.prefs.cardSize));
   const cardLayout = cardSizeConfig(cardSize);
   const setGameCaughtMany = useDexStore((s) => s.setGameCaughtMany);
+  const setGameHomeMany = useDexStore((s) => s.setGameHomeMany);
+  const [track, setTrack] = useState<GameTrack>('caught');
   const [filter, setFilter] = useState<GameFilter>('all');
   const [layout, setLayout] = useState<'list' | 'grid'>('grid');
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
@@ -868,21 +940,24 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const [scrollWidth, setScrollWidth] = useState(0);
   const [scrollMargin, setScrollMargin] = useState(0);
 
+  const trackMap = track === 'home' ? homeMap : caughtMap;
+  const trackLabel = track === 'home' ? 'HOME' : 'caught';
+
   useEffect(() => {
     setSelected(new Set());
-  }, [gameId, filter]);
+  }, [gameId, filter, track]);
 
   const slots = useMemo(() => game?.boxes.flatMap((box) => box.slots) ?? [], [game]);
   const search = useDexSearchState(slots);
 
   const visible = useMemo(() => {
     if (filter === 'all') return slots;
-    if (filter === 'caught') {
-      return slots.filter((s) => s.available !== false && caughtMap[s.key]);
+    if (filter === 'done') {
+      return slots.filter((s) => s.available !== false && trackMap[s.key]);
     }
-    // Missing: obtainable but not caught (skip unreleased)
-    return slots.filter((s) => s.available !== false && !caughtMap[s.key]);
-  }, [slots, filter, caughtMap]);
+    // Missing: obtainable but not marked on the active track
+    return slots.filter((s) => s.available !== false && !trackMap[s.key]);
+  }, [slots, filter, trackMap]);
 
   useLayoutEffect(() => {
     const el = listRef.current;
@@ -969,32 +1044,40 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     });
   }
 
-  function addSelected() {
+  function addSelected(options: GameAddOptions) {
     if (selectedCount === 0) return;
     const keys = Array.from(selected).filter((key) => {
       const slot = slots.find((s) => s.key === key);
       return slot?.available !== false;
     });
     if (keys.length === 0) return;
-    setGameCaughtMany(gameId, keys, true);
+    applyGameAddOptions(gameId, keys, options, {
+      setGameCaughtMany,
+      setGameHomeMany,
+    });
     setSelected(new Set());
-    toast.success(keys.length === 1 ? 'Marked 1 as caught' : `Marked ${keys.length} as caught`);
+    toast.success(
+      keys.length === 1
+        ? `Added 1 · ${summarizeGameAddOptions(options)}`
+        : `Added ${keys.length} · ${summarizeGameAddOptions(options)}`,
+    );
   }
 
   function removeSelected() {
     if (selectedCount === 0) return;
     const keys = Array.from(selected);
     setConfirm({
-      title: selectedCount === 1 ? 'Clear from this dex?' : `Clear ${selectedCount} from this dex?`,
+      title: selectedCount === 1 ? `Clear ${trackLabel}?` : `Clear ${selectedCount} ${trackLabel}?`,
       description:
         selectedCount === 1
-          ? 'This unmarks the selected Pokémon in this game dex only.'
-          : `This unmarks ${selectedCount} Pokémon in this game dex only.`,
+          ? `This removes the ${trackLabel} mark in this game dex only.`
+          : `This removes the ${trackLabel} mark for ${selectedCount} Pokémon in this game dex only.`,
       confirmLabel: 'Clear',
       onConfirm: () => {
-        setGameCaughtMany(gameId, keys, false);
+        if (track === 'home') setGameHomeMany(gameId, keys, false);
+        else setGameCaughtMany(gameId, keys, false);
         setSelected(new Set());
-        toast.success(keys.length === 1 ? 'Removed 1' : `Removed ${keys.length}`);
+        toast.success(keys.length === 1 ? `Cleared 1 ${trackLabel}` : `Cleared ${keys.length} ${trackLabel}`);
       },
     });
   }
@@ -1004,9 +1087,14 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   }
 
   const virtualItems = virtualizer.getVirtualItems();
+  const progress = countGameProgress(game.boxes, trackMap);
 
   return (
     <div className="flex flex-col gap-3">
+      <p className="text-sm text-muted-foreground">
+        {track === 'home' ? 'HOME from this game' : 'Caught in this game'}: {progress.caught}/{progress.total} (
+        {progress.percent}%)
+      </p>
       <div className={DEX_STICKY_TOOLBAR}>
         {visible.length > 0 ? (
           <>
@@ -1016,9 +1104,12 @@ function GameDexView({ gameId }: { gameId: GameId }) {
               onCheckedChange={(v) => toggleSelectAll(v)}
               aria-label={selectedCount > 0 ? `Select all visible · ${selectedCount} selected` : 'Select all visible'}
             />
-            <Button size="sm" disabled={selectedCount === 0} onClick={addSelected}>
-              Add
-            </Button>
+            <GameAddDialogButton
+              selectedCount={selectedCount}
+              disabled={selectedCount === 0}
+              gameName={game.short || game.name}
+              onAdd={addSelected}
+            />
             <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={removeSelected}>
               Clear
             </Button>
@@ -1034,7 +1125,8 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           onNext={search.goNext}
         />
 
-        <GameFilterMenu value={filter} onChange={setFilter} />
+        <GameFilterMenu value={filter} onChange={setFilter} track={track} />
+        <GameTrackMenu value={track} onChange={setTrack} />
 
         <ToggleGroup
           variant="outline"
@@ -1062,7 +1154,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           <EmptyHeader>
             <EmptyTitle>{filter === 'missing' ? 'Nothing missing' : 'No Pokémon here'}</EmptyTitle>
             <EmptyDescription>
-              {filter === 'missing' ? 'This dex is complete.' : 'Try another filter.'}
+              {filter === 'missing' ? 'This track is complete.' : 'Try another filter.'}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
@@ -1084,7 +1176,9 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                   <GameDexRow
                     slot={slot}
                     gameId={gameId}
-                    caught={Boolean(caughtMap[slot.key])}
+                    active={Boolean(trackMap[slot.key])}
+                    inHome={Boolean(homeMap[slot.key])}
+                    track={track}
                     selected={selected.has(slot.key)}
                     searchHit={search.hitKeys.has(slot.key)}
                     searchActive={search.activeKey === slot.key}
@@ -1114,7 +1208,9 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     key={slot.key}
                     slot={slot}
                     gameId={gameId}
-                    caught={Boolean(caughtMap[slot.key])}
+                    active={Boolean(trackMap[slot.key])}
+                    inHome={Boolean(homeMap[slot.key])}
+                    track={track}
                     selected={selected.has(slot.key)}
                     searchHit={search.hitKeys.has(slot.key)}
                     searchActive={search.activeKey === slot.key}
@@ -1158,7 +1254,9 @@ function GameDexNumbers({ slot }: { slot: DexSlot }) {
 function GameDexRow({
   slot,
   gameId,
-  caught,
+  active,
+  inHome,
+  track,
   selected,
   searchHit,
   searchActive,
@@ -1168,7 +1266,9 @@ function GameDexRow({
 }: {
   slot: DexSlot;
   gameId: GameId;
-  caught: boolean;
+  active: boolean;
+  inHome: boolean;
+  track: GameTrack;
   selected: boolean;
   searchHit?: boolean;
   searchActive?: boolean;
@@ -1178,8 +1278,10 @@ function GameDexRow({
 }) {
   const size = cardSizeConfig(cardSize);
   const unavailable = slot.available === false;
+  const showHomeDot = track === 'caught' && inHome && !unavailable;
   const pokemonSearch = { from: 'games' as const, game: gameId };
-  const variant = selected ? 'secondary' : caught ? 'primary' : 'muted';
+  const variant = selected ? 'secondary' : active ? 'primary' : 'muted';
+  const statusLabel = track === 'home' ? 'HOME' : 'Caught';
 
   return (
     <Item
@@ -1205,18 +1307,23 @@ function GameDexRow({
           slug={slot.slug}
           width={size.spritePx}
           height={size.spritePx}
-          className={cn(size.listSpriteClass, (!caught || unavailable) && 'opacity-40 grayscale')}
+          className={cn(size.listSpriteClass, (!active || unavailable) && 'opacity-40 grayscale')}
         />
       </ItemMedia>
       <ItemContent>
         <ItemTitle>
           <GameDexNumbers slot={slot} />
-          <span>{slot.name}</span>
+          <span className="inline-flex items-center gap-1.5">
+            {slot.name}
+            {showHomeDot ? (
+              <span className="size-1.5 shrink-0 rounded-full bg-emerald-600" title="In HOME" aria-label="In HOME" />
+            ) : null}
+          </span>
         </ItemTitle>
         {unavailable ? (
           <Badge variant="secondary">Unavailable</Badge>
-        ) : caught ? (
-          <ItemDescription>Caught</ItemDescription>
+        ) : active ? (
+          <ItemDescription>{statusLabel}</ItemDescription>
         ) : null}
       </ItemContent>
       <Button
@@ -1235,7 +1342,9 @@ function GameDexRow({
 function GameDexGridCard({
   slot,
   gameId,
-  caught,
+  active,
+  inHome,
+  track,
   selected,
   searchHit,
   searchActive,
@@ -1245,7 +1354,9 @@ function GameDexGridCard({
 }: {
   slot: DexSlot;
   gameId: GameId;
-  caught: boolean;
+  active: boolean;
+  inHome: boolean;
+  track: GameTrack;
   selected: boolean;
   searchHit?: boolean;
   searchActive?: boolean;
@@ -1255,9 +1366,21 @@ function GameDexGridCard({
 }) {
   const size = cardSizeConfig(cardSize);
   const unavailable = slot.available === false;
-  const active = caught && !unavailable;
+  const filled = active && !unavailable;
+  const showHomeDot = track === 'caught' && inHome && !unavailable;
   const pokemonSearch = { from: 'games' as const, game: gameId };
-  const variant = selected ? 'secondary' : active ? 'primary' : 'muted';
+  const variant = selected ? 'secondary' : filled ? 'primary' : 'muted';
+  const statusWord = unavailable
+    ? 'unavailable'
+    : track === 'home'
+      ? active
+        ? 'in HOME'
+        : 'not in HOME'
+      : active
+        ? inHome
+          ? 'caught, in HOME'
+          : 'caught'
+        : 'missing';
 
   return (
     <div className="relative">
@@ -1276,7 +1399,7 @@ function GameDexGridCard({
             type="button"
             disabled={unavailable}
             onClick={() => onSelectedChange(!selected)}
-            aria-label={`${slot.name}: ${unavailable ? 'unavailable' : caught ? 'caught' : 'missing'}. Tap to select.`}
+            aria-label={`${slot.name}: ${statusWord}. Tap to select.`}
             aria-pressed={selected}
           />
         }
@@ -1294,13 +1417,18 @@ function GameDexGridCard({
           slug={slot.slug}
           width={size.spritePx}
           height={size.spritePx}
-          className={cn(size.spriteClass, !active && 'opacity-35 grayscale')}
+          className={cn(size.spriteClass, !filled && 'opacity-35 grayscale')}
         />
         <ItemContent className="w-full items-center text-center">
           <ItemTitle className="w-full justify-center tabular-nums">
             <GameDexNumbers slot={slot} />
           </ItemTitle>
-          <ItemDescription className="w-full text-center">{slot.name}</ItemDescription>
+          <ItemDescription className="inline-flex w-full items-center justify-center gap-1.5 text-center">
+            {slot.name}
+            {showHomeDot ? (
+              <span className="size-1.5 shrink-0 rounded-full bg-emerald-600" title="In HOME" aria-hidden />
+            ) : null}
+          </ItemDescription>
           {unavailable ? <Badge variant="secondary">Unavailable</Badge> : null}
         </ItemContent>
       </Item>

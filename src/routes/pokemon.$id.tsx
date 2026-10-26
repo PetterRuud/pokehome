@@ -107,6 +107,7 @@ function PokemonPage() {
   const gmax = useDexStore((s) => Boolean(s.gmaxByKey[key]));
   const regional = useDexStore((s) => Boolean(s.regionalByKey[key]));
   const caughtByGame = useDexStore((s) => s.caughtByGame);
+  const homeByGame = useDexStore((s) => s.homeByGame);
   const setCaught = useDexStore((s) => s.setCaught);
   const setHome = useDexStore((s) => s.setHome);
   const setShiny = useDexStore((s) => s.setShiny);
@@ -115,6 +116,7 @@ function PokemonPage() {
   const setGmax = useDexStore((s) => s.setGmax);
   const setRegional = useDexStore((s) => s.setRegional);
   const setGameCaught = useDexStore((s) => s.setGameCaught);
+  const setGameHome = useDexStore((s) => s.setGameHome);
   const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
 
   const gameGroups = getGameGroupsForSpecies(summary.id);
@@ -304,34 +306,47 @@ function PokemonPage() {
               <CardHeader>
                 <CardTitle>Games & DLC</CardTitle>
                 <CardDescription>
-                  Origin dexes this species appears in — main games and expansions separately.
+                  Origin Caught/HOME also mark the matching national flags. Clearing a game mark leaves national as-is.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ItemGroup className="flex-row flex-wrap gap-2">
-                  {gameGroups.flatMap((group) =>
-                    group.games.map((game) => {
-                      const inGame = Boolean(caughtByGame[game.id]?.[key]);
-                      return (
-                        <Item key={game.id} variant="outline" size="sm">
-                          <ItemContent>
-                            <ItemTitle>
-                              {game.name}
-                              {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
-                            </ItemTitle>
-                          </ItemContent>
-                          <ItemActions>
+              <CardContent className="flex flex-col gap-3">
+                {gameGroups.flatMap((group) =>
+                  group.games.map((game) => {
+                    const inGame = Boolean(caughtByGame[game.id]?.[key]);
+                    const inHome = Boolean(homeByGame[game.id]?.[key]);
+                    return (
+                      <Item key={game.id} variant="outline" size="sm" className="flex-wrap">
+                        <ItemContent>
+                          <ItemTitle>
+                            {game.name}
+                            {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
+                          </ItemTitle>
+                        </ItemContent>
+                        <ItemActions className="flex flex-wrap gap-3">
+                          <label className="flex items-center gap-2 text-sm">
+                            <span className="text-muted-foreground">Caught</span>
                             <Switch
                               checked={inGame}
                               onCheckedChange={(v) => setGameCaught(game.id, key, v)}
                               aria-label={`Caught in ${game.name}`}
                             />
-                          </ItemActions>
-                        </Item>
-                      );
-                    }),
-                  )}
-                </ItemGroup>
+                          </label>
+                          <label className="flex items-center gap-2 text-sm">
+                            <span className="flex items-center gap-1 text-muted-foreground">
+                              <HomeIcon className="size-3.5 text-emerald-600" aria-hidden />
+                              HOME
+                            </span>
+                            <Switch
+                              checked={inHome}
+                              onCheckedChange={(v) => setGameHome(game.id, key, v)}
+                              aria-label={`HOME from ${game.name}`}
+                            />
+                          </label>
+                        </ItemActions>
+                      </Item>
+                    );
+                  }),
+                )}
               </CardContent>
             </Card>
           ) : null}

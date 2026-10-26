@@ -23,6 +23,7 @@ import {
 import { canGmax, canMega, canRegional } from '@/lib/form-variants';
 import { getGameGroups } from '@/lib/games';
 import type { GameId } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import { CheckIcon, ExpandIcon, EyeIcon, GlobeIcon, HomeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
 
 export type AddStatuses = {
@@ -71,6 +72,7 @@ export function applyAddToOptions(
     setGmaxMany: (keys: string[], value: boolean) => void;
     setRegionalMany: (keys: string[], value: boolean) => void;
     setGamesCaughtMany: (gameIds: GameId[], keys: string[], value: boolean) => void;
+    setGamesHomeMany: (gameIds: GameId[], keys: string[], value: boolean) => void;
   },
 ) {
   const { statuses, gameIds } = options;
@@ -90,7 +92,41 @@ export function applyAddToOptions(
     const regionalKeys = keys.filter((key) => canRegional(parseNationalId(key)));
     if (regionalKeys.length) actions.setRegionalMany(regionalKeys, true);
   }
-  if (gameIds.length) actions.setGamesCaughtMany(gameIds, keys, true);
+  if (gameIds.length) {
+    // Games list means origin caught; HOME status also banks those origins.
+    actions.setGamesCaughtMany(gameIds, keys, true);
+    if (statuses.home) actions.setGamesHomeMany(gameIds, keys, true);
+  }
+}
+
+export type GameAddOptions = {
+  gameCaught: boolean;
+  gameHome: boolean;
+};
+
+const DEFAULT_GAME_OPTIONS: GameAddOptions = {
+  gameCaught: true,
+  gameHome: false,
+};
+
+export function applyGameAddOptions(
+  gameId: GameId,
+  keys: string[],
+  options: GameAddOptions,
+  actions: {
+    setGameCaughtMany: (gameId: GameId, keys: string[], value: boolean) => void;
+    setGameHomeMany: (gameId: GameId, keys: string[], value: boolean) => void;
+  },
+) {
+  if (options.gameCaught) actions.setGameCaughtMany(gameId, keys, true);
+  if (options.gameHome) actions.setGameHomeMany(gameId, keys, true);
+}
+
+export function summarizeGameAddOptions(options: GameAddOptions): string {
+  const parts: string[] = [];
+  if (options.gameCaught) parts.push('caught');
+  if (options.gameHome) parts.push('HOME');
+  return parts.length ? parts.join(' · ') : 'nothing selected';
 }
 
 export function summarizeAddOptions(options: AddToOptions): string {
@@ -191,20 +227,20 @@ export function AddToDialogButton({
           <FieldSet>
             <FieldLegend>Status</FieldLegend>
             <FieldDescription>National living-dex flags</FieldDescription>
-            <FieldGroup className="gap-2">
+            <FieldGroup className="grid grid-cols-2 gap-x-3 gap-y-2">
               {STATUS_OPTIONS.map((opt) => {
                 const Icon = opt.icon;
                 const id = `add-status-${opt.key}`;
                 return (
-                  <Field key={opt.key} orientation="horizontal">
+                  <Field key={opt.key} orientation="horizontal" className="min-w-0">
                     <Checkbox
                       id={id}
                       checked={options.statuses[opt.key]}
                       onCheckedChange={(v) => toggleStatus(opt.key, Boolean(v))}
                     />
-                    <FieldLabel htmlFor={id} className="flex items-center gap-1.5 font-medium">
-                      <Icon className={opt.iconClassName} />
-                      {opt.label}
+                    <FieldLabel htmlFor={id} className="flex min-w-0 items-center gap-1.5 font-medium">
+                      <Icon className={cn('shrink-0', opt.iconClassName)} />
+                      <span className="truncate">{opt.label}</span>
                     </FieldLabel>
                   </Field>
                 );
@@ -244,6 +280,107 @@ export function AddToDialogButton({
             </div>
           </FieldSet>
         </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button disabled={!canApply} onClick={handleAdd}>
+            Add {countLabel}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+const GAME_STATUS_OPTIONS: {
+  key: keyof GameAddOptions;
+  label: string;
+  description: string;
+  icon: typeof CheckIcon;
+  iconClassName?: string;
+}[] = [
+  {
+    key: 'gameCaught',
+    label: 'Caught',
+    description: 'This game’s Pokédex — also marks national Caught',
+    icon: CheckIcon,
+  },
+  {
+    key: 'gameHome',
+    label: 'HOME',
+    description: 'Banked from this game — also marks national HOME',
+    icon: HomeIcon,
+    iconClassName: 'text-emerald-600',
+  },
+];
+
+export function GameAddDialogButton({
+  disabled,
+  selectedCount,
+  gameName,
+  onAdd,
+}: {
+  disabled?: boolean;
+  selectedCount: number;
+  gameName: string;
+  onAdd: (options: GameAddOptions) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState<GameAddOptions>(DEFAULT_GAME_OPTIONS);
+
+  const canApply = selectedCount > 0 && (options.gameCaught || options.gameHome);
+
+  function toggle(key: keyof GameAddOptions, next: boolean) {
+    setOptions((prev) => ({ ...prev, [key]: next }));
+  }
+
+  function handleOpenChange(next: boolean) {
+    setOpen(next);
+    if (next) setOptions(DEFAULT_GAME_OPTIONS);
+  }
+
+  function handleAdd() {
+    if (!canApply) return;
+    onAdd(options);
+    setOpen(false);
+  }
+
+  const countLabel = selectedCount === 1 ? '1 Pokémon' : `${selectedCount} Pokémon`;
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger render={<Button size="sm" disabled={disabled || selectedCount === 0} />}>Add</DialogTrigger>
+      <DialogContent className="sm:max-w-md" showCloseButton>
+        <DialogHeader>
+          <DialogTitle>Add to {gameName}</DialogTitle>
+          <DialogDescription>
+            Choose what to mark for {countLabel}. Game Caught/HOME also update the matching national flags.
+          </DialogDescription>
+        </DialogHeader>
+
+        <FieldSet>
+          <FieldLegend>Marks</FieldLegend>
+          <FieldGroup className="gap-2">
+            {GAME_STATUS_OPTIONS.map((opt) => {
+              const Icon = opt.icon;
+              const id = `game-add-${opt.key}`;
+              return (
+                <Field key={opt.key} orientation="horizontal">
+                  <Checkbox id={id} checked={options[opt.key]} onCheckedChange={(v) => toggle(opt.key, Boolean(v))} />
+                  <FieldContent>
+                    <FieldLabel htmlFor={id} className="flex items-center gap-1.5 font-medium">
+                      <Icon className={opt.iconClassName} />
+                      {opt.label}
+                    </FieldLabel>
+                    <FieldDescription>{opt.description}</FieldDescription>
+                  </FieldContent>
+                </Field>
+              );
+            })}
+          </FieldGroup>
+        </FieldSet>
 
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>

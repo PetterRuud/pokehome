@@ -94,6 +94,8 @@ export type ExportPayload = {
   /** Deposited in Pokémon HOME. Older v5 backups may omit it. */
   homeByKey?: Record<string, boolean>;
   caughtByGame: Record<GameId, Record<string, boolean>>;
+  /** Deposited in HOME from that origin game. Older v5 backups may omit it. */
+  homeByGame?: Record<GameId, Record<string, boolean>>;
   claimedGiftIds: string[];
   lastSeenGiftIds: string[];
   prefs: DexPrefs;

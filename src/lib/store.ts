@@ -15,6 +15,7 @@ type DexState = {
   gmaxByKey: Record<string, boolean>;
   regionalByKey: Record<string, boolean>;
   caughtByGame: Record<GameId, Record<string, boolean>>;
+  homeByGame: Record<GameId, Record<string, boolean>>;
   claimedGiftIds: string[];
   lastSeenGiftIds: string[];
   prefs: DexPrefs;
@@ -48,6 +49,10 @@ type DexState = {
   setGameCaught: (gameId: GameId, key: string, caught: boolean) => void;
   setGameCaughtMany: (gameId: GameId, keys: string[], caught: boolean) => void;
   setGamesCaughtMany: (gameIds: GameId[], keys: string[], caught: boolean) => void;
+  toggleGameHome: (gameId: GameId, key: string) => void;
+  setGameHome: (gameId: GameId, key: string, home: boolean) => void;
+  setGameHomeMany: (gameId: GameId, keys: string[], home: boolean) => void;
+  setGamesHomeMany: (gameIds: GameId[], keys: string[], home: boolean) => void;
   toggleClaimedGift: (id: string) => void;
   markGiftsSeen: (ids: string[]) => void;
   setPref: <K extends keyof DexPrefs>(key: K, value: DexPrefs[K]) => void;
@@ -142,6 +147,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
       gmaxByKey: payload.gmaxByKey ?? {},
       regionalByKey: payload.regionalByKey ?? {},
       caughtByGame: migrateCaughtByGame(payload.caughtByGame),
+      homeByGame: migrateCaughtByGame(payload.homeByGame),
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
       prefs: normalizePrefs(payload.prefs),
@@ -159,6 +165,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
       gmaxByKey: payload.gmaxByKey ?? {},
       regionalByKey: {},
       caughtByGame: migrateCaughtByGame(payload.caughtByGame),
+      homeByGame: {},
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
       prefs: normalizePrefs(payload.prefs),
@@ -176,6 +183,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
       gmaxByKey: {},
       regionalByKey: {},
       caughtByGame: migrateCaughtByGame(payload.caughtByGame),
+      homeByGame: {},
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
       prefs: normalizePrefs(payload.prefs),
@@ -193,6 +201,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
       gmaxByKey: {},
       regionalByKey: {},
       caughtByGame: {},
+      homeByGame: {},
       claimedGiftIds: payload.claimedGiftIds ?? [],
       lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
       prefs: normalizePrefs(payload.prefs),
@@ -209,6 +218,7 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
     gmaxByKey: {},
     regionalByKey: {},
     caughtByGame: {},
+    homeByGame: {},
     claimedGiftIds: payload.claimedGiftIds ?? [],
     lastSeenGiftIds: payload.lastSeenGiftIds ?? [],
     prefs: normalizePrefs(payload.prefs),
@@ -216,12 +226,31 @@ function normalizeImport(payload: AnyExportPayload): Omit<ExportPayload, 'versio
   };
 }
 
-function mergeGameCaught(a: Record<GameId, Record<string, boolean>>, b: Record<GameId, Record<string, boolean>>) {
+function mergeGameMap(a: Record<GameId, Record<string, boolean>>, b: Record<GameId, Record<string, boolean>>) {
   const out: Record<GameId, Record<string, boolean>> = { ...a };
   for (const [gameId, map] of Object.entries(b)) {
     out[gameId] = { ...out[gameId], ...map };
   }
   return out;
+}
+
+/** National + exact keys when promoting from a game slot (form keys → `n{id}`). */
+function nationalKeysFromGame(keys: string[]): string[] {
+  const out = new Set<string>();
+  for (const key of keys) {
+    out.add(key);
+    const match = /^n(\d+)/.exec(key);
+    if (match) out.add(`n${match[1]}`);
+  }
+  return Array.from(out);
+}
+
+/** Mark national flags when a game mark turns on (never auto-clears). */
+function withNationalFlag(flagByKey: Record<string, boolean>, keys: string[], on: boolean): Record<string, boolean> {
+  if (!on) return flagByKey;
+  const next = { ...flagByKey };
+  for (const key of nationalKeysFromGame(keys)) next[key] = true;
+  return next;
 }
 
 export const useDexStore = create<DexState>()(
@@ -235,6 +264,7 @@ export const useDexStore = create<DexState>()(
       gmaxByKey: {},
       regionalByKey: {},
       caughtByGame: {},
+      homeByGame: {},
       claimedGiftIds: [],
       lastSeenGiftIds: [],
       prefs: defaultPrefs,
@@ -364,11 +394,13 @@ export const useDexStore = create<DexState>()(
       toggleGameCaught: (gameId, key) =>
         set((s) => {
           const game = s.caughtByGame[gameId] ?? {};
+          const next = !game[key];
           return {
             caughtByGame: {
               ...s.caughtByGame,
-              [gameId]: { ...game, [key]: !game[key] },
+              [gameId]: { ...game, [key]: next },
             },
+            caughtByKey: withNationalFlag(s.caughtByKey, [key], next),
           };
         }),
       setGameCaught: (gameId, key, caught) =>
@@ -377,6 +409,7 @@ export const useDexStore = create<DexState>()(
             ...s.caughtByGame,
             [gameId]: { ...s.caughtByGame[gameId], [key]: caught },
           },
+          caughtByKey: withNationalFlag(s.caughtByKey, [key], caught),
         })),
       setGameCaughtMany: (gameId, keys, caught) =>
         set((s) => {
@@ -384,6 +417,7 @@ export const useDexStore = create<DexState>()(
           for (const key of keys) game[key] = caught;
           return {
             caughtByGame: { ...s.caughtByGame, [gameId]: game },
+            caughtByKey: withNationalFlag(s.caughtByKey, keys, caught),
           };
         }),
       setGamesCaughtMany: (gameIds, keys, caught) =>
@@ -394,7 +428,52 @@ export const useDexStore = create<DexState>()(
             for (const key of keys) game[key] = caught;
             caughtByGame[gameId] = game;
           }
-          return { caughtByGame };
+          return {
+            caughtByGame,
+            caughtByKey: withNationalFlag(s.caughtByKey, keys, caught),
+          };
+        }),
+      toggleGameHome: (gameId, key) =>
+        set((s) => {
+          const game = s.homeByGame[gameId] ?? {};
+          const next = !game[key];
+          return {
+            homeByGame: {
+              ...s.homeByGame,
+              [gameId]: { ...game, [key]: next },
+            },
+            homeByKey: withNationalFlag(s.homeByKey, [key], next),
+          };
+        }),
+      setGameHome: (gameId, key, home) =>
+        set((s) => ({
+          homeByGame: {
+            ...s.homeByGame,
+            [gameId]: { ...s.homeByGame[gameId], [key]: home },
+          },
+          homeByKey: withNationalFlag(s.homeByKey, [key], home),
+        })),
+      setGameHomeMany: (gameId, keys, home) =>
+        set((s) => {
+          const game = { ...s.homeByGame[gameId] };
+          for (const key of keys) game[key] = home;
+          return {
+            homeByGame: { ...s.homeByGame, [gameId]: game },
+            homeByKey: withNationalFlag(s.homeByKey, keys, home),
+          };
+        }),
+      setGamesHomeMany: (gameIds, keys, home) =>
+        set((s) => {
+          const homeByGame = { ...s.homeByGame };
+          for (const gameId of gameIds) {
+            const game = { ...homeByGame[gameId] };
+            for (const key of keys) game[key] = home;
+            homeByGame[gameId] = game;
+          }
+          return {
+            homeByGame,
+            homeByKey: withNationalFlag(s.homeByKey, keys, home),
+          };
         }),
       toggleClaimedGift: (id) =>
         set((s) => {
@@ -433,6 +512,7 @@ export const useDexStore = create<DexState>()(
           gmaxByKey: s.gmaxByKey,
           regionalByKey: s.regionalByKey,
           caughtByGame: s.caughtByGame,
+          homeByGame: s.homeByGame,
           claimedGiftIds: s.claimedGiftIds,
           lastSeenGiftIds: s.lastSeenGiftIds,
           prefs: s.prefs,
@@ -466,7 +546,8 @@ export const useDexStore = create<DexState>()(
             megaByKey: { ...s.megaByKey, ...next.megaByKey },
             gmaxByKey: { ...s.gmaxByKey, ...next.gmaxByKey },
             regionalByKey: { ...s.regionalByKey, ...next.regionalByKey },
-            caughtByGame: mergeGameCaught(s.caughtByGame, next.caughtByGame),
+            caughtByGame: mergeGameMap(s.caughtByGame, next.caughtByGame),
+            homeByGame: mergeGameMap(s.homeByGame, next.homeByGame ?? {}),
             claimedGiftIds: Array.from(new Set([...s.claimedGiftIds, ...next.claimedGiftIds])),
             lastSeenGiftIds: Array.from(new Set([...s.lastSeenGiftIds, ...next.lastSeenGiftIds])),
             prefs: normalizePrefs({ ...s.prefs, ...next.prefs }),
@@ -486,6 +567,7 @@ export const useDexStore = create<DexState>()(
           gmaxByKey: {},
           regionalByKey: {},
           caughtByGame: {},
+          homeByGame: {},
           claimedGiftIds: [],
           lastSeenGiftIds: [],
           prefs: defaultPrefs,
@@ -496,7 +578,7 @@ export const useDexStore = create<DexState>()(
     {
       name: 'pokehome-dex',
       storage: idbStorage,
-      version: 11,
+      version: 12,
       migrate: (persisted: unknown, fromVersion) => {
         const state = persisted as Partial<DexState> & {
           statusByKey?: Record<string, string>;
@@ -568,10 +650,18 @@ export const useDexStore = create<DexState>()(
         }
 
         // v11: cardSize pref (normalizePrefs fills medium when missing)
-        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home; v10: HOME default; v11: cardSize
+        if (fromVersion < 12) {
+          next = {
+            ...next,
+            homeByGame: state.homeByGame ?? {},
+          };
+        }
+
+        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home; v10: HOME default; v11: cardSize; v12: homeByGame
         return {
           ...next,
           caughtByGame: migrateCaughtByGame(next.caughtByGame),
+          homeByGame: migrateCaughtByGame(next.homeByGame),
           prefs: normalizePrefs(next.prefs),
           nationalBoxLayout: normalizeBoxLayout(next.nationalBoxLayout),
           localUpdatedAt: next.localUpdatedAt ?? new Date(0).toISOString(),
@@ -586,6 +676,7 @@ export const useDexStore = create<DexState>()(
         gmaxByKey: s.gmaxByKey,
         regionalByKey: s.regionalByKey,
         caughtByGame: s.caughtByGame,
+        homeByGame: s.homeByGame,
         claimedGiftIds: s.claimedGiftIds,
         lastSeenGiftIds: s.lastSeenGiftIds,
         prefs: s.prefs,
@@ -608,6 +699,7 @@ const DATA_KEYS = [
   'gmaxByKey',
   'regionalByKey',
   'caughtByGame',
+  'homeByGame',
   'claimedGiftIds',
   'lastSeenGiftIds',
   'prefs',
