@@ -41,13 +41,14 @@ import { GameLogo } from '@/components/game-logo';
 import { PokeballIcon } from '@/components/pokeball-logo';
 import { PokemonSprite } from '@/components/pokemon-sprite';
 import { applyBoxLayout } from '@/lib/box-layout';
+import { cardSizeConfig, gridColumnCount, resolveCardSize } from '@/lib/card-size';
 import { filterSlotsByQuery } from '@/lib/dex-search';
 import { useDexStore } from '@/lib/store';
 import { countGameProgress, countProgress, toPercent } from '@/lib/dex-stats';
 import { filterBoxesForFormView, gmaxSpeciesCount, megaSpeciesCount, regionalSpeciesCount } from '@/lib/form-variants';
 import { getGame, getGames } from '@/lib/games';
 import nationalDex from '@/data/national-dex.json';
-import type { DexBox, DexSlot, FormView, GameId, SpriteStyle } from '@/lib/types';
+import type { CardSize, DexBox, DexSlot, FormView, GameId, SpriteStyle } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import {
   CheckIcon,
@@ -111,11 +112,7 @@ const DEX_STICKY_TOOLBAR =
   'sticky top-14 z-30 -mx-4 flex flex-wrap items-center gap-2 border-b border-border bg-background/95 px-4 py-2 backdrop-blur md:-mx-6 md:px-6';
 
 const EMPTY_CAUGHT: Record<string, boolean> = {};
-const LIST_ROW_HEIGHT = 104;
-/** Shared national/game grid row: Item tile (sprite + # + name + padding/gaps). */
-const GRID_ROW_HEIGHT = 220;
 const NAT_HEADER_HEIGHT = 44;
-const NAT_GRID_ROW_HEIGHT = GRID_ROW_HEIGHT;
 
 type NationalVirtualRow =
   | {
@@ -128,11 +125,8 @@ type NationalVirtualRow =
     }
   | { type: 'grid'; boxId: string; slots: DexSlot[] };
 
-function useGridColumnCount(width: number) {
-  if (width >= 1024) return 6;
-  if (width >= 768) return 5;
-  if (width >= 640) return 4;
-  return 3;
+function useGridColumnCount(width: number, cardSize: CardSize) {
+  return gridColumnCount(width, cardSize);
 }
 
 const FORM_VIEW_OPTIONS: {
@@ -384,6 +378,8 @@ function NationalDexView() {
   const setPref = useDexStore((s) => s.setPref);
   const formView = prefs.formView;
   const spriteStyle = prefs.spriteStyle;
+  const cardSize = resolveCardSize(prefs.cardSize);
+  const cardLayout = cardSizeConfig(cardSize);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [renameBox, setRenameBox] = useState<DexBox | null>(null);
   const [renameValue, setRenameValue] = useState('');
@@ -477,9 +473,9 @@ function NationalDexView() {
       ro.disconnect();
       window.removeEventListener('resize', update);
     };
-  }, [boxes.length, formView]);
+  }, [boxes.length, formView, cardSize]);
 
-  const colCount = useGridColumnCount(scrollWidth);
+  const colCount = useGridColumnCount(scrollWidth, cardSize);
 
   const virtualRows = useMemo(() => {
     const rows: NationalVirtualRow[] = [];
@@ -509,14 +505,14 @@ function NationalDexView() {
   // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual intentionally skips compiler memoization
   const virtualizer = useWindowVirtualizer({
     count: virtualRows.length,
-    estimateSize: (index) => (virtualRows[index]?.type === 'header' ? NAT_HEADER_HEIGHT : NAT_GRID_ROW_HEIGHT),
+    estimateSize: (index) => (virtualRows[index]?.type === 'header' ? NAT_HEADER_HEIGHT : cardLayout.gridRowHeight),
     overscan: 6,
     scrollMargin,
   });
 
   useLayoutEffect(() => {
     virtualizer.measure();
-  }, [colCount, scrollMargin, virtualRows.length, formView, virtualizer]);
+  }, [colCount, scrollMargin, virtualRows.length, formView, cardSize, cardLayout.gridRowHeight, virtualizer]);
 
   useEffect(() => {
     if (!search.activeKey) return;
@@ -715,6 +711,7 @@ function NationalDexView() {
                     formView={formView}
                     flagged={Boolean(flagByKey?.[slot.key])}
                     spriteStyle={spriteStyle}
+                    cardSize={cardSize}
                     selected={selected.has(slot.key)}
                     searchHit={search.hitKeys.has(slot.key)}
                     searchActive={search.activeKey === slot.key}
@@ -860,6 +857,8 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const game = getGame(gameId);
   const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? EMPTY_CAUGHT);
   const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
+  const cardSize = useDexStore((s) => resolveCardSize(s.prefs.cardSize));
+  const cardLayout = cardSizeConfig(cardSize);
   const setGameCaughtMany = useDexStore((s) => s.setGameCaughtMany);
   const [filter, setFilter] = useState<GameFilter>('all');
   const [layout, setLayout] = useState<'list' | 'grid'>('grid');
@@ -900,22 +899,32 @@ function GameDexView({ gameId }: { gameId: GameId }) {
       ro.disconnect();
       window.removeEventListener('resize', update);
     };
-  }, [layout, gameId, visible.length]);
+  }, [layout, gameId, visible.length, cardSize]);
 
-  const colCount = useGridColumnCount(scrollWidth);
+  const colCount = useGridColumnCount(scrollWidth, cardSize);
   const rowCount = layout === 'grid' ? Math.ceil(visible.length / colCount) : visible.length;
 
   // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual intentionally skips compiler memoization
   const virtualizer = useWindowVirtualizer({
     count: rowCount,
-    estimateSize: () => (layout === 'list' ? LIST_ROW_HEIGHT : GRID_ROW_HEIGHT),
+    estimateSize: () => (layout === 'list' ? cardLayout.listRowHeight : cardLayout.gridRowHeight),
     overscan: 8,
     scrollMargin,
   });
 
   useLayoutEffect(() => {
     virtualizer.measure();
-  }, [layout, colCount, scrollMargin, visible.length, gameId, virtualizer]);
+  }, [
+    layout,
+    colCount,
+    scrollMargin,
+    visible.length,
+    gameId,
+    cardSize,
+    cardLayout.gridRowHeight,
+    cardLayout.listRowHeight,
+    virtualizer,
+  ]);
 
   // Jump to match: widen filter to All if the hit is hidden by caught/missing.
   useEffect(() => {
@@ -1080,6 +1089,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     searchHit={search.hitKeys.has(slot.key)}
                     searchActive={search.activeKey === slot.key}
                     spriteStyle={spriteStyle}
+                    cardSize={cardSize}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
                   />
                 </div>
@@ -1109,6 +1119,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     searchHit={search.hitKeys.has(slot.key)}
                     searchActive={search.activeKey === slot.key}
                     spriteStyle={spriteStyle}
+                    cardSize={cardSize}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
                   />
                 ))}
@@ -1152,6 +1163,7 @@ function GameDexRow({
   searchHit,
   searchActive,
   spriteStyle,
+  cardSize = 'medium',
   onSelectedChange,
 }: {
   slot: DexSlot;
@@ -1161,8 +1173,10 @@ function GameDexRow({
   searchHit?: boolean;
   searchActive?: boolean;
   spriteStyle: SpriteStyle;
+  cardSize?: CardSize;
   onSelectedChange: (selected: boolean) => void;
 }) {
+  const size = cardSizeConfig(cardSize);
   const unavailable = slot.available === false;
   const pokemonSearch = { from: 'games' as const, game: gameId };
   const variant = selected ? 'secondary' : caught ? 'primary' : 'muted';
@@ -1189,9 +1203,9 @@ function GameDexRow({
           style={spriteStyle}
           formId={slot.formId}
           slug={slot.slug}
-          width={72}
-          height={72}
-          className={cn('size-18 sm:size-20', (!caught || unavailable) && 'opacity-40 grayscale')}
+          width={size.spritePx}
+          height={size.spritePx}
+          className={cn(size.listSpriteClass, (!caught || unavailable) && 'opacity-40 grayscale')}
         />
       </ItemMedia>
       <ItemContent>
@@ -1226,6 +1240,7 @@ function GameDexGridCard({
   searchHit,
   searchActive,
   spriteStyle,
+  cardSize = 'medium',
   onSelectedChange,
 }: {
   slot: DexSlot;
@@ -1235,8 +1250,10 @@ function GameDexGridCard({
   searchHit?: boolean;
   searchActive?: boolean;
   spriteStyle: SpriteStyle;
+  cardSize?: CardSize;
   onSelectedChange: (selected: boolean) => void;
 }) {
+  const size = cardSizeConfig(cardSize);
   const unavailable = slot.available === false;
   const active = caught && !unavailable;
   const pokemonSearch = { from: 'games' as const, game: gameId };
@@ -1264,7 +1281,8 @@ function GameDexGridCard({
           />
         }
         className={cn(
-          'flex-col items-center pt-8',
+          'flex-col items-center',
+          size.cardPadClass,
           searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
           searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
         )}
@@ -1274,9 +1292,9 @@ function GameDexGridCard({
           style={spriteStyle}
           formId={slot.formId}
           slug={slot.slug}
-          width={80}
-          height={80}
-          className={cn('size-16 sm:size-20', !active && 'opacity-35 grayscale')}
+          width={size.spritePx}
+          height={size.spritePx}
+          className={cn(size.spriteClass, !active && 'opacity-35 grayscale')}
         />
         <ItemContent className="w-full items-center text-center">
           <ItemTitle className="w-full justify-center tabular-nums">

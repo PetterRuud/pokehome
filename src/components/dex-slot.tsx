@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { cardSizeConfig } from '@/lib/card-size';
 import { canGmax, canMega, canRegional } from '@/lib/form-variants';
-import type { DexSlot, FormView, SpriteStyle } from '@/lib/types';
+import type { CardSize, DexSlot, FormView, SpriteStyle } from '@/lib/types';
 import { PokemonSprite } from '@/components/pokemon-sprite';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ export function DexSlotButton({
   formView,
   flagged,
   spriteStyle,
+  cardSize = 'medium',
   selected,
   searchHit,
   searchActive,
@@ -26,6 +28,7 @@ export function DexSlotButton({
   /** Whether this species has the currently selected form flag. */
   flagged: boolean;
   spriteStyle: SpriteStyle;
+  cardSize?: CardSize;
   selected: boolean;
   /** Matched by in-app dex search. */
   searchHit?: boolean;
@@ -33,6 +36,7 @@ export function DexSlotButton({
   searchActive?: boolean;
   onSelectedChange: (selected: boolean) => void;
 }) {
+  const size = cardSizeConfig(cardSize);
   const trackingForm = formView !== 'default';
   const showShiny = formView === 'shiny';
   const showAlpha = formView === 'alpha' && flagged;
@@ -78,7 +82,8 @@ export function DexSlotButton({
           />
         }
         className={cn(
-          'flex-col items-center pt-8',
+          'flex-col items-center',
+          size.cardPadClass,
           searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
           searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
         )}
@@ -89,10 +94,10 @@ export function DexSlotButton({
           shiny={showShiny}
           variant={spriteVariant}
           slug={slot.slug}
-          width={80}
-          height={80}
+          width={size.spritePx}
+          height={size.spritePx}
           className={cn(
-            'size-16 sm:size-20',
+            size.spriteClass,
             !active && 'opacity-35 grayscale',
             (formView === 'alpha' || formView === 'gmax') && active && 'scale-110',
           )}

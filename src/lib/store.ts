@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { get, set, del } from 'idb-keyval';
 import type { AnyExportPayload, BoxLayout, DexPrefs, ExportPayload, FormView, GameId, SpriteStyle } from '@/lib/types';
 import { EMPTY_BOX_LAYOUT } from '@/lib/box-layout';
+import { resolveCardSize } from '@/lib/card-size';
 import { migrateCaughtByGame } from '@/lib/caught-by-game';
 
 type DexState = {
@@ -72,6 +73,7 @@ const defaultPrefs: DexPrefs = {
   notificationsEnabled: false,
   formView: 'home',
   spriteStyle: 'pixel',
+  cardSize: 'medium',
 };
 
 type LegacyPrefs = Partial<DexPrefs> & {
@@ -103,6 +105,7 @@ function normalizePrefs(prefs?: LegacyPrefs | null): DexPrefs {
     notificationsEnabled: prefs?.notificationsEnabled ?? false,
     formView: migrateFormView(prefs),
     spriteStyle: prefs?.spriteStyle && SPRITE_STYLES.includes(prefs.spriteStyle) ? prefs.spriteStyle : 'pixel',
+    cardSize: resolveCardSize(prefs?.cardSize),
   };
 }
 
@@ -493,7 +496,7 @@ export const useDexStore = create<DexState>()(
     {
       name: 'pokehome-dex',
       storage: idbStorage,
-      version: 10,
+      version: 11,
       migrate: (persisted: unknown, fromVersion) => {
         const state = persisted as Partial<DexState> & {
           statusByKey?: Record<string, string>;
@@ -564,7 +567,8 @@ export const useDexStore = create<DexState>()(
           }
         }
 
-        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home; v10: HOME default
+        // v11: cardSize pref (normalizePrefs fills medium when missing)
+        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home; v10: HOME default; v11: cardSize
         return {
           ...next,
           caughtByGame: migrateCaughtByGame(next.caughtByGame),

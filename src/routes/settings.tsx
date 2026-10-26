@@ -9,7 +9,8 @@ import { ConfirmAlertDialog, type ConfirmRequest } from '@/components/confirm-al
 import { useCloudSyncContext } from '@/components/cloud-sync-provider';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useDexStore } from '@/lib/store';
-import type { AnyExportPayload, SpriteStyle } from '@/lib/types';
+import { resolveCardSize } from '@/lib/card-size';
+import type { AnyExportPayload, CardSize, SpriteStyle } from '@/lib/types';
 import { toast } from 'sonner';
 import { BoxIcon, CloudIcon, SparklesIcon } from 'lucide-react';
 
@@ -122,13 +123,38 @@ function SettingsPage() {
         <CardHeader>
           <CardTitle>Appearance</CardTitle>
           <CardDescription>
-            Theme and Pokémon art style (pixel sprites or HOME 3D renders from PokeAPI).
+            Theme, dex card density, and Pokémon art style (pixel sprites or HOME 3D renders from PokeAPI).
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <FieldTitle>Theme</FieldTitle>
             <ThemeToggle />
+          </div>
+          <div className="flex flex-col gap-2">
+            <FieldTitle>Card size</FieldTitle>
+            <ToggleGroup
+              variant="outline"
+              size="sm"
+              value={[resolveCardSize(prefs.cardSize)]}
+              onValueChange={(next) => {
+                const value = next[0] as CardSize | undefined;
+                if (value) setPref('cardSize', value);
+              }}
+              className="w-full justify-stretch sm:w-auto sm:justify-start"
+              aria-label="Card size"
+            >
+              <ToggleGroupItem value="small" aria-label="Small" className="flex-1 px-3 sm:flex-none">
+                Small
+              </ToggleGroupItem>
+              <ToggleGroupItem value="medium" aria-label="Medium" className="flex-1 px-3 sm:flex-none">
+                Medium
+              </ToggleGroupItem>
+              <ToggleGroupItem value="large" aria-label="Large" className="flex-1 px-3 sm:flex-none">
+                Large
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <FieldDescription>Sprite size on national and game dex grids. Medium is the default.</FieldDescription>
           </div>
           <div className="flex flex-col gap-2">
             <FieldTitle>Sprite style</FieldTitle>

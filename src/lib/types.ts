@@ -65,10 +65,14 @@ export type FormView = 'default' | 'home' | 'shiny' | 'alpha' | 'mega' | 'gmax' 
 /** Pixel battle sprites vs Pokémon HOME 3D-style renders (PokeAPI). */
 export type SpriteStyle = 'pixel' | 'home';
 
+/** Dex grid card density. Medium matches the original layout. */
+export type CardSize = 'small' | 'medium' | 'large';
+
 export type DexPrefs = {
   notificationsEnabled: boolean;
   formView: FormView;
   spriteStyle: SpriteStyle;
+  cardSize: CardSize;
 };
 
 /** Custom national-dex box titles. `order` is legacy and ignored. */
