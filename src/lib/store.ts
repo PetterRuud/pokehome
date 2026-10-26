@@ -70,7 +70,7 @@ const SPRITE_STYLES: SpriteStyle[] = ['pixel', 'home'];
 
 const defaultPrefs: DexPrefs = {
   notificationsEnabled: false,
-  formView: 'default',
+  formView: 'home',
   spriteStyle: 'pixel',
 };
 
@@ -95,7 +95,7 @@ function migrateFormView(prefs?: LegacyPrefs | null): FormView {
     ] as const
   ).filter((v): v is 'shiny' | 'alpha' | 'mega' | 'gmax' => v != null);
   if (active.length === 1) return active[0];
-  return 'default';
+  return 'home';
 }
 
 function normalizePrefs(prefs?: LegacyPrefs | null): DexPrefs {
@@ -493,7 +493,7 @@ export const useDexStore = create<DexState>()(
     {
       name: 'pokehome-dex',
       storage: idbStorage,
-      version: 9,
+      version: 10,
       migrate: (persisted: unknown, fromVersion) => {
         const state = persisted as Partial<DexState> & {
           statusByKey?: Record<string, string>;
@@ -553,7 +553,18 @@ export const useDexStore = create<DexState>()(
           };
         }
 
-        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home
+        // v10: national filter default is HOME (was Caught / `default`)
+        if (fromVersion < 10) {
+          const prefs = next.prefs ?? state.prefs;
+          if (!prefs?.formView || prefs.formView === 'default') {
+            next = {
+              ...next,
+              prefs: { ...normalizePrefs(prefs), formView: 'home' },
+            };
+          }
+        }
+
+        // v4: split merged game ids; v5: formView + gmax; v6: box layout; v7: localUpdatedAt; v8: regional; v9: home; v10: HOME default
         return {
           ...next,
           caughtByGame: migrateCaughtByGame(next.caughtByGame),

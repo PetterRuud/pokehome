@@ -38,6 +38,7 @@ import { ConfirmAlertDialog, type ConfirmRequest } from '@/components/confirm-al
 import { DexSearchBar } from '@/components/dex-search';
 import { DexSlotButton } from '@/components/dex-slot';
 import { GameLogo } from '@/components/game-logo';
+import { PokeballIcon } from '@/components/pokeball-logo';
 import { PokemonSprite } from '@/components/pokemon-sprite';
 import { applyBoxLayout } from '@/lib/box-layout';
 import { filterSlotsByQuery } from '@/lib/dex-search';
@@ -65,6 +66,7 @@ import {
   SparklesIcon,
   ZapIcon,
 } from 'lucide-react';
+import type { ComponentType, SVGProps } from 'react';
 
 function useDexSearchState(slots: DexSlot[]) {
   const [query, setQueryState] = useState('');
@@ -136,11 +138,11 @@ function useGridColumnCount(width: number) {
 const FORM_VIEW_OPTIONS: {
   value: FormView;
   label: string;
-  icon: typeof SparklesIcon;
+  icon: ComponentType<{ className?: string } & SVGProps<SVGSVGElement>>;
   iconClassName?: string;
 }[] = [
-  { value: 'default', label: 'Caught', icon: CheckIcon },
   { value: 'home', label: 'HOME', icon: HomeIcon, iconClassName: 'text-emerald-600' },
+  { value: 'default', label: 'Caught', icon: PokeballIcon },
   { value: 'shiny', label: 'Shiny', icon: SparklesIcon, iconClassName: 'text-amber-500' },
   { value: 'alpha', label: 'Alpha', icon: EyeIcon, iconClassName: 'text-red-500' },
   { value: 'mega', label: 'Mega', icon: ZapIcon, iconClassName: 'text-violet-500' },

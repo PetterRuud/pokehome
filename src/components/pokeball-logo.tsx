@@ -1,3 +1,4 @@
+import type { SVGProps } from 'react';
 import { cn } from '@/lib/utils';
 
 /** App mark — simple Poké Ball + wordmark. */
@@ -21,7 +22,7 @@ export function PokeballLogo({
   );
 }
 
-export function PokeballIcon({ className }: { className?: string }) {
+export function PokeballIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 32 32"
@@ -29,12 +30,13 @@ export function PokeballIcon({ className }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       className={cn('shrink-0', className)}
       aria-hidden
+      {...props}
     >
-      <circle cx="16" cy="16" r="15" className="fill-background stroke-foreground" strokeWidth="2" />
-      <path d="M2 16a14 14 0 0 1 28 0" className="fill-destructive" />
-      <path d="M2 16h28" className="stroke-foreground" strokeWidth="2" />
-      <circle cx="16" cy="16" r="5" className="fill-background stroke-foreground" strokeWidth="2" />
-      <circle cx="16" cy="16" r="2.25" className="fill-foreground" />
+      <circle cx="16" cy="16" r="15" fill="#fff" stroke="#111" strokeWidth="2" />
+      <path d="M2 16a14 14 0 0 1 28 0" fill="#ee1515" />
+      <path d="M2 16h28" stroke="#111" strokeWidth="2" />
+      <circle cx="16" cy="16" r="5" fill="#fff" stroke="#111" strokeWidth="2" />
+      <circle cx="16" cy="16" r="2.25" fill="#111" />
     </svg>
   );
 }

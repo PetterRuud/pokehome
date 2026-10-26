@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { GameLogo } from '@/components/game-logo';
-import { PokeballLogo } from '@/components/pokeball-logo';
+import { PokeballIcon, PokeballLogo } from '@/components/pokeball-logo';
 import { useDexStore } from '@/lib/store';
 import { countFlag, countGameProgress, countProgress } from '@/lib/dex-stats';
 import { categorizeGifts } from '@/lib/gifts';
@@ -92,7 +92,7 @@ function HomePage() {
             <Badge variant="outline">{total - home} missing</Badge>
             {caughtCount > 0 ? (
               <Badge variant="outline">
-                <CheckIcon data-icon="inline-start" />
+                <PokeballIcon data-icon="inline-start" className="size-3.5" />
                 {caughtCount} caught
               </Badge>
             ) : null}
