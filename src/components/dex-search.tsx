@@ -45,7 +45,7 @@ export function DexSearchBar({
           }}
           placeholder={placeholder}
           aria-label="Search Pokémon"
-          className="h-8 pr-8 pl-7 text-sm"
+          className="pr-8 pl-7 text-sm"
         />
         {hasQuery ? (
           <button

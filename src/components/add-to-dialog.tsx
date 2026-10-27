@@ -299,7 +299,7 @@ export function AddToDialogButton({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<Button size="sm" disabled={disabled || selectedCount === 0} />}>Add</DialogTrigger>
+      <DialogTrigger render={<Button disabled={disabled || selectedCount === 0} />}>Add</DialogTrigger>
       <DialogContent className="sm:max-w-md" showCloseButton>
         <DialogHeader>
           <DialogTitle>Add to living dex</DialogTitle>
@@ -456,7 +456,7 @@ export function GameAddDialogButton({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<Button size="sm" disabled={disabled || selectedCount === 0} />}>Add</DialogTrigger>
+      <DialogTrigger render={<Button disabled={disabled || selectedCount === 0} />}>Add</DialogTrigger>
       <DialogContent className="sm:max-w-md" showCloseButton>
         <DialogHeader>
           <DialogTitle>Add to {gameName}</DialogTitle>
