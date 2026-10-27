@@ -400,7 +400,10 @@ function DexPage() {
                     {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
                   </span>
                   {complete ? (
-                    <Badge variant="secondary">
+                    <Badge
+                      variant="secondary"
+                      className="border-transparent bg-emerald-600/15 text-emerald-600"
+                    >
                       <CheckIcon data-icon="inline-start" aria-hidden />
                       Complete
                     </Badge>
@@ -880,7 +883,11 @@ function NationalBoxHeader({
         <Badge variant="outline">
           {caughtCount}/{box.slots.length}
         </Badge>
-        {complete ? <Badge variant="secondary">Done</Badge> : null}
+        {complete ? (
+          <Badge variant="secondary" className="border-transparent bg-emerald-600/15 text-emerald-600">
+            Done
+          </Badge>
+        ) : null}
       </div>
 
       <DropdownMenu>

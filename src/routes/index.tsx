@@ -158,7 +158,10 @@ function HomePage() {
                         <span className="truncate text-sm font-medium">{game.name}</span>
                         {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
                         {complete ? (
-                          <Badge variant="secondary">
+                          <Badge
+                            variant="secondary"
+                            className="border-transparent bg-emerald-600/15 text-emerald-600"
+                          >
                             <CheckIcon data-icon="inline-start" aria-hidden />
                             Done
                           </Badge>
