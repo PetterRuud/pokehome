@@ -168,7 +168,6 @@ function FormViewMenu({
           <Button
             type="button"
             variant="outline"
-            size="sm"
             className={className}
             aria-label={`Form view: ${current.label}`}
           />
@@ -226,7 +225,6 @@ function GameTrackMenu({
           <Button
             type="button"
             variant="outline"
-            size="sm"
             className={className}
             aria-label={`Track: ${current.label}`}
           />
@@ -283,7 +281,6 @@ function GameFilterMenu({
           <Button
             type="button"
             variant="outline"
-            size="sm"
             className={className}
             aria-label={`Filter: ${current.label}`}
           />
@@ -678,7 +675,7 @@ function NationalDexView() {
           disabled={selectedCount === 0}
           onAdd={addSelected}
         />
-        <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
+        <Button variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
         <DexSearchBar
@@ -1115,7 +1112,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
               gameName={game.short || game.name}
               onAdd={addSelected}
             />
-            <Button size="sm" variant="outline" disabled={selectedCount === 0} onClick={removeSelected}>
+            <Button variant="outline" disabled={selectedCount === 0} onClick={removeSelected}>
               Clear
             </Button>
           </>
@@ -1135,7 +1132,6 @@ function GameDexView({ gameId }: { gameId: GameId }) {
 
         <ToggleGroup
           variant="outline"
-          size="sm"
           spacing={0}
           value={[layout]}
           onValueChange={(next) => {
