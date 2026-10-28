@@ -211,12 +211,13 @@ const GAMES = [
     kind: 'special',
     logo: 'go',
     pokedexSlugs: ['national'],
-    // Mark unreleased species via pogoapi.net released list (still listed in the dex).
+    // Mark unreleased species via curated list (still listed in the dex).
+    // pogoapi.net/released_pokemon.json lags real debuts — see pogo-unavailable.json.
     source: 'go',
   },
 ];
 
-const POGO_RELEASED_URL = 'https://pogoapi.net/api/v1/released_pokemon.json';
+const pogoUnavailablePath = join(__dirname, '../src/data/pogo-unavailable.json');
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -351,13 +352,11 @@ async function loadDex(slug) {
     .sort((a, b) => a.entryNumber - b.entryNumber || a.id - b.id);
 }
 
-/** @returns {Promise<Set<number>>} */
-async function loadGoReleasedIds() {
-  const data = await fetchJson(POGO_RELEASED_URL);
+/** @returns {Set<number>} National dex ids not yet obtainable in Pokémon GO. */
+function loadGoUnavailableIds() {
+  const data = JSON.parse(readFileSync(pogoUnavailablePath, 'utf8'));
   return new Set(
-    Object.keys(data)
-      .map(Number)
-      .filter((n) => Number.isFinite(n) && n > 0),
+    (data.ids ?? []).map(Number).filter((n) => Number.isFinite(n) && n > 0),
   );
 }
 
@@ -414,10 +413,10 @@ async function main() {
         if (regionalHits) console.log(`  (${regionalHits} regional forms)`);
 
         if (game.source === 'go') {
-          const released = await loadGoReleasedIds();
+          const unavailableIds = loadGoUnavailableIds();
           let unavailable = 0;
           slots = slots.map((slot) => {
-            if (released.has(slot.id)) return slot;
+            if (!unavailableIds.has(slot.id)) return slot;
             unavailable += 1;
             return { ...slot, available: false };
           });

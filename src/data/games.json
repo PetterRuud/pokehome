@@ -33611,8 +33611,7 @@
               "name": "Minior",
               "entryNumber": 774,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/774.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/774.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/774.png"
             },
             {
               "id": 775,
@@ -33648,8 +33647,7 @@
               "name": "Mimikyu",
               "entryNumber": 778,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/778.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/778.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/778.png"
             },
             {
               "id": 779,
@@ -33918,8 +33916,7 @@
               "name": "Zeraora",
               "entryNumber": 807,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/807.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/807.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/807.png"
             },
             {
               "id": 808,
@@ -34079,8 +34076,7 @@
               "name": "Blipbug",
               "entryNumber": 824,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/824.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/824.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/824.png"
             },
             {
               "id": 825,
@@ -34089,8 +34085,7 @@
               "name": "Dottler",
               "entryNumber": 825,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/825.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/825.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/825.png"
             },
             {
               "id": 826,
@@ -34099,8 +34094,7 @@
               "name": "Orbeetle",
               "entryNumber": 826,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/826.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/826.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/826.png"
             },
             {
               "id": 827,
@@ -34262,8 +34256,7 @@
               "name": "Silicobra",
               "entryNumber": 843,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/843.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/843.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/843.png"
             },
             {
               "id": 844,
@@ -34272,8 +34265,7 @@
               "name": "Sandaconda",
               "entryNumber": 844,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/844.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/844.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/844.png"
             },
             {
               "id": 845,
@@ -34291,8 +34283,7 @@
               "name": "Arrokuda",
               "entryNumber": 846,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/846.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/846.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/846.png"
             },
             {
               "id": 847,
@@ -34301,8 +34292,7 @@
               "name": "Barraskewda",
               "entryNumber": 847,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/847.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/847.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/847.png"
             },
             {
               "id": 848,
@@ -34311,8 +34301,7 @@
               "name": "Toxel",
               "entryNumber": 848,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/848.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/848.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/848.png"
             },
             {
               "id": 849,
@@ -34321,8 +34310,7 @@
               "name": "Toxtricity",
               "entryNumber": 849,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/849.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/849.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/849.png"
             },
             {
               "id": 850,
@@ -34367,8 +34355,7 @@
               "name": "Sinistea",
               "entryNumber": 854,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/854.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/854.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/854.png"
             },
             {
               "id": 855,
@@ -35096,8 +35083,7 @@
               "name": "Squawkabilly",
               "entryNumber": 931,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/931.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/931.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/931.png"
             },
             {
               "id": 932,
@@ -35196,8 +35182,7 @@
               "name": "Maschiff",
               "entryNumber": 942,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/942.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/942.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/942.png"
             },
             {
               "id": 943,
@@ -35206,8 +35191,7 @@
               "name": "Mabosstiff",
               "entryNumber": 943,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/943.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/943.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/943.png"
             },
             {
               "id": 944,
@@ -35234,8 +35218,7 @@
               "name": "Bramblin",
               "entryNumber": 946,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/946.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/946.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/946.png"
             },
             {
               "id": 947,
@@ -35244,8 +35227,7 @@
               "name": "Brambleghast",
               "entryNumber": 947,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/947.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/947.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/947.png"
             },
             {
               "id": 948,
@@ -35321,8 +35303,7 @@
               "name": "Flittle",
               "entryNumber": 955,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/955.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/955.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/955.png"
             },
             {
               "id": 956,
@@ -35331,8 +35312,7 @@
               "name": "Espathra",
               "entryNumber": 956,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/956.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/956.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/956.png"
             },
             {
               "id": 957,
@@ -35450,8 +35430,7 @@
               "name": "Orthworm",
               "entryNumber": 968,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/968.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/968.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/968.png"
             },
             {
               "id": 969,
@@ -35496,8 +35475,7 @@
               "name": "Flamigo",
               "entryNumber": 973,
               "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/973.png",
-              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/973.png",
-              "available": false
+              "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/973.png"
             },
             {
               "id": 974,
