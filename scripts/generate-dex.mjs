@@ -67,7 +67,8 @@ async function main() {
       {
         version: 2,
         generatedAt: new Date().toISOString(),
-        total: entries.length + formSlotCount,
+        // National progress uses species only; form boxes are extras.
+        total: entries.length,
         speciesTotal: entries.length,
         formSlotCount,
         boxSize: BOX_SIZE,

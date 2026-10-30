@@ -22,6 +22,11 @@ export type DexBox = {
   title: string;
   rangeLabel: string;
   slots: DexSlot[];
+  /**
+   * `forms` = special living-dex boxes (Unown, Vivillon, Alcremie, …).
+   * They are shown in the national dex but excluded from national progress.
+   */
+  kind?: 'species' | 'forms';
 };
 
 export type GameId = string;

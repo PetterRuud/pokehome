@@ -6,7 +6,7 @@ import {
   megaSpeciesCount,
   regionalSpeciesCount,
 } from '@/lib/form-variants';
-import { toPercent } from '@/lib/dex-stats';
+import { speciesSlots, toPercent } from '@/lib/dex-stats';
 import type { DexBox, DexSlot, FormView } from '@/lib/types';
 
 export type FormDimension = 'shiny' | 'alpha' | 'mega' | 'gmax' | 'regional';
@@ -26,14 +26,8 @@ export type FormHole = {
 };
 
 function availableSlots(boxes: DexBox[]): DexSlot[] {
-  const out: DexSlot[] = [];
-  for (const box of boxes) {
-    for (const slot of box.slots) {
-      if (slot.available === false) continue;
-      out.push(slot);
-    }
-  }
-  return out;
+  // National form stats ignore special form boxes (Unown / Vivillon / …).
+  return speciesSlots(boxes);
 }
 
 function countMarked(

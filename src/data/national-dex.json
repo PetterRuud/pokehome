@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-30T12:47:01.256Z",
-  "total": 1161,
+  "generatedAt": "2026-10-30T21:20:09.800Z",
+  "total": 1025,
   "speciesTotal": 1025,
   "formSlotCount": 136,
   "boxSize": 30,
@@ -251,7 +251,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/30.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/30.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-2",
@@ -498,7 +499,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/60.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/60.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-3",
@@ -745,7 +747,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/90.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/90.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-4",
@@ -992,7 +995,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/120.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/120.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-5",
@@ -1239,7 +1243,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/150.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-6",
@@ -1486,7 +1491,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/180.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/180.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-7",
@@ -1733,7 +1739,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/210.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/210.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-8",
@@ -1980,7 +1987,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/240.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/240.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-9",
@@ -2227,7 +2235,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/270.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/270.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-10",
@@ -2474,7 +2483,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/300.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-11",
@@ -2721,7 +2731,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/330.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/330.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-12",
@@ -2968,7 +2979,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/360.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/360.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-13",
@@ -3215,7 +3227,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/390.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/390.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-14",
@@ -3462,7 +3475,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/420.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/420.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-15",
@@ -3709,7 +3723,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/450.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-16",
@@ -3956,7 +3971,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/480.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/480.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-17",
@@ -4203,7 +4219,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/510.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/510.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-18",
@@ -4450,7 +4467,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/540.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/540.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-19",
@@ -4697,7 +4715,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/570.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/570.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-20",
@@ -4944,7 +4963,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/600.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/600.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-21",
@@ -5191,7 +5211,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/630.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/630.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-22",
@@ -5438,7 +5459,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/660.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/660.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-23",
@@ -5685,7 +5707,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/690.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/690.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-24",
@@ -5932,7 +5955,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/720.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/720.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-25",
@@ -6179,7 +6203,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/750.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/750.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-26",
@@ -6426,7 +6451,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/780.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/780.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-27",
@@ -6673,7 +6699,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/810.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/810.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-28",
@@ -6920,7 +6947,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/840.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/840.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-29",
@@ -7167,7 +7195,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/870.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/870.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-30",
@@ -7414,7 +7443,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/900.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/900.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-31",
@@ -7661,7 +7691,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/930.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/930.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-32",
@@ -7908,7 +7939,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/960.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/960.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-33",
@@ -8155,7 +8187,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/990.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/990.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-34",
@@ -8402,7 +8435,8 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1020.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1020.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-35",
@@ -8449,12 +8483,14 @@
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1025.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1025.png"
         }
-      ]
+      ],
+      "kind": "species"
     },
     {
       "id": "box-unown",
       "title": "Unown Dex",
       "rangeLabel": "Unown A–Z",
+      "kind": "forms",
       "slots": [
         {
           "id": 201,
@@ -8742,6 +8778,7 @@
       "id": "box-trims-flowers",
       "title": "Trims & Flowers",
       "rangeLabel": "Furfrou · Flabébé line",
+      "kind": "forms",
       "slots": [
         {
           "id": 676,
@@ -8999,6 +9036,7 @@
       "id": "box-vivillon",
       "title": "Vivillon Patt.",
       "rangeLabel": "Vivillon patterns",
+      "kind": "forms",
       "slots": [
         {
           "id": 666,
@@ -9206,6 +9244,7 @@
       "id": "box-alcremie-1",
       "title": "Alcremie 1",
       "rangeLabel": "Alcremie (1/3)",
+      "kind": "forms",
       "slots": [
         {
           "id": 869,
@@ -9493,6 +9532,7 @@
       "id": "box-alcremie-2",
       "title": "Alcremie 2",
       "rangeLabel": "Alcremie (2/3)",
+      "kind": "forms",
       "slots": [
         {
           "id": 869,
@@ -9780,6 +9820,7 @@
       "id": "box-alcremie-3",
       "title": "Alcremie 3",
       "rangeLabel": "Alcremie (3/3)",
+      "kind": "forms",
       "slots": [
         {
           "id": 869,

@@ -6,11 +6,14 @@ import { GiftsCard } from '@/components/home/gifts-card';
 import { NationalChart } from '@/components/home/national-chart';
 import { PokeballLogo } from '@/components/pokeball-logo';
 import { useDexStore } from '@/lib/store';
-import { countFlag, countGameProgress, countProgress } from '@/lib/dex-stats';
+import { countGameProgress, countProgress, countSpeciesFlag } from '@/lib/dex-stats';
 import { categorizeGifts } from '@/lib/gifts';
 import { getGames } from '@/lib/games';
 import { loadGiftFeed } from '@/server/gifts';
+import type { DexBox } from '@/lib/types';
 import nationalDex from '@/data/national-dex.json';
+
+const nationalBoxes = nationalDex.boxes as DexBox[];
 
 export const Route = createFileRoute('/')({
   loader: () => loadGiftFeed(),
@@ -29,8 +32,8 @@ function HomePage() {
   const homeByGame = useDexStore((s) => s.homeByGame);
   const claimedGiftIds = useDexStore((s) => s.claimedGiftIds);
 
-  const { total, caught: home, percent } = countProgress(nationalDex.boxes, homeByKey);
-  const caughtCount = countFlag(caughtByKey);
+  const { total, caught: home, percent } = countProgress(nationalBoxes, homeByKey);
+  const caughtCount = countSpeciesFlag(caughtByKey);
 
   const gameStats = useMemo(() => {
     return getGames().map((game) => {
@@ -75,7 +78,7 @@ function HomePage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <NationalChart home={home} total={total} percent={percent} caughtCount={caughtCount} />
-        <FormsPanel boxes={nationalDex.boxes} flags={formFlags} />
+        <FormsPanel boxes={nationalBoxes} flags={formFlags} />
       </div>
 
       <GamesChart gameStats={gameStats} gamesComplete={gamesComplete} />

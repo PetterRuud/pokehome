@@ -48,7 +48,7 @@ import { applyBoxLayout } from '@/lib/box-layout';
 import { cardSizeConfig, gridColumnCount, resolveCardSize } from '@/lib/card-size';
 import { filterSlotsByQuery } from '@/lib/dex-search';
 import { useDexStore } from '@/lib/store';
-import { countGameProgress, countProgress, toPercent } from '@/lib/dex-stats';
+import { countGameProgress, countProgress } from '@/lib/dex-stats';
 import { filterBoxesForFormView, gmaxSpeciesCount, megaSpeciesCount, regionalSpeciesCount } from '@/lib/form-variants';
 import { getGame, getGames } from '@/lib/games';
 import nationalDex from '@/data/national-dex.json';
@@ -489,19 +489,11 @@ function NationalDexView() {
   const progressByKey = flagByKey ?? caughtByKey;
 
   const formProgress = useMemo(() => {
+    // Special form boxes are excluded from national progress (species living dex only).
     if (formView === 'default') {
       return countProgress(boxes, caughtByKey);
     }
-    if (formView === 'mega' || formView === 'gmax' || formView === 'regional') {
-      return countProgress(boxes, flagByKey ?? {});
-    }
-    const flagged = Object.values(flagByKey ?? {}).filter(Boolean).length;
-    const total = nationalDex.total;
-    return {
-      total,
-      caught: flagged,
-      percent: toPercent(flagged, total),
-    };
+    return countProgress(boxes, flagByKey ?? {});
   }, [formView, boxes, caughtByKey, flagByKey]);
 
   const trackLabel =

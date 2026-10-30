@@ -4,7 +4,7 @@ import nationalDex from '@/data/national-dex.json';
 import { countGameProgress, countProgress } from '@/lib/dex-stats';
 import { getGame } from '@/lib/games';
 import { useDexStore } from '@/lib/store';
-import type { GameId } from '@/lib/types';
+import type { DexBox, GameId } from '@/lib/types';
 
 export type ShellProgress = {
   caught: number;
@@ -30,6 +30,6 @@ export function useShellProgress(): ShellProgress {
         return countGameProgress(game.boxes, homeByGame[game.id]);
       }
     }
-    return countProgress(nationalDex.boxes, homeByKey);
+    return countProgress(nationalDex.boxes as DexBox[], homeByKey);
   }, [pathname, search.tab, search.game, homeByKey, homeByGame]);
 }

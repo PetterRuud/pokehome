@@ -305,6 +305,7 @@ export function buildFormBoxes(startBoxIndex) {
       id: `box-${g.idSuffix}`,
       title: g.title,
       rangeLabel: g.rangeLabel,
+      kind: 'forms',
       slots: g.slots,
     };
     index += 1;
