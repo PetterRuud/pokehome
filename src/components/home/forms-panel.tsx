@@ -3,17 +3,10 @@ import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import { ExpandIcon, EyeIcon, GlobeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
-import { PokemonSprite } from '@/components/pokemon-sprite';
 import { Badge } from '@/components/ui/badge';
 import { useDexStore } from '@/lib/store';
-import {
-  biggestHolesAcross,
-  formProgressList,
-  formViewForDimension,
-  type FormDimension,
-  type FormHole,
-} from '@/lib/form-stats';
-import type { DexBox, SpriteStyle } from '@/lib/types';
+import { formProgressList, formViewForDimension, type FormDimension } from '@/lib/form-stats';
+import type { DexBox } from '@/lib/types';
 
 const chartConfig = {
   percent: {
@@ -40,7 +33,6 @@ const DIMENSION_CLASS: Record<FormDimension, string> = {
 
 type FormsPanelProps = {
   boxes: DexBox[];
-  spriteStyle: SpriteStyle;
   flags: {
     shinyByKey: Record<string, boolean>;
     alphaByKey: Record<string, boolean>;
@@ -50,35 +42,9 @@ type FormsPanelProps = {
   };
 };
 
-function HoleChip({ hole, spriteStyle }: { hole: FormHole; spriteStyle: SpriteStyle }) {
-  const setPref = useDexStore((s) => s.setPref);
-  const Icon = DIMENSION_ICON[hole.dimension];
-
-  return (
-    <Link
-      to="/pokemon/$id"
-      params={{ id: String(hole.slot.id) }}
-      onClick={() => setPref('formView', formViewForDimension(hole.dimension))}
-      className="flex items-center gap-2 rounded-lg border border-border px-2 py-1.5 transition hover:border-primary/40 hover:bg-muted/40"
-    >
-      <PokemonSprite
-        id={hole.slot.id}
-        style={spriteStyle}
-        variant={hole.dimension === 'shiny' ? 'shiny' : 'default'}
-        width={36}
-        height={36}
-        className="size-9"
-      />
-      <span className="min-w-0 flex-1 truncate text-xs font-medium">{hole.slot.name}</span>
-      <Icon className={`size-3.5 shrink-0 ${DIMENSION_CLASS[hole.dimension]}`} aria-hidden />
-    </Link>
-  );
-}
-
-export function FormsPanel({ boxes, spriteStyle, flags }: FormsPanelProps) {
+export function FormsPanel({ boxes, flags }: FormsPanelProps) {
   const setPref = useDexStore((s) => s.setPref);
   const progress = formProgressList(boxes, flags);
-  const holes = biggestHolesAcross(boxes, flags, 10);
   const chartData = progress.map((row) => ({
     dimension: row.label,
     percent: row.percent,
@@ -139,19 +105,6 @@ export function FormsPanel({ boxes, spriteStyle, flags }: FormsPanelProps) {
             );
           })}
         </div>
-
-        {holes.length > 0 ? (
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium tracking-wide uppercase text-muted-foreground">Biggest holes</h3>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {holes.map((hole) => (
-                <HoleChip key={`${hole.dimension}-${hole.slot.key}`} hole={hole} spriteStyle={spriteStyle} />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">All tracked form dimensions are complete — nice work.</p>
-        )}
       </CardContent>
     </Card>
   );

@@ -1,7 +1,9 @@
 {
-  "version": 1,
-  "generatedAt": "2026-10-24T13:45:02.372Z",
-  "total": 1025,
+  "version": 2,
+  "generatedAt": "2026-10-30T12:47:01.256Z",
+  "total": 1161,
+  "speciesTotal": 1025,
+  "formSlotCount": 136,
   "boxSize": 30,
   "boxes": [
     {
@@ -8446,6 +8448,1408 @@
           "name": "Pecharunt",
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1025.png",
           "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1025.png"
+        }
+      ]
+    },
+    {
+      "id": "box-unown",
+      "title": "Unown Dex",
+      "rangeLabel": "Unown A–Z",
+      "slots": [
+        {
+          "id": 201,
+          "key": "f201",
+          "slug": "unown-a",
+          "name": "Unown A",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201.png",
+          "formId": 201,
+          "formSlug": "unown-a"
+        },
+        {
+          "id": 201,
+          "key": "f10001",
+          "slug": "unown-b",
+          "name": "Unown B",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-b.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-b.png",
+          "formId": 10001,
+          "formSlug": "unown-b"
+        },
+        {
+          "id": 201,
+          "key": "f10002",
+          "slug": "unown-c",
+          "name": "Unown C",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-c.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-c.png",
+          "formId": 10002,
+          "formSlug": "unown-c"
+        },
+        {
+          "id": 201,
+          "key": "f10003",
+          "slug": "unown-d",
+          "name": "Unown D",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-d.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-d.png",
+          "formId": 10003,
+          "formSlug": "unown-d"
+        },
+        {
+          "id": 201,
+          "key": "f10004",
+          "slug": "unown-e",
+          "name": "Unown E",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-e.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-e.png",
+          "formId": 10004,
+          "formSlug": "unown-e"
+        },
+        {
+          "id": 201,
+          "key": "f10005",
+          "slug": "unown-f",
+          "name": "Unown F",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-f.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-f.png",
+          "formId": 10005,
+          "formSlug": "unown-f"
+        },
+        {
+          "id": 201,
+          "key": "f10006",
+          "slug": "unown-g",
+          "name": "Unown G",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-g.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-g.png",
+          "formId": 10006,
+          "formSlug": "unown-g"
+        },
+        {
+          "id": 201,
+          "key": "f10007",
+          "slug": "unown-h",
+          "name": "Unown H",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-h.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-h.png",
+          "formId": 10007,
+          "formSlug": "unown-h"
+        },
+        {
+          "id": 201,
+          "key": "f10008",
+          "slug": "unown-i",
+          "name": "Unown I",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-i.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-i.png",
+          "formId": 10008,
+          "formSlug": "unown-i"
+        },
+        {
+          "id": 201,
+          "key": "f10009",
+          "slug": "unown-j",
+          "name": "Unown J",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-j.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-j.png",
+          "formId": 10009,
+          "formSlug": "unown-j"
+        },
+        {
+          "id": 201,
+          "key": "f10010",
+          "slug": "unown-k",
+          "name": "Unown K",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-k.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-k.png",
+          "formId": 10010,
+          "formSlug": "unown-k"
+        },
+        {
+          "id": 201,
+          "key": "f10011",
+          "slug": "unown-l",
+          "name": "Unown L",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-l.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-l.png",
+          "formId": 10011,
+          "formSlug": "unown-l"
+        },
+        {
+          "id": 201,
+          "key": "f10012",
+          "slug": "unown-m",
+          "name": "Unown M",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-m.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-m.png",
+          "formId": 10012,
+          "formSlug": "unown-m"
+        },
+        {
+          "id": 201,
+          "key": "f10013",
+          "slug": "unown-n",
+          "name": "Unown N",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-n.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-n.png",
+          "formId": 10013,
+          "formSlug": "unown-n"
+        },
+        {
+          "id": 201,
+          "key": "f10014",
+          "slug": "unown-o",
+          "name": "Unown O",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-o.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-o.png",
+          "formId": 10014,
+          "formSlug": "unown-o"
+        },
+        {
+          "id": 201,
+          "key": "f10015",
+          "slug": "unown-p",
+          "name": "Unown P",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-p.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-p.png",
+          "formId": 10015,
+          "formSlug": "unown-p"
+        },
+        {
+          "id": 201,
+          "key": "f10016",
+          "slug": "unown-q",
+          "name": "Unown Q",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-q.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-q.png",
+          "formId": 10016,
+          "formSlug": "unown-q"
+        },
+        {
+          "id": 201,
+          "key": "f10017",
+          "slug": "unown-r",
+          "name": "Unown R",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-r.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-r.png",
+          "formId": 10017,
+          "formSlug": "unown-r"
+        },
+        {
+          "id": 201,
+          "key": "f10018",
+          "slug": "unown-s",
+          "name": "Unown S",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-s.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-s.png",
+          "formId": 10018,
+          "formSlug": "unown-s"
+        },
+        {
+          "id": 201,
+          "key": "f10019",
+          "slug": "unown-t",
+          "name": "Unown T",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-t.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-t.png",
+          "formId": 10019,
+          "formSlug": "unown-t"
+        },
+        {
+          "id": 201,
+          "key": "f10020",
+          "slug": "unown-u",
+          "name": "Unown U",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-u.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-u.png",
+          "formId": 10020,
+          "formSlug": "unown-u"
+        },
+        {
+          "id": 201,
+          "key": "f10021",
+          "slug": "unown-v",
+          "name": "Unown V",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-v.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-v.png",
+          "formId": 10021,
+          "formSlug": "unown-v"
+        },
+        {
+          "id": 201,
+          "key": "f10022",
+          "slug": "unown-w",
+          "name": "Unown W",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-w.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-w.png",
+          "formId": 10022,
+          "formSlug": "unown-w"
+        },
+        {
+          "id": 201,
+          "key": "f10023",
+          "slug": "unown-x",
+          "name": "Unown X",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-x.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-x.png",
+          "formId": 10023,
+          "formSlug": "unown-x"
+        },
+        {
+          "id": 201,
+          "key": "f10024",
+          "slug": "unown-y",
+          "name": "Unown Y",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-y.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-y.png",
+          "formId": 10024,
+          "formSlug": "unown-y"
+        },
+        {
+          "id": 201,
+          "key": "f10025",
+          "slug": "unown-z",
+          "name": "Unown Z",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-z.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-z.png",
+          "formId": 10025,
+          "formSlug": "unown-z"
+        },
+        {
+          "id": 201,
+          "key": "f10026",
+          "slug": "unown-exclamation",
+          "name": "Unown !",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-exclamation.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-exclamation.png",
+          "formId": 10026,
+          "formSlug": "unown-exclamation"
+        },
+        {
+          "id": 201,
+          "key": "f10027",
+          "slug": "unown-question",
+          "name": "Unown ?",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-question.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/201-question.png",
+          "formId": 10027,
+          "formSlug": "unown-question"
+        }
+      ]
+    },
+    {
+      "id": "box-trims-flowers",
+      "title": "Trims & Flowers",
+      "rangeLabel": "Furfrou · Flabébé line",
+      "slots": [
+        {
+          "id": 676,
+          "key": "f10115",
+          "slug": "furfrou-heart",
+          "name": "Heart Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-heart.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-heart.png",
+          "formId": 10115,
+          "formSlug": "furfrou-heart"
+        },
+        {
+          "id": 676,
+          "key": "f10116",
+          "slug": "furfrou-star",
+          "name": "Star Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-star.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-star.png",
+          "formId": 10116,
+          "formSlug": "furfrou-star"
+        },
+        {
+          "id": 676,
+          "key": "f10117",
+          "slug": "furfrou-diamond",
+          "name": "Diamond Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-diamond.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-diamond.png",
+          "formId": 10117,
+          "formSlug": "furfrou-diamond"
+        },
+        {
+          "id": 676,
+          "key": "f10118",
+          "slug": "furfrou-debutante",
+          "name": "Debutante Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-debutante.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-debutante.png",
+          "formId": 10118,
+          "formSlug": "furfrou-debutante"
+        },
+        {
+          "id": 676,
+          "key": "f10119",
+          "slug": "furfrou-matron",
+          "name": "Matron Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-matron.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-matron.png",
+          "formId": 10119,
+          "formSlug": "furfrou-matron"
+        },
+        {
+          "id": 676,
+          "key": "f10120",
+          "slug": "furfrou-dandy",
+          "name": "Dandy Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-dandy.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-dandy.png",
+          "formId": 10120,
+          "formSlug": "furfrou-dandy"
+        },
+        {
+          "id": 676,
+          "key": "f10121",
+          "slug": "furfrou-la-reine",
+          "name": "La Reine Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-la-reine.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-la-reine.png",
+          "formId": 10121,
+          "formSlug": "furfrou-la-reine"
+        },
+        {
+          "id": 676,
+          "key": "f10122",
+          "slug": "furfrou-kabuki",
+          "name": "Kabuki Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-kabuki.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-kabuki.png",
+          "formId": 10122,
+          "formSlug": "furfrou-kabuki"
+        },
+        {
+          "id": 676,
+          "key": "f10123",
+          "slug": "furfrou-pharaoh",
+          "name": "Pharaoh Furfrou",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/676-pharaoh.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/676-pharaoh.png",
+          "formId": 10123,
+          "formSlug": "furfrou-pharaoh"
+        },
+        {
+          "id": 669,
+          "key": "f669",
+          "slug": "flabebe-red",
+          "name": "Red Flabébé",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/669-red.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/669-red.png",
+          "formId": 669,
+          "formSlug": "flabebe-red"
+        },
+        {
+          "id": 669,
+          "key": "f10103",
+          "slug": "flabebe-yellow",
+          "name": "Yellow Flabébé",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/669-yellow.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/669-yellow.png",
+          "formId": 10103,
+          "formSlug": "flabebe-yellow"
+        },
+        {
+          "id": 669,
+          "key": "f10104",
+          "slug": "flabebe-orange",
+          "name": "Orange Flabébé",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/669-orange.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/669-orange.png",
+          "formId": 10104,
+          "formSlug": "flabebe-orange"
+        },
+        {
+          "id": 669,
+          "key": "f10105",
+          "slug": "flabebe-blue",
+          "name": "Blue Flabébé",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/669-blue.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/669-blue.png",
+          "formId": 10105,
+          "formSlug": "flabebe-blue"
+        },
+        {
+          "id": 669,
+          "key": "f10106",
+          "slug": "flabebe-white",
+          "name": "White Flabébé",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/669-white.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/669-white.png",
+          "formId": 10106,
+          "formSlug": "flabebe-white"
+        },
+        {
+          "id": 670,
+          "key": "f670",
+          "slug": "floette-red",
+          "name": "Red Floette",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670-red.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670-red.png",
+          "formId": 670,
+          "formSlug": "floette-red"
+        },
+        {
+          "id": 670,
+          "key": "f10107",
+          "slug": "floette-yellow",
+          "name": "Yellow Floette",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670-yellow.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670-yellow.png",
+          "formId": 10107,
+          "formSlug": "floette-yellow"
+        },
+        {
+          "id": 670,
+          "key": "f10108",
+          "slug": "floette-orange",
+          "name": "Orange Floette",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670-orange.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670-orange.png",
+          "formId": 10108,
+          "formSlug": "floette-orange"
+        },
+        {
+          "id": 670,
+          "key": "f10109",
+          "slug": "floette-blue",
+          "name": "Blue Floette",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670-blue.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670-blue.png",
+          "formId": 10109,
+          "formSlug": "floette-blue"
+        },
+        {
+          "id": 670,
+          "key": "f10110",
+          "slug": "floette-white",
+          "name": "White Floette",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670-white.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670-white.png",
+          "formId": 10110,
+          "formSlug": "floette-white"
+        },
+        {
+          "id": 670,
+          "key": "f10163",
+          "slug": "floette-eternal",
+          "name": "Eternal Floette",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10061.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10061.png",
+          "formId": 10163,
+          "formSlug": "floette-eternal"
+        },
+        {
+          "id": 671,
+          "key": "f671",
+          "slug": "florges-red",
+          "name": "Red Florges",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/671-red.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/671-red.png",
+          "formId": 671,
+          "formSlug": "florges-red"
+        },
+        {
+          "id": 671,
+          "key": "f10111",
+          "slug": "florges-yellow",
+          "name": "Yellow Florges",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/671-yellow.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/671-yellow.png",
+          "formId": 10111,
+          "formSlug": "florges-yellow"
+        },
+        {
+          "id": 671,
+          "key": "f10112",
+          "slug": "florges-orange",
+          "name": "Orange Florges",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/671-orange.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/671-orange.png",
+          "formId": 10112,
+          "formSlug": "florges-orange"
+        },
+        {
+          "id": 671,
+          "key": "f10113",
+          "slug": "florges-blue",
+          "name": "Blue Florges",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/671-blue.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/671-blue.png",
+          "formId": 10113,
+          "formSlug": "florges-blue"
+        },
+        {
+          "id": 671,
+          "key": "f10114",
+          "slug": "florges-white",
+          "name": "White Florges",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/671-white.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/671-white.png",
+          "formId": 10114,
+          "formSlug": "florges-white"
+        }
+      ]
+    },
+    {
+      "id": "box-vivillon",
+      "title": "Vivillon Patt.",
+      "rangeLabel": "Vivillon patterns",
+      "slots": [
+        {
+          "id": 666,
+          "key": "f666",
+          "slug": "vivillon-meadow",
+          "name": "Meadow Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666.png",
+          "formId": 666,
+          "formSlug": "vivillon-meadow"
+        },
+        {
+          "id": 666,
+          "key": "f10086",
+          "slug": "vivillon-icy-snow",
+          "name": "Icy Snow Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-icy-snow.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-icy-snow.png",
+          "formId": 10086,
+          "formSlug": "vivillon-icy-snow"
+        },
+        {
+          "id": 666,
+          "key": "f10087",
+          "slug": "vivillon-polar",
+          "name": "Polar Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-polar.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-polar.png",
+          "formId": 10087,
+          "formSlug": "vivillon-polar"
+        },
+        {
+          "id": 666,
+          "key": "f10088",
+          "slug": "vivillon-tundra",
+          "name": "Tundra Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-tundra.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-tundra.png",
+          "formId": 10088,
+          "formSlug": "vivillon-tundra"
+        },
+        {
+          "id": 666,
+          "key": "f10089",
+          "slug": "vivillon-continental",
+          "name": "Continental Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-continental.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-continental.png",
+          "formId": 10089,
+          "formSlug": "vivillon-continental"
+        },
+        {
+          "id": 666,
+          "key": "f10090",
+          "slug": "vivillon-garden",
+          "name": "Garden Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-garden.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-garden.png",
+          "formId": 10090,
+          "formSlug": "vivillon-garden"
+        },
+        {
+          "id": 666,
+          "key": "f10091",
+          "slug": "vivillon-elegant",
+          "name": "Elegant Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-elegant.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-elegant.png",
+          "formId": 10091,
+          "formSlug": "vivillon-elegant"
+        },
+        {
+          "id": 666,
+          "key": "f10092",
+          "slug": "vivillon-modern",
+          "name": "Modern Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-modern.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-modern.png",
+          "formId": 10092,
+          "formSlug": "vivillon-modern"
+        },
+        {
+          "id": 666,
+          "key": "f10093",
+          "slug": "vivillon-marine",
+          "name": "Marine Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-marine.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-marine.png",
+          "formId": 10093,
+          "formSlug": "vivillon-marine"
+        },
+        {
+          "id": 666,
+          "key": "f10094",
+          "slug": "vivillon-archipelago",
+          "name": "Archipelago Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-archipelago.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-archipelago.png",
+          "formId": 10094,
+          "formSlug": "vivillon-archipelago"
+        },
+        {
+          "id": 666,
+          "key": "f10095",
+          "slug": "vivillon-high-plains",
+          "name": "High Plains Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-high-plains.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-high-plains.png",
+          "formId": 10095,
+          "formSlug": "vivillon-high-plains"
+        },
+        {
+          "id": 666,
+          "key": "f10096",
+          "slug": "vivillon-sandstorm",
+          "name": "Sandstorm Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-sandstorm.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-sandstorm.png",
+          "formId": 10096,
+          "formSlug": "vivillon-sandstorm"
+        },
+        {
+          "id": 666,
+          "key": "f10097",
+          "slug": "vivillon-river",
+          "name": "River Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-river.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-river.png",
+          "formId": 10097,
+          "formSlug": "vivillon-river"
+        },
+        {
+          "id": 666,
+          "key": "f10098",
+          "slug": "vivillon-monsoon",
+          "name": "Monsoon Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-monsoon.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-monsoon.png",
+          "formId": 10098,
+          "formSlug": "vivillon-monsoon"
+        },
+        {
+          "id": 666,
+          "key": "f10099",
+          "slug": "vivillon-savanna",
+          "name": "Savanna Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-savanna.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-savanna.png",
+          "formId": 10099,
+          "formSlug": "vivillon-savanna"
+        },
+        {
+          "id": 666,
+          "key": "f10100",
+          "slug": "vivillon-sun",
+          "name": "Sun Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-sun.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-sun.png",
+          "formId": 10100,
+          "formSlug": "vivillon-sun"
+        },
+        {
+          "id": 666,
+          "key": "f10101",
+          "slug": "vivillon-ocean",
+          "name": "Ocean Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-ocean.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-ocean.png",
+          "formId": 10101,
+          "formSlug": "vivillon-ocean"
+        },
+        {
+          "id": 666,
+          "key": "f10102",
+          "slug": "vivillon-jungle",
+          "name": "Jungle Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-jungle.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-jungle.png",
+          "formId": 10102,
+          "formSlug": "vivillon-jungle"
+        },
+        {
+          "id": 666,
+          "key": "f10161",
+          "slug": "vivillon-fancy",
+          "name": "Fancy Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-fancy.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-fancy.png",
+          "formId": 10161,
+          "formSlug": "vivillon-fancy"
+        },
+        {
+          "id": 666,
+          "key": "f10162",
+          "slug": "vivillon-poke-ball",
+          "name": "Poké Ball Vivillon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/666-poke-ball.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/666-poke-ball.png",
+          "formId": 10162,
+          "formSlug": "vivillon-poke-ball"
+        }
+      ]
+    },
+    {
+      "id": "box-alcremie-1",
+      "title": "Alcremie 1",
+      "rangeLabel": "Alcremie (1/3)",
+      "slots": [
+        {
+          "id": 869,
+          "key": "f869",
+          "slug": "alcremie-vanilla-cream-strawberry-sweet",
+          "name": "Vanilla Cream · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-strawberry-sweet.png",
+          "formId": 869,
+          "formSlug": "alcremie-vanilla-cream-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10449",
+          "slug": "alcremie-vanilla-cream-berry-sweet",
+          "name": "Vanilla Cream · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-berry-sweet.png",
+          "formId": 10449,
+          "formSlug": "alcremie-vanilla-cream-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10458",
+          "slug": "alcremie-vanilla-cream-love-sweet",
+          "name": "Vanilla Cream · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-love-sweet.png",
+          "formId": 10458,
+          "formSlug": "alcremie-vanilla-cream-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10467",
+          "slug": "alcremie-vanilla-cream-star-sweet",
+          "name": "Vanilla Cream · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-star-sweet.png",
+          "formId": 10467,
+          "formSlug": "alcremie-vanilla-cream-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10476",
+          "slug": "alcremie-vanilla-cream-clover-sweet",
+          "name": "Vanilla Cream · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-clover-sweet.png",
+          "formId": 10476,
+          "formSlug": "alcremie-vanilla-cream-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10485",
+          "slug": "alcremie-vanilla-cream-flower-sweet",
+          "name": "Vanilla Cream · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-flower-sweet.png",
+          "formId": 10485,
+          "formSlug": "alcremie-vanilla-cream-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10494",
+          "slug": "alcremie-vanilla-cream-ribbon-sweet",
+          "name": "Vanilla Cream · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-vanilla-cream-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-vanilla-cream-ribbon-sweet.png",
+          "formId": 10494,
+          "formSlug": "alcremie-vanilla-cream-ribbon-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10346",
+          "slug": "alcremie-ruby-cream-strawberry-sweet",
+          "name": "Ruby Cream · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-strawberry-sweet.png",
+          "formId": 10346,
+          "formSlug": "alcremie-ruby-cream-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10450",
+          "slug": "alcremie-ruby-cream-berry-sweet",
+          "name": "Ruby Cream · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-berry-sweet.png",
+          "formId": 10450,
+          "formSlug": "alcremie-ruby-cream-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10459",
+          "slug": "alcremie-ruby-cream-love-sweet",
+          "name": "Ruby Cream · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-love-sweet.png",
+          "formId": 10459,
+          "formSlug": "alcremie-ruby-cream-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10468",
+          "slug": "alcremie-ruby-cream-star-sweet",
+          "name": "Ruby Cream · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-star-sweet.png",
+          "formId": 10468,
+          "formSlug": "alcremie-ruby-cream-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10477",
+          "slug": "alcremie-ruby-cream-clover-sweet",
+          "name": "Ruby Cream · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-clover-sweet.png",
+          "formId": 10477,
+          "formSlug": "alcremie-ruby-cream-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10486",
+          "slug": "alcremie-ruby-cream-flower-sweet",
+          "name": "Ruby Cream · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-flower-sweet.png",
+          "formId": 10486,
+          "formSlug": "alcremie-ruby-cream-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10495",
+          "slug": "alcremie-ruby-cream-ribbon-sweet",
+          "name": "Ruby Cream · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-cream-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-cream-ribbon-sweet.png",
+          "formId": 10495,
+          "formSlug": "alcremie-ruby-cream-ribbon-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10347",
+          "slug": "alcremie-matcha-cream-strawberry-sweet",
+          "name": "Matcha Cream · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-strawberry-sweet.png",
+          "formId": 10347,
+          "formSlug": "alcremie-matcha-cream-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10451",
+          "slug": "alcremie-matcha-cream-berry-sweet",
+          "name": "Matcha Cream · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-berry-sweet.png",
+          "formId": 10451,
+          "formSlug": "alcremie-matcha-cream-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10460",
+          "slug": "alcremie-matcha-cream-love-sweet",
+          "name": "Matcha Cream · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-love-sweet.png",
+          "formId": 10460,
+          "formSlug": "alcremie-matcha-cream-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10469",
+          "slug": "alcremie-matcha-cream-star-sweet",
+          "name": "Matcha Cream · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-star-sweet.png",
+          "formId": 10469,
+          "formSlug": "alcremie-matcha-cream-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10478",
+          "slug": "alcremie-matcha-cream-clover-sweet",
+          "name": "Matcha Cream · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-clover-sweet.png",
+          "formId": 10478,
+          "formSlug": "alcremie-matcha-cream-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10487",
+          "slug": "alcremie-matcha-cream-flower-sweet",
+          "name": "Matcha Cream · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-flower-sweet.png",
+          "formId": 10487,
+          "formSlug": "alcremie-matcha-cream-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10496",
+          "slug": "alcremie-matcha-cream-ribbon-sweet",
+          "name": "Matcha Cream · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-matcha-cream-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-matcha-cream-ribbon-sweet.png",
+          "formId": 10496,
+          "formSlug": "alcremie-matcha-cream-ribbon-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10348",
+          "slug": "alcremie-mint-cream-strawberry-sweet",
+          "name": "Mint Cream · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-strawberry-sweet.png",
+          "formId": 10348,
+          "formSlug": "alcremie-mint-cream-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10452",
+          "slug": "alcremie-mint-cream-berry-sweet",
+          "name": "Mint Cream · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-berry-sweet.png",
+          "formId": 10452,
+          "formSlug": "alcremie-mint-cream-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10461",
+          "slug": "alcremie-mint-cream-love-sweet",
+          "name": "Mint Cream · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-love-sweet.png",
+          "formId": 10461,
+          "formSlug": "alcremie-mint-cream-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10470",
+          "slug": "alcremie-mint-cream-star-sweet",
+          "name": "Mint Cream · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-star-sweet.png",
+          "formId": 10470,
+          "formSlug": "alcremie-mint-cream-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10479",
+          "slug": "alcremie-mint-cream-clover-sweet",
+          "name": "Mint Cream · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-clover-sweet.png",
+          "formId": 10479,
+          "formSlug": "alcremie-mint-cream-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10488",
+          "slug": "alcremie-mint-cream-flower-sweet",
+          "name": "Mint Cream · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-flower-sweet.png",
+          "formId": 10488,
+          "formSlug": "alcremie-mint-cream-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10497",
+          "slug": "alcremie-mint-cream-ribbon-sweet",
+          "name": "Mint Cream · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-mint-cream-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-mint-cream-ribbon-sweet.png",
+          "formId": 10497,
+          "formSlug": "alcremie-mint-cream-ribbon-sweet"
+        }
+      ]
+    },
+    {
+      "id": "box-alcremie-2",
+      "title": "Alcremie 2",
+      "rangeLabel": "Alcremie (2/3)",
+      "slots": [
+        {
+          "id": 869,
+          "key": "f10349",
+          "slug": "alcremie-lemon-cream-strawberry-sweet",
+          "name": "Lemon Cream · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-strawberry-sweet.png",
+          "formId": 10349,
+          "formSlug": "alcremie-lemon-cream-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10453",
+          "slug": "alcremie-lemon-cream-berry-sweet",
+          "name": "Lemon Cream · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-berry-sweet.png",
+          "formId": 10453,
+          "formSlug": "alcremie-lemon-cream-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10462",
+          "slug": "alcremie-lemon-cream-love-sweet",
+          "name": "Lemon Cream · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-love-sweet.png",
+          "formId": 10462,
+          "formSlug": "alcremie-lemon-cream-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10471",
+          "slug": "alcremie-lemon-cream-star-sweet",
+          "name": "Lemon Cream · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-star-sweet.png",
+          "formId": 10471,
+          "formSlug": "alcremie-lemon-cream-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10480",
+          "slug": "alcremie-lemon-cream-clover-sweet",
+          "name": "Lemon Cream · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-clover-sweet.png",
+          "formId": 10480,
+          "formSlug": "alcremie-lemon-cream-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10489",
+          "slug": "alcremie-lemon-cream-flower-sweet",
+          "name": "Lemon Cream · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-flower-sweet.png",
+          "formId": 10489,
+          "formSlug": "alcremie-lemon-cream-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10498",
+          "slug": "alcremie-lemon-cream-ribbon-sweet",
+          "name": "Lemon Cream · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-lemon-cream-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-lemon-cream-ribbon-sweet.png",
+          "formId": 10498,
+          "formSlug": "alcremie-lemon-cream-ribbon-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10350",
+          "slug": "alcremie-salted-cream-strawberry-sweet",
+          "name": "Salted Cream · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-strawberry-sweet.png",
+          "formId": 10350,
+          "formSlug": "alcremie-salted-cream-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10454",
+          "slug": "alcremie-salted-cream-berry-sweet",
+          "name": "Salted Cream · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-berry-sweet.png",
+          "formId": 10454,
+          "formSlug": "alcremie-salted-cream-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10463",
+          "slug": "alcremie-salted-cream-love-sweet",
+          "name": "Salted Cream · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-love-sweet.png",
+          "formId": 10463,
+          "formSlug": "alcremie-salted-cream-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10472",
+          "slug": "alcremie-salted-cream-star-sweet",
+          "name": "Salted Cream · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-star-sweet.png",
+          "formId": 10472,
+          "formSlug": "alcremie-salted-cream-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10481",
+          "slug": "alcremie-salted-cream-clover-sweet",
+          "name": "Salted Cream · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-clover-sweet.png",
+          "formId": 10481,
+          "formSlug": "alcremie-salted-cream-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10490",
+          "slug": "alcremie-salted-cream-flower-sweet",
+          "name": "Salted Cream · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-flower-sweet.png",
+          "formId": 10490,
+          "formSlug": "alcremie-salted-cream-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10499",
+          "slug": "alcremie-salted-cream-ribbon-sweet",
+          "name": "Salted Cream · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-salted-cream-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-salted-cream-ribbon-sweet.png",
+          "formId": 10499,
+          "formSlug": "alcremie-salted-cream-ribbon-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10351",
+          "slug": "alcremie-ruby-swirl-strawberry-sweet",
+          "name": "Ruby Swirl · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-strawberry-sweet.png",
+          "formId": 10351,
+          "formSlug": "alcremie-ruby-swirl-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10455",
+          "slug": "alcremie-ruby-swirl-berry-sweet",
+          "name": "Ruby Swirl · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-berry-sweet.png",
+          "formId": 10455,
+          "formSlug": "alcremie-ruby-swirl-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10464",
+          "slug": "alcremie-ruby-swirl-love-sweet",
+          "name": "Ruby Swirl · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-love-sweet.png",
+          "formId": 10464,
+          "formSlug": "alcremie-ruby-swirl-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10473",
+          "slug": "alcremie-ruby-swirl-star-sweet",
+          "name": "Ruby Swirl · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-star-sweet.png",
+          "formId": 10473,
+          "formSlug": "alcremie-ruby-swirl-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10482",
+          "slug": "alcremie-ruby-swirl-clover-sweet",
+          "name": "Ruby Swirl · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-clover-sweet.png",
+          "formId": 10482,
+          "formSlug": "alcremie-ruby-swirl-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10491",
+          "slug": "alcremie-ruby-swirl-flower-sweet",
+          "name": "Ruby Swirl · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-flower-sweet.png",
+          "formId": 10491,
+          "formSlug": "alcremie-ruby-swirl-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10500",
+          "slug": "alcremie-ruby-swirl-ribbon-sweet",
+          "name": "Ruby Swirl · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-ruby-swirl-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-ruby-swirl-ribbon-sweet.png",
+          "formId": 10500,
+          "formSlug": "alcremie-ruby-swirl-ribbon-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10352",
+          "slug": "alcremie-caramel-swirl-strawberry-sweet",
+          "name": "Caramel Swirl · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-strawberry-sweet.png",
+          "formId": 10352,
+          "formSlug": "alcremie-caramel-swirl-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10456",
+          "slug": "alcremie-caramel-swirl-berry-sweet",
+          "name": "Caramel Swirl · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-berry-sweet.png",
+          "formId": 10456,
+          "formSlug": "alcremie-caramel-swirl-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10465",
+          "slug": "alcremie-caramel-swirl-love-sweet",
+          "name": "Caramel Swirl · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-love-sweet.png",
+          "formId": 10465,
+          "formSlug": "alcremie-caramel-swirl-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10474",
+          "slug": "alcremie-caramel-swirl-star-sweet",
+          "name": "Caramel Swirl · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-star-sweet.png",
+          "formId": 10474,
+          "formSlug": "alcremie-caramel-swirl-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10483",
+          "slug": "alcremie-caramel-swirl-clover-sweet",
+          "name": "Caramel Swirl · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-clover-sweet.png",
+          "formId": 10483,
+          "formSlug": "alcremie-caramel-swirl-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10492",
+          "slug": "alcremie-caramel-swirl-flower-sweet",
+          "name": "Caramel Swirl · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-flower-sweet.png",
+          "formId": 10492,
+          "formSlug": "alcremie-caramel-swirl-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10501",
+          "slug": "alcremie-caramel-swirl-ribbon-sweet",
+          "name": "Caramel Swirl · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-caramel-swirl-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-caramel-swirl-ribbon-sweet.png",
+          "formId": 10501,
+          "formSlug": "alcremie-caramel-swirl-ribbon-sweet"
+        }
+      ]
+    },
+    {
+      "id": "box-alcremie-3",
+      "title": "Alcremie 3",
+      "rangeLabel": "Alcremie (3/3)",
+      "slots": [
+        {
+          "id": 869,
+          "key": "f10353",
+          "slug": "alcremie-rainbow-swirl-strawberry-sweet",
+          "name": "Rainbow Swirl · Strawberry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-strawberry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-strawberry-sweet.png",
+          "formId": 10353,
+          "formSlug": "alcremie-rainbow-swirl-strawberry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10457",
+          "slug": "alcremie-rainbow-swirl-berry-sweet",
+          "name": "Rainbow Swirl · Berry",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-berry-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-berry-sweet.png",
+          "formId": 10457,
+          "formSlug": "alcremie-rainbow-swirl-berry-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10466",
+          "slug": "alcremie-rainbow-swirl-love-sweet",
+          "name": "Rainbow Swirl · Love",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-love-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-love-sweet.png",
+          "formId": 10466,
+          "formSlug": "alcremie-rainbow-swirl-love-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10475",
+          "slug": "alcremie-rainbow-swirl-star-sweet",
+          "name": "Rainbow Swirl · Star",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-star-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-star-sweet.png",
+          "formId": 10475,
+          "formSlug": "alcremie-rainbow-swirl-star-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10484",
+          "slug": "alcremie-rainbow-swirl-clover-sweet",
+          "name": "Rainbow Swirl · Clover",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-clover-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-clover-sweet.png",
+          "formId": 10484,
+          "formSlug": "alcremie-rainbow-swirl-clover-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10493",
+          "slug": "alcremie-rainbow-swirl-flower-sweet",
+          "name": "Rainbow Swirl · Flower",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-flower-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-flower-sweet.png",
+          "formId": 10493,
+          "formSlug": "alcremie-rainbow-swirl-flower-sweet"
+        },
+        {
+          "id": 869,
+          "key": "f10502",
+          "slug": "alcremie-rainbow-swirl-ribbon-sweet",
+          "name": "Rainbow Swirl · Ribbon",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/869-rainbow-swirl-ribbon-sweet.png",
+          "shinySprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/869-rainbow-swirl-ribbon-sweet.png",
+          "formId": 10502,
+          "formSlug": "alcremie-rainbow-swirl-ribbon-sweet"
         }
       ]
     }

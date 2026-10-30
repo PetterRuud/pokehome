@@ -1,10 +1,12 @@
 /**
- * Generates a national living-dex layout (30 slots per box) from PokéAPI.
+ * Generates a national living-dex layout (30 slots per box) from PokéAPI,
+ * then appends special form boxes (Unown, Trims & Flowers, Vivillon, Alcremie).
  * Run: node scripts/generate-dex.mjs
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildFormBoxes } from './form-boxes.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const outPath = join(__dirname, '../src/data/national-dex.json');
@@ -55,14 +57,19 @@ async function main() {
     });
   }
 
+  const { boxes: formBoxes, formSlotCount } = buildFormBoxes(boxes.length + 1);
+  boxes.push(...formBoxes);
+
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(
     outPath,
     JSON.stringify(
       {
-        version: 1,
+        version: 2,
         generatedAt: new Date().toISOString(),
-        total: entries.length,
+        total: entries.length + formSlotCount,
+        speciesTotal: entries.length,
+        formSlotCount,
         boxSize: BOX_SIZE,
         boxes,
       },
@@ -70,7 +77,9 @@ async function main() {
       2,
     ),
   );
-  console.log(`Wrote ${boxes.length} boxes (${entries.length} Pokémon) → ${outPath}`);
+  console.log(
+    `Wrote ${boxes.length} boxes (${entries.length} species + ${formSlotCount} forms) → ${outPath}`,
+  );
 }
 
 main().catch((err) => {

@@ -94,6 +94,10 @@ export function DexSlotButton({
           shiny={showShiny}
           variant={spriteVariant}
           slug={slot.slug}
+          // Form-box slots (`f…`) use curated sprite URLs — never formId as pokemon id.
+          formId={slot.key.startsWith('f') ? undefined : slot.formId}
+          src={slot.key.startsWith('f') ? slot.sprite : undefined}
+          srcShiny={slot.key.startsWith('f') ? slot.shinySprite : undefined}
           width={size.spritePx}
           height={size.spritePx}
           className={cn(
@@ -103,8 +107,18 @@ export function DexSlotButton({
           )}
         />
         <ItemContent className="w-full items-center text-center">
-          <ItemTitle className="w-full justify-center tabular-nums">#{String(slot.id).padStart(3, '0')}</ItemTitle>
-          <ItemDescription className="w-full text-center">{slot.name}</ItemDescription>
+          <ItemTitle className="w-full justify-center tabular-nums">
+            {slot.formId != null ? (
+              <span className="line-clamp-2 text-center text-[0.65rem] leading-tight normal-case tracking-normal">
+                {slot.name}
+              </span>
+            ) : (
+              `#${String(slot.id).padStart(3, '0')}`
+            )}
+          </ItemTitle>
+          <ItemDescription className="w-full truncate text-center">
+            {slot.formId != null ? `#${String(slot.id).padStart(3, '0')}` : slot.name}
+          </ItemDescription>
           {showAlpha || showMega || showGmax || showRegional ? (
             <div className="flex flex-wrap justify-center gap-1">
               {showAlpha ? <Badge variant="secondary">α</Badge> : null}

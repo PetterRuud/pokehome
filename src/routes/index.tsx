@@ -28,7 +28,6 @@ function HomePage() {
   const regionalByKey = useDexStore((s) => s.regionalByKey);
   const homeByGame = useDexStore((s) => s.homeByGame);
   const claimedGiftIds = useDexStore((s) => s.claimedGiftIds);
-  const spriteStyle = useDexStore((s) => s.prefs.spriteStyle);
 
   const { total, caught: home, percent } = countProgress(nationalDex.boxes, homeByKey);
   const caughtCount = countFlag(caughtByKey);
@@ -76,7 +75,7 @@ function HomePage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <NationalChart home={home} total={total} percent={percent} caughtCount={caughtCount} />
-        <FormsPanel boxes={nationalDex.boxes} spriteStyle={spriteStyle} flags={formFlags} />
+        <FormsPanel boxes={nationalDex.boxes} flags={formFlags} />
       </div>
 
       <GamesChart gameStats={gameStats} gamesComplete={gamesComplete} />

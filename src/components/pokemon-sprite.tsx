@@ -10,12 +10,27 @@ type PokemonSpriteProps = {
   slug?: string;
   /** PokéAPI form id for regional (or other) forms. */
   formId?: number;
+  /**
+   * Explicit pixel sprite URL (e.g. cosmetic form boxes). When set, bypasses
+   * formId→pokemon-id mapping which breaks Vivillon/Unown/etc.
+   */
+  src?: string;
+  /** Explicit shiny pixel sprite URL paired with `src`. */
+  srcShiny?: string;
   alt?: string;
   width?: number;
   height?: number;
   className?: string;
   loading?: 'lazy' | 'eager';
 };
+
+function homeStyleUrl(pixelUrl: string): string {
+  if (pixelUrl.includes('/other/home/')) return pixelUrl;
+  if (pixelUrl.includes('/sprites/pokemon/shiny/')) {
+    return pixelUrl.replace('/sprites/pokemon/shiny/', '/sprites/pokemon/other/home/shiny/');
+  }
+  return pixelUrl.replace('/sprites/pokemon/', '/sprites/pokemon/other/home/');
+}
 
 /**
  * Species art from PokeAPI / Showdown — pixel, HOME 3D, or mega/gmax/regional art.
@@ -27,6 +42,8 @@ export function PokemonSprite({
   variant = 'default',
   slug,
   formId,
+  src,
+  srcShiny,
   alt = '',
   width = 80,
   height = 80,
@@ -34,12 +51,23 @@ export function PokemonSprite({
   loading = 'lazy',
 }: PokemonSpriteProps) {
   const opts = { shiny, variant, slug, formId };
-  const primary = spriteUrl(id, style, opts);
-  const fallbacks = spriteFallbackChain(id, style, opts);
+  const explicit = shiny ? srcShiny ?? src : src;
+  const primary = explicit
+    ? style === 'home'
+      ? homeStyleUrl(explicit)
+      : explicit
+    : spriteUrl(id, style, opts);
+  const fallbacks = explicit
+    ? [
+        ...(style === 'home' && explicit ? [explicit] : []),
+        ...(src && src !== explicit ? [src] : []),
+        spriteUrl(id, style, { shiny, variant: 'default', slug }),
+      ].filter(Boolean)
+    : spriteFallbackChain(id, style, opts);
 
   return (
     <img
-      key={`${id}-${style}-${variant}-${shiny ? 's' : 'n'}-${slug ?? ''}-${formId ?? ''}`}
+      key={`${id}-${style}-${variant}-${shiny ? 's' : 'n'}-${slug ?? ''}-${formId ?? ''}-${primary}`}
       src={primary}
       alt={alt}
       width={width}
