@@ -74,8 +74,8 @@ function SettingsPage() {
             Account & sync
           </CardTitle>
           <CardDescription>
-            Sign in to sync progress across devices. If cloud data is newer, it replaces this browser. Export a file
-            backup first if unsure.
+            Sign in to sync progress across devices. When cloud is newer and this browser also has progress, you&apos;ll
+            confirm before overwrite — use cloud, keep this device, or merge. Export a file backup first if unsure.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -97,20 +97,22 @@ function SettingsPage() {
                 <UserButton />
                 <Button
                   variant="outline"
-                  disabled={status === 'syncing'}
+                  disabled={status === 'syncing' || status === 'conflict'}
                   onClick={() => {
-                    void syncNow().then(() => toast.success('Sync finished'));
+                    void syncNow().then(() => toast.success('Sync checked'));
                   }}
                 >
-                  {status === 'syncing' ? 'Syncing…' : 'Sync now'}
+                  {status === 'syncing' ? 'Syncing…' : status === 'conflict' ? 'Resolve conflict…' : 'Sync now'}
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                {lastSyncedAt
-                  ? `Last synced ${new Date(lastSyncedAt).toLocaleString()}`
-                  : status === 'syncing'
-                    ? 'Syncing with cloud…'
-                    : 'Not synced yet'}
+                {status === 'conflict'
+                  ? 'Cloud is newer — choose how to resolve in the dialog'
+                  : lastSyncedAt
+                    ? `Last synced ${new Date(lastSyncedAt).toLocaleString()}`
+                    : status === 'syncing'
+                      ? 'Syncing with cloud…'
+                      : 'Not synced yet'}
                 {status === 'ok' ? ' · up to date' : null}
                 {error ? ` · ${error}` : null}
               </p>

@@ -2,19 +2,33 @@ import { useAuth } from '@clerk/tanstack-react-start';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getCloudSnapshot, putCloudSnapshot } from '@/server/sync';
 import { useDexStore } from '@/lib/store';
+import { diffExportPayloads, hasMeaningfulLocalProgress, type SyncDiffSummary } from '@/lib/sync-diff';
+import type { ExportPayload } from '@/lib/types';
 
-export type SyncStatus = 'idle' | 'syncing' | 'ok' | 'error';
+export type SyncStatus = 'idle' | 'syncing' | 'ok' | 'error' | 'conflict';
+
+export type SyncConflictResolution = 'cloud' | 'local' | 'merge';
+
+export type PendingSyncConflict = {
+  cloud: ExportPayload;
+  localAt: string;
+  cloudAt: string;
+  diff: SyncDiffSummary;
+};
 
 export type CloudSyncState = {
   status: SyncStatus;
   lastSyncedAt: string | null;
   error: string | null;
+  pendingConflict: PendingSyncConflict | null;
   syncNow: () => Promise<void>;
+  resolveConflict: (choice: SyncConflictResolution) => Promise<void>;
 };
 
 /**
  * Last-write-wins cloud sync while signed in.
  * Pulls once on sign-in; debounced push after local changes.
+ * When cloud is newer and local has progress, pauses for user confirmation.
  */
 export function useCloudSync(): CloudSyncState {
   const { isSignedIn, userId, isLoaded } = useAuth();
@@ -26,15 +40,50 @@ export function useCloudSync(): CloudSyncState {
   const [status, setStatus] = useState<SyncStatus>('idle');
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [pendingConflict, setPendingConflict] = useState<PendingSyncConflict | null>(null);
 
   const pulledForUser = useRef<string | null>(null);
   const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncing = useRef(false);
+  const pendingConflictRef = useRef<PendingSyncConflict | null>(null);
+
+  const setConflict = useCallback((conflict: PendingSyncConflict | null) => {
+    pendingConflictRef.current = conflict;
+    setPendingConflict(conflict);
+  }, []);
+
+  const pushLocal = useCallback(async () => {
+    const localAt = useDexStore.getState().localUpdatedAt;
+    const payload = exportData();
+    const { updatedAt } = await putCloudSnapshot({
+      data: { payload, updatedAt: localAt },
+    });
+    setLastSyncedAt(updatedAt);
+    setStatus('ok');
+  }, [exportData]);
+
+  const takeCloud = useCallback(
+    (cloud: ExportPayload, cloudAt: string, mode: 'replace' | 'merge') => {
+      importData(cloud, mode);
+      if (mode === 'replace') {
+        useDexStore.setState({ localUpdatedAt: cloudAt });
+        setLastSyncedAt(cloudAt);
+        setStatus('ok');
+        return Promise.resolve();
+      }
+      // Merge bumps localUpdatedAt — push so cloud gets the union.
+      return pushLocal();
+    },
+    [importData, pushLocal],
+  );
 
   const runSync = useCallback(
     async (reason: 'login' | 'manual' | 'auto') => {
       if (!isSignedIn || !userId || !hydrated) return;
       if (syncing.current) return;
+      // Do not auto-push (or re-reconcile) while waiting on the user.
+      if (pendingConflictRef.current && reason === 'auto') return;
+
       syncing.current = true;
       setStatus('syncing');
       setError(null);
@@ -42,36 +91,40 @@ export function useCloudSync(): CloudSyncState {
       try {
         const cloud = await getCloudSnapshot();
         const localAt = useDexStore.getState().localUpdatedAt;
+        const localPayload = exportData();
 
         if (!cloud) {
-          const payload = exportData();
-          const { updatedAt } = await putCloudSnapshot({
-            data: { payload, updatedAt: localAt },
-          });
-          setLastSyncedAt(updatedAt);
-          setStatus('ok');
+          await pushLocal();
           return;
         }
 
         if (cloud.updatedAt > localAt) {
-          importData(cloud.payload, 'replace');
-          useDexStore.setState({ localUpdatedAt: cloud.updatedAt });
-          setLastSyncedAt(cloud.updatedAt);
-          setStatus('ok');
+          if (!hasMeaningfulLocalProgress(localPayload)) {
+            await takeCloud(cloud.payload, cloud.updatedAt, 'replace');
+            setConflict(null);
+            return;
+          }
+
+          // Manual sync while a conflict is already open: refresh the pending snapshot.
+          const conflict: PendingSyncConflict = {
+            cloud: cloud.payload,
+            localAt,
+            cloudAt: cloud.updatedAt,
+            diff: diffExportPayloads(localPayload, cloud.payload),
+          };
+          setConflict(conflict);
+          setStatus('conflict');
           return;
         }
 
         if (cloud.updatedAt < localAt || reason === 'manual') {
-          const payload = exportData();
-          const { updatedAt } = await putCloudSnapshot({
-            data: { payload, updatedAt: localAt },
-          });
-          setLastSyncedAt(updatedAt);
-          setStatus('ok');
+          setConflict(null);
+          await pushLocal();
           return;
         }
 
         // Equal timestamps — already in sync
+        setConflict(null);
         setLastSyncedAt(cloud.updatedAt);
         setStatus('ok');
       } catch (err) {
@@ -82,24 +135,57 @@ export function useCloudSync(): CloudSyncState {
         syncing.current = false;
       }
     },
-    [isSignedIn, userId, hydrated, exportData, importData],
+    [isSignedIn, userId, hydrated, exportData, pushLocal, takeCloud, setConflict],
+  );
+
+  const resolveConflict = useCallback(
+    async (choice: SyncConflictResolution) => {
+      const conflict = pendingConflictRef.current;
+      if (!conflict) return;
+      if (syncing.current) return;
+      syncing.current = true;
+      setStatus('syncing');
+      setError(null);
+
+      try {
+        if (choice === 'cloud') {
+          await takeCloud(conflict.cloud, conflict.cloudAt, 'replace');
+        } else if (choice === 'local') {
+          await pushLocal();
+        } else {
+          await takeCloud(conflict.cloud, conflict.cloudAt, 'merge');
+        }
+        setConflict(null);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Sync failed';
+        setError(message);
+        setStatus('error');
+      } finally {
+        syncing.current = false;
+      }
+    },
+    [takeCloud, pushLocal, setConflict],
   );
 
   // Pull / reconcile once per signed-in user after hydrate
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !userId || !hydrated) {
-      if (!isSignedIn) pulledForUser.current = null;
+      if (!isSignedIn) {
+        pulledForUser.current = null;
+        setConflict(null);
+      }
       return;
     }
     if (pulledForUser.current === userId) return;
     pulledForUser.current = userId;
     void runSync('login');
-  }, [isLoaded, isSignedIn, userId, hydrated, runSync]);
+  }, [isLoaded, isSignedIn, userId, hydrated, runSync, setConflict]);
 
   // Debounced push when local data changes after initial pull
   useEffect(() => {
     if (!isSignedIn || !userId || !hydrated) return;
     if (pulledForUser.current !== userId) return;
+    if (pendingConflictRef.current) return;
 
     if (pushTimer.current) clearTimeout(pushTimer.current);
     pushTimer.current = setTimeout(() => {
@@ -115,6 +201,8 @@ export function useCloudSync(): CloudSyncState {
     status,
     lastSyncedAt,
     error,
+    pendingConflict,
     syncNow: () => runSync('manual'),
+    resolveConflict,
   };
 }
