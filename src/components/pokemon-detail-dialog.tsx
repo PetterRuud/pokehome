@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PokemonNeighborButton } from '@/components/pokemon-adjacent-nav';
 import { PokemonDetail, type PokemonSummary } from '@/components/pokemon-detail';
 import type { EvoNode } from '@/lib/evolution';
+import { pokemonNeighbors } from '@/lib/pokemon-neighbors';
 import type { GameId } from '@/lib/types';
 import { getEvolutionChain, getPokemonSummary } from '@/server/pokemon';
 
@@ -59,21 +61,24 @@ export function PokemonDetailDialog({ pokemonId, open, onOpenChange, gameId }: P
   }, [open, activeId]);
 
   const navSearch = gameId ? { from: 'games' as const, game: gameId } : undefined;
+  const { prev, next } = useMemo(
+    () => (activeId != null ? pokemonNeighbors(activeId, gameId) : { prev: null, next: null }),
+    [activeId, gameId],
+  );
   const titleName = summary?.name ?? (activeId != null ? `#${String(activeId).padStart(4, '0')}` : 'Pokémon');
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[min(90vh,52rem)] w-full flex-col gap-4 overflow-hidden sm:max-w-3xl">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="pr-8 normal-case tracking-normal">{titleName}</DialogTitle>
-          <DialogDescription>Living dex details. Open page for a shareable link.</DialogDescription>
+          <DialogTitle className="normal-case tracking-normal">{titleName}</DialogTitle>
         </DialogHeader>
 
-        <div className="min-h-0 flex-1 overflow-y-auto pe-1">
+        <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
           {loading ? (
             <div className="flex flex-col gap-4">
-              <Skeleton className="h-40 w-full rounded-xl" />
-              <Skeleton className="h-48 w-full rounded-xl" />
+              <Skeleton className="h-40 w-full" />
+              <Skeleton className="h-48 w-full" />
             </div>
           ) : error ? (
             <p className="text-sm text-muted-foreground">{error}</p>
@@ -87,6 +92,19 @@ export function PokemonDetailDialog({ pokemonId, open, onOpenChange, gameId }: P
             />
           ) : null}
         </div>
+
+        {activeId != null ? (
+          <DialogFooter className="sm:justify-between">
+            {prev ? (
+              <PokemonNeighborButton entry={prev} direction="prev" search={navSearch} onSelect={setActiveId} />
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <PokemonNeighborButton entry={next} direction="next" search={navSearch} onSelect={setActiveId} />
+            ) : null}
+          </DialogFooter>
+        ) : null}
       </DialogContent>
     </Dialog>
   );

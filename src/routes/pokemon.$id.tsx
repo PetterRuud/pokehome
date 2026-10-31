@@ -2,42 +2,19 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PokemonAdjacentNav } from '@/components/pokemon-adjacent-nav';
 import { PokemonDetail } from '@/components/pokemon-detail';
 import { getEvolutionChain, getPokemonSummary } from '@/server/pokemon';
-import {
-  ArrowLeftIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { gameHasSpecies, gameNeighbors, getGame } from '@/lib/games';
+import { ArrowLeftIcon } from 'lucide-react';
+import { gameHasSpecies, getGame } from '@/lib/games';
+import { pokemonNeighbors } from '@/lib/pokemon-neighbors';
 import type { GameId } from '@/lib/types';
-import nationalDex from '@/data/national-dex.json';
 
 type PokemonSearch = {
   /** Opened from a game dex — drives back link + adjacent order. */
   from?: 'games';
   game?: GameId;
 };
-
-const nationalOrder = (() => {
-  const slots: { id: number; name: string }[] = [];
-  for (const box of nationalDex.boxes as Array<{ slots: Array<{ id: number; name: string }> }>) {
-    for (const slot of box.slots) slots.push({ id: slot.id, name: slot.name });
-  }
-  return slots;
-})();
-
-const nationalIndexById = new Map(nationalOrder.map((slot, index) => [slot.id, index]));
-
-function nationalNeighbors(id: number) {
-  const index = nationalIndexById.get(id);
-  if (index == null) return { prev: null, next: null };
-  return {
-    prev: index > 0 ? nationalOrder[index - 1]! : null,
-    next: index < nationalOrder.length - 1 ? nationalOrder[index + 1]! : null,
-  };
-}
 
 export const Route = createFileRoute('/pokemon/$id')({
   validateSearch: (search: Record<string, unknown>): PokemonSearch => {
@@ -88,7 +65,7 @@ function PokemonPage() {
 
   const fromGame = search.from === 'games' && search.game ? getGame(search.game) : undefined;
   const inGameOrder = Boolean(fromGame && gameHasSpecies(fromGame, summary.id));
-  const { prev, next } = inGameOrder && fromGame ? gameNeighbors(fromGame, summary.id) : nationalNeighbors(summary.id);
+  const { prev, next } = pokemonNeighbors(summary.id, inGameOrder && fromGame ? fromGame.id : undefined);
   const navSearch = fromGame ? search : undefined;
   const dexSearch = fromGame ? { tab: 'games' as const, game: fromGame.id } : undefined;
 
@@ -115,54 +92,5 @@ function PokemonPage() {
         <PokemonAdjacentNav prev={prev} next={next} search={navSearch} className="w-full justify-between" />
       </div>
     </div>
-  );
-}
-
-function formatNavNumber(entry: { id: number; entryNumber?: number }) {
-  if (entry.entryNumber != null) return `#${String(entry.entryNumber).padStart(3, '0')}`;
-  return `#${String(entry.id).padStart(4, '0')}`;
-}
-
-function PokemonAdjacentNav({
-  prev,
-  next,
-  search,
-  className,
-}: {
-  prev: { id: number; name: string; entryNumber?: number } | null;
-  next: { id: number; name: string; entryNumber?: number } | null;
-  search?: PokemonSearch;
-  className?: string;
-}) {
-  return (
-    <nav className={cn('flex flex-wrap items-center justify-end gap-2', className)} aria-label="Adjacent Pokémon">
-      {prev ? (
-        <Button
-          variant="outline"
-          size="sm"
-          render={<Link to="/pokemon/$id" params={{ id: String(prev.id) }} search={search} />}
-          nativeButton={false}
-        >
-          <ChevronLeftIcon data-icon="inline-start" />
-          <span>
-            <span className="text-muted-foreground tabular-nums">{formatNavNumber(prev)}</span> {prev.name}
-          </span>
-        </Button>
-      ) : null}
-      {next ? (
-        <Button
-          variant="outline"
-          size="sm"
-          className={cn(!prev && 'ms-auto')}
-          render={<Link to="/pokemon/$id" params={{ id: String(next.id) }} search={search} />}
-          nativeButton={false}
-        >
-          <span>
-            <span className="text-muted-foreground tabular-nums">{formatNavNumber(next)}</span> {next.name}
-          </span>
-          <ChevronRightIcon data-icon="inline-end" />
-        </Button>
-      ) : null}
-    </nav>
   );
 }
