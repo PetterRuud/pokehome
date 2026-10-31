@@ -30,9 +30,7 @@ export function PokemonNeighborButton({
       size="sm"
       nativeButton={onSelect == null ? false : undefined}
       render={
-        onSelect == null ? (
-          <Link to="/pokemon/$id" params={{ id: String(entry.id) }} search={search} />
-        ) : undefined
+        onSelect == null ? <Link to="/pokemon/$id" params={{ id: String(entry.id) }} search={search} /> : undefined
       }
       onClick={onSelect ? () => onSelect(entry.id) : undefined}
     >
@@ -61,12 +59,8 @@ export function PokemonAdjacentNav({
 }) {
   return (
     <nav className={cn('flex flex-wrap items-center justify-end gap-2', className)} aria-label="Adjacent Pokémon">
-      {prev ? (
-        <PokemonNeighborButton entry={prev} direction="prev" search={search} onSelect={onSelect} />
-      ) : null}
-      {next ? (
-        <PokemonNeighborButton entry={next} direction="next" search={search} onSelect={onSelect} />
-      ) : null}
+      {prev ? <PokemonNeighborButton entry={prev} direction="prev" search={search} onSelect={onSelect} /> : null}
+      {next ? <PokemonNeighborButton entry={next} direction="next" search={search} onSelect={onSelect} /> : null}
     </nav>
   );
 }

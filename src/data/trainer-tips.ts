@@ -64,12 +64,7 @@ function b(id: string, count: number, opts?: { hyper?: boolean; optional?: boole
   return { id, count, ...opts };
 }
 
-function mon(
-  id: number,
-  name: string,
-  slug: string,
-  opts?: { mega?: boolean; spriteSlug?: string },
-): TipSpecies {
+function mon(id: number, name: string, slug: string, opts?: { mega?: boolean; spriteSlug?: string }): TipSpecies {
   return { id, name, slug, ...opts };
 }
 
@@ -384,12 +379,7 @@ export const trainerTipsById: Record<string, GameTips> = {
                     'Focus Blast',
                     'Thunder Wave',
                   ]),
-                  build(mon(150, 'Mewtwo', 'mewtwo', { mega: M }), [
-                    'Psystrike',
-                    'Ice Beam',
-                    'Aura Sphere',
-                    'Recover',
-                  ]),
+                  build(mon(150, 'Mewtwo', 'mewtwo', { mega: M }), ['Psystrike', 'Ice Beam', 'Aura Sphere', 'Recover']),
                 ],
               },
               {
@@ -421,12 +411,7 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Bug', 'Ghost', 'Dark'],
                 note: 'Break the psychic box from the weak face (odd square), then stand inside before it detonates.',
                 counters: [
-                  build(mon(979, 'Annihilape', 'annihilape'), [
-                    'Rage Fist',
-                    'Close Combat',
-                    'Bulk Up',
-                    'Focus Energy',
-                  ]),
+                  build(mon(979, 'Annihilape', 'annihilape'), ['Rage Fist', 'Close Combat', 'Bulk Up', 'Focus Energy']),
                   build(mon(359, 'Absol', 'absol', { mega: M }), [
                     'Night Slash',
                     'Sucker Punch',
@@ -454,18 +439,8 @@ export const trainerTipsById: Record<string, GameTips> = {
                     'Swords Dance',
                     'Stone Edge',
                   ]),
-                  build(mon(530, 'Excadrill', 'excadrill'), [
-                    'Earthquake',
-                    'Iron Head',
-                    'Rock Slide',
-                    'Swords Dance',
-                  ]),
-                  build(mon(979, 'Annihilape', 'annihilape'), [
-                    'Rage Fist',
-                    'Close Combat',
-                    'Bulk Up',
-                    'Screech',
-                  ]),
+                  build(mon(530, 'Excadrill', 'excadrill'), ['Earthquake', 'Iron Head', 'Rock Slide', 'Swords Dance']),
+                  build(mon(979, 'Annihilape', 'annihilape'), ['Rage Fist', 'Close Combat', 'Bulk Up', 'Screech']),
                 ],
               },
               {
@@ -508,18 +483,16 @@ export const trainerTipsById: Record<string, GameTips> = {
                     'Swords Dance',
                     'Fire Fang',
                   ]),
-                  build(mon(260, 'Swampert', 'swampert', { mega: M }), [
-                    'Earthquake',
-                    'Waterfall',
-                    'Ice Punch',
-                    'Bulk Up',
-                  ], 'Water only for phase 1'),
-                  build(mon(478, 'Froslass', 'froslass', { mega: M }), [
-                    'Blizzard',
-                    'Shadow Ball',
-                    'Thunderbolt',
-                    'Destiny Bond',
-                  ], 'Phase 1 Ice coverage'),
+                  build(
+                    mon(260, 'Swampert', 'swampert', { mega: M }),
+                    ['Earthquake', 'Waterfall', 'Ice Punch', 'Bulk Up'],
+                    'Water only for phase 1',
+                  ),
+                  build(
+                    mon(478, 'Froslass', 'froslass', { mega: M }),
+                    ['Blizzard', 'Shadow Ball', 'Thunderbolt', 'Destiny Bond'],
+                    'Phase 1 Ice coverage',
+                  ),
                 ],
               },
               {
@@ -541,12 +514,7 @@ export const trainerTipsById: Record<string, GameTips> = {
                     'Leech Seed',
                     'Earthquake',
                   ]),
-                  build(mon(26, 'Raichu', 'raichu', { mega: M }), [
-                    'Thunderbolt',
-                    'Surf',
-                    'Focus Blast',
-                    'Nasty Plot',
-                  ]),
+                  build(mon(26, 'Raichu', 'raichu', { mega: M }), ['Thunderbolt', 'Surf', 'Focus Blast', 'Nasty Plot']),
                 ],
               },
               {
@@ -589,12 +557,7 @@ export const trainerTipsById: Record<string, GameTips> = {
                     'Swords Dance',
                     'Stone Edge',
                   ]),
-                  build(mon(530, 'Excadrill', 'excadrill'), [
-                    'Earthquake',
-                    'Iron Head',
-                    'Rock Slide',
-                    'Swords Dance',
-                  ]),
+                  build(mon(530, 'Excadrill', 'excadrill'), ['Earthquake', 'Iron Head', 'Rock Slide', 'Swords Dance']),
                   build(mon(260, 'Swampert', 'swampert', { mega: M }), [
                     'Earthquake',
                     'Waterfall',
@@ -616,7 +579,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 types: ['Dark'],
                 weaknesses: ['Fighting', 'Bug', 'Fairy'],
                 counters: [
-                  build(mon(448, 'Lucario', 'lucario', { mega: M }), ['Close Combat', 'Bullet Punch', 'Swords Dance', 'Extreme Speed']),
+                  build(mon(448, 'Lucario', 'lucario', { mega: M }), [
+                    'Close Combat',
+                    'Bullet Punch',
+                    'Swords Dance',
+                    'Extreme Speed',
+                  ]),
                   build(mon(716, 'Xerneas', 'xerneas'), ['Moonblast', 'Geomancy', 'Focus Blast', 'Thunderbolt']),
                 ],
               },
@@ -627,7 +595,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Bug', 'Ghost', 'Dark', 'Electric', 'Grass'],
                 counters: [
                   build(mon(979, 'Annihilape', 'annihilape'), ['Rage Fist', 'Close Combat', 'Bulk Up', 'Focus Energy']),
-                  build(mon(359, 'Absol', 'absol', { mega: M }), ['Night Slash', 'Sucker Punch', 'Psycho Cut', 'Swords Dance']),
+                  build(mon(359, 'Absol', 'absol', { mega: M }), [
+                    'Night Slash',
+                    'Sucker Punch',
+                    'Psycho Cut',
+                    'Swords Dance',
+                  ]),
                 ],
               },
               {
@@ -636,8 +609,18 @@ export const trainerTipsById: Record<string, GameTips> = {
                 types: ['Fire', 'Ground'],
                 weaknesses: ['Water (×4)', 'Ground'],
                 counters: [
-                  build(mon(130, 'Gyarados', 'gyarados', { mega: M }), ['Waterfall', 'Earthquake', 'Dragon Dance', 'Ice Fang']),
-                  build(mon(160, 'Feraligatr', 'feraligatr', { mega: M }), ['Waterfall', 'Ice Punch', 'Crunch', 'Swords Dance']),
+                  build(mon(130, 'Gyarados', 'gyarados', { mega: M }), [
+                    'Waterfall',
+                    'Earthquake',
+                    'Dragon Dance',
+                    'Ice Fang',
+                  ]),
+                  build(mon(160, 'Feraligatr', 'feraligatr', { mega: M }), [
+                    'Waterfall',
+                    'Ice Punch',
+                    'Crunch',
+                    'Swords Dance',
+                  ]),
                 ],
               },
               {
@@ -647,7 +630,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Fire (×2+)'],
                 note: 'Victreebel / Beedrill / Mawile / Venusaur — Fire-weak group. Mega Heatran or Fire STAB sweepers shine here.',
                 counters: [
-                  build(mon(485, 'Heatran', 'heatran', { mega: M }), ['Magma Storm', 'Heat Wave', 'Earth Power', 'Flash Cannon']),
+                  build(mon(485, 'Heatran', 'heatran', { mega: M }), [
+                    'Magma Storm',
+                    'Heat Wave',
+                    'Earth Power',
+                    'Flash Cannon',
+                  ]),
                   build(mon(979, 'Annihilape', 'annihilape'), ['Rage Fist', 'Close Combat', 'Bulk Up', 'Focus Energy']),
                 ],
               },
@@ -657,8 +645,18 @@ export const trainerTipsById: Record<string, GameTips> = {
                 types: ['Fighting', 'Flying'],
                 weaknesses: ['Electric', 'Psychic', 'Fairy', 'Ice', 'Flying'],
                 counters: [
-                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), ['Psychic', 'Moonblast', 'Thunderbolt', 'Calm Mind']),
-                  build(mon(181, 'Ampharos', 'ampharos', { mega: M }), ['Thunderbolt', 'Dragon Pulse', 'Focus Blast', 'Thunder Wave']),
+                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), [
+                    'Psychic',
+                    'Moonblast',
+                    'Thunderbolt',
+                    'Calm Mind',
+                  ]),
+                  build(mon(181, 'Ampharos', 'ampharos', { mega: M }), [
+                    'Thunderbolt',
+                    'Dragon Pulse',
+                    'Focus Blast',
+                    'Thunder Wave',
+                  ]),
                 ],
               },
               {
@@ -668,7 +666,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Dark', 'Ghost'],
                 counters: [
                   build(mon(979, 'Annihilape', 'annihilape'), ['Rage Fist', 'Close Combat', 'Bulk Up', 'Screech']),
-                  build(mon(359, 'Absol', 'absol', { mega: M }), ['Night Slash', 'Sucker Punch', 'Shadow Claw', 'Swords Dance']),
+                  build(mon(359, 'Absol', 'absol', { mega: M }), [
+                    'Night Slash',
+                    'Sucker Punch',
+                    'Shadow Claw',
+                    'Swords Dance',
+                  ]),
                 ],
               },
               {
@@ -678,7 +681,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Ground', 'Ice', 'Dragon', 'Fairy'],
                 counters: [
                   build(mon(530, 'Excadrill', 'excadrill'), ['Earthquake', 'Iron Head', 'Rock Slide', 'Swords Dance']),
-                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), ['Moonblast', 'Psychic', 'Thunderbolt', 'Calm Mind']),
+                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), [
+                    'Moonblast',
+                    'Psychic',
+                    'Thunderbolt',
+                    'Calm Mind',
+                  ]),
                 ],
               },
               {
@@ -687,7 +695,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 types: ['Ice', 'Ghost'],
                 weaknesses: ['Fire', 'Rock', 'Ghost', 'Dark', 'Steel'],
                 counters: [
-                  build(mon(485, 'Heatran', 'heatran', { mega: M }), ['Magma Storm', 'Heat Wave', 'Earth Power', 'Flash Cannon']),
+                  build(mon(485, 'Heatran', 'heatran', { mega: M }), [
+                    'Magma Storm',
+                    'Heat Wave',
+                    'Earth Power',
+                    'Flash Cannon',
+                  ]),
                   build(mon(530, 'Excadrill', 'excadrill'), ['Iron Head', 'Earthquake', 'Rock Slide', 'Swords Dance']),
                 ],
               },
@@ -698,7 +711,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Ice (×4)', 'Rock', 'Dragon', 'Fairy'],
                 counters: [
                   build(mon(530, 'Excadrill', 'excadrill'), ['Iron Head', 'Earthquake', 'Rock Slide', 'Swords Dance']),
-                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), ['Moonblast', 'Psychic', 'Thunderbolt', 'Ice Beam']),
+                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), [
+                    'Moonblast',
+                    'Psychic',
+                    'Thunderbolt',
+                    'Ice Beam',
+                  ]),
                 ],
               },
               {
@@ -707,9 +725,24 @@ export const trainerTipsById: Record<string, GameTips> = {
                 types: ['Rock', 'Dark'],
                 weaknesses: ['Fighting (×4)', 'Bug', 'Fairy', 'Ground', 'Steel', 'Water', 'Grass'],
                 counters: [
-                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), ['Moonblast', 'Psychic', 'Focus Blast', 'Calm Mind']),
-                  build(mon(214, 'Heracross', 'heracross', { mega: M }), ['Close Combat', 'Megahorn', 'Rock Blast', 'Swords Dance']),
-                  build(mon(448, 'Lucario', 'lucario', { mega: M }), ['Close Combat', 'Bullet Punch', 'Swords Dance', 'Extreme Speed']),
+                  build(mon(282, 'Gardevoir', 'gardevoir', { mega: M }), [
+                    'Moonblast',
+                    'Psychic',
+                    'Focus Blast',
+                    'Calm Mind',
+                  ]),
+                  build(mon(214, 'Heracross', 'heracross', { mega: M }), [
+                    'Close Combat',
+                    'Megahorn',
+                    'Rock Blast',
+                    'Swords Dance',
+                  ]),
+                  build(mon(448, 'Lucario', 'lucario', { mega: M }), [
+                    'Close Combat',
+                    'Bullet Punch',
+                    'Swords Dance',
+                    'Extreme Speed',
+                  ]),
                 ],
               },
               {
@@ -719,7 +752,12 @@ export const trainerTipsById: Record<string, GameTips> = {
                 weaknesses: ['Electric', 'Grass', 'Ghost', 'Dark', 'Bug'],
                 counters: [
                   build(mon(979, 'Annihilape', 'annihilape'), ['Rage Fist', 'Close Combat', 'Bulk Up', 'Focus Energy']),
-                  build(mon(181, 'Ampharos', 'ampharos', { mega: M }), ['Thunderbolt', 'Dragon Pulse', 'Focus Blast', 'Thunder Wave']),
+                  build(mon(181, 'Ampharos', 'ampharos', { mega: M }), [
+                    'Thunderbolt',
+                    'Dragon Pulse',
+                    'Focus Blast',
+                    'Thunder Wave',
+                  ]),
                 ],
               },
             ],

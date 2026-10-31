@@ -20,17 +20,11 @@ function Stage({
   onSelectSpecies?: (id: number) => void;
 }) {
   const render =
-    onSelectSpecies != null
-      ? (
-          <button
-            type="button"
-            onClick={() => onSelectSpecies(node.id)}
-            aria-label={`${node.name} details`}
-          />
-        )
-      : (
-          <Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />
-        );
+    onSelectSpecies != null ? (
+      <button type="button" onClick={() => onSelectSpecies(node.id)} aria-label={`${node.name} details`} />
+    ) : (
+      <Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />
+    );
 
   return (
     <Item variant="outline" size="sm" render={render} className="w-28 flex-col items-center">

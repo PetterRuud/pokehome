@@ -11,12 +11,7 @@ type GiftsCardProps = {
   giftBadge: number;
 };
 
-export function GiftsCard({
-  activeGiftCount,
-  unclaimedGiftCount,
-  endingSoonCount,
-  giftBadge,
-}: GiftsCardProps) {
+export function GiftsCard({ activeGiftCount, unclaimedGiftCount, endingSoonCount, giftBadge }: GiftsCardProps) {
   return (
     <Card className="animate-in fade-in-0 duration-500">
       <CardHeader>

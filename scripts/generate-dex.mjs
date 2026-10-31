@@ -78,9 +78,7 @@ async function main() {
       2,
     ),
   );
-  console.log(
-    `Wrote ${boxes.length} boxes (${entries.length} species + ${formSlotCount} forms) → ${outPath}`,
-  );
+  console.log(`Wrote ${boxes.length} boxes (${entries.length} species + ${formSlotCount} forms) → ${outPath}`);
 }
 
 main().catch((err) => {

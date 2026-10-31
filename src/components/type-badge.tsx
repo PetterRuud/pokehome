@@ -1,11 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import {
-  parsePokemonType,
-  typeBadgeClass,
-  typeIconClass,
-  typeIconUrl,
-  type PokemonType,
-} from '@/lib/move-types';
+import { parsePokemonType, typeBadgeClass, typeIconClass, typeIconUrl, type PokemonType } from '@/lib/move-types';
 import { cn } from '@/lib/utils';
 
 type TypeBadgeProps = {
@@ -32,12 +26,7 @@ export function TypeBadge({ label, type: typeOverride, title, className }: TypeB
       className={cn('gap-1 shadow-none', typeBadgeClass(type), className)}
       title={title ?? `${type} · ${label}`}
     >
-      <img
-        src={typeIconUrl(type)}
-        alt=""
-        data-icon="inline-start"
-        className={cn('size-3', typeIconClass(type))}
-      />
+      <img src={typeIconUrl(type)} alt="" data-icon="inline-start" className={cn('size-3', typeIconClass(type))} />
       {label}
     </Badge>
   );

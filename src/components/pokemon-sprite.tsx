@@ -51,12 +51,8 @@ export function PokemonSprite({
   loading = 'lazy',
 }: PokemonSpriteProps) {
   const opts = { shiny, variant, slug, formId };
-  const explicit = shiny ? srcShiny ?? src : src;
-  const primary = explicit
-    ? style === 'home'
-      ? homeStyleUrl(explicit)
-      : explicit
-    : spriteUrl(id, style, opts);
+  const explicit = shiny ? (srcShiny ?? src) : src;
+  const primary = explicit ? (style === 'home' ? homeStyleUrl(explicit) : explicit) : spriteUrl(id, style, opts);
   const fallbacks = explicit
     ? [
         ...(style === 'home' && explicit ? [explicit] : []),

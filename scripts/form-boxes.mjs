@@ -6,11 +6,7 @@
 const BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
 /** Defaults that use `/sprites/pokemon/{nationalId}.png` (no form suffix). */
-const DEFAULT_PIXEL_ONLY = new Set([
-  'unown-a',
-  'vivillon-meadow',
-  'furfrou-natural',
-]);
+const DEFAULT_PIXEL_ONLY = new Set(['unown-a', 'vivillon-meadow', 'furfrou-natural']);
 
 function titleCase(slug) {
   return slug

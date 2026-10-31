@@ -169,10 +169,7 @@ export function DonutCalculator() {
   const [targetStars, setTargetStars] = useState<DonutStar>(3);
 
   const recipe = recipes[recipeIndex] ?? recipes[0];
-  const result = useMemo(
-    () => (recipe ? checkDonutRecipe(deferredCounts, recipe) : null),
-    [deferredCounts, recipe],
-  );
+  const result = useMemo(() => (recipe ? checkDonutRecipe(deferredCounts, recipe) : null), [deferredCounts, recipe]);
   const starSuggestion = useMemo(
     () => suggestDonutForStars(deferredCounts, targetStars),
     [deferredCounts, targetStars],

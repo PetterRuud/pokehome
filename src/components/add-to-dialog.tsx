@@ -77,11 +77,7 @@ export function parseNationalId(key: string): number {
   return match ? Number(match[1]) : Number.NaN;
 }
 
-function applyTriState(
-  state: TriState | undefined,
-  keys: string[],
-  setMany: (keys: string[], value: boolean) => void,
-) {
+function applyTriState(state: TriState | undefined, keys: string[], setMany: (keys: string[], value: boolean) => void) {
   if (state === undefined || state === 'indeterminate' || keys.length === 0) return;
   setMany(keys, state);
 }
@@ -304,8 +300,8 @@ export function AddToDialogButton({
         <DialogHeader>
           <DialogTitle>Add to living dex</DialogTitle>
           <DialogDescription>
-            Choose what to mark for {countLabel}. Mixed checkboxes keep each Pokémon’s current value. Status updates
-            the national dex; games also mark those origin Pokédexes.
+            Choose what to mark for {countLabel}. Mixed checkboxes keep each Pokémon’s current value. Status updates the
+            national dex; games also mark those origin Pokédexes.
           </DialogDescription>
         </DialogHeader>
 

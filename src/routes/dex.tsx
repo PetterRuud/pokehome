@@ -143,12 +143,7 @@ function FormViewMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            type="button"
-            variant="outline"
-            className={className}
-            aria-label={`Form view: ${current.label}`}
-          />
+          <Button type="button" variant="outline" className={className} aria-label={`Form view: ${current.label}`} />
         }
       >
         <CurrentIcon data-icon="inline-start" className={current.iconClassName} />
@@ -199,14 +194,7 @@ function GameTrackMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button
-            type="button"
-            variant="outline"
-            className={className}
-            aria-label={`Track: ${current.label}`}
-          />
-        }
+        render={<Button type="button" variant="outline" className={className} aria-label={`Track: ${current.label}`} />}
       >
         <CurrentIcon data-icon="inline-start" className={current.iconClassName} />
         {current.label}
@@ -256,12 +244,7 @@ function GameFilterMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            type="button"
-            variant="outline"
-            className={className}
-            aria-label={`Filter: ${current.label}`}
-          />
+          <Button type="button" variant="outline" className={className} aria-label={`Filter: ${current.label}`} />
         }
       >
         {current.label}
@@ -378,10 +361,7 @@ function DexPage() {
                     {game.kind === 'dlc' ? <Badge variant="secondary">DLC</Badge> : null}
                   </span>
                   {complete ? (
-                    <Badge
-                      variant="secondary"
-                      className="border-transparent bg-emerald-600/15 text-emerald-600"
-                    >
+                    <Badge variant="secondary" className="border-transparent bg-emerald-600/15 text-emerald-600">
                       <CheckIcon data-icon="inline-start" aria-hidden />
                       Complete
                     </Badge>
@@ -647,19 +627,11 @@ function NationalDexView() {
           onCheckedChange={(v) => toggleSelectAll(v)}
           aria-label={selectedCount > 0 ? `Select all · ${selectedCount} selected` : 'Select all'}
         />
-        <AddToDialogButton
-          selectedKeys={Array.from(selected)}
-          disabled={selectedCount === 0}
-          onAdd={addSelected}
-        />
+        <AddToDialogButton selectedKeys={Array.from(selected)} disabled={selectedCount === 0} onAdd={addSelected} />
         <Button variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
-        <FormViewMenu
-          value={formView}
-          onChange={(value) => setPref('formView', value)}
-          className="shrink-0"
-        />
+        <FormViewMenu value={formView} onChange={(value) => setPref('formView', value)} className="shrink-0" />
         <DexSearchBar value={search.query} onChange={search.setQuery} matchCount={search.matchCount} />
       </div>
 
@@ -1298,13 +1270,7 @@ function GameDexRow({
           <ItemDescription>{statusLabel}</ItemDescription>
         ) : null}
       </ItemContent>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-xs"
-        aria-label={`${slot.name} details`}
-        onClick={onInfoClick}
-      >
+      <Button type="button" variant="ghost" size="icon-xs" aria-label={`${slot.name} details`} onClick={onInfoClick}>
         <InfoIcon />
       </Button>
     </Item>

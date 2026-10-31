@@ -355,9 +355,7 @@ async function loadDex(slug) {
 /** @returns {Set<number>} National dex ids not yet obtainable in Pokémon GO. */
 function loadGoUnavailableIds() {
   const data = JSON.parse(readFileSync(pogoUnavailablePath, 'utf8'));
-  return new Set(
-    (data.ids ?? []).map(Number).filter((n) => Number.isFinite(n) && n > 0),
-  );
+  return new Set((data.ids ?? []).map(Number).filter((n) => Number.isFinite(n) && n > 0));
 }
 
 async function main() {

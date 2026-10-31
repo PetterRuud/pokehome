@@ -37,11 +37,7 @@ function DiffRows({ diff }: { diff: SyncDiffSummary }) {
   ].filter((r) => r.local > 0 || r.cloud > 0 || r.onlyLocal > 0 || r.onlyCloud > 0);
 
   const gameNote =
-    diff.gameCaughtOnlyLocal +
-      diff.gameCaughtOnlyCloud +
-      diff.gameHomeOnlyLocal +
-      diff.gameHomeOnlyCloud >
-    0
+    diff.gameCaughtOnlyLocal + diff.gameCaughtOnlyCloud + diff.gameHomeOnlyLocal + diff.gameHomeOnlyCloud > 0
       ? `Game marks: ${diff.gameCaughtOnlyLocal + diff.gameHomeOnlyLocal} only here · ${diff.gameCaughtOnlyCloud + diff.gameHomeOnlyCloud} only in cloud`
       : null;
 
@@ -60,9 +56,7 @@ function DiffRows({ diff }: { diff: SyncDiffSummary }) {
             <span className="font-medium text-foreground">{row.label}</span>
             <span className="tabular-nums text-muted-foreground">
               {row.local} here · {row.cloud} cloud
-              {row.onlyLocal > 0 || row.onlyCloud > 0
-                ? ` · +${row.onlyLocal}/+${row.onlyCloud}`
-                : ''}
+              {row.onlyLocal > 0 || row.onlyCloud > 0 ? ` · +${row.onlyLocal}/+${row.onlyCloud}` : ''}
             </span>
           </li>
         ))}
@@ -98,12 +92,10 @@ export function SyncConflictDialog() {
           <div className="flex flex-col gap-3">
             <div className="grid gap-1 text-xs text-muted-foreground">
               <p>
-                <span className="font-medium text-foreground">This device:</span>{' '}
-                {formatWhen(pendingConflict.localAt)}
+                <span className="font-medium text-foreground">This device:</span> {formatWhen(pendingConflict.localAt)}
               </p>
               <p>
-                <span className="font-medium text-foreground">Cloud:</span>{' '}
-                {formatWhen(pendingConflict.cloudAt)}
+                <span className="font-medium text-foreground">Cloud:</span> {formatWhen(pendingConflict.cloudAt)}
               </p>
             </div>
             <DiffRows diff={pendingConflict.diff} />

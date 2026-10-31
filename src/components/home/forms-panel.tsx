@@ -60,7 +60,11 @@ export function FormsPanel({ boxes, flags }: FormsPanelProps) {
         <CardDescription>Shiny, alpha, mega, gmax, and regional — % of eligible species</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
-        <ChartContainer config={chartConfig} className="aspect-auto h-52 w-full" initialDimension={{ width: 480, height: 208 }}>
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-52 w-full"
+          initialDimension={{ width: 480, height: 208 }}
+        >
           <BarChart data={chartData} layout="vertical" margin={{ left: 8, right: 12, top: 4, bottom: 4 }}>
             <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tickLine={false} axisLine={false} />
             <YAxis dataKey="dimension" type="category" width={72} tickLine={false} axisLine={false} />
