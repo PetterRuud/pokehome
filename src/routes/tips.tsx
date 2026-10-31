@@ -6,9 +6,27 @@ import { Separator } from '@/components/ui/separator';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { GameLogo } from '@/components/game-logo';
 import { DonutCalculator } from '@/components/donut-calculator';
+import { PokemonSprite } from '@/components/pokemon-sprite';
 import { berryDisplayName, berrySpriteUrl } from '@/lib/berries';
+import {
+  moveType,
+  parsePokemonType,
+  typeBadgeClass,
+  typeIconClass,
+  typeIconUrl,
+  type PokemonType,
+} from '@/lib/move-types';
 import { getDefaultTipFamilyId, getTipFamilies, getTips } from '@/lib/trainer-tips';
-import type { TipBerry, TipBlock, TipRecipe, TipSection } from '@/data/trainer-tips';
+import { cn } from '@/lib/utils';
+import type {
+  TipBerry,
+  TipBlock,
+  TipCounterBuild,
+  TipMegaFight,
+  TipRecipe,
+  TipSection,
+  TipSpecies,
+} from '@/data/trainer-tips';
 import { ExternalLinkIcon } from 'lucide-react';
 
 type TipsSearch = {
@@ -55,7 +73,7 @@ function TipsPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Trainer tips</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Curated cheatsheets by game family — donuts, berries, and mission shortcuts.
+          Curated cheatsheets by game family — donuts, berries, Rogue Mega counters, and mission shortcuts.
         </p>
       </div>
 
@@ -133,6 +151,16 @@ function TipsPage() {
                   story walkthrough
                   <ExternalLinkIcon data-icon="inline-end" aria-hidden />
                 </a>
+                {' · '}
+                <a
+                  href="https://game8.co/games/Pokemon-Legends-Z-A/archives/571819"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-2 hover:underline"
+                >
+                  Rogue Mega counters
+                  <ExternalLinkIcon data-icon="inline-end" aria-hidden />
+                </a>
               </p>
             </div>
           ) : null}
@@ -168,6 +196,22 @@ function TipBlockView({ block }: { block: TipBlock }) {
     );
   }
 
+  if (block.type === 'mega-fights') {
+    return (
+      <div className="flex flex-col gap-2">
+        <div>
+          <h3 className="text-sm font-semibold">{block.title}</h3>
+          <p className="text-xs text-muted-foreground">{block.goal}</p>
+        </div>
+        <ul className="divide-y divide-border rounded-md border border-border">
+          {block.fights.map((fight) => (
+            <MegaFightRow key={fight.label} fight={fight} />
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <div>
@@ -180,6 +224,106 @@ function TipBlockView({ block }: { block: TipBlock }) {
         ))}
       </ul>
     </div>
+  );
+}
+
+const SHOWDOWN_DEX = 'https://play.pokemonshowdown.com/sprites/dex';
+
+function TipSpeciesArt({ species, size = 40 }: { species: TipSpecies; size?: number }) {
+  return (
+    <PokemonSprite
+      id={species.id}
+      style="pixel"
+      variant={species.mega ? 'mega' : 'default'}
+      slug={species.slug}
+      src={species.spriteSlug ? `${SHOWDOWN_DEX}/${species.spriteSlug}.png` : undefined}
+      alt=""
+      width={size}
+      height={size}
+      className={size <= 32 ? 'size-8 shrink-0' : 'size-10 shrink-0'}
+    />
+  );
+}
+
+function TypeBadge({
+  label,
+  type: typeOverride,
+  title,
+}: {
+  label: string;
+  type?: PokemonType | null;
+  title?: string;
+}) {
+  const type = typeOverride === undefined ? parsePokemonType(label) : typeOverride;
+  if (!type) {
+    return (
+      <Badge variant="secondary" title={title}>
+        {label}
+      </Badge>
+    );
+  }
+  return (
+    <Badge
+      variant="outline"
+      className={cn('gap-1 shadow-none', typeBadgeClass(type))}
+      title={title ?? `${type} · ${label}`}
+    >
+      <img
+        src={typeIconUrl(type)}
+        alt=""
+        data-icon="inline-start"
+        className={cn('size-3', typeIconClass(type))}
+      />
+      {label}
+    </Badge>
+  );
+}
+
+function MegaFightRow({ fight }: { fight: TipMegaFight }) {
+  return (
+    <li className="flex flex-col gap-3 px-3 py-3">
+      <div className="flex items-start gap-3">
+        <TipSpeciesArt species={fight.boss} />
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold leading-snug">{fight.label}</p>
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+            {fight.types.map((type, i) => (
+              <TypeBadge key={`type-${i}-${type}`} label={type} />
+            ))}
+            <span className="text-xs font-medium text-muted-foreground">Weak</span>
+            {fight.weaknesses.map((weakness, i) => (
+              <TypeBadge key={`weak-${i}-${weakness}`} label={weakness} />
+            ))}
+          </div>
+          {fight.note ? <p className="mt-1.5 text-xs text-muted-foreground">{fight.note}</p> : null}
+        </div>
+      </div>
+      <ul className="flex flex-col gap-2.5 pl-1">
+        {fight.counters.map((counter) => (
+          <CounterBuildRow key={`${fight.label}-${counter.pokemon.slug}`} counter={counter} />
+        ))}
+      </ul>
+    </li>
+  );
+}
+
+function CounterBuildRow({ counter }: { counter: TipCounterBuild }) {
+  const { pokemon, moves, note } = counter;
+  return (
+    <li className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+      <div className="flex min-w-0 items-center gap-2 sm:w-40 sm:shrink-0">
+        <TipSpeciesArt species={pokemon} size={32} />
+        <span className="truncate text-sm font-medium">{pokemon.name}</span>
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="flex flex-wrap gap-1.5">
+          {moves.map((move) => (
+            <TypeBadge key={move} label={move} type={moveType(move)} />
+          ))}
+        </div>
+        {note ? <p className="text-xs text-muted-foreground">{note}</p> : null}
+      </div>
+    </li>
   );
 }
 
