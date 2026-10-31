@@ -71,7 +71,7 @@ function HomePage() {
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Your living dex</h1>
           <p className="text-sm text-muted-foreground md:text-base">
-            Track HOME-style boxes offline. Sign in to sync across devices — conflicts ask before overwrite.
+            Track HOME-style boxes offline. Sign in to sync across devices.
           </p>
         </div>
       </section>
