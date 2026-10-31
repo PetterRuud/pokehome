@@ -673,6 +673,11 @@ function NationalDexView() {
         <Button variant="outline" disabled={selectedCount === 0} onClick={clearSelected}>
           Clear
         </Button>
+        <FormViewMenu
+          value={formView}
+          onChange={(value) => setPref('formView', value)}
+          className="shrink-0"
+        />
         <DexSearchBar
           value={search.query}
           onChange={search.setQuery}
@@ -681,7 +686,6 @@ function NationalDexView() {
           onPrev={search.goPrev}
           onNext={search.goNext}
         />
-        <FormViewMenu value={formView} onChange={(value) => setPref('formView', value)} className="ml-auto" />
       </div>
 
       <p className="text-sm text-muted-foreground">

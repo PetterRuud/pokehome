@@ -24,7 +24,7 @@ export function DexSearchBar({
   const hasMatches = matchCount > 0;
 
   return (
-    <div className="flex min-w-0 flex-1 items-center gap-1.5">
+    <div className="flex w-full min-w-0 basis-full items-center gap-1.5 sm:w-auto sm:flex-1 sm:basis-auto">
       <div className="relative min-w-0 flex-1">
         <SearchIcon
           className="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-muted-foreground"
