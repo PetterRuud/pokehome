@@ -18,6 +18,7 @@ export function DexSlotButton({
   spriteStyle,
   cardSize = 'medium',
   selected,
+  highlighted = false,
   onSelectedChange,
 }: {
   slot: DexSlot;
@@ -28,6 +29,8 @@ export function DexSlotButton({
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   selected: boolean;
+  /** Brief ring after returning from the detail page. */
+  highlighted?: boolean;
   onSelectedChange: (selected: boolean) => void;
 }) {
   const size = cardSizeConfig(cardSize);
@@ -57,7 +60,12 @@ export function DexSlotButton({
   const variant = selected ? 'secondary' : active ? 'primary' : 'muted';
 
   return (
-    <div className="relative">
+    <div
+      className={cn(
+        'relative rounded-xl transition-[box-shadow,background-color] duration-500',
+        highlighted && 'bg-primary/10 ring-2 ring-primary ring-offset-2 ring-offset-background',
+      )}
+    >
       <Checkbox
         checked={selected}
         onCheckedChange={(v) => onSelectedChange(v === true)}

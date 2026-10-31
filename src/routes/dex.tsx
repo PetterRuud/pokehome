@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -282,16 +282,29 @@ function GameFilterMenu({
 type DexSearch = {
   tab?: 'national' | 'games';
   game?: GameId;
+  /** Species id to scroll into view after returning from Pokémon detail. */
+  focus?: number;
 };
+
+function parseFocusId(value: unknown): number | undefined {
+  if (typeof value === 'number' && Number.isInteger(value) && value > 0) return value;
+  if (typeof value === 'string' && /^\d+$/.test(value)) {
+    const id = Number(value);
+    if (id > 0) return id;
+  }
+  return undefined;
+}
 
 export const Route = createFileRoute('/dex')({
   validateSearch: (search: Record<string, unknown>): DexSearch => {
     const tab = search.tab === 'games' ? 'games' : 'national';
     const rawGame = typeof search.game === 'string' && search.game.length > 0 ? search.game : undefined;
     const game = rawGame && getGame(rawGame) ? rawGame : undefined;
+    const focus = parseFocusId(search.focus);
     return {
       tab,
       ...(game ? { game } : {}),
+      ...(focus != null ? { focus } : {}),
     };
   },
   component: DexPage,
@@ -304,6 +317,7 @@ function DexPage() {
   const navigate = Route.useNavigate();
   const tab = search.tab === 'games' ? 'games' : 'national';
   const gameId: GameId = (search.game && getGame(search.game)?.id) || games[0]?.id || 'sv-paldea';
+  const focusId = search.focus;
 
   // Keep ?game= in sync when browsing the Games tab
   useEffect(() => {
@@ -311,10 +325,23 @@ function DexPage() {
     if (search.game === gameId) return;
     void navigate({
       to: '/dex',
-      search: { tab: 'games', game: gameId },
+      search: {
+        tab: 'games',
+        game: gameId,
+        ...(focusId != null ? { focus: focusId } : {}),
+      },
       replace: true,
     });
-  }, [tab, gameId, search.game, navigate]);
+  }, [tab, gameId, search.game, focusId, navigate]);
+
+  const clearFocus = useCallback(() => {
+    if (focusId == null) return;
+    void navigate({
+      to: '/dex',
+      search: tab === 'games' ? { tab: 'games', game: gameId } : { tab: 'national' },
+      replace: true,
+    });
+  }, [focusId, tab, gameId, navigate]);
 
   function setTab(next: 'national' | 'games') {
     void navigate({
@@ -346,7 +373,10 @@ function DexPage() {
         </TabsList>
 
         <TabsContent value="national" className="mt-4">
-          <NationalDexView />
+          <NationalDexView
+            focusId={tab === 'national' ? focusId : undefined}
+            onFocusHandled={clearFocus}
+          />
         </TabsContent>
 
         <TabsContent value="games" className="mt-4 flex flex-col gap-4">
@@ -393,14 +423,24 @@ function DexPage() {
               );
             })}
           </ToggleGroup>
-          <GameDexView gameId={gameId} />
+          <GameDexView
+            gameId={gameId}
+            focusId={tab === 'games' ? focusId : undefined}
+            onFocusHandled={clearFocus}
+          />
         </TabsContent>
       </Tabs>
     </div>
   );
 }
 
-function NationalDexView() {
+function NationalDexView({
+  focusId,
+  onFocusHandled,
+}: {
+  focusId?: number;
+  onFocusHandled: () => void;
+}) {
   const caughtByKey = useDexStore((s) => s.caughtByKey);
   const homeByKey = useDexStore((s) => s.homeByKey);
   const shinyByKey = useDexStore((s) => s.shinyByKey);
@@ -429,7 +469,9 @@ function NationalDexView() {
   const [renameBox, setRenameBox] = useState<DexBox | null>(null);
   const [renameValue, setRenameValue] = useState('');
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
+  const [highlightId, setHighlightId] = useState<number | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const focusHandledRef = useRef<number | null>(null);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [scrollMargin, setScrollMargin] = useState(0);
 
@@ -441,6 +483,12 @@ function NationalDexView() {
   useEffect(() => {
     setSelected(new Set());
   }, [formView]);
+
+  useEffect(() => {
+    if (highlightId == null) return;
+    const timer = window.setTimeout(() => setHighlightId(null), 1600);
+    return () => window.clearTimeout(timer);
+  }, [highlightId]);
 
   const defaultTitles = useMemo(() => {
     const map: Record<string, string> = {};
@@ -563,6 +611,30 @@ function NationalDexView() {
   useLayoutEffect(() => {
     virtualizer.measure();
   }, [colCount, scrollMargin, virtualRows.length, formView, cardSize, cardLayout.gridRowHeight, virtualizer]);
+
+  useLayoutEffect(() => {
+    if (focusId == null) {
+      focusHandledRef.current = null;
+      return;
+    }
+    if (focusHandledRef.current === focusId) return;
+    if (displayBoxes.length === 0) {
+      focusHandledRef.current = focusId;
+      onFocusHandled();
+      return;
+    }
+    if (scrollWidth === 0 || virtualRows.length === 0) return;
+
+    const index = virtualRows.findIndex(
+      (row) => row.type === 'grid' && row.slots.some((slot) => slot.id === focusId),
+    );
+    focusHandledRef.current = focusId;
+    if (index >= 0) {
+      setHighlightId(focusId);
+      virtualizer.scrollToIndex(index, { align: 'center' });
+    }
+    onFocusHandled();
+  }, [focusId, displayBoxes.length, scrollWidth, virtualRows, virtualizer, onFocusHandled]);
 
   function setMany(keys: string[], value: boolean) {
     if (formView === 'home') setHomeMany(keys, value);
@@ -759,6 +831,7 @@ function NationalDexView() {
                     spriteStyle={spriteStyle}
                     cardSize={cardSize}
                     selected={selected.has(slot.key)}
+                    highlighted={highlightId === slot.id}
                     onSelectedChange={(next) => toggleSelected(slot.key, next)}
                   />
                 ))}
@@ -901,7 +974,15 @@ function NationalBoxHeader({
   );
 }
 
-function GameDexView({ gameId }: { gameId: GameId }) {
+function GameDexView({
+  gameId,
+  focusId,
+  onFocusHandled,
+}: {
+  gameId: GameId;
+  focusId?: number;
+  onFocusHandled: () => void;
+}) {
   const game = getGame(gameId);
   const caughtMap = useDexStore((s) => s.caughtByGame[gameId] ?? EMPTY_CAUGHT);
   const homeMap = useDexStore((s) => s.homeByGame[gameId] ?? EMPTY_HOME);
@@ -915,7 +996,9 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const [layout, setLayout] = useState<'list' | 'grid'>('grid');
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
+  const [highlightId, setHighlightId] = useState<number | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const focusHandledRef = useRef<number | null>(null);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [scrollMargin, setScrollMargin] = useState(0);
 
@@ -925,6 +1008,12 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   useEffect(() => {
     setSelected(new Set());
   }, [gameId, filter, track]);
+
+  useEffect(() => {
+    if (highlightId == null) return;
+    const timer = window.setTimeout(() => setHighlightId(null), 1600);
+    return () => window.clearTimeout(timer);
+  }, [highlightId]);
 
   const slots = useMemo(() => game?.boxes.flatMap((box) => box.slots) ?? [], [game]);
   const search = useDexSearchState(slots);
@@ -983,6 +1072,29 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     cardLayout.listRowHeight,
     virtualizer,
   ]);
+
+  useLayoutEffect(() => {
+    if (focusId == null) {
+      focusHandledRef.current = null;
+      return;
+    }
+    if (focusHandledRef.current === focusId) return;
+    if (visible.length === 0) {
+      focusHandledRef.current = focusId;
+      onFocusHandled();
+      return;
+    }
+    if (scrollWidth === 0 || colCount < 1) return;
+
+    const slotIndex = visible.findIndex((slot) => slot.id === focusId);
+    focusHandledRef.current = focusId;
+    if (slotIndex >= 0) {
+      const rowIndex = layout === 'list' ? slotIndex : Math.floor(slotIndex / colCount);
+      setHighlightId(focusId);
+      virtualizer.scrollToIndex(rowIndex, { align: 'center' });
+    }
+    onFocusHandled();
+  }, [focusId, scrollWidth, visible, layout, colCount, virtualizer, onFocusHandled]);
 
   const selectableVisible = useMemo(() => visible.filter((s) => s.available !== false), [visible]);
   const visibleKeys = useMemo(() => selectableVisible.map((s) => s.key), [selectableVisible]);
@@ -1148,6 +1260,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     inHome={Boolean(homeMap[slot.key])}
                     track={track}
                     selected={selected.has(slot.key)}
+                    highlighted={highlightId === slot.id}
                     spriteStyle={spriteStyle}
                     cardSize={cardSize}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
@@ -1178,6 +1291,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     inHome={Boolean(homeMap[slot.key])}
                     track={track}
                     selected={selected.has(slot.key)}
+                    highlighted={highlightId === slot.id}
                     spriteStyle={spriteStyle}
                     cardSize={cardSize}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
@@ -1222,6 +1336,7 @@ function GameDexRow({
   inHome,
   track,
   selected,
+  highlighted = false,
   spriteStyle,
   cardSize = 'medium',
   onSelectedChange,
@@ -1232,6 +1347,7 @@ function GameDexRow({
   inHome: boolean;
   track: GameTrack;
   selected: boolean;
+  highlighted?: boolean;
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   onSelectedChange: (selected: boolean) => void;
@@ -1244,7 +1360,14 @@ function GameDexRow({
   const statusLabel = track === 'home' ? 'HOME' : 'Caught';
 
   return (
-    <Item variant={variant} size="sm" className={cn(unavailable && 'opacity-70')}>
+    <Item
+      variant={variant}
+      size="sm"
+      className={cn(
+        unavailable && 'opacity-70',
+        highlighted && 'bg-primary/10 ring-2 ring-primary ring-offset-2 ring-offset-background',
+      )}
+    >
       <Checkbox
         checked={selected}
         disabled={unavailable}
@@ -1298,6 +1421,7 @@ function GameDexGridCard({
   inHome,
   track,
   selected,
+  highlighted = false,
   spriteStyle,
   cardSize = 'medium',
   onSelectedChange,
@@ -1308,6 +1432,7 @@ function GameDexGridCard({
   inHome: boolean;
   track: GameTrack;
   selected: boolean;
+  highlighted?: boolean;
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   onSelectedChange: (selected: boolean) => void;
@@ -1331,7 +1456,12 @@ function GameDexGridCard({
         : 'missing';
 
   return (
-    <div className="relative">
+    <div
+      className={cn(
+        'relative rounded-xl transition-[box-shadow,background-color] duration-500',
+        highlighted && 'bg-primary/10 ring-2 ring-primary ring-offset-2 ring-offset-background',
+      )}
+    >
       <Checkbox
         checked={selected}
         disabled={unavailable}

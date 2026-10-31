@@ -85,8 +85,15 @@ function PokemonPending() {
 }
 
 function PokemonError() {
+  const { id } = Route.useParams();
   const search = Route.useSearch();
-  const dexSearch = search.from === 'games' && search.game ? { tab: 'games' as const, game: search.game } : undefined;
+  const focus = Number(id);
+  const dexSearch =
+    search.from === 'games' && search.game
+      ? { tab: 'games' as const, game: search.game, ...(Number.isFinite(focus) && focus > 0 ? { focus } : {}) }
+      : Number.isFinite(focus) && focus > 0
+        ? { focus }
+        : undefined;
 
   return (
     <div className="mx-auto flex max-w-md flex-col gap-3 py-12 text-center">
@@ -131,7 +138,9 @@ function PokemonPage() {
   const inGameOrder = Boolean(fromGame && gameHasSpecies(fromGame, summary.id));
   const { prev, next } = inGameOrder && fromGame ? gameNeighbors(fromGame, summary.id) : nationalNeighbors(summary.id);
   const navSearch = fromGame ? search : undefined;
-  const dexSearch = fromGame ? { tab: 'games' as const, game: fromGame.id } : undefined;
+  const dexSearch = fromGame
+    ? { tab: 'games' as const, game: fromGame.id, focus: summary.id }
+    : { focus: summary.id };
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
