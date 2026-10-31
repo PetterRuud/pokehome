@@ -85,7 +85,7 @@ function PokemonPage() {
         <PokemonAdjacentNav prev={prev} next={next} search={navSearch} />
       </div>
 
-      <PokemonDetail summary={summary} chain={chain} navSearch={navSearch} permalink={false} />
+      <PokemonDetail summary={summary} chain={chain} navSearch={navSearch} />
 
       <div className="flex w-full flex-col gap-4">
         <Separator />

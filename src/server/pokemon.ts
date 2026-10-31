@@ -92,7 +92,7 @@ async function fetchMoveType(slug: string): Promise<string> {
 }
 
 async function mapPool<T, R>(items: T[], concurrency: number, fn: (item: T) => Promise<R>): Promise<R[]> {
-  const results = new Array<R>(items.length);
+  const results = Array.from({ length: items.length }) as R[];
   let next = 0;
   async function worker() {
     while (next < items.length) {

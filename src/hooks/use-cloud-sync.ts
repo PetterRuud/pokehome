@@ -46,6 +46,14 @@ export function useCloudSync(): CloudSyncState {
   const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncing = useRef(false);
   const pendingConflictRef = useRef<PendingSyncConflict | null>(null);
+  const signedIn = Boolean(isSignedIn);
+  const [trackedSignedIn, setTrackedSignedIn] = useState(signedIn);
+
+  // Clear conflict UI state when the session ends (adjust during render).
+  if (signedIn !== trackedSignedIn) {
+    setTrackedSignedIn(signedIn);
+    if (!signedIn) setPendingConflict(null);
+  }
 
   const setConflict = useCallback((conflict: PendingSyncConflict | null) => {
     pendingConflictRef.current = conflict;
@@ -167,19 +175,18 @@ export function useCloudSync(): CloudSyncState {
     [takeCloud, pushLocal, setConflict],
   );
 
-  // Pull / reconcile once per signed-in user after hydrate
+  // Reset sync bookkeeping on sign-out; pull once per signed-in user after hydrate.
   useEffect(() => {
-    if (!isLoaded || !isSignedIn || !userId || !hydrated) {
-      if (!isSignedIn) {
-        pulledForUser.current = null;
-        setConflict(null);
-      }
+    if (!isSignedIn) {
+      pulledForUser.current = null;
+      pendingConflictRef.current = null;
       return;
     }
+    if (!isLoaded || !userId || !hydrated) return;
     if (pulledForUser.current === userId) return;
     pulledForUser.current = userId;
     void runSync('login');
-  }, [isLoaded, isSignedIn, userId, hydrated, runSync, setConflict]);
+  }, [isLoaded, isSignedIn, userId, hydrated, runSync]);
 
   // Debounced push when local data changes after initial pull
   useEffect(() => {

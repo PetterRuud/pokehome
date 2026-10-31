@@ -31,33 +31,31 @@ type MovePoolDialogProps = {
   pokemonName: string;
 };
 
+type PoolResult = { status: 'ok'; pool: MovePool } | { status: 'error'; id: number; message: string };
+
 export function MovePoolDialog({ pokemonId, pokemonName }: MovePoolDialogProps) {
   const [open, setOpen] = useState(false);
-  const [pool, setPool] = useState<MovePool | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<PoolResult | null>(null);
 
   useEffect(() => {
     if (!open) return;
-    if (pool?.id === pokemonId) return;
+    const id = pokemonId;
     let cancelled = false;
-    setLoading(true);
-    setError(null);
-    setPool(null);
-    void getPokemonMovePool({ data: { id: String(pokemonId) } })
-      .then((next) => {
-        if (!cancelled) setPool(next);
+    void getPokemonMovePool({ data: { id: String(id) } })
+      .then((pool) => {
+        if (!cancelled) setResult({ status: 'ok', pool });
       })
       .catch(() => {
-        if (!cancelled) setError('Could not load move pool.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setResult({ status: 'error', id, message: 'Could not load move pool.' });
       });
     return () => {
       cancelled = true;
     };
-  }, [open, pokemonId, pool?.id]);
+  }, [open, pokemonId]);
+
+  const pool = result?.status === 'ok' && result.pool.id === pokemonId ? result.pool : null;
+  const error = result?.status === 'error' && result.id === pokemonId ? result.message : null;
+  const loading = open && !pool && !error;
 
   const sections = useMemo(() => {
     if (!pool) return [];
@@ -73,7 +71,7 @@ export function MovePoolDialog({ pokemonId, pokemonName }: MovePoolDialogProps) 
         <ListIcon data-icon="inline-start" />
         Move pool
       </DialogTrigger>
-      <DialogContent className="flex max-h-[min(85vh,40rem)] flex-col gap-4 overflow-hidden sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Move pool</DialogTitle>
           <DialogDescription>
@@ -81,7 +79,7 @@ export function MovePoolDialog({ pokemonId, pokemonName }: MovePoolDialogProps) 
           </DialogDescription>
         </DialogHeader>
 
-        <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+        <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
           {loading ? (
             <div className="flex flex-col gap-3">
               <Skeleton className="h-4 w-24" />

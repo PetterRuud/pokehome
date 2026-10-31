@@ -15,15 +15,7 @@ import { parsePokemonType } from '@/lib/move-types';
 import { getGameGroupsForSpecies } from '@/lib/games';
 import type { GameId } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import {
-  ExpandIcon,
-  ExternalLinkIcon,
-  EyeIcon,
-  GlobeIcon,
-  HomeIcon,
-  SparklesIcon,
-  ZapIcon,
-} from 'lucide-react';
+import { ExpandIcon, ExternalLinkIcon, EyeIcon, GlobeIcon, HomeIcon, SparklesIcon, ZapIcon } from 'lucide-react';
 
 export type PokemonSummary = {
   id: number;
@@ -42,8 +34,7 @@ export function PokemonDetail({
   chain,
   navSearch,
   onSelectSpecies,
-  permalink = true,
-  className,
+  permalink = false,
 }: {
   summary: PokemonSummary;
   chain: EvoNode;
@@ -52,7 +43,6 @@ export function PokemonDetail({
   onSelectSpecies?: (id: number) => void;
   /** Show a link to the standalone `/pokemon/$id` page. */
   permalink?: boolean;
-  className?: string;
 }) {
   const key = `n${summary.id}`;
   const caught = useDexStore((s) => Boolean(s.caughtByKey[key]));
@@ -81,9 +71,9 @@ export function PokemonDetail({
   const hasRegional = canRegional(summary.id);
 
   return (
-    <div className={cn('flex flex-col gap-6 md:flex-row md:items-start', className)}>
+    <div className="flex flex-col gap-6 md:flex-row md:items-start">
       <Card className="items-center md:w-56 md:shrink-0">
-        <CardContent className="flex flex-col items-center gap-3 pt-6">
+        <CardContent className="flex flex-col items-center gap-3">
           <PokemonSprite
             id={summary.id}
             style={spriteStyle}
@@ -115,9 +105,7 @@ export function PokemonDetail({
               variant="ghost"
               size="sm"
               className="w-full"
-              render={
-                <Link to="/pokemon/$id" params={{ id: String(summary.id) }} search={navSearch} />
-              }
+              render={<Link to="/pokemon/$id" params={{ id: String(summary.id) }} search={navSearch} />}
               nativeButton={false}
             >
               <ExternalLinkIcon data-icon="inline-start" />
@@ -271,12 +259,7 @@ export function PokemonDetail({
           </Card>
         ) : null}
 
-        <EvolutionChart
-          chain={chain}
-          spriteStyle={spriteStyle}
-          search={navSearch}
-          onSelectSpecies={onSelectSpecies}
-        />
+        <EvolutionChart chain={chain} spriteStyle={spriteStyle} search={navSearch} onSelectSpecies={onSelectSpecies} />
       </div>
     </div>
   );
