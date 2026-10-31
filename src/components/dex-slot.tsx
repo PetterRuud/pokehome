@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { cardSizeConfig } from '@/lib/card-size';
 import { canGmax, canMega, canRegional } from '@/lib/form-variants';
@@ -18,8 +17,8 @@ export function DexSlotButton({
   spriteStyle,
   cardSize = 'medium',
   selected,
-  highlighted = false,
   onSelectedChange,
+  onInfoClick,
 }: {
   slot: DexSlot;
   caught: boolean;
@@ -29,9 +28,8 @@ export function DexSlotButton({
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   selected: boolean;
-  /** Brief ring after returning from the detail page. */
-  highlighted?: boolean;
   onSelectedChange: (selected: boolean) => void;
+  onInfoClick: () => void;
 }) {
   const size = cardSizeConfig(cardSize);
   const trackingForm = formView !== 'default';
@@ -60,12 +58,7 @@ export function DexSlotButton({
   const variant = selected ? 'secondary' : active ? 'primary' : 'muted';
 
   return (
-    <div
-      className={cn(
-        'relative rounded-xl transition-[box-shadow,background-color] duration-500',
-        highlighted && 'bg-primary/10 ring-2 ring-primary ring-offset-2 ring-offset-background',
-      )}
-    >
+    <div className="relative">
       <Checkbox
         checked={selected}
         onCheckedChange={(v) => onSelectedChange(v === true)}
@@ -128,18 +121,15 @@ export function DexSlotButton({
       </Item>
 
       <Button
+        type="button"
         variant="outline"
         size="icon-sm"
         className="absolute top-1 right-1 z-10"
-        render={
-          <Link
-            to="/pokemon/$id"
-            params={{ id: String(slot.id) }}
-            aria-label={`${slot.name} details`}
-            onClick={(e) => e.stopPropagation()}
-          />
-        }
-        nativeButton={false}
+        aria-label={`${slot.name} details`}
+        onClick={(e) => {
+          e.stopPropagation();
+          onInfoClick();
+        }}
       >
         <InfoIcon />
       </Button>

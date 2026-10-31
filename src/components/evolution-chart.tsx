@@ -8,14 +8,32 @@ import { ArrowRightIcon } from 'lucide-react';
 
 type PokemonNavSearch = { from?: 'games'; game?: GameId };
 
-function Stage({ node, spriteStyle, search }: { node: EvoNode; spriteStyle: SpriteStyle; search?: PokemonNavSearch }) {
+function Stage({
+  node,
+  spriteStyle,
+  search,
+  onSelectSpecies,
+}: {
+  node: EvoNode;
+  spriteStyle: SpriteStyle;
+  search?: PokemonNavSearch;
+  onSelectSpecies?: (id: number) => void;
+}) {
+  const render =
+    onSelectSpecies != null
+      ? (
+          <button
+            type="button"
+            onClick={() => onSelectSpecies(node.id)}
+            aria-label={`${node.name} details`}
+          />
+        )
+      : (
+          <Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />
+        );
+
   return (
-    <Item
-      variant="outline"
-      size="sm"
-      render={<Link to="/pokemon/$id" params={{ id: String(node.id) }} search={search} />}
-      className="w-28 flex-col items-center"
-    >
+    <Item variant="outline" size="sm" render={render} className="w-28 flex-col items-center">
       <PokemonSprite id={node.id} style={spriteStyle} width={80} height={80} className="size-20" />
       <ItemContent className="w-full items-center text-center">
         <ItemTitle className="w-full justify-center normal-case tracking-normal">{node.name}</ItemTitle>
@@ -33,30 +51,40 @@ function MethodLabel({ label }: { label: string }) {
   );
 }
 
-function Branch({ node, spriteStyle, search }: { node: EvoNode; spriteStyle: SpriteStyle; search?: PokemonNavSearch }) {
+function Branch({
+  node,
+  spriteStyle,
+  search,
+  onSelectSpecies,
+}: {
+  node: EvoNode;
+  spriteStyle: SpriteStyle;
+  search?: PokemonNavSearch;
+  onSelectSpecies?: (id: number) => void;
+}) {
   if (node.evolvesTo.length === 0) {
-    return <Stage node={node} spriteStyle={spriteStyle} search={search} />;
+    return <Stage node={node} spriteStyle={spriteStyle} search={search} onSelectSpecies={onSelectSpecies} />;
   }
 
   if (node.evolvesTo.length === 1) {
     const child = node.evolvesTo[0]!;
     return (
       <div className="flex flex-wrap items-center justify-center gap-1">
-        <Stage node={node} spriteStyle={spriteStyle} search={search} />
+        <Stage node={node} spriteStyle={spriteStyle} search={search} onSelectSpecies={onSelectSpecies} />
         {child.methodFromParent ? <MethodLabel label={child.methodFromParent.label} /> : null}
-        <Branch node={child} spriteStyle={spriteStyle} search={search} />
+        <Branch node={child} spriteStyle={spriteStyle} search={search} onSelectSpecies={onSelectSpecies} />
       </div>
     );
   }
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-2">
-      <Stage node={node} spriteStyle={spriteStyle} search={search} />
+      <Stage node={node} spriteStyle={spriteStyle} search={search} onSelectSpecies={onSelectSpecies} />
       <div className="flex flex-col gap-3 border-l border-border pl-2">
         {node.evolvesTo.map((child) => (
           <div key={child.id} className="flex flex-wrap items-center gap-1">
             {child.methodFromParent ? <MethodLabel label={child.methodFromParent.label} /> : null}
-            <Branch node={child} spriteStyle={spriteStyle} search={search} />
+            <Branch node={child} spriteStyle={spriteStyle} search={search} onSelectSpecies={onSelectSpecies} />
           </div>
         ))}
       </div>
@@ -68,10 +96,12 @@ export function EvolutionChart({
   chain,
   spriteStyle,
   search,
+  onSelectSpecies,
 }: {
   chain: EvoNode;
   spriteStyle: SpriteStyle;
   search?: PokemonNavSearch;
+  onSelectSpecies?: (id: number) => void;
 }) {
   return (
     <Card size="sm">
@@ -80,7 +110,7 @@ export function EvolutionChart({
       </CardHeader>
       <CardContent className="overflow-x-auto">
         <div className="flex min-w-min justify-center md:justify-start">
-          <Branch node={chain} spriteStyle={spriteStyle} search={search} />
+          <Branch node={chain} spriteStyle={spriteStyle} search={search} onSelectSpecies={onSelectSpecies} />
         </div>
       </CardContent>
     </Card>
