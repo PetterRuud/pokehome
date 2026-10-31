@@ -1,27 +1,19 @@
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronDownIcon, ChevronUpIcon, SearchIcon, XIcon } from 'lucide-react';
+import { SearchIcon, XIcon } from 'lucide-react';
 
 export function DexSearchBar({
   value,
   onChange,
   matchCount,
-  activeIndex,
-  onPrev,
-  onNext,
   placeholder = 'Search name or #…',
 }: {
   value: string;
   onChange: (next: string) => void;
-  matchCount: number;
-  /** 0-based index into matches; -1 when none. */
-  activeIndex: number;
-  onPrev: () => void;
-  onNext: () => void;
+  /** When filtering, number of visible matches (omit or ignore when empty query). */
+  matchCount?: number;
   placeholder?: string;
 }) {
   const hasQuery = value.trim().length > 0;
-  const hasMatches = matchCount > 0;
 
   return (
     <div className="flex w-full min-w-0 basis-full items-center gap-1.5 sm:w-auto sm:flex-1 sm:basis-auto">
@@ -34,11 +26,7 @@ export function DexSearchBar({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              if (e.shiftKey) onPrev();
-              else onNext();
-            } else if (e.key === 'Escape' && value) {
+            if (e.key === 'Escape' && value) {
               e.preventDefault();
               onChange('');
             }
@@ -59,31 +47,9 @@ export function DexSearchBar({
         ) : null}
       </div>
       {hasQuery ? (
-        <div className="flex shrink-0 items-center gap-0.5">
-          <span className="px-1 text-xs tabular-nums text-muted-foreground">
-            {hasMatches ? `${activeIndex + 1}/${matchCount}` : '0'}
-          </span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            disabled={!hasMatches}
-            onClick={onPrev}
-            aria-label="Previous match"
-          >
-            <ChevronUpIcon className="size-3.5" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            disabled={!hasMatches}
-            onClick={onNext}
-            aria-label="Next match"
-          >
-            <ChevronDownIcon className="size-3.5" />
-          </Button>
-        </div>
+        <span className="shrink-0 px-1 text-xs tabular-nums text-muted-foreground">
+          {matchCount === 0 ? '0' : matchCount}
+        </span>
       ) : null}
     </div>
   );

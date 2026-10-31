@@ -18,8 +18,6 @@ export function DexSlotButton({
   spriteStyle,
   cardSize = 'medium',
   selected,
-  searchHit,
-  searchActive,
   onSelectedChange,
 }: {
   slot: DexSlot;
@@ -30,10 +28,6 @@ export function DexSlotButton({
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   selected: boolean;
-  /** Matched by in-app dex search. */
-  searchHit?: boolean;
-  /** Current active search match. */
-  searchActive?: boolean;
   onSelectedChange: (selected: boolean) => void;
 }) {
   const size = cardSizeConfig(cardSize);
@@ -81,12 +75,7 @@ export function DexSlotButton({
             aria-pressed={selected}
           />
         }
-        className={cn(
-          'flex-col items-center',
-          size.cardPadClass,
-          searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
-          searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
-        )}
+        className={cn('flex-col items-center', size.cardPadClass)}
       >
         <PokemonSprite
           id={slot.id}

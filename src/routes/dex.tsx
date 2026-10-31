@@ -74,39 +74,16 @@ import {
 import type { ComponentType, SVGProps } from 'react';
 
 function useDexSearchState(slots: DexSlot[]) {
-  const [query, setQueryState] = useState('');
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const matches = useMemo(() => filterSlotsByQuery(slots, query), [slots, query]);
-
-  const safeIndex = matches.length === 0 ? -1 : Math.min(activeIndex, matches.length - 1);
-  const activeKey = safeIndex >= 0 ? (matches[safeIndex]?.key ?? null) : null;
-  const hitKeys = useMemo(() => new Set(matches.map((s) => s.key)), [matches]);
-
-  function setQuery(next: string) {
-    setQueryState(next);
-    setActiveIndex(0);
-  }
-
-  function goNext() {
-    if (matches.length === 0) return;
-    setActiveIndex((i) => (i + 1) % matches.length);
-  }
-
-  function goPrev() {
-    if (matches.length === 0) return;
-    setActiveIndex((i) => (i - 1 + matches.length) % matches.length);
-  }
+  const [query, setQuery] = useState('');
+  const hasQuery = query.trim().length > 0;
+  const matches = useMemo(() => (hasQuery ? filterSlotsByQuery(slots, query) : []), [slots, query, hasQuery]);
 
   return {
     query,
     setQuery,
+    hasQuery,
     matches,
-    activeIndex: safeIndex,
-    activeKey,
-    hitKeys,
-    goNext,
-    goPrev,
+    matchCount: hasQuery ? matches.length : undefined,
   };
 }
 import { toast } from 'sonner';
@@ -512,11 +489,24 @@ function NationalDexView() {
                 : 'regional';
 
   const allSlots = useMemo(() => boxes.flatMap((box) => box.slots), [boxes]);
-  const allKeys = useMemo(() => allSlots.map((s) => s.key), [allSlots]);
+  const search = useDexSearchState(allSlots);
+
+  const displayBoxes = useMemo(() => {
+    if (!search.hasQuery) return boxes;
+    const hitKeys = new Set(search.matches.map((s) => s.key));
+    return boxes
+      .map((box) => ({
+        ...box,
+        slots: box.slots.filter((slot) => hitKeys.has(slot.key)),
+      }))
+      .filter((box) => box.slots.length > 0);
+  }, [boxes, search.hasQuery, search.matches]);
+
+  const displaySlots = useMemo(() => displayBoxes.flatMap((box) => box.slots), [displayBoxes]);
+  const allKeys = useMemo(() => displaySlots.map((s) => s.key), [displaySlots]);
   const selectedCount = selected.size;
   const allSelected = allKeys.length > 0 && allKeys.every((k) => selected.has(k));
   const someSelected = allKeys.some((k) => selected.has(k));
-  const search = useDexSearchState(allSlots);
 
   useLayoutEffect(() => {
     const el = listRef.current;
@@ -533,13 +523,13 @@ function NationalDexView() {
       ro.disconnect();
       window.removeEventListener('resize', update);
     };
-  }, [boxes.length, formView, cardSize]);
+  }, [displayBoxes.length, formView, cardSize, search.query]);
 
   const colCount = useGridColumnCount(scrollWidth, cardSize);
 
   const virtualRows = useMemo(() => {
     const rows: NationalVirtualRow[] = [];
-    for (const box of boxes) {
+    for (const box of displayBoxes) {
       const keys = box.slots.map((s) => s.key);
       const caughtCount = keys.filter((k) => Boolean(progressByKey[k])).length;
       const complete = caughtCount === keys.length && keys.length > 0;
@@ -560,7 +550,7 @@ function NationalDexView() {
       }
     }
     return rows;
-  }, [boxes, progressByKey, colCount]);
+  }, [displayBoxes, progressByKey, colCount]);
 
   // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual intentionally skips compiler memoization
   const virtualizer = useWindowVirtualizer({
@@ -573,16 +563,6 @@ function NationalDexView() {
   useLayoutEffect(() => {
     virtualizer.measure();
   }, [colCount, scrollMargin, virtualRows.length, formView, cardSize, cardLayout.gridRowHeight, virtualizer]);
-
-  useEffect(() => {
-    if (!search.activeKey) return;
-    const rowIndex = virtualRows.findIndex(
-      (row) => row.type === 'grid' && row.slots.some((slot) => slot.key === search.activeKey),
-    );
-    if (rowIndex >= 0) {
-      virtualizer.scrollToIndex(rowIndex, { align: 'center' });
-    }
-  }, [search.activeKey, virtualRows, virtualizer]);
 
   function setMany(keys: string[], value: boolean) {
     if (formView === 'home') setHomeMany(keys, value);
@@ -678,33 +658,30 @@ function NationalDexView() {
           onChange={(value) => setPref('formView', value)}
           className="shrink-0"
         />
-        <DexSearchBar
-          value={search.query}
-          onChange={search.setQuery}
-          matchCount={search.matches.length}
-          activeIndex={search.activeIndex}
-          onPrev={search.goPrev}
-          onNext={search.goNext}
-        />
+        <DexSearchBar value={search.query} onChange={search.setQuery} matchCount={search.matchCount} />
       </div>
 
       <p className="text-sm text-muted-foreground">
-        {formView === 'mega'
-          ? `Mega · ${formProgress.caught} / ${megaSpeciesCount()}`
-          : formView === 'gmax'
-            ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
-            : formView === 'regional'
-              ? `Regional · ${formProgress.caught} / ${regionalSpeciesCount()}`
-              : formView === 'home' || formView === 'shiny' || formView === 'alpha'
-                ? `${trackLabel} · ${formProgress.caught} marked`
-                : `National · ${formProgress.caught} / ${formProgress.total}`}
+        {search.hasQuery
+          ? `${search.matchCount} match${search.matchCount === 1 ? '' : 'es'}`
+          : formView === 'mega'
+            ? `Mega · ${formProgress.caught} / ${megaSpeciesCount()}`
+            : formView === 'gmax'
+              ? `Gmax · ${formProgress.caught} / ${gmaxSpeciesCount()}`
+              : formView === 'regional'
+                ? `Regional · ${formProgress.caught} / ${regionalSpeciesCount()}`
+                : formView === 'home' || formView === 'shiny' || formView === 'alpha'
+                  ? `${trackLabel} · ${formProgress.caught} marked`
+                  : `National · ${formProgress.caught} / ${formProgress.total}`}
       </p>
 
-      {boxes.length === 0 ? (
+      {displayBoxes.length === 0 ? (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>No Pokémon here</EmptyTitle>
-            <EmptyDescription>Try another form view.</EmptyDescription>
+            <EmptyTitle>{search.hasQuery ? 'No matches' : 'No Pokémon here'}</EmptyTitle>
+            <EmptyDescription>
+              {search.hasQuery ? 'Try another name or number.' : 'Try another form view.'}
+            </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
@@ -782,8 +759,6 @@ function NationalDexView() {
                     spriteStyle={spriteStyle}
                     cardSize={cardSize}
                     selected={selected.has(slot.key)}
-                    searchHit={search.hitKeys.has(slot.key)}
-                    searchActive={search.activeKey === slot.key}
                     onSelectedChange={(next) => toggleSelected(slot.key, next)}
                   />
                 ))}
@@ -955,13 +930,17 @@ function GameDexView({ gameId }: { gameId: GameId }) {
   const search = useDexSearchState(slots);
 
   const visible = useMemo(() => {
-    if (filter === 'all') return slots;
-    if (filter === 'done') {
-      return slots.filter((s) => s.available !== false && trackMap[s.key]);
-    }
-    // Missing: obtainable but not marked on the active track
-    return slots.filter((s) => s.available !== false && !trackMap[s.key]);
-  }, [slots, filter, trackMap]);
+    const filtered =
+      filter === 'all'
+        ? slots
+        : filter === 'done'
+          ? slots.filter((s) => s.available !== false && trackMap[s.key])
+          : slots.filter((s) => s.available !== false && !trackMap[s.key]);
+    if (!search.hasQuery) return filtered;
+    const allowed = new Set(filtered.map((s) => s.key));
+    // Prefer fuzzy score order from search.matches.
+    return search.matches.filter((s) => allowed.has(s.key));
+  }, [slots, filter, trackMap, search.hasQuery, search.matches]);
 
   useLayoutEffect(() => {
     const el = listRef.current;
@@ -978,7 +957,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
       ro.disconnect();
       window.removeEventListener('resize', update);
     };
-  }, [layout, gameId, visible.length, cardSize]);
+  }, [layout, gameId, visible.length, cardSize, search.query]);
 
   const colCount = useGridColumnCount(scrollWidth, cardSize);
   const rowCount = layout === 'grid' ? Math.ceil(visible.length / colCount) : visible.length;
@@ -1004,20 +983,6 @@ function GameDexView({ gameId }: { gameId: GameId }) {
     cardLayout.listRowHeight,
     virtualizer,
   ]);
-
-  // Jump to match: widen filter to All if the hit is hidden by caught/missing.
-  useEffect(() => {
-    if (!search.activeKey) return;
-    const inVisible = visible.some((s) => s.key === search.activeKey);
-    if (!inVisible && filter !== 'all') {
-      setFilter('all');
-      return;
-    }
-    const slotIndex = visible.findIndex((s) => s.key === search.activeKey);
-    if (slotIndex < 0) return;
-    const rowIndex = layout === 'grid' ? Math.floor(slotIndex / colCount) : slotIndex;
-    virtualizer.scrollToIndex(rowIndex, { align: 'center' });
-  }, [search.activeKey, visible, filter, layout, colCount, virtualizer]);
 
   const selectableVisible = useMemo(() => visible.filter((s) => s.available !== false), [visible]);
   const visibleKeys = useMemo(() => selectableVisible.map((s) => s.key), [selectableVisible]);
@@ -1121,14 +1086,7 @@ function GameDexView({ gameId }: { gameId: GameId }) {
           </>
         ) : null}
 
-        <DexSearchBar
-          value={search.query}
-          onChange={search.setQuery}
-          matchCount={search.matches.length}
-          activeIndex={search.activeIndex}
-          onPrev={search.goPrev}
-          onNext={search.goNext}
-        />
+        <DexSearchBar value={search.query} onChange={search.setQuery} matchCount={search.matchCount} />
 
         <GameFilterMenu value={filter} onChange={setFilter} track={track} />
         <GameTrackMenu value={track} onChange={setTrack} />
@@ -1156,9 +1114,15 @@ function GameDexView({ gameId }: { gameId: GameId }) {
       {visible.length === 0 ? (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>{filter === 'missing' ? 'Nothing missing' : 'No Pokémon here'}</EmptyTitle>
+            <EmptyTitle>
+              {search.hasQuery ? 'No matches' : filter === 'missing' ? 'Nothing missing' : 'No Pokémon here'}
+            </EmptyTitle>
             <EmptyDescription>
-              {filter === 'missing' ? 'This track is complete.' : 'Try another filter.'}
+              {search.hasQuery
+                ? 'Try another name or number.'
+                : filter === 'missing'
+                  ? 'This track is complete.'
+                  : 'Try another filter.'}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
@@ -1184,8 +1148,6 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     inHome={Boolean(homeMap[slot.key])}
                     track={track}
                     selected={selected.has(slot.key)}
-                    searchHit={search.hitKeys.has(slot.key)}
-                    searchActive={search.activeKey === slot.key}
                     spriteStyle={spriteStyle}
                     cardSize={cardSize}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
@@ -1216,8 +1178,6 @@ function GameDexView({ gameId }: { gameId: GameId }) {
                     inHome={Boolean(homeMap[slot.key])}
                     track={track}
                     selected={selected.has(slot.key)}
-                    searchHit={search.hitKeys.has(slot.key)}
-                    searchActive={search.activeKey === slot.key}
                     spriteStyle={spriteStyle}
                     cardSize={cardSize}
                     onSelectedChange={(v) => toggleSelected(slot.key, v)}
@@ -1262,8 +1222,6 @@ function GameDexRow({
   inHome,
   track,
   selected,
-  searchHit,
-  searchActive,
   spriteStyle,
   cardSize = 'medium',
   onSelectedChange,
@@ -1274,8 +1232,6 @@ function GameDexRow({
   inHome: boolean;
   track: GameTrack;
   selected: boolean;
-  searchHit?: boolean;
-  searchActive?: boolean;
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   onSelectedChange: (selected: boolean) => void;
@@ -1288,15 +1244,7 @@ function GameDexRow({
   const statusLabel = track === 'home' ? 'HOME' : 'Caught';
 
   return (
-    <Item
-      variant={variant}
-      size="sm"
-      className={cn(
-        unavailable && 'opacity-70',
-        searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
-        searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
-      )}
-    >
+    <Item variant={variant} size="sm" className={cn(unavailable && 'opacity-70')}>
       <Checkbox
         checked={selected}
         disabled={unavailable}
@@ -1350,8 +1298,6 @@ function GameDexGridCard({
   inHome,
   track,
   selected,
-  searchHit,
-  searchActive,
   spriteStyle,
   cardSize = 'medium',
   onSelectedChange,
@@ -1362,8 +1308,6 @@ function GameDexGridCard({
   inHome: boolean;
   track: GameTrack;
   selected: boolean;
-  searchHit?: boolean;
-  searchActive?: boolean;
   spriteStyle: SpriteStyle;
   cardSize?: CardSize;
   onSelectedChange: (selected: boolean) => void;
@@ -1407,12 +1351,7 @@ function GameDexGridCard({
             aria-pressed={selected}
           />
         }
-        className={cn(
-          'flex-col items-center',
-          size.cardPadClass,
-          searchActive && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
-          searchHit && !searchActive && !selected && 'ring-2 ring-ring/50 ring-offset-1 ring-offset-background',
-        )}
+        className={cn('flex-col items-center', size.cardPadClass)}
       >
         <PokemonSprite
           id={slot.id}
