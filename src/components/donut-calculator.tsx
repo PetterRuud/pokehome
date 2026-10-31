@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { memo, useDeferredValue, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -71,7 +71,7 @@ function BerryCountStepper({ id, value, onChange }: { id: string; value: number;
         inputMode="numeric"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-7 w-12 text-center tabular-nums"
+        className="h-7 w-12 px-1 text-center tabular-nums"
         aria-label={`${label} count`}
       />
       <Button
@@ -87,24 +87,103 @@ function BerryCountStepper({ id, value, onChange }: { id: string; value: number;
   );
 }
 
+/** Own store slice so only this row re-renders when its count changes. */
+const BerryStashRow = memo(function BerryStashRow({ id }: { id: string }) {
+  const value = useHyperBerryStore((s) => s.counts[id] ?? 0);
+  const setCount = useHyperBerryStore((s) => s.setCount);
+  const howto = hyperBerryHowto(id);
+  const name = capitalizeBerryId(id);
+
+  return (
+    <li className="flex items-center gap-2">
+      <img
+        src={berrySpriteUrl(id, { hyper: true })}
+        alt=""
+        width={28}
+        height={28}
+        className="size-7 shrink-0"
+        loading="lazy"
+      />
+      <div className="flex min-w-0 flex-1 items-center gap-1">
+        <Label htmlFor={`hyper-${id}`} className="min-w-0 truncate text-sm font-normal normal-case tracking-normal">
+          {name}
+        </Label>
+        {howto ? (
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-xs"
+                  className="shrink-0"
+                  aria-label={`${name} farming tip`}
+                />
+              }
+            >
+              <InfoIcon />
+            </PopoverTrigger>
+            <PopoverContent side="top" align="start">
+              <PopoverHeader>
+                <PopoverTitle>{name}</PopoverTitle>
+                <PopoverDescription>{howto}</PopoverDescription>
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
+        ) : null}
+      </div>
+      <BerryCountStepper id={id} value={value} onChange={(next) => setCount(id, next)} />
+    </li>
+  );
+});
+
+/** Isolated from suggestion recalcs — does not subscribe to `counts`. */
+const HyperBerryStash = memo(function HyperBerryStash({ berryIds }: { berryIds: readonly string[] }) {
+  const clearAll = useHyperBerryStore((s) => s.clearAll);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <Label>Hyper berry stash</Label>
+        <Button type="button" variant="ghost" size="xs" onClick={clearAll}>
+          Clear
+        </Button>
+      </div>
+      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {berryIds.map((id) => (
+          <BerryStashRow key={id} id={id} />
+        ))}
+      </ul>
+    </div>
+  );
+});
+
 export function DonutCalculator() {
   const recipes = useMemo(() => getSpecialDonutRecipes(), []);
   const berryIds = useMemo(() => getAllHyperBerryIds(), []);
   const counts = useHyperBerryStore((s) => s.counts);
-  const setCount = useHyperBerryStore((s) => s.setCount);
+  const deferredCounts = useDeferredValue(counts);
   const setCounts = useHyperBerryStore((s) => s.setCounts);
-  const clearAll = useHyperBerryStore((s) => s.clearAll);
   const [recipeIndex, setRecipeIndex] = useState(0);
   const [mixGoal, setMixGoal] = useState<MixGoal>('stars');
   const [targetStars, setTargetStars] = useState<DonutStar>(3);
 
   const recipe = recipes[recipeIndex] ?? recipes[0];
-  const result = useMemo(() => (recipe ? checkDonutRecipe(counts, recipe) : null), [counts, recipe]);
-  const starSuggestion = useMemo(() => suggestDonutForStars(counts, targetStars), [counts, targetStars]);
-  const tipSuggestion = useMemo(() => (mixGoal === 'stars' ? null : suggestTipMix(counts, mixGoal)), [counts, mixGoal]);
+  const result = useMemo(
+    () => (recipe ? checkDonutRecipe(deferredCounts, recipe) : null),
+    [deferredCounts, recipe],
+  );
+  const starSuggestion = useMemo(
+    () => suggestDonutForStars(deferredCounts, targetStars),
+    [deferredCounts, targetStars],
+  );
+  const tipSuggestion = useMemo(
+    () => (mixGoal === 'stars' ? null : suggestTipMix(deferredCounts, mixGoal)),
+    [deferredCounts, mixGoal],
+  );
 
   function makeSuggestedMix(ingredients: { id: string; count: number }[], substitutes: boolean) {
-    const next = inventoryAfterSpend(counts, ingredients, { substitutes });
+    const next = inventoryAfterSpend(useHyperBerryStore.getState().counts, ingredients, { substitutes });
     if (next) setCounts(next);
   }
 
@@ -120,64 +199,7 @@ export function DonutCalculator() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2">
-            <Label>Hyper berry stash</Label>
-            <Button type="button" variant="ghost" size="xs" onClick={clearAll}>
-              Clear
-            </Button>
-          </div>
-          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {berryIds.map((id) => {
-              const howto = hyperBerryHowto(id);
-              const name = capitalizeBerryId(id);
-              return (
-                <li key={id} className="flex items-center gap-2">
-                  <img
-                    src={berrySpriteUrl(id, { hyper: true })}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="size-7 shrink-0"
-                    loading="lazy"
-                  />
-                  <div className="flex min-w-0 flex-1 items-center gap-1">
-                    <Label
-                      htmlFor={`hyper-${id}`}
-                      className="min-w-0 truncate text-sm font-normal normal-case tracking-normal"
-                    >
-                      {name}
-                    </Label>
-                    {howto ? (
-                      <Popover>
-                        <PopoverTrigger
-                          render={
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon-xs"
-                              className="shrink-0"
-                              aria-label={`${name} farming tip`}
-                            />
-                          }
-                        >
-                          <InfoIcon />
-                        </PopoverTrigger>
-                        <PopoverContent side="top" align="start">
-                          <PopoverHeader>
-                            <PopoverTitle>{name}</PopoverTitle>
-                            <PopoverDescription>{howto}</PopoverDescription>
-                          </PopoverHeader>
-                        </PopoverContent>
-                      </Popover>
-                    ) : null}
-                  </div>
-                  <BerryCountStepper id={id} value={counts[id] ?? 0} onChange={(next) => setCount(id, next)} />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <HyperBerryStash berryIds={berryIds} />
 
         <div className="flex flex-col gap-2">
           <Label>Suggest mix</Label>
@@ -357,7 +379,7 @@ export function DonutCalculator() {
 
           <ul className="flex flex-col gap-1.5">
             {result.required.map((berry) => {
-              const have = availableIncludingSubstitutes(counts, berry.id);
+              const have = availableIncludingSubstitutes(deferredCounts, berry.id);
               const short = result.missing.find((m) => m.id === berry.id)?.count ?? 0;
               const ok = short === 0;
               return (

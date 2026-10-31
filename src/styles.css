@@ -215,6 +215,17 @@
   body {
     @apply min-h-dvh font-sans antialiased bg-background text-foreground;
   }
+  /* Custom +/- steppers; hide native number spinners */
+  input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+  }
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;

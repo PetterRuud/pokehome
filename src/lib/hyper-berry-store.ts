@@ -9,15 +9,28 @@ type HyperBerryState = {
   clearAll: () => void;
 };
 
+/** Debounce IDB writes so rapid +/- clicks don't serialize every keystroke. */
+let persistTimer: ReturnType<typeof setTimeout> | undefined;
+let pendingPersist: { name: string; value: string } | null = null;
+
 const idbStorage = createJSONStorage(() => ({
   getItem: async (name) => {
     const value = await get(name);
     return value ?? null;
   },
-  setItem: async (name, value) => {
-    await set(name, value);
+  setItem: (name, value) => {
+    pendingPersist = { name, value };
+    clearTimeout(persistTimer);
+    persistTimer = setTimeout(() => {
+      const next = pendingPersist;
+      pendingPersist = null;
+      if (next) void set(next.name, next.value);
+    }, 250);
+    return Promise.resolve();
   },
   removeItem: async (name) => {
+    clearTimeout(persistTimer);
+    pendingPersist = null;
     await del(name);
   },
 }));
