@@ -7,10 +7,13 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Item, ItemActions, ItemContent, ItemGroup, ItemTitle } from '@/components/ui/item';
 import { EvolutionChart } from '@/components/evolution-chart';
+import { MovePoolDialog } from '@/components/move-pool-dialog';
 import { PokemonSprite } from '@/components/pokemon-sprite';
+import { TypeBadge } from '@/components/type-badge';
 import { getEvolutionChain, getPokemonSummary } from '@/server/pokemon';
 import { useDexStore } from '@/lib/store';
 import { canGmax, canMega, canRegional } from '@/lib/form-variants';
+import { parsePokemonType } from '@/lib/move-types';
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -165,45 +168,16 @@ function PokemonPage() {
               <h1 className="text-xl font-bold">{summary.name}</h1>
               {summary.genus ? <p className="text-sm text-muted-foreground">{summary.genus}</p> : null}
             </div>
-            <div className="flex flex-wrap justify-center gap-1">
-              <Badge variant={caught ? 'default' : 'outline'}>{caught ? 'Caught' : 'Missing'}</Badge>
-              {home ? (
-                <Badge variant="secondary">
-                  <HomeIcon data-icon="inline-start" className="text-emerald-600" />
-                  HOME
-                </Badge>
-              ) : null}
-              {shiny ? (
-                <Badge variant="secondary">
-                  <SparklesIcon data-icon="inline-start" className="text-amber-500" />
-                  Shiny
-                </Badge>
-              ) : null}
-              {alpha ? (
-                <Badge variant="secondary">
-                  <EyeIcon data-icon="inline-start" className="text-red-500" />
-                  Alpha
-                </Badge>
-              ) : null}
-              {mega ? (
-                <Badge variant="secondary">
-                  <ZapIcon data-icon="inline-start" className="text-violet-500" />
-                  Mega
-                </Badge>
-              ) : null}
-              {gmax ? (
-                <Badge variant="secondary">
-                  <ExpandIcon data-icon="inline-start" className="text-rose-500" />
-                  Gigantamax
-                </Badge>
-              ) : null}
-              {regional ? (
-                <Badge variant="secondary">
-                  <GlobeIcon data-icon="inline-start" className="text-sky-500" />
-                  Regional
-                </Badge>
-              ) : null}
-            </div>
+            {summary.types?.length ? (
+              <div className="flex flex-wrap justify-center gap-1.5">
+                {summary.types.map((typeName: string) => {
+                  const type = parsePokemonType(typeName);
+                  const label = typeName.charAt(0).toUpperCase() + typeName.slice(1);
+                  return <TypeBadge key={typeName} label={label} type={type} />;
+                })}
+              </div>
+            ) : null}
+            <MovePoolDialog pokemonId={summary.id} pokemonName={summary.name} />
           </CardContent>
         </Card>
 

@@ -7,17 +7,10 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { GameLogo } from '@/components/game-logo';
 import { DonutCalculator } from '@/components/donut-calculator';
 import { PokemonSprite } from '@/components/pokemon-sprite';
+import { TypeBadge } from '@/components/type-badge';
 import { berryDisplayName, berrySpriteUrl } from '@/lib/berries';
-import {
-  moveType,
-  parsePokemonType,
-  typeBadgeClass,
-  typeIconClass,
-  typeIconUrl,
-  type PokemonType,
-} from '@/lib/move-types';
+import { moveType } from '@/lib/move-types';
 import { getDefaultTipFamilyId, getTipFamilies, getTips } from '@/lib/trainer-tips';
-import { cn } from '@/lib/utils';
 import type {
   TipBerry,
   TipBlock,
@@ -242,40 +235,6 @@ function TipSpeciesArt({ species, size = 40 }: { species: TipSpecies; size?: num
       height={size}
       className={size <= 32 ? 'size-8 shrink-0' : 'size-10 shrink-0'}
     />
-  );
-}
-
-function TypeBadge({
-  label,
-  type: typeOverride,
-  title,
-}: {
-  label: string;
-  type?: PokemonType | null;
-  title?: string;
-}) {
-  const type = typeOverride === undefined ? parsePokemonType(label) : typeOverride;
-  if (!type) {
-    return (
-      <Badge variant="secondary" title={title}>
-        {label}
-      </Badge>
-    );
-  }
-  return (
-    <Badge
-      variant="outline"
-      className={cn('gap-1 shadow-none', typeBadgeClass(type))}
-      title={title ?? `${type} · ${label}`}
-    >
-      <img
-        src={typeIconUrl(type)}
-        alt=""
-        data-icon="inline-start"
-        className={cn('size-3', typeIconClass(type))}
-      />
-      {label}
-    </Badge>
   );
 }
 
